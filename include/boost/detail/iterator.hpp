@@ -23,6 +23,10 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 09 Feb 2001 - Always have a definition for each traits member, even if it
+//               can't be properly deduced. These will be incomplete types in
+//               some cases (undefined<void>), but it helps suppress MSVC errors
+//               elsewhere (David Abrahams)
 // 07 Feb 2001 - Support for more of the traits members where possible, making
 //               this useful as a replacement for std::iterator_traits<T> when
 //               used as a default template parameter.
@@ -63,6 +67,7 @@ using std::distance;
 // Workarounds for less-capable implementations
 template <bool is_ptr> struct iterator_traits_select;
 
+template <class T> struct undefined;
 template <> struct iterator_traits_select<true>
 {
     template <class Ptr>
@@ -70,6 +75,14 @@ template <> struct iterator_traits_select<true>
     {
         typedef std::ptrdiff_t difference_type;
         typedef std::random_access_iterator_tag iterator_category;
+#ifdef BOOST_MSVC
+// Keeps MSVC happy under certain circumstances. It seems class template default
+// arguments are partly instantiated even when not used when the class template
+// is the return type of a function template.
+        typedef undefined<void> value_type;
+        typedef undefined<void> pointer;
+        typedef undefined<void> reference;
+#endif
     };
 };
 
@@ -132,8 +145,6 @@ struct bad_output_iterator_select<false>
 };
 # endif
 
-template <class T> struct undefined;
-
 template <> struct iterator_traits_select<false>
 {
     template <class Iterator>
@@ -143,6 +154,10 @@ template <> struct iterator_traits_select<false>
 #   if defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
         typedef typename Iterator::distance_type difference_type;
         typedef typename Iterator::value_type value_type;
+#ifdef BOOST_MSVC // Keeps MSVC happy under certain circumstances
+        typedef undefined<void> pointer;
+        typedef undefined<void> reference;
+#endif
 #   elif !defined(BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION)
         typedef typename Iterator::difference_type difference_type;
         typedef typename Iterator::value_type value_type;
