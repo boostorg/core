@@ -21,6 +21,4 @@ namespace boost {
 }
 
 
-
-
 #endif // include guard
