@@ -5,6 +5,8 @@
 #  pragma once
 # endif
 
+# include <boost/config.hpp>
+
 //
 //  ref.hpp - ref/cref, useful helper functions
 //
