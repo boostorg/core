@@ -28,6 +28,8 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 02 Mar 2001 - Changed BOOST_MSVC to BOOST_MSVC_STD_ITERATOR in a few
+//               places. (Jeremy Siek)
 // 19 Feb 2001 - Improved workarounds for stock MSVC6; use yes_type and
 //               no_type from type_traits.hpp; stopped trying to remove_cv
 //               before detecting is_pointer, in honor of the new type_traits
@@ -167,7 +169,7 @@ struct bad_output_iterator_select<false>
 };
 # endif
 
-# if defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
+# if defined(BOOST_MSVC_STD_ITERATOR)
 
 // We'll sort iterator types into one of these classifications, from which we
 // can determine the difference_type, pointer, reference, and value_type
@@ -275,7 +277,7 @@ template <> struct iterator_traits_select<false>
     template <class Iterator>
     struct traits
     {
-#   if defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
+#   if defined(BOOST_MSVC_STD_ITERATOR)
         typedef msvc_traits_select<(
             msvc_iterator_classification<Iterator>::value
         )>::template traits_<Iterator> inner_traits;
