@@ -303,7 +303,7 @@ foo(T t);
 <UL><LI>
 Use an extra dummy parameter which disambiguates the functions. Use a default value for
 it to hide the parameter from the caller. For example:
-<PRE>template &lt;class T&gt; struct dummy { dummy(int) {} };
+<PRE>template &lt;int&gt; struct dummy { dummy(int) {} };
 
 template &lt;class T&gt;
 typename enable_if&lt;boost::is_arithmetic&lt;T&gt;, T&gt;::type 
