@@ -1,0 +1,33 @@
+# Copyright David Abrahams 2003.
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt)
+
+# For more information, see http://www.boost.org/
+
+subproject libs/utility/enable_if/test ;
+
+# bring in rules for testing
+import testing ;
+
+# Make tests run by default.
+DEPENDS all : test ;
+
+{
+    local test_monitor = <lib>@boost/libs/test/build/boost_test_exec_monitor ;
+
+    # look in BOOST_ROOT for sources first, just in this Jamfile
+    local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
+
+    test-suite utility/enable_if
+        :
+        [ run libs/utility/enable_if/test/constructors.cpp $(test_monitor) ]
+        [ run libs/utility/enable_if/test/dummy_arg_disambiguation.cpp $(test_monitor) ]
+        [ run libs/utility/enable_if/test/lazy.cpp $(test_monitor) ]
+        [ run libs/utility/enable_if/test/lazy_test.cpp $(test_monitor) ]
+        [ run libs/utility/enable_if/test/member_templates.cpp $(test_monitor) ]
+        [ run libs/utility/enable_if/test/namespace_disambiguation.cpp $(test_monitor) ]
+        [ run libs/utility/enable_if/test/no_disambiguation.cpp $(test_monitor) ]
+        [ run libs/utility/enable_if/test/partial_specializations.cpp $(test_monitor) ]
+    ;
+}
