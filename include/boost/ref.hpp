@@ -29,17 +29,15 @@ template<class T> class reference_wrapper
 public:
     typedef T type;
 
-    explicit reference_wrapper(T & t): t_(t) {}
+    explicit reference_wrapper(T& t): t_(&t) {}
 
-    operator T & () const { return t_; }
+    operator T& () const { return *t_; }
 
-    T & get() const { return t_; }
+    T& get() const { return *t_; }
 
 private:
 
-    T & t_;
-
-    reference_wrapper & operator= (reference_wrapper const &);
+    T* t_;
 };
 
 # if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
