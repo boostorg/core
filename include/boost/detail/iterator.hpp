@@ -144,7 +144,7 @@ struct iterator_traits<T const*>
 # endif
 
 # include <boost/mpl/if.hpp>
-# include <boost/mpl/aux_/has_xxx.hpp>
+# include <boost/mpl/has_xxx.hpp>
 # include <cstddef>
 
 // should be the last #include
