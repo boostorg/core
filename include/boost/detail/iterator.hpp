@@ -145,17 +145,6 @@ struct iterator_traits<T const*>
 # endif
 
 # include <boost/mpl/if.hpp>
-
-# include <boost/detail/workaround.hpp>
-# if BOOST_MSVC == 1300
-#  include <boost/type_traits/add_reference.hpp>
-#  include <boost/mpl/apply_if.hpp>
-# endif
-
-# ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#  include <boost/mpl/or.hpp>
-#  include <boost/mpl/and.hpp>
-# endif 
 # include <boost/mpl/aux_/has_xxx.hpp>
 # include <cstddef>
 
