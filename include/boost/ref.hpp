@@ -52,7 +52,7 @@ private:
     T* t_;
 };
 
-# if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+# if defined(__BORLANDC__) && (__BORLANDC__ <= 0x560)
 #  define BOOST_REF_CONST
 # else
 #  define BOOST_REF_CONST const
