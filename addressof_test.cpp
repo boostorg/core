@@ -36,6 +36,14 @@ int test_main(int, char*[])
 
   const volatile nonaddressable& cvx = *px;
   BOOST_CHECK(boost::addressof(cvx) == static_cast<const volatile nonaddressable*>(px));
-  
+
+  int nrg[3] = {1,2,3};
+  int (*pnrg)[3] = &nrg;
+  BOOST_CHECK(boost::addressof(nrg) == pnrg);
+
+  int const cnrg[3] = {1,2,3};
+  int const (*pcnrg)[3] = &cnrg;
+  BOOST_CHECK(boost::addressof(cnrg) == pcnrg);
+
   return 0;
 }
