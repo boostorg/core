@@ -43,7 +43,7 @@ template<class T> struct checked_deleter
 
     void operator()(T * x) const
     {
-        checked_delete(x);
+        boost::checked_delete(x);
     }
 };
 
@@ -54,7 +54,7 @@ template<class T> struct checked_array_deleter
 
     void operator()(T * x) const
     {
-        checked_array_delete(x);
+        boost::checked_array_delete(x);
     }
 };
 
