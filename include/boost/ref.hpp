@@ -12,6 +12,7 @@
 //
 //  Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
 //  Copyright (C) 2001 Peter Dimov
+//  Copyright (C) 2002 David Abrahams
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
