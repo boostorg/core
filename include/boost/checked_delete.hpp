@@ -26,13 +26,14 @@ namespace boost
 
 template<class T> inline void checked_delete(T * x)
 {
-    typedef char type_must_be_complete[sizeof(T)];
+    // Intel 7 accepts sizeof(incomplete) as 0 in system headers
+    typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
     delete x;
 }
 
 template<class T> inline void checked_array_delete(T * x)
 {
-    typedef char type_must_be_complete[sizeof(T)];
+    typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
     delete [] x;
 }
 
@@ -43,6 +44,7 @@ template<class T> struct checked_deleter
 
     void operator()(T * x) const
     {
+        // boost:: disables ADL
         boost::checked_delete(x);
     }
 };
