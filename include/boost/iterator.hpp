@@ -5,7 +5,7 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-//  See http://www.boost.org for most recent version including documentation.
+//  See http://www.boost.org/libs/utility for documentation.
 
 //  Revision History
 //  12 Jan 01 added <cstddef> for std::ptrdiff_t (Jens Maurer)
