@@ -14,8 +14,7 @@
 #ifndef BOOST_UTILITY_ENABLE_IF_HPP
 #define BOOST_UTILITY_ENABLE_IF_HPP
 
-#include <boost/config.hpp>
-#include <boost/static_assert.hpp>
+#include "boost/config.hpp"
 
 // Even the definition of enable_if causes problems on some compilers,
 // so it's macroed out for all compilers that do not support SFINAE
@@ -76,39 +75,42 @@ namespace boost
 
 namespace boost {
 
-  BOOST_STATIC_CONSTANT(bool, enable_if_does_not_work_on_this_compiler = false);
+  namespace detail { typedef void enable_if_default_T; }
 
-  template <bool B, class T = void> 
-  struct enable_if_c
-    { BOOST_STATIC_ASSERT(enable_if_does_not_work_on_this_compiler); };
+  template <typename T>
+  struct enable_if_does_not_work_on_this_compiler;
 
-  template <bool B, class T = void> 
-  struct disable_if_c
-    { BOOST_STATIC_ASSERT(enable_if_does_not_work_on_this_compiler); };
+  template <bool B, class T = detail::enable_if_default_T>
+  struct enable_if_c : enable_if_does_not_work_on_this_compiler<T>
+  { };
 
-  template <bool B, class T = void> 
-  struct lazy_enable_if_c
-    { BOOST_STATIC_ASSERT(enable_if_does_not_work_on_this_compiler); };
+  template <bool B, class T = detail::enable_if_default_T> 
+  struct disable_if_c : enable_if_does_not_work_on_this_compiler<T>
+  { };
 
-  template <bool B, class T = void> 
-  struct lazy_disable_if_c
-    { BOOST_STATIC_ASSERT(enable_if_does_not_work_on_this_compiler); };
+  template <bool B, class T = detail::enable_if_default_T> 
+  struct lazy_enable_if_c : enable_if_does_not_work_on_this_compiler<T>
+  { };
 
-  template <class Cond, class T = void> 
-  struct enable_if
-    { BOOST_STATIC_ASSERT(enable_if_does_not_work_on_this_compiler); };
+  template <bool B, class T = detail::enable_if_default_T> 
+  struct lazy_disable_if_c : enable_if_does_not_work_on_this_compiler<T>
+  { };
 
-  template <class Cond, class T = void> 
-  struct disable_if
-    { BOOST_STATIC_ASSERT(enable_if_does_not_work_on_this_compiler); };
+  template <class Cond, class T = detail::enable_if_default_T> 
+  struct enable_if : enable_if_does_not_work_on_this_compiler<T>
+  { };
 
-  template <class Cond, class T = void> 
-  struct lazy_enable_if
-    { BOOST_STATIC_ASSERT(enable_if_does_not_work_on_this_compiler); };
+  template <class Cond, class T = detail::enable_if_default_T> 
+  struct disable_if : enable_if_does_not_work_on_this_compiler<T>
+  { };
 
-  template <class Cond, class T = void> 
-  struct lazy_disable_if
-    { BOOST_STATIC_ASSERT(enable_if_does_not_work_on_this_compiler); };
+  template <class Cond, class T = detail::enable_if_default_T> 
+  struct lazy_enable_if : enable_if_does_not_work_on_this_compiler<T>
+  { };
+
+  template <class Cond, class T = detail::enable_if_default_T> 
+  struct lazy_disable_if : enable_if_does_not_work_on_this_compiler<T>
+  { };
 
 } // namespace boost
 
