@@ -20,7 +20,7 @@
 
 namespace
 {
-    class DontTreadOnMe : boost::noncopyable
+    class DontTreadOnMe : private boost::noncopyable
     {
     public:
          DontTreadOnMe() { std::cout << "defanged!" << std::endl; }
