@@ -70,6 +70,9 @@ using std::iterator_traits;
 using std::distance;
 # else
 
+typedef char yes_result;
+typedef double no_result;
+
 // Workarounds for less-capable implementations
 template <bool is_ptr> struct iterator_traits_select;
 
