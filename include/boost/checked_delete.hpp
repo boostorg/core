@@ -16,7 +16,7 @@
 //  This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 //
-//  http://www.boost.org/libs/utility/checked_delete.html
+//  See http://www.boost.org/libs/utility/checked_delete.html for documentation.
 //
 
 namespace boost
