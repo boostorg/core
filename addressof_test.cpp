@@ -1,5 +1,5 @@
 // Copyright (C) 2002 Brad King (brad.king@kitware.com) 
-//                    Doug Gregor (gregod@cs.rpi.edu)
+//                    Douglas Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
