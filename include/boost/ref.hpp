@@ -7,6 +7,7 @@
 
 # include <boost/config.hpp>
 # include <boost/utility/addressof.hpp>
+# include <boost/mpl/bool_c.hpp>
 
 //
 //  ref.hpp - ref/cref, useful helper functions
@@ -73,16 +74,14 @@ template<class T> inline reference_wrapper<T const> BOOST_REF_CONST cref(T const
 # ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template<typename T>
 class is_reference_wrapper
+    : public mpl::false_c
 {
- public:
-    BOOST_STATIC_CONSTANT(bool, value = false); 
 };
 
 template<typename T>
 class is_reference_wrapper<reference_wrapper<T> >
+    : public mpl::true_c
 {
- public:
-    BOOST_STATIC_CONSTANT(bool, value = true);
 };
 
 template<typename T>
@@ -144,8 +143,10 @@ class is_reference_wrapper
  public:
     BOOST_STATIC_CONSTANT(
         bool, value = (
-            sizeof(detail::is_reference_wrapper_test(type<T>()))
+             sizeof(detail::is_reference_wrapper_test(type<T>()))
             == sizeof(detail::yes_reference_wrapper_t)));
+    
+    typedef ::boost::mpl::bool_c<value> type;
 };
 
 template <typename T>
