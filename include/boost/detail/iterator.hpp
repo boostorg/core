@@ -424,7 +424,14 @@ struct iterator_traits
 };
 
 // This specialization cuts off ETI (Early Template Instantiation) for MSVC.
-template <> struct iterator_traits<int>{};
+template <> struct iterator_traits<int>
+{
+    typedef int value_type;
+    typedef int pointer;
+    typedef int reference;
+    typedef int difference_type;
+    typedef int iterator_category;
+};
 
 }} // namespace boost::detail
 
