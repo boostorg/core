@@ -28,6 +28,9 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 03 Mar 2001 - Put all implementation into namespace
+//               boost::detail::iterator_traits_. Some progress made on fixes
+//               for Intel compiler. (David Abrahams)
 // 02 Mar 2001 - Changed BOOST_MSVC to BOOST_MSVC_STD_ITERATOR in a few
 //               places. (Jeremy Siek)
 // 19 Feb 2001 - Improved workarounds for stock MSVC6; use yes_type and
@@ -58,7 +61,7 @@
 # include <iterator>
 # include <cstddef>
 
-# if defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
+# if defined(BOOST_MSVC_STD_ITERATOR)
 #  include <xtree>
 #  include <deque>
 #  include <list>
@@ -88,6 +91,8 @@ using std::iterator_traits;
 using std::distance;
 # else
 
+namespace iterator_traits_ {
+
 // Workarounds for less-capable implementations
 template <bool is_ptr> struct iterator_traits_select;
 
@@ -111,7 +116,11 @@ template <> struct iterator_traits_select<true>
 };
 
 
+typedef char yes_type;
+typedef double no_type;
+
 # ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+
 no_type bad_category_helper(...);
 template <class C, class T> yes_type bad_category_helper(std::_DBG_iter<C,T>*);
 
@@ -245,11 +254,11 @@ no_type is_boost_iterator_helper(...);
 
 // Is the iterator one of the known mutable container iterators?
 template<class K, class Ty, class Kfn, class Pr, class A>
-yes_type is_mutable_iterator_helper(const volatile std::_Tree<K,Ty,Kfn,Pr,A>::iterator*);
+yes_type is_mutable_iterator_helper(const volatile typename std::_Tree<K,Ty,Kfn,Pr,A>::iterator*);
 template<class Ty, class A>
-yes_type is_mutable_iterator_helper(const volatile std::list<Ty,A>::iterator*);
+yes_type is_mutable_iterator_helper(const volatile typename std::list<Ty,A>::iterator*);
 template<class Ty, class A>
-yes_type is_mutable_iterator_helper(const volatile std::deque<Ty,A>::iterator*);
+yes_type is_mutable_iterator_helper(const volatile typename std::deque<Ty,A>::iterator*);
 no_type is_mutable_iterator_helper(...);
 
 // Is the iterator an ostream_iterator?
@@ -257,9 +266,15 @@ template<class T, class CharT, class Traits>
 yes_type is_ostream_iterator_helper(const volatile std::ostream_iterator<T,CharT,Traits>*);
 no_type is_ostream_iterator_helper(...);
 
+#ifdef __ICL
+template <bool> struct check;
+template <> struct check<true> {};
+check<(sizeof(is_std_iterator_helper((std::istream_iterator<int>*)0)) == sizeof(yes_type))> assertion;
+#endif
+
 template <class T>
 struct msvc_iterator_classification {
-    enum {
+    BOOST_STATIC_CONSTANT(unsigned,
         value = (sizeof(is_ostream_iterator_helper((T*)0)) == sizeof(yes_type))
           ? msvc_stdlib_ostream_iterator
         : (sizeof(is_mutable_iterator_helper((T*)0)) == sizeof(yes_type))
@@ -268,7 +283,7 @@ struct msvc_iterator_classification {
            && sizeof(is_boost_iterator_helper((T*)0)) == sizeof(no_type))
         ? msvc_stdlib_const_iterator
         : not_msvc_stdlib_iterator
-    };
+        );
 };
 # endif
 
@@ -313,12 +328,14 @@ template <> struct iterator_traits_select<false>
     };
 };
 
+} // namespace boost::detail::iterator_traits_
+
 template <class Iterator>
 struct iterator_traits
-    : iterator_traits_select<is_pointer<Iterator>::value>::template traits<Iterator>
+    : iterator_traits_::iterator_traits_select<is_pointer<Iterator>::value>::template traits<Iterator>
 {
  private:
-    typedef typename iterator_traits_select<
+    typedef typename iterator_traits_::iterator_traits_select<
         is_pointer<remove_cv<Iterator>::type>::value>::template traits<Iterator> traits;
  public:
     // Why do I need to define these typedefs? It keeps MSVC happy somehow.
@@ -326,6 +343,8 @@ struct iterator_traits
     typedef typename traits::difference_type difference_type;
     typedef typename traits::iterator_category iterator_category;
 };
+
+namespace iterator_traits_ {
 
 template <class Category>
 struct distance_select {
@@ -353,16 +372,18 @@ struct distance_select<std::random_access_iterator_tag> {
     }
 };
 
+} // namespace boost::detail::iterator_traits_
+
 template <class Iterator>
 inline typename ::boost::detail::iterator_traits<Iterator>::difference_type
 distance(const Iterator& first, const Iterator& last)
 {
     typedef typename ::boost::detail::iterator_traits<Iterator>::iterator_category iterator_category;
-    return distance_select<iterator_category>::distance(first, last);
+    return iterator_traits_::distance_select<iterator_category>::distance(first, last);
 }
 # endif // workarounds
 
-}}
+}} // namespace boost::detail
 
 # undef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
 # undef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
