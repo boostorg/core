@@ -1,16 +1,15 @@
 #ifndef BOOST_REF_HPP_INCLUDED
 #define BOOST_REF_HPP_INCLUDED
 
-#if _MSC_VER >= 1020
+#if _MSC_VER+0 >= 1020
 #pragma once
 #endif
 
 //
 //  ref.hpp - ref/cref, useful helper functions
 //
-//  Version 1.00.0003 (2001-08-22)
-//
 //  Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
+//  Copyright (C) 2001 Peter Dimov
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
