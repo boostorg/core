@@ -58,8 +58,10 @@
 # include <boost/type_traits/detail/yes_no_type.hpp>
 # include <boost/type_traits/is_pointer.hpp>
 # include <boost/type_traits/is_base_and_derived.hpp>
+# include <boost/mpl/aux_/has_xxx.hpp>
 # include <iterator>
 # include <cstddef>
+
 
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
@@ -82,6 +84,12 @@
 # endif // STLPort <= 4.1b4 && no partial specialization
 
 namespace boost { namespace detail {
+
+BOOST_MPL_HAS_XXX_TRAIT_DEF(value_type)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(reference)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(pointer)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(difference_type)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(iterator_category)
 
 # if !defined(BOOST_NO_STD_ITERATOR_TRAITS) && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
 using std::iterator_traits;
@@ -126,22 +134,15 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(
 //   types to satisfy the requirements for a fully-conforming
 //   iterator_traits implementation.
 template <class T>
-type_traits::yes_type is_full_iterator_traits_helper(
-    T const volatile*
-    , BOOST_DEDUCED_TYPENAME T::value_type* = 0
-    , BOOST_DEDUCED_TYPENAME T::reference (*)() = 0
-    , BOOST_DEDUCED_TYPENAME T::pointer* = 0
-    , BOOST_DEDUCED_TYPENAME T::difference_type* = 0
-    , BOOST_DEDUCED_TYPENAME T::iterator_category* = 0
-    );
-
-type_traits::no_type is_full_iterator_traits_helper(...);
-
-template <class T>
 struct is_full_iterator_traits_impl
 {
-    enum { value = sizeof(
-               is_full_iterator_traits_helper((T*)0)) == sizeof(type_traits::yes_type) };
+    enum { value = 
+           has_value_type<T>::value 
+           & has_reference<T>::value 
+           & has_pointer<T>::value 
+           & has_difference_type<T>::value
+           & has_iterator_category<T>::value
+    };
 };
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(
@@ -149,28 +150,23 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(
 
 
 #  ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+BOOST_MPL_HAS_XXX_TRAIT_DEF(_Iterator_category)
+    
 // is_stlport_40_debug_iterator --
 //
 //   A metafunction returning true iff T has all the requisite nested
 //   types to satisfy the requirements of an STLPort 4.0 debug iterator
 //   iterator_traits implementation.
 template <class T>
-type_traits::yes_type is_stlport_40_debug_iterator_helper(
-    T const volatile*
-    , BOOST_DEDUCED_TYPENAME T::value_type* = 0
-    , BOOST_DEDUCED_TYPENAME T::reference (*)() = 0
-    , BOOST_DEDUCED_TYPENAME T::pointer* = 0
-    , BOOST_DEDUCED_TYPENAME T::difference_type* = 0
-    , BOOST_DEDUCED_TYPENAME T::_Iterator_category* = 0
-    );
-
-type_traits::no_type is_stlport_40_debug_iterator_helper(...);
-
-template <class T>
 struct is_stlport_40_debug_iterator_impl
 {
-    enum { value = sizeof(
-               is_stlport_40_debug_iterator_helper((T*)0)) == sizeof(type_traits::yes_type) };
+    enum { value = 
+           has_value_type<T>::value 
+           & has_reference<T>::value 
+           & has_pointer<T>::value 
+           & has_difference_type<T>::value
+           & has__Iterator_category<T>::value
+    };
 };
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(
