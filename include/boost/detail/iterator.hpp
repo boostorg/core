@@ -62,14 +62,10 @@
 # include <iterator>
 # include <cstddef>
 
-# if defined(BOOST_MSVC_STD_ITERATOR)
+# if defined(BOOST_MSVC_STD_ITERATOR) && !defined(__SGI_STL_PORT)
 #  include <xtree>
 #  include <deque>
 #  include <list>
-#  if 0 && defined(__ICL) // Re-enable this to pick up the Intel fixes where they left off
-#   include <iosfwd>
-#   include <memory>
-#  endif
 # endif
 
 
@@ -110,7 +106,7 @@ template <> struct iterator_traits_select<true>
         typedef std::ptrdiff_t difference_type;
         typedef std::random_access_iterator_tag iterator_category;
         typedef Ptr pointer;
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
 // Keeps MSVC happy under certain circumstances. It seems class template default
 // arguments are partly instantiated even when not used when the class template
 // is the return type of a function template.
@@ -183,7 +179,7 @@ struct bad_output_iterator_select<false>
 };
 # endif
 
-# if defined(BOOST_MSVC_STD_ITERATOR)
+# if defined(BOOST_MSVC_STD_ITERATOR) && !defined(__SGI_STL_PORT)
 
 // We'll sort iterator types into one of these classifications, from which we
 // can determine the difference_type, pointer, reference, and value_type
@@ -291,7 +287,7 @@ template <> struct iterator_traits_select<false>
     template <class Iterator>
     struct traits
     {
-#   if defined(BOOST_MSVC_STD_ITERATOR)
+#   if defined(BOOST_MSVC_STD_ITERATOR) && !defined(__SGI_STL_PORT)
         typedef msvc_traits_select<(
             msvc_iterator_classification<Iterator>::value
         )>::template traits_<Iterator> inner_traits;
