@@ -23,6 +23,10 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 13 Feb 2001 - Make it work with nearly all standard-conforming iterators
+//               under raw VC6. The one category remaining which will fail is
+//               that of iterators derived from std::iterator but not
+//               boost::iterator and which redefine difference_type.
 // 11 Feb 2001 - Clean away code which can never be used (David Abrahams)
 // 09 Feb 2001 - Always have a definition for each traits member, even if it
 //               can't be properly deduced. These will be incomplete types in
@@ -39,6 +43,7 @@
 
 # include <boost/config.hpp>
 # include <boost/type_traits.hpp>
+# include <boost/iterator.hpp>
 # include <iterator>
 # include <cstddef>
 
@@ -146,18 +151,64 @@ struct bad_output_iterator_select<false>
 };
 # endif
 
+# if defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
+template <bool from_stdlib> struct msvc_traits_select;
+
+template <> struct msvc_traits_select<true>
+{
+    template <class Iterator>
+    struct traits_     // calling this "traits" will confuse VC.
+    {
+        typedef typename Iterator::distance_type difference_type;
+        typedef typename Iterator::value_type value_type;
+        typedef undefined<void> pointer;
+        typedef undefined<void> reference;
+    };
+};
+
+template <> struct msvc_traits_select<false>
+{
+    template <class Iterator>
+    struct traits_
+    {
+        typedef typename Iterator::difference_type difference_type;
+        typedef typename Iterator::value_type value_type;
+        typedef typename Iterator::pointer pointer;
+        typedef typename Iterator::reference reference;
+    };
+};
+
+template <class V, class D, class C>
+yes_result is_std_iterator_helper(const volatile std::iterator<V,D,C>*);
+no_result is_std_iterator_helper(...);
+
+template <class C, class T, class D, class P, class R>
+yes_result is_boost_iterator_helper(const volatile boost::iterator<C,T,D,P,R>*);
+no_result is_boost_iterator_helper(...);
+
+template <class T>
+struct has_msvc_std_iterator_traits
+{
+    BOOST_STATIC_CONSTANT(bool, value = 
+        (sizeof(is_std_iterator_helper((T*)0)) == sizeof(yes_result)
+        && sizeof(is_boost_iterator_helper((T*)0)) == sizeof(no_result)));
+};
+# endif
+
 template <> struct iterator_traits_select<false>
 {
     template <class Iterator>
     struct traits
     {
 #   if defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
-        typedef typename Iterator::distance_type difference_type;
-        typedef typename Iterator::value_type value_type;
-#ifdef BOOST_MSVC // Keeps MSVC happy under certain circumstances
-        typedef undefined<void> pointer;
-        typedef undefined<void> reference;
-#endif
+        typedef msvc_traits_select<(
+            has_msvc_std_iterator_traits<Iterator>::value
+        )>::template traits_<Iterator> inner_traits;
+        
+        typedef typename inner_traits::difference_type difference_type;
+        typedef typename inner_traits::value_type value_type;
+        typedef typename inner_traits::pointer pointer;
+        typedef typename inner_traits::reference reference;
 #   elif !defined(BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION)
         typedef typename Iterator::difference_type difference_type;
         typedef typename Iterator::value_type value_type;
