@@ -12,10 +12,20 @@
 //
 // ...for all compilers and iterators
 //
+// Additionally, if partial specialization is supported or X is not a pointer
+//    std::iterator_traits<X>::value_type
+//
+// And if partial specialization is supported or (X is not a pointer and the
+// library isn't the VC6 standard library),
+//    std::iterator_traits<X>::pointer
+//    std::iterator_traits<X>::reference
 
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 07 Feb 2001 - Support for more of the traits members where possible, making
+//               this useful as a replacement for std::iterator_traits<T> when
+//               used as a default template parameter.
 // 06 Feb 2001 - Removed useless #includes of standard library headers
 //               (David Abrahams)
 
@@ -49,8 +59,10 @@ namespace boost { namespace detail {
 using std::iterator_traits;
 using std::distance;
 # else
+
 // Workarounds for less-capable implementations
 template <bool is_ptr> struct iterator_traits_select;
+
 template <> struct iterator_traits_select<true>
 {
     template <class Ptr>
@@ -95,22 +107,32 @@ struct iterator_category_select
 # endif
 
 # ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
-template <bool is_bad_output_iterator> struct bad_difference_select;
+template <bool is_bad_output_iterator> struct bad_output_iterator_select;
 template <>
-struct bad_difference_select<true>
+struct bad_output_iterator_select<true>
 {
     template <class Iterator>
-    struct difference { typedef void type; };
+    struct non_category_traits {
+        typedef void value_type;
+        typedef void difference_type;
+        typedef void pointer;
+        typedef void reference;
+    };
 };
 template <>
-struct bad_difference_select<false>
+struct bad_output_iterator_select<false>
 {
     template <class Iterator>
-    struct difference { typedef typename Iterator::difference_type type; };
+    struct non_category_traits {
+        typedef typename Iterator::value_type value_type;
+        typedef typename Iterator::difference_type difference_type;
+        typedef typename Iterator::pointer pointer;
+        typedef typename Iterator::reference reference;
+    };
 };
-yes_result bad_output_iterator_helper(std::iterator<std::output_iterator_tag,void,void,void,void>*);
-no_result bad_output_iterator_helper(...);
 # endif
+
+template <class T> struct undefined;
 
 template <> struct iterator_traits_select<false>
 {
@@ -120,17 +142,24 @@ template <> struct iterator_traits_select<false>
     {
 #   if defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
         typedef typename Iterator::distance_type difference_type;
+        typedef typename Iterator::value_type value_type;
 #   elif !defined(BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION)
         typedef typename Iterator::difference_type difference_type;
+        typedef typename Iterator::value_type value_type;
+        typedef typename Iterator::difference_type difference_type;
+        typedef typename Iterator::pointer pointer;
+        typedef typename Iterator::reference reference;
 #   else
-     private:
-        // static Iterator *p;
-        typedef bad_difference_select<
+        typedef bad_output_iterator_select<
           is_convertible<const volatile Iterator*,
             const volatile std::iterator<std::output_iterator_tag,void,void,void,void>*
-          >::value> difference_type_select;
+          >::value> non_category_traits_select;
+        typedef non_category_traits_select::template non_category_traits<Iterator> non_category_traits;
      public:
-        typedef typename difference_type_select::template difference<Iterator>::type difference_type;
+        typedef typename non_category_traits::value_type value_type;
+        typedef typename non_category_traits::difference_type difference_type;
+        typedef typename non_category_traits::pointer pointer;
+        typedef typename non_category_traits::reference reference;
 #   endif
         
 #   if !defined(BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF)
@@ -149,11 +178,14 @@ template <> struct iterator_traits_select<false>
 
 template <class Iterator>
 struct iterator_traits
+    : iterator_traits_select<is_pointer<remove_cv<Iterator>::type>::value>::template traits<Iterator>
 {
  private:
-    typedef iterator_traits_select<is_pointer<remove_cv<Iterator>::type>::value> select;
-    typedef typename select::template traits<Iterator> traits;
+    typedef typename iterator_traits_select<
+        is_pointer<remove_cv<Iterator>::type>::value>::template traits<Iterator> traits;
  public:
+    // Why do I need to define these typedefs? It keeps MSVC happy somehow.
+    // Why don't I need to define the other typedefs? Who knows?!?
     typedef typename traits::difference_type difference_type;
     typedef typename traits::iterator_category iterator_category;
 };
