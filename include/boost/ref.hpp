@@ -12,7 +12,7 @@
 //  ref.hpp - ref/cref, useful helper functions
 //
 //  Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
-//  Copyright (C) 2001 Peter Dimov
+//  Copyright (C) 2001, 2002 Peter Dimov
 //  Copyright (C) 2002 David Abrahams
 //
 //  Permission to copy, use, modify, sell and distribute this software
@@ -31,7 +31,15 @@ template<class T> class reference_wrapper
 public:
     typedef T type;
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+
+    explicit reference_wrapper(T& t): t_(&t) {}
+
+#else
+
     explicit reference_wrapper(T& t): t_(addressof(t)) {}
+
+#endif
 
     operator T& () const { return *t_; }
 
