@@ -446,7 +446,7 @@ namespace iterator_traits_
   {
       static Difference execute(Iterator i1, const Iterator i2, ...)
       {
-          typename Difference result = 0;
+          Difference result = 0;
           while (i1 != i2)
           {
               ++i1;
