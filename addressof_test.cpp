@@ -26,16 +26,16 @@ int test_main(int, char*[])
   nonaddressable* px = new nonaddressable();
 
   nonaddressable& x = *px;
-  BOOST_TEST(boost::addressof(x) == px);
+  BOOST_CHECK(boost::addressof(x) == px);
 
   const nonaddressable& cx = *px;
-  BOOST_TEST(boost::addressof(cx) == static_cast<const nonaddressable*>(px));
+  BOOST_CHECK(boost::addressof(cx) == static_cast<const nonaddressable*>(px));
 
   volatile nonaddressable& vx = *px;
-  BOOST_TEST(boost::addressof(vx) == static_cast<volatile nonaddressable*>(px));
+  BOOST_CHECK(boost::addressof(vx) == static_cast<volatile nonaddressable*>(px));
 
   const volatile nonaddressable& cvx = *px;
-  BOOST_TEST(boost::addressof(cvx) == static_cast<const volatile nonaddressable*>(px));
+  BOOST_CHECK(boost::addressof(cvx) == static_cast<const volatile nonaddressable*>(px));
   
   return 0;
 }

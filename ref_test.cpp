@@ -60,11 +60,11 @@ struct ref_wrapper
 
     static void test(T x)
     {
-        BOOST_TEST(passthru(ref(x)) == &x);
-        BOOST_TEST(&ref(x).get() == &x);
+        BOOST_CHECK(passthru(ref(x)) == &x);
+        BOOST_CHECK(&ref(x).get() == &x);
 
-        BOOST_TEST(cref_passthru(cref(x)) == &x);
-        BOOST_TEST(&cref(x).get() == &x);
+        BOOST_CHECK(cref_passthru(cref(x)) == &x);
+        BOOST_CHECK(&cref(x).get() == &x);
     }
 };
 
