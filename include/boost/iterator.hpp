@@ -1,4 +1,4 @@
-//  integer.hpp workarounds for non-conforming standard libraries  -----------//
+//  interator.hpp workarounds for non-conforming standard libraries  ---------//
 
 //  (C) Copyright Boost.org 2000. Permission to copy, use, modify, sell and
 //  distribute this software is granted provided this copyright notice appears
@@ -8,6 +8,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  12 Jan 01 added <cstddef> for std::ptrdiff_t (Jens Maurer)
 //  28 Jun 00 Workarounds to deal with known MSVC bugs (David Abrahams)
 //  26 Jun 00 Initial version (Jeremy Siek)
 
@@ -15,6 +16,7 @@
 #define BOOST_ITERATOR_HPP
 
 #include <iterator>
+#include <cstddef>           // std::ptrdiff_t
 #include <boost/config.hpp>
 
 namespace boost
