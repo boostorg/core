@@ -21,13 +21,13 @@ namespace boost
 
 // verify that types are complete for increased safety
 
-template< typename T > inline void checked_delete(T * x)
+template<class T> inline void checked_delete(T * x)
 {
     typedef char type_must_be_complete[sizeof(T)];
     delete x;
 }
 
-template< typename T > inline void checked_array_delete(T * x)
+template<class T> inline void checked_array_delete(T * x)
 {
     typedef char type_must_be_complete[sizeof(T)];
     delete [] x;
