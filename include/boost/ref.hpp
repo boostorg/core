@@ -39,12 +39,18 @@ private:
     reference_wrapper & operator= (reference_wrapper const &);
 };
 
-template<class T> inline reference_wrapper<T> ref(T & t)
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+#define BOOST_REF_CONST
+#else
+#define BOOST_REF_CONST const
+#endif
+
+template<class T> inline reference_wrapper<T> BOOST_REF_CONST ref(T & t)
 { 
     return reference_wrapper<T>(t);
 }
 
-template<class T> inline reference_wrapper<T const> cref(T const & t)
+template<class T> inline reference_wrapper<T const> BOOST_REF_CONST cref(T const & t)
 {
     return reference_wrapper<T const>(t);
 }
