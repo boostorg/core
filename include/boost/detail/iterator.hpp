@@ -173,6 +173,13 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(iterator_category)
 template <class T>
 type_traits::yes_type is_mutable_iterator_helper(T const*, BOOST_DEDUCED_TYPENAME T::value_type*);
 
+// Since you can't take the address of an rvalue, the guts of
+// is_mutable_iterator_impl will fail if we use &*t directly.  This
+// makes sure we can still work with non-lvalue iterators.
+template <class T> T* mutable_iterator_lvalue_helper(T& x);
+int mutable_iterator_lvalue_helper(...);
+
+
 // This one detects output iterators such as ostream_iterator which
 // return references to themselves.
 template <class T>
@@ -185,10 +192,14 @@ struct is_mutable_iterator_impl
 {
     static T t;
     
-    BOOST_STATIC_CONSTANT(bool, value = sizeof(
-               detail::is_mutable_iterator_helper((T*)0, &*t))
-           == sizeof(type_traits::yes_type)
-        );
+    BOOST_STATIC_CONSTANT(
+        bool, value = sizeof(
+            detail::is_mutable_iterator_helper(
+                (T*)0
+              , mutable_iterator_lvalue_helper(*t) // like &*t
+            ))
+        == sizeof(type_traits::yes_type)
+    );
 };
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(
