@@ -10,7 +10,6 @@
 //
 //  boost/checked_delete.hpp
 //
-//  Copyright (c) 1999, 2000, 2001, 2002 boost.org
 //  Copyright (c) 2002, 2003 Peter Dimov
 //  Copyright (c) 2003 Daniel Frey
 //  Copyright (c) 2003 Howard Hinnant
