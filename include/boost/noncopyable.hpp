@@ -29,6 +29,8 @@ namespace noncopyable_  // protection from unintended ADL
   };
 }
 
+typedef noncopyable_::noncopyable noncopyable;
+
 } // namespace boost
 
 #endif  // BOOST_NONCOPYABLE_HPP_INCLUDED
