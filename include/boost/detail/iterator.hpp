@@ -11,6 +11,13 @@
 //    std::distance()
 //
 // ...for all compilers and iterators
+//
+
+// See http://www.boost.org for most recent version including documentation.
+
+// Revision History
+// 06 Feb 2001 - Removed useless #includes of standard library headers
+//               (David Abrahams)
 
 #ifndef ITERATOR_DWA122600_HPP_
 # define ITERATOR_DWA122600_HPP_
@@ -36,18 +43,6 @@
 #  define BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
 
 # endif // STLPort <= 4.1b4 && no partial specialization
-
-# ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
-#  include <vector>
-#  include <list>
-#  include <set>
-#  include <map>
-#  include <deque>
-#  include <slist>
-#  include <hash_map>
-#  include <hash_set>
-#  include <string>
-# endif
 
 namespace boost { namespace detail {
 # if !defined(BOOST_NO_STD_ITERATOR_TRAITS) && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
