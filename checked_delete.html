@@ -23,8 +23,8 @@
 			function templates, <STRONG>checked_delete</STRONG> and <STRONG>checked_array_delete</STRONG>, 
 			and two class templates, <STRONG>checked_deleter</STRONG> and <STRONG>checked_array_deleter</STRONG>.
 		</p>
-		<P>The C++ Standard allows, in 5.3.5/5, pointers to incomplete class types to 
-			be deleted with a <EM>delete-expression</EM>. When the class has a non-trivial 
+		<P>The C++ Standard allows, in 5.3.5/5, pointers to incomplete class types to be 
+			deleted with a <EM>delete-expression</EM>. When the class has a non-trivial 
 			destructor, or a class-specific operator delete, the behavior is undefined. 
 			Some compilers issue a warning when an incomplete type is deleted, but 
 			unfortunately, not all do, and programmers sometimes ignore or disable 
@@ -75,10 +75,10 @@ template&lt;class T&gt; struct checked_deleter
 {
     typedef void result_type;
     typedef T * argument_type;
-    void operator()(T * p);
+    void operator()(T * p) const;
 };
 </pre>
-		<h4>void checked_deleter&lt;T&gt;::operator()(T * p);</h4>
+		<h4>void checked_deleter&lt;T&gt;::operator()(T * p) const;</h4>
 		<blockquote>
 			<p>
 				<b>Requires:</b> <b>T</b> must be a complete type. The expression <tt>delete p</tt>
@@ -94,10 +94,10 @@ template&lt;class T&gt; struct checked_array_deleter
 {
     typedef void result_type;
     typedef T * argument_type;
-    void operator()(T * p);
+    void operator()(T * p) const;
 };
 </pre>
-		<h4>void checked_array_deleter&lt;T&gt;::operator()(T * p);</h4>
+		<h4>void checked_array_deleter&lt;T&gt;::operator()(T * p) const;</h4>
 		<blockquote>
 			<p>
 				<b>Requires:</b> <b>T</b> must be a complete type. The expression <tt>delete [] p</tt>
@@ -111,14 +111,14 @@ template&lt;class T&gt; struct checked_array_deleter
 		<p>
 			The function templates <STRONG>checked_delete</STRONG> and <STRONG>checked_array_delete</STRONG>
 			were originally part of <STRONG>&lt;boost/utility.hpp&gt;</STRONG>, and the 
-			documentation acknowledged Beman Dawes, Dave Abrahams, Vladimir Prus, 
-			Rainer Deyke, John Maddock, and others as contributors.
+			documentation acknowledged Beman Dawes, Dave Abrahams, Vladimir Prus, Rainer 
+			Deyke, John Maddock, and others as contributors.
 		</p>
 		<p>
 			<br>
-			<small>Copyright © 2002 by Peter Dimov. Permission to copy, use, modify, sell 
-				and distribute this document is granted provided this copyright notice appears 
-				in all copies. This document is provided "as is" without express or implied 
+			<small>Copyright © 2002 by Peter Dimov. Permission to copy, use, modify, sell and 
+				distribute this document is granted provided this copyright notice appears in 
+				all copies. This document is provided "as is" without express or implied 
 				warranty, and with no claim as to its suitability for any purpose.</small></p>
 	</body>
 </html>
