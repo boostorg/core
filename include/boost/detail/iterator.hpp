@@ -56,6 +56,7 @@
 # include <boost/type_traits/detail/yes_no_type.hpp>
 # include <boost/type_traits/is_pointer.hpp>
 # include <boost/type_traits/is_base_and_derived.hpp>
+# include <boost/mpl/if.hpp>
 # include <boost/mpl/aux_/has_xxx.hpp>
 # include <iterator>
 # include <cstddef>
