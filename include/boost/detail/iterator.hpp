@@ -334,8 +334,8 @@ struct msvc_stdlib_mutable_traits
     : std::iterator_traits<Iterator>
 {
     typedef typename std::iterator_traits<Iterator>::distance_type difference_type;
-    typedef value_type* pointer;
-    typedef value_type& reference;
+    typedef typename std::iterator_traits<Iterator>::value_type* pointer;
+    typedef typename std::iterator_traits<Iterator>::value_type& reference;
 };
 
 template <class Iterator>
@@ -343,8 +343,8 @@ struct msvc_stdlib_const_traits
     : std::iterator_traits<Iterator>
 {
     typedef typename std::iterator_traits<Iterator>::distance_type difference_type;
-    typedef const value_type* pointer;
-    typedef const value_type& reference;
+    typedef const typename std::iterator_traits<Iterator>::value_type* pointer;
+    typedef const typename std::iterator_traits<Iterator>::value_type& reference;
 };
 
 #   ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
