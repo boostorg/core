@@ -7,8 +7,12 @@
 // see 'ref_test.cpp' for run-time part
 
 #include <boost/ref.hpp>
-#include <boost/type_traits/same_traits.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/detail/workaround.hpp>
+
+#include <boost/mpl/assert.hpp>
 
 namespace {
 
@@ -35,13 +39,23 @@ void is_reference_wrapper_test(T)
 template< typename R, typename Ref >
 void cxx_reference_test(Ref)
 {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+    typedef typename boost::remove_const<Ref>::type ref;
+    BOOST_STATIC_ASSERT((boost::is_same<R,ref>::value));
+#else
     BOOST_STATIC_ASSERT((boost::is_same<R,Ref>::value));
+#endif
 }
 
 template< typename R, typename Ref >
 void unwrap_reference_test(Ref)
 {
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+    typedef typename boost::remove_const<Ref>::type ref;
+    typedef typename boost::unwrap_reference<ref>::type type;
+#else
     typedef typename boost::unwrap_reference<Ref>::type type;
+#endif
     BOOST_STATIC_ASSERT((boost::is_same<R,type>::value));
 }
 
