@@ -348,7 +348,6 @@ template <> struct iterator_traits_select<false>
 #   elif !defined(BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION)
         typedef typename Iterator::difference_type difference_type;
         typedef typename Iterator::value_type value_type;
-        typedef typename Iterator::difference_type difference_type;
         typedef typename Iterator::pointer pointer;
         typedef typename Iterator::reference reference;
 #   else
