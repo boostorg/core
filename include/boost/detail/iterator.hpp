@@ -61,7 +61,7 @@
 # include <boost/mpl/aux_/has_xxx.hpp>
 # include <iterator>
 # include <cstddef>
-
+# include <boost/utility.hpp> // for noncopyable
 
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
@@ -189,6 +189,10 @@ struct pointer_iterator_traits
     typedef T pointer;
     typedef std::random_access_iterator_tag iterator_category;
     typedef std::ptrdiff_t difference_type;
+
+    // Makes MSVC6 happy under some circumstances
+    typedef noncopyable value_type;
+    typedef noncopyable reference;
 };
 
 # ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -286,26 +290,30 @@ struct iterator_traits_aux
 
 template <class Iterator>
 struct iterator_traits
+{
+    // Explicit forwarding from base class needed to keep MSVC6 happy
+    // under some circumstances.
+ private:
 # ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
-    : mpl::if_<
+    typedef 
+    typename mpl::if_<
         is_bad_output_iterator<Iterator>
         , bad_output_iterator_traits
         , iterator_traits_aux<Iterator>
-    >::type
+    >::type base;
 # else
-    : iterator_traits_aux<Iterator>
-# endif 
-{
+    typedef iterator_traits_aux<Iterator> base;
+# endif
+ public:
+    typedef typename base::value_type value_type;
+    typedef typename base::pointer pointer;
+    typedef typename base::reference reference;
+    typedef typename base::difference_type difference_type;
+    typedef typename base::iterator_category iterator_category;
 };
 
 namespace iterator_traits_
 {
-  template <class T>
-  struct iterator_difference
-  {
-      typedef typename iterator_traits<T>::difference_type type;
-  };
-
   template <class Iterator, class Difference>
   struct distance_select
   {
@@ -328,10 +336,10 @@ namespace iterator_traits_
 } // namespace boost::detail::iterator_traits_
 
 template <class Iterator>
-inline typename iterator_traits_::iterator_difference<Iterator>::type
+inline typename iterator_traits<Iterator>::difference_type
 distance(Iterator first, Iterator last)
 {
-    typedef typename iterator_traits_::iterator_difference<Iterator>::type diff_t;
+    typedef typename iterator_traits<Iterator>::difference_type diff_t;
     typedef typename ::boost::detail::iterator_traits<Iterator>::iterator_category iterator_category;
     
     return iterator_traits_::distance_select<Iterator,diff_t>::execute(
