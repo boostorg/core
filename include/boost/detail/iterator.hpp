@@ -23,6 +23,7 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 11 Feb 2001 - Clean away code which can never be used (David Abrahams)
 // 09 Feb 2001 - Always have a definition for each traits member, even if it
 //               can't be properly deduced. These will be incomplete types in
 //               some cases (undefined<void>), but it helps suppress MSVC errors
@@ -149,7 +150,6 @@ template <> struct iterator_traits_select<false>
 {
     template <class Iterator>
     struct traits
-#  if defined(BOOST_NO_STD_ITERATOR_TRAITS)
     {
 #   if defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
         typedef typename Iterator::distance_type difference_type;
@@ -183,12 +183,6 @@ template <> struct iterator_traits_select<false>
         typedef typename iterator_category_select<Iterator>::type iterator_category;
 #   endif
     };
-#  else
-    {
-        typedef typename std::iterator_traits<Iterator>::difference_type difference_type;
-        typedef typename std::iterator_traits<Iterator>::iterator_category iterator_category;
-    };
-#  endif
 };
 
 template <class Iterator>
