@@ -36,6 +36,8 @@ public:
 
     T& get() const { return *t_; }
 
+    T* get_pointer() const { return t_; }
+
 private:
 
     T* t_;
