@@ -12,7 +12,7 @@
 //   9 Jun 99  Add unnamed namespace
 //   2 Jun 99  Initial Version
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <iostream>
 
 //  This program demonstrates compiler errors resulting from trying to copy
