@@ -17,36 +17,11 @@
 
 namespace boost {
 
-namespace detail {
-  struct addressof_helper {}; 
-}
-
 template <typename T>
 inline T* addressof(T& v)
 {
   return reinterpret_cast<T*>(
-	   &reinterpret_cast<detail::addressof_helper&>(v));
-}
-
-template <typename T>
-inline const T* addressof(const T& v)
-{
-  return reinterpret_cast<const T*>(
-           &reinterpret_cast<const detail::addressof_helper&>(v));
-}
-
-template <typename T>
-inline volatile T* addressof(volatile T& v)
-{
-  return reinterpret_cast<volatile T*>(
-           &reinterpret_cast<volatile detail::addressof_helper&>(v));
-}
-
-template <typename T>
-inline const volatile T* addressof(const volatile T& v)
-{
-  return reinterpret_cast<const volatile T*>(
-           &reinterpret_cast<const volatile detail::addressof_helper&>(v));
+	   &const_cast<char&>(reinterpret_cast<const volatile char &>(v)));
 }
 
 }
