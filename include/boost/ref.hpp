@@ -55,6 +55,8 @@ template<class T> inline reference_wrapper<T const> BOOST_REF_CONST cref(T const
     return reference_wrapper<T const>(t);
 }
 
+#undef BOOST_REF_CONST
+
 } // namespace boost
 
 #endif // #ifndef BOOST_REF_HPP_INCLUDED
