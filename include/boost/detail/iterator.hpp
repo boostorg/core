@@ -62,7 +62,7 @@
 # include <cstddef>
 
 // should be the last #include
-#include "boost/type_traits/detail/bool_trait_def.hpp"
+# include "boost/type_traits/detail/bool_trait_def.hpp"
 
 // STLPort 4.0 and betas have a bug when debugging is enabled and there is no
 // partial specialization: instead of an iterator_category typedef, the standard
@@ -92,14 +92,19 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(iterator_category)
 # if !defined(BOOST_NO_STD_ITERATOR_TRAITS)             \
   && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
   && !defined(BOOST_MSVC_STD_ITERATOR)
+    
 // Define a new template so it can be specialized
 template <class Iterator>
 struct iterator_traits
     : std::iterator_traits<Iterator>
 {};
 using std::distance;
-# elif  !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-     && !defined(BOOST_MSVC_STD_ITERATOR)
+
+# else
+#  if  !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)  \
+    && !defined(BOOST_MSVC_STD_ITERATOR)
+
+// This is the case where everything conforms except BOOST_NO_STD_ITERATOR_TRAITS
 
 // Rogue Wave Standard Library fools itself into thinking partial
 // specialization is missing on some platforms (e.g. Sun), so fails to
@@ -134,7 +139,7 @@ struct iterator_traits<T const*>
     typedef std::random_access_iterator_tag iterator_category;
 };
 
-# else
+#  else
 
 // is_mutable_iterator --
 //
@@ -193,7 +198,7 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(
     is_full_iterator_traits,T,::boost::detail::is_full_iterator_traits_impl<T>::value)
 
 
-#  ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+#   ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
 BOOST_MPL_HAS_XXX_TRAIT_DEF(_Iterator_category)
     
 // is_stlport_40_debug_iterator --
@@ -225,11 +230,11 @@ struct stlport_40_debug_iterator_traits
     typedef typename T::difference_type difference_type;
     typedef typename T::_Iterator_category iterator_category;
 };
-# endif // BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF 
+#   endif // BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF 
 
 template <class T> struct pointer_iterator_traits;
 
-# ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#   ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T>
 struct pointer_iterator_traits<T*>
 {
@@ -239,7 +244,7 @@ struct pointer_iterator_traits<T*>
     typedef std::random_access_iterator_tag iterator_category;
     typedef std::ptrdiff_t difference_type;
 };
-# else 
+#   else 
 template <class Ptr>
 struct must_manually_specialize_boost_detail_iterator_traits;
 
@@ -268,7 +273,7 @@ struct ptr_iter_traits
     typedef std::random_access_iterator_tag iterator_category;
     typedef std::ptrdiff_t difference_type;
 };
-# endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 // We'll sort iterator types into one of these classifications, from which we
 // can determine the difference_type, pointer, reference, and value_type
@@ -300,7 +305,7 @@ struct msvc_stdlib_const_traits
     typedef const value_type& reference;
 };
 
-# ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
+#   ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
 template <class Iterator>
 struct is_bad_output_iterator
     : is_base_and_derived<
@@ -317,7 +322,7 @@ struct bad_output_iterator_traits
     typedef void pointer;
     typedef void reference;
 };
-# endif
+#   endif
 
 // If we're looking at an MSVC6 (old Dinkumware) ``standard''
 // iterator, this will generate an appropriate traits class. 
@@ -337,17 +342,17 @@ struct non_pointer_iterator_traits
         is_full_iterator_traits<Iterator>
         // Use a standard iterator_traits implementation
         , standard_iterator_traits<Iterator>
-# ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+#   ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
         // Check for STLPort 4.0 broken _Iterator_category type
         , mpl::if_<
              is_stlport_40_debug_iterator<Iterator>
              , stlport_40_debug_iterator_traits<Iterator>
-# endif
+#   endif
         // Otherwise, assume it's a Dinkum iterator
         , msvc_stdlib_iterator_traits<Iterator>
-# ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+#   ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
         >::type
-# endif 
+#   endif 
     >::type
 {
 };
@@ -368,16 +373,16 @@ struct iterator_traits
     // Explicit forwarding from base class needed to keep MSVC6 happy
     // under some circumstances.
  private:
-# ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
+#   ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
     typedef 
     typename mpl::if_<
         is_bad_output_iterator<Iterator>
         , bad_output_iterator_traits
         , iterator_traits_aux<Iterator>
     >::type base;
-# else
+#   else
     typedef iterator_traits_aux<Iterator> base;
-# endif
+#   endif
  public:
     typedef typename base::value_type value_type;
     typedef typename base::pointer pointer;
@@ -388,6 +393,8 @@ struct iterator_traits
 
 // This specialization cuts off ETI (Early Template Instantiation) for MSVC.
 template <> struct iterator_traits<int>{};
+
+#  endif
 
 namespace iterator_traits_
 {
