@@ -10,6 +10,8 @@
 //
 //  Copyright (c) 1999, 2000, 2001, 2002 boost.org
 //  Copyright (c) 2002, 2003 Peter Dimov
+//  Copyright (c) 2003 Daniel Frey
+//  Copyright (c) 2003 Howard Hinnant
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -26,14 +28,16 @@ namespace boost
 
 template<class T> inline void checked_delete(T * x)
 {
-    // Intel 7 accepts sizeof(incomplete) as 0 in system headers
+    // intentionally complex - simplification causes regressions
     typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
+    (void) sizeof(type_must_be_complete);
     delete x;
 }
 
 template<class T> inline void checked_array_delete(T * x)
 {
     typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
+    (void) sizeof(type_must_be_complete);
     delete [] x;
 }
 
