@@ -73,15 +73,10 @@ template<class T> inline reference_wrapper<T const> BOOST_REF_CONST cref(T const
 # undef BOOST_REF_CONST
 
 # ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
 template<typename T>
 class is_reference_wrapper
     : public mpl::false_
-{
-};
-
-template<typename T>
-class is_reference_wrapper<reference_wrapper<T> >
-    : public mpl::true_
 {
 };
 
@@ -92,12 +87,30 @@ class unwrap_reference
     typedef T type;
 };
 
-template<typename T>
-class unwrap_reference<reference_wrapper<T> >
-{
- public:
-    typedef T type;
-};
+#  define AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(X) \
+template<typename T> \
+class is_reference_wrapper< X > \
+    : public mpl::true_ \
+{ \
+}; \
+\
+template<typename T> \
+class unwrap_reference< X > \
+{ \
+ public: \
+    typedef T type; \
+}; \
+/**/
+
+AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T>)
+#if !defined(BOOST_NO_CV_SPECIALIZATIONS)
+AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T> const)
+AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T> volatile)
+AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T> const volatile)
+#endif
+
+#  undef AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF
+
 # else // no partial specialization
 
 } // namespace boost
