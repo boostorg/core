@@ -13,9 +13,6 @@
 
 # include <boost/config.hpp>
 # include <boost/detail/workaround.hpp>
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-#  include <boost/type_traits/add_pointer.hpp>
-# endif
 
 namespace boost {
 
@@ -23,7 +20,14 @@ namespace boost {
 
 // VC7 strips const from nested classes unless we add indirection here
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-template <typename T> typename add_pointer<T>::type
+
+template<class T> struct _addp
+{
+    typedef T * type;
+};
+    
+template <typename T> typename _addp<T>::type
+
 # else
 template <typename T> T*
 # endif
