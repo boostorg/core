@@ -6,7 +6,6 @@
 # endif
 
 # include <boost/config.hpp>
-# include <boost/utility/addressof.hpp>
 
 //
 //  ref.hpp - ref/cref, useful helper functions
@@ -31,7 +30,7 @@ template<class T> class reference_wrapper
 public:
     typedef T type;
 
-    explicit reference_wrapper(T& t): t_(addressof(t)) {}
+    explicit reference_wrapper(T& t): t_(&t) {}
 
     operator T& () const { return *t_; }
 
