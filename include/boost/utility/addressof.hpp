@@ -1,5 +1,6 @@
 // Copyright (C) 2002 Brad King (brad.king@kitware.com) 
 //                    Doug Gregor (gregod@cs.rpi.edu)
+//                    Peter Dimov
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -17,11 +18,12 @@
 
 namespace boost {
 
-template <typename T>
-inline T* addressof(T& v)
+// Do not make addressof() inline. Breaks MSVC 7. (Peter Dimov)
+
+template <typename T> T* addressof(T& v)
 {
   return reinterpret_cast<T*>(
-	   &const_cast<char&>(reinterpret_cast<const volatile char &>(v)));
+       &const_cast<char&>(reinterpret_cast<const volatile char &>(v)));
 }
 
 }
