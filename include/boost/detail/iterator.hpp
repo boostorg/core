@@ -266,7 +266,7 @@ template <class T> struct pointer_iterator_traits;
 template <class T>
 struct pointer_iterator_traits<T*>
 {
-    typedef remove_const<T>::type value_type;
+    typedef typename remove_const<T>::type value_type;
     typedef T* pointer;
     typedef T& reference;
     typedef std::random_access_iterator_tag iterator_category;
