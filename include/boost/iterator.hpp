@@ -21,7 +21,7 @@
 
 namespace boost
 {
-# ifdef BOOST_NO_STD_ITERATOR
+# if defined(BOOST_NO_STD_ITERATOR) && !defined(BOOST_MSVC_STD_ITERATOR)
   template <class Category, class T,
     class Distance = std::ptrdiff_t,
     class Pointer = T*, class Reference = T&>
