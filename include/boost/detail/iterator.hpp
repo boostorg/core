@@ -12,13 +12,18 @@
 //
 // ...for all compilers and iterators
 //
-// Additionally, if partial specialization is supported or X is not a pointer
+// Additionally, if X is a pointer
+//    std::iterator_traits<X>::pointer
+
+// Otherwise, if partial specialization is supported or X is not a pointer
 //    std::iterator_traits<X>::value_type
-//
-// And if partial specialization is supported or (X is not a pointer and the
-// library isn't the VC6 standard library),
 //    std::iterator_traits<X>::pointer
 //    std::iterator_traits<X>::reference
+//
+// CAVEAT: When using the VC6 standard library, an iterator derived from
+// std::iterator but not boost::iterator or from one supplied by the standard
+// will always have pointer == const value_type* and reference == const
+// value_type&, whether that's correct or not.
 
 // See http://www.boost.org for most recent version including documentation.
 
