@@ -16,15 +16,20 @@ namespace boost {
 
 //  Contributed by Dave Abrahams
 
-class noncopyable
+namespace noncopyable_  // protection from unintended ADL
 {
- protected:
-    noncopyable() {}
-    ~noncopyable() {}
- private:  // emphasize the following members are private
-    noncopyable( const noncopyable& );
-    const noncopyable& operator=( const noncopyable& );
-};
+  class noncopyable
+  {
+   protected:
+      noncopyable() {}
+      ~noncopyable() {}
+   private:  // emphasize the following members are private
+      noncopyable( const noncopyable& );
+      const noncopyable& operator=( const noncopyable& );
+  };
+}
+
+typedef noncopyable_::noncopyable noncopyable;
 
 } // namespace boost
 
