@@ -9,7 +9,7 @@
 //  boost/checked_delete.hpp
 //
 //  Copyright (c) 1999, 2000, 2001, 2002 boost.org
-//  Copyright (c) 2002 Peter Dimov
+//  Copyright (c) 2002, 2003 Peter Dimov
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -41,7 +41,7 @@ template<class T> struct checked_deleter
     typedef void result_type;
     typedef T * argument_type;
 
-    void operator()(T * x)
+    void operator()(T * x) const
     {
         checked_delete(x);
     }
@@ -52,7 +52,7 @@ template<class T> struct checked_array_deleter
     typedef void result_type;
     typedef T * argument_type;
 
-    void operator()(T * x)
+    void operator()(T * x) const
     {
         checked_array_delete(x);
     }
