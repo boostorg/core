@@ -52,8 +52,6 @@
 # define ITERATOR_DWA122600_HPP_
 
 # include <boost/config.hpp>
-# include <boost/mpl/apply_if.hpp>
-# include <boost/mpl/identity.hpp>
 # include <boost/type_traits/remove_const.hpp>
 # include <boost/type_traits/detail/yes_no_type.hpp>
 # include <boost/type_traits/is_pointer.hpp>
@@ -61,7 +59,6 @@
 # include <boost/mpl/aux_/has_xxx.hpp>
 # include <iterator>
 # include <cstddef>
-# include <boost/utility.hpp> // for noncopyable
 
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
@@ -91,15 +88,25 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(pointer)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(difference_type)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(iterator_category)
 
-# if !defined(BOOST_NO_STD_ITERATOR_TRAITS) && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
-using std::iterator_traits;
+# if !defined(BOOST_NO_STD_ITERATOR_TRAITS)             \
+  && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+  && !defined(BOOST_MSVC_STD_ITERATOR)
+// Define a new template so it can be specialized
+template <class Iterator>
+struct iterator_traits
+    : std::iterator_traits<Iterator>
+{};
 using std::distance;
 # else
 
 // is_mutable_iterator --
 //
-//   A metafunction returning true iff T is a mutable iterator
-//   type with a nested value_type. 
+//   A metafunction returning true iff T is a mutable iterator type
+//   with a nested value_type. Will only work portably with iterators
+//   whose operator* returns a reference, but that seems to be OK for
+//   the iterators supplied by Dinkumware. Some input iterators may
+//   compile-time if they arrive here, and if the compiler is strict
+//   about not taking the address of an rvalue.
 
 // This one detects ordinary mutable iterators - the result of
 // operator* is convertible to the value_type.
@@ -182,18 +189,8 @@ struct stlport_40_debug_iterator_traits
     typedef typename T::_Iterator_category iterator_category;
 };
 # endif // BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF 
-    
-template <class T>
-struct pointer_iterator_traits
-{
-    typedef T pointer;
-    typedef std::random_access_iterator_tag iterator_category;
-    typedef std::ptrdiff_t difference_type;
 
-    // Makes MSVC6 happy under some circumstances
-    typedef noncopyable value_type;
-    typedef noncopyable reference;
-};
+template <class T> struct pointer_iterator_traits;
 
 # ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T>
@@ -205,7 +202,36 @@ struct pointer_iterator_traits<T*>
     typedef std::random_access_iterator_tag iterator_category;
     typedef std::ptrdiff_t difference_type;
 };
-# endif
+# else 
+template <class Ptr>
+struct must_manually_specialize_boost_detail_iterator_traits;
+
+template <class T>
+struct pointer_iterator_traits
+{
+    typedef T pointer;
+    typedef std::random_access_iterator_tag iterator_category;
+    typedef std::ptrdiff_t difference_type;
+
+    // Makes MSVC6 happy under some circumstances
+    typedef must_manually_specialize_boost_detail_iterator_traits<T> value_type;
+    typedef must_manually_specialize_boost_detail_iterator_traits<T> reference;
+};
+
+// Use this as a base class in manual iterator_traits specializations
+// for pointer types. T should be the value_type. CV should be the
+// cv-qualified value_type to which */& is added in order to produce
+// pointer/reference.
+template <class T, class CV = T>
+struct ptr_iter_traits
+{
+    typedef T value_type;
+    typedef CV* pointer;
+    typedef CV& reference;
+    typedef std::random_access_iterator_tag iterator_category;
+    typedef std::ptrdiff_t difference_type;
+};
+# endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 // We'll sort iterator types into one of these classifications, from which we
 // can determine the difference_type, pointer, reference, and value_type
@@ -256,21 +282,32 @@ struct bad_output_iterator_traits
 };
 # endif
 
+// If we're looking at an MSVC6 (old Dinkumware) ``standard''
+// iterator, this will generate an appropriate traits class. 
+template <class Iterator>
+struct msvc_stdlib_iterator_traits
+    : mpl::if_<
+       is_mutable_iterator<Iterator>
+       , msvc_stdlib_mutable_traits<Iterator>
+       , msvc_stdlib_const_traits<Iterator>
+      >::type
+{};
+
 template <class Iterator>
 struct non_pointer_iterator_traits
     : mpl::if_<
+        // if the iterator contains all the right nested types...
         is_full_iterator_traits<Iterator>
+        // Use a standard iterator_traits implementation
         , standard_iterator_traits<Iterator>
 # ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+        // Check for STLPort 4.0 broken _Iterator_category type
         , mpl::if_<
              is_stlport_40_debug_iterator<Iterator>
              , stlport_40_debug_iterator_traits<Iterator>
-# endif 
-        , mpl::if_<
-           is_mutable_iterator<Iterator>
-           , msvc_stdlib_mutable_traits<Iterator>
-           , msvc_stdlib_const_traits<Iterator>
-        >::type
+# endif
+        // Otherwise, assume it's a Dinkum iterator
+        , msvc_stdlib_iterator_traits<Iterator>
 # ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
         >::type
 # endif 
@@ -311,6 +348,9 @@ struct iterator_traits
     typedef typename base::difference_type difference_type;
     typedef typename base::iterator_category iterator_category;
 };
+
+// This specialization cuts off ETI (Early Template Instantiation) for MSVC.
+template <> struct iterator_traits<int>{};
 
 namespace iterator_traits_
 {
