@@ -44,19 +44,6 @@ template<class T> struct checked_deleter
     }
 };
 
-// checked_deleter<void> is needed by shared_ptr<void>::reset(0)
-
-template<> struct checked_deleter<void>
-{
-    typedef void result_type;
-    typedef void * argument_type;
-
-    void operator()(void * x)
-    {
-        ::operator delete(x); // avoid g++ warning
-    }
-};
-
 template<class T> struct checked_array_deleter
 {
     typedef void result_type;
