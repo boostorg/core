@@ -4,7 +4,7 @@
 <HEAD><TITLE>enable_if</TITLE>
 
 <META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<META name="GENERATOR" content="hevea 1.06">
+<META name="GENERATOR" content="Microsoft FrontPage 5.0">
 </HEAD>
 <BODY >
 <!--HEVEA command line is: hevea -nosymb -noiso -pedantic -v enable_if_docs_for_boost.tex -->
@@ -17,7 +17,7 @@
 
 
 <h1>
-<img border="0" src="c++boost.gif" align="center" width="277" height="86">enable_if</h1>
+<img border="0" src="../../c++boost.gif" align="center" width="277" height="86">enable_if</h1>
 <BR>
 <BR>
 Copyright 2003 Jaakko J&auml;rvi, Jeremiah Willcock, Andrew Lumsdaine.<BR>
@@ -42,8 +42,7 @@ in&nbsp;[<A HREF="#jarvi:03:cuj_arbitrary_overloading"><CITE>1</CITE></A>] and&n
 <H3><A NAME="htoc2">1.1</A>&nbsp;&nbsp;Synopsis</H3><!--SEC END -->
 
 <A NAME="sec:synopsis"></A>
-<PRE>
-namespace boost {
+<PRE>namespace boost {
   template &lt;class Cond, class T = void&gt; struct enable_if;
   template &lt;class Cond, class T = void&gt; struct disable_if;
   template &lt;class Cond, class T&gt; struct lazy_enable_if;
@@ -68,9 +67,7 @@ template, the instantiation is removed from the overload resolution
 set instead of causing a compilation error. The following example, 
 taken from&nbsp;[<A HREF="#jarvi:03:cuj_arbitrary_overloading"><CITE>1</CITE></A>],
 demonstrates why this is important:
-<PRE>
-
-int negate(int i) { return -i; }
+<PRE>int negate(int i) { return -i; }
 
 template &lt;class F&gt;
 typename F::result_type negate(const F&amp; f) { return -f(); }
@@ -81,9 +78,7 @@ definition is obviously a better match, but the compiler must
 nevertheless consider (and instantiate the prototypes) of both
 definitions to find this out. Instantiating the latter definition with
 <TT>F</TT> as <TT>int</TT> would result in:
-<PRE>
-
-int::result_type negate(const int&amp;);
+<PRE>int::result_type negate(const int&amp;);
 
 </PRE>
 where the return type is invalid. If this was an error, adding an unrelated function template 
@@ -111,9 +106,7 @@ The latter version interoperates with Boost.MPL. <BR>
 <BR>
 The definitions of <TT>enable_if_c</TT> and <TT>enable_if</TT> are as follows (we use <TT>enable_if</TT> templates 
 unqualified but they are in the <TT>boost</TT> namespace).
-<PRE>
-
-template &lt;bool B, class T = void&gt;
+<PRE>template &lt;bool B, class T = void&gt;
 struct enable_if_c {
   typedef T type;
 };
@@ -136,9 +129,7 @@ The <TT>enable_if_c</TT> template can thus be used for controlling when function
 overload resolution and when they are not. 
 For example, the following function is defined for all arithmetic types (according to the
 classification of the <A HREF="http://www.boost.org/libs/type_traits">Boost type_traits library</A>):
-<PRE>
-
-template &lt;class T&gt;
+<PRE>template &lt;class T&gt;
 typename enable_if_c&lt;boost::is_arithmetic&lt;T&gt;::value, T&gt;::type 
 foo(T t) { return t; }
 
@@ -146,9 +137,7 @@ foo(T t) { return t; }
 The <TT>disable_if_c</TT> template is provided as well, and has the
 same functionality as <TT>enable_if_c</TT> except for the negated condition. The following
 function is enabled for all non-arithmetic types.
-<PRE>
-
-template &lt;class T&gt;
+<PRE>template &lt;class T&gt;
 typename disable_if_c&lt;boost::is_arithmetic&lt;T&gt;::value, T&gt;::type 
 bar(T t) { return t; }
 
@@ -160,9 +149,7 @@ The MPL <TT>bool_</TT>, <TT>and_</TT>, <TT>or_</TT>, and <TT>not_</TT> templates
 useful for creating such types. Also, the traits classes in the Boost.Type_traits library 
 follow this convention. 
 For example, the above example function <TT>foo</TT> can be alternatively written as:
-<PRE>
-
-template &lt;class T&gt;
+<PRE>template &lt;class T&gt;
 typename enable_if&lt;boost::is_arithmetic&lt;T&gt;, T&gt;::type 
 foo(T t) { return t; }
 
@@ -178,9 +165,7 @@ The <TT>enable_if</TT> templates are defined in
 The <TT>enable_if</TT> template can be used either as the return type, or as an 
 extra argument. For example, the <TT>foo</TT> function in the previous section could also be written
 as:
-<PRE>
-
-template &lt;class T&gt;
+<PRE>template &lt;class T&gt;
 T foo(T t, typename enable_if&lt;boost::is_arithmetic&lt;T&gt; &gt;::type* dummy = 0); 
 
 </PRE>Hence, an extra parameter of type <TT>void*</TT> is added, but it is given 
@@ -206,9 +191,7 @@ Class template specializations can be enabled or disabled with <TT>enable_if</TT
 One extra template parameter needs to be added for the enabler expressions.
 This parameter has the default value <TT>void</TT>.
 For example:
-<PRE>
-
-template &lt;class T, class Enable = void&gt; 
+<PRE>template &lt;class T, class Enable = void&gt; 
 class A { ... };
 
 template &lt;class T&gt;
@@ -236,9 +219,7 @@ rules are used to select the best matching function.
 In particular, there is no ordering between enabling conditions.
 Function templates with enabling conditions that are not mutually exclusive can 
 lead to ambiguities. For example:
-<PRE>
-
-template &lt;class T&gt;
+<PRE>template &lt;class T&gt;
 typename enable_if&lt;boost::is_integral&lt;T&gt;, void&gt;::type 
 foo(T t) {}
 
@@ -263,9 +244,7 @@ partial specializations as well.<BR>
 <A NAME="sec:enable_if_lazy"></A>
 In some cases it is necessary to avoid instantiating part of a
 function signature unless an enabling condition is true. For example:
-<PRE>
-
-template &lt;class T, class U&gt; class mult_traits;
+<PRE>template &lt;class T, class U&gt; class mult_traits;
 
 template &lt;class T, class U&gt;
 typename enable_if&lt;is_multipliable&lt;T, U&gt;, typename mult_traits&lt;T, U&gt;::type&gt;::type
@@ -284,9 +263,7 @@ The SFINAE principle is not applied because
 the invalid type occurs as an argument to another template. The <TT>lazy_enable_if</TT> 
 and <TT>lazy_disable_if</TT> templates (and their <TT>_c</TT> versions) can be used in such
 situations:
-<PRE>
-
-template&lt;class T, class U&gt;
+<PRE>template&lt;class T, class U&gt;
 typename lazy_enable_if&lt;is_multipliable&lt;T, U&gt;, mult_traits&lt;T, U&gt; &gt;::type
 operator*(const T&amp; t, const U&amp; u) { ... }
 
@@ -314,9 +291,7 @@ above example, <TT>is_multipliable&lt;T, U&gt;::value</TT> defines when
 Some compilers flag functions as ambiguous if the only distinguishing factor is a different 
 condition in an enabler (even though the functions could never be ambiguous). For example,
 some compilers (e.g. GCC 3.2) diagnose the following two functions as ambiguous:
-<PRE>
-
-template &lt;class T&gt;
+<PRE>template &lt;class T&gt;
 typename enable_if&lt;boost::is_arithmetic&lt;T&gt;, T&gt;::type 
 foo(T t);
 
@@ -328,9 +303,7 @@ foo(T t);
 <UL><LI>
 Use an extra dummy parameter which disambiguates the functions. Use a default value for
 it to hide the parameter from the caller. For example:
-<PRE>
-
-template &lt;class T&gt; struct dummy { dummy(int) {} };
+<PRE>template &lt;class T&gt; struct dummy { dummy(int) {} };
 
 template &lt;class T&gt;
 typename enable_if&lt;boost::is_arithmetic&lt;T&gt;, T&gt;::type 
@@ -343,9 +316,7 @@ foo(T t, dummy&lt;1&gt; = 0);
 <BR>
 <LI>Define the functions in different namespaces and bring them into a common
 namespace with <TT>using</TT> declarations:
-<PRE>
-
-namespace A {
+<PRE>namespace A {
   template &lt;class T&gt;
   typename enable_if&lt;boost::is_arithmetic&lt;T&gt;, T&gt;::type 
   foo(T t);
