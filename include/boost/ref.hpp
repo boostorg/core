@@ -87,6 +87,14 @@ class unwrap_reference<reference_wrapper<T> >
     typedef T type;
 };
 # else // no partial specialization
+
+} // namespace boost
+
+#include <boost/type.hpp>
+
+namespace boost
+{
+
 namespace detail
 {
   typedef char (&yes_reference_wrapper_t)[1];
@@ -95,7 +103,7 @@ namespace detail
   no_reference_wrapper_t is_reference_wrapper_test(...);
 
   template<typename T>
-  yes_reference_wrapper_t is_reference_wrapper_test(reference_wrapper<T>*);
+  yes_reference_wrapper_t is_reference_wrapper_test(type< reference_wrapper<T> >);
 
   template<bool wrapped>
   struct reference_unwrapper
@@ -122,10 +130,9 @@ template<typename T>
 class is_reference_wrapper
 {
  public:
-    static T* t;
     BOOST_STATIC_CONSTANT(
         bool, value = (
-            sizeof(detail::is_reference_wrapper_test(t))
+            sizeof(detail::is_reference_wrapper_test(type<T>()))
             == sizeof(detail::yes_reference_wrapper_t)));
 };
 
