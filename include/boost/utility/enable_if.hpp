@@ -14,6 +14,13 @@
 #ifndef BOOST_UTILITY_ENABLE_IF_HPP
 #define BOOST_UTILITY_ENABLE_IF_HPP
 
+#include <boost/config.hpp>
+
+// Even the definition of enable_if causes problems on some compilers,
+// so it's macroed out for all compilers that do not support SFINAE
+
+#ifndef BOOST_NO_SFINAE
+
 namespace boost
 {
  
@@ -62,8 +69,8 @@ namespace boost
   template <class Cond, class T> 
   struct lazy_disable_if : public lazy_disable_if_c<Cond::value, T> {};
 
-
-  
 } // namespace boost
+
+#endif // BOOST_NO_SFINAE
 
 #endif
