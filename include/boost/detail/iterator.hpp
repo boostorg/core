@@ -284,20 +284,6 @@ template<class P> class please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqual
 
 template<class P>
 struct pointer_value_type
-#    if BOOST_WORKAROUND(BOOST_MSVC, == 1300) || BOOST_WORKAROUND(__EDG_VERSION__, != 0)
-// Special formulation required to get
-// please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee
-// to show up in vc7 errors.  It's better to use the other one if
-// possible because it means you can use the other members of
-// iterator_traits
-  : mpl::apply_if<
-        is_same<P, typename remove_pointer<P>::type>
-      , please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee<P>
-      , remove_const<
-            typename remove_pointer<P>::type
-        >
-    >
-#    else 
   : mpl::if_<
         is_same<P, typename remove_pointer<P>::type>
       , please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee<P>
@@ -305,31 +291,17 @@ struct pointer_value_type
             typename remove_pointer<P>::type
         >::type
     >
-#    endif 
 {
 };
 
 
 template<class P>
 struct pointer_reference
-#    if BOOST_WORKAROUND(BOOST_MSVC, == 1300) || BOOST_WORKAROUND(__EDG_VERSION__,  != 0)
-// Special formulation required to get
-// please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee to
-// show up in vc7 errors.  It's better to use the other one if
-// possible because it means you can use the other members of
-// iterator_traits
-  : mpl::apply_if<
-        is_same<P, typename remove_pointer<P>::type>
-      , please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee<P>
-      , add_reference<typename remove_pointer<P>::type>
-    >
-#    else 
   : mpl::if_<
         is_same<P, typename remove_pointer<P>::type>
       , please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee<P>
       , typename remove_pointer<P>::type&
     >
-#    endif 
 {
 };
 
