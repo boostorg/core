@@ -252,42 +252,6 @@ no_type is_std_iterator_helper(...);
 template <class V, class D, class C>
 yes_type is_std_iterator_helper(const volatile std::iterator<V,D,C>*);
 
-#if 0 && defined(__ICL)  // re-enable this to pick up with the Intel C++ fixes where they left off
-// for some reason, it's unable to make the deduction of derivation :(
-template<class K, class Ty, class Kfn, class Pr, class A>
-yes_type is_std_iterator_helper(const volatile typename std::_Tree<K,Ty,Kfn,Pr,A>::iterator*);
-template<class Ty, class A>
-yes_type is_std_iterator_helper(const volatile typename std::list<Ty,A>::iterator*);
-template<class Ty, class A>
-yes_type is_std_iterator_helper(const volatile typename std::deque<Ty,A>::iterator*);
-
-template<class K, class Ty, class Kfn, class Pr, class A>
-yes_type is_std_iterator_helper(const volatile typename std::_Tree<K,Ty,Kfn,Pr,A>::const_iterator*);
-template<class Ty, class A>
-yes_type is_std_iterator_helper(const volatile typename std::list<Ty,A>::const_iterator*);
-template<class Ty, class A>
-yes_type is_std_iterator_helper(const volatile typename std::deque<Ty,A>::const_iterator*);
-
-template<class RI, class Ty, class Rt, class Pt, class D>
-yes_type is_std_iterator_helper(const volatile std::reverse_iterator<RI,Ty,Rt,Pt,D>*);
-template<class BI, class Ty, class Rt, class Pt, class D>
-yes_type is_std_iterator_helper(const volatile std::reverse_bidirectional_iterator<BI,Ty,Rt,Pt,D>*);
-template<class C>
-yes_type is_std_iterator_helper(const volatile std::back_insert_iterator<C>*);
-template<class C>
-yes_type is_std_iterator_helper(const volatile std::front_insert_iterator<C>*);
-template<class C>
-yes_type is_std_iterator_helper(const volatile std::insert_iterator<C>*);
-template<class U, class E, class Tr>
-yes_type is_std_iterator_helper(const volatile std::istream_iterator<U,E,Tr>*);
-template<class E, class Tr>
-yes_type is_std_iterator_helper(const volatile std::istreambuf_iterator<E,Tr>*);
-template<class E, class Tr>
-yes_type is_std_iterator_helper(const volatile std::ostreambuf_iterator<E,Tr>*);
-template<class Oi, class Ty>
-yes_type is_std_iterator_helper(const volatile std::raw_storage_iterator<Oi,Ty>*);
-#endif
-
 // Is the iterator derived from boost::iterator?
 template <class C, class T, class D, class P, class R>
 yes_type is_boost_iterator_helper(const volatile boost::iterator<C,T,D,P,R>*);
@@ -306,15 +270,6 @@ no_type is_mutable_iterator_helper(...);
 template<class T, class CharT, class Traits>
 yes_type is_ostream_iterator_helper(const volatile std::ostream_iterator<T,CharT,Traits>*);
 no_type is_ostream_iterator_helper(...);
-
-#if 0 && defined(__ICL)
-// this static assertion highlights the first of a few problems getting this to
-// work with the Intel compiler. We can get past it with the many definitions
-// for is_std_iterator_helper above, but there are other failures.
-template <bool> struct check;
-template <> struct check<true> {};
-check<(sizeof(is_std_iterator_helper((std::istream_iterator<int>*)0)) == sizeof(yes_type))> assertion;
-#endif
 
 template <class T>
 struct msvc_iterator_classification {
