@@ -27,7 +27,6 @@
 // Also, whether debugging is enabled or not, there is a broken specialization
 // of std::iterator<output_iterator_tag,void,void,void,void> which has no
 // typedefs but iterator_category.
-// the proper typedef.
 # if defined(__SGI_STL_PORT) && (__SGI_STL_PORT <= 0x410) && !defined(__STL_CLASS_PARTIAL_SPECIALIZATION)
 
 #  ifdef __STL_DEBUG
