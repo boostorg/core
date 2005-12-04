@@ -61,7 +61,7 @@ mult(const T& x, const U& y) {return x * y;}
 #if 1
 template <class T, class U>
 typename lazy_enable_if_c<
-  is_int<T>::value && is_int<U>::value,
+  is_int<T>::value & is_int<U>::value,
   mult_traits<T, U> 
 >::type
 mult(const T& x, const U& y) {return x * y;}
