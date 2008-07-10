@@ -109,6 +109,7 @@ void unwrap_test() {
   do_unwrap(cref(cc));
 
   BOOST_CHECK(cc.count() == 1);
+  BOOST_CHECK(unwrap_ref(ref(cc)).count() == 1); 
 }
 
 int test_main(int, char * [])
