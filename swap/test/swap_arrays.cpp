@@ -11,6 +11,25 @@
 //Put test class in the global namespace
 #include "./swap_test_class.hpp"
 
+//Provide swap function in both the namespace of swap_test_class
+//(which is the global namespace), and the std namespace.
+//It's common to provide a swap function for a class in both
+//namespaces. Scott Meyers recommends doing so: Effectice C++,
+//Third Edition, item 25, "Consider support for a non-throwing swap".
+void swap(swap_test_class& left, swap_test_class& right)
+{
+  left.swap(right);
+}
+
+namespace std
+{
+  template <>
+  void swap(swap_test_class& left, swap_test_class& right)
+  {
+    left.swap(right);
+  }
+}
+
 
 int test_main(int, char*[])
 {
