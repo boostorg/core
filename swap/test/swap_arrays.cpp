@@ -30,7 +30,7 @@ int test_main(int, char*[])
 
   swap_test_class two_d_array1[firstDimension][secondDimension];
   swap_test_class two_d_array2[firstDimension][secondDimension];
-  boost::swap(two_d_array1, two_d_array1);
+  boost::swap(two_d_array1, two_d_array2);
 
   BOOST_CHECK_EQUAL(swap_test_class::swap_count(), firstDimension*secondDimension);
   BOOST_CHECK_EQUAL(swap_test_class::copy_count(), 0);
