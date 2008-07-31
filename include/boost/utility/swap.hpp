@@ -36,16 +36,11 @@ namespace boost_swap_impl
 
 namespace boost
 {
-  namespace swap_adl_barrier
+  template<class T1, class T2>
+  void swap(T1& left, T2& right)
   {
-    template<class T1, class T2>
-    void swap(T1& left, T2& right)
-    {
-      ::boost_swap_impl::swap_impl(left, right);
-    }
+    ::boost_swap_impl::swap_impl(left, right);
   }
-
-  using swap_adl_barrier::swap;
 }
 
 #endif
