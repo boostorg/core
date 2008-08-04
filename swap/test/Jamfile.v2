@@ -28,6 +28,6 @@ test-suite utility/swap
     [ run std_vector_of_boost.cpp ../../../test/build//boost_test_exec_monitor/<link>static            ]
     [ run std_vector_of_global.cpp ../../../test/build//boost_test_exec_monitor/<link>static           ]
     [ run std_vector_of_other.cpp ../../../test/build//boost_test_exec_monitor/<link>static            ]
-    [ run test_adl_barrier.cpp ../../../test/build//boost_test_exec_monitor/<link>static               ]
+    [ run no_ambiguity_in_boost.cpp ../../../test/build//boost_test_exec_monitor/<link>static          ]
     [ run swap_arrays.cpp ../../../test/build//boost_test_exec_monitor/<link>static                    ]
     ;
