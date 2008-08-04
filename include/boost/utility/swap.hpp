@@ -20,7 +20,7 @@ namespace boost_swap_impl
   template<class T>
   void swap_impl(T& left, T& right)
   {
-    using std::swap;//use std::swap if argument dependent lookup fails
+    using namespace std;//use std::swap if argument dependent lookup fails
     swap(left,right);
   }
 
