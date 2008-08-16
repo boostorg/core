@@ -9,6 +9,18 @@
 #ifndef BOOST_UTILITY_SWAP_HPP
 #define BOOST_UTILITY_SWAP_HPP
 
+// Note: the implementation of this utility contains various workarounds:
+// - swap_impl is put outside the boost namespace, to avoid infinite
+// recursion (causing stack overflow) when swapping objects of a primitive
+// type.
+// - swap_impl has a using-directive, rather than a using-declaration,
+// because some compilers (including MSVC 7.1, Borland 5.9.3, and
+// Intel 8.1) don't do argument-dependent lookup when it has a
+// using-declaration instead.
+// - boost::swap has two template arguments, instead of one, to
+// avoid ambiguity when swapping objects of a Boost type that does
+// not have its own boost::swap overload.
+
 #include <algorithm> //for std::swap
 #include <cstddef> //for std::size_t
 
