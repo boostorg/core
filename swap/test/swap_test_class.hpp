@@ -12,8 +12,11 @@
 
 class swap_test_class
 {
+  int m_data;	
 public:
-  swap_test_class()
+  explicit swap_test_class(int arg = 0)
+  :
+  m_data(arg)
   {
     ++constructCount();
   }
@@ -23,24 +26,40 @@ public:
     ++destructCount();
   }
 
-  swap_test_class(const swap_test_class&)
+  swap_test_class(const swap_test_class& arg)
+  :
+  m_data(arg.m_data)
   {
     ++copyCount();
     ++destructCount();
   }
 
-  swap_test_class& operator=(const swap_test_class&)
+  swap_test_class& operator=(const swap_test_class& arg)
   {
+    m_data = arg.m_data;
     ++copyCount();
     return *this;
   }
 
   void swap(swap_test_class& other)
   {
+    const int temp = m_data;
+    m_data = other.m_data;
+    other.m_data = temp;
+
     ++swapCount();
   }
 
+  int get_data() const
+  {
+    return m_data;
+  }
 
+  void set_data(int arg)
+  {
+    m_data = arg;
+  }
+  
   static unsigned int swap_count(){ return swapCount(); }
   static unsigned int copy_count(){ return copyCount(); }
   static unsigned int construct_count(){ return constructCount(); }
@@ -80,5 +99,16 @@ private:
   }
 
 };
+
+
+inline bool operator==(const swap_test_class & lhs, const swap_test_class & rhs)
+{
+  return lhs.get_data() == rhs.get_data();
+}
+
+inline bool operator!=(const swap_test_class & lhs, const swap_test_class & rhs)
+{
+  return !(lhs == rhs);
+}
 
 #endif
