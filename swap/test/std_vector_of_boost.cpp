@@ -36,8 +36,11 @@ int test_main(int, char*[])
   const vector_type::size_type initial_size1 = 1;
   const vector_type::size_type initial_size2 = 2;
 
-  vector_type object1(initial_size1);
-  vector_type object2(initial_size2);
+  const vector_type initial_value1(initial_size1, swap_test_class_type(1));
+  const vector_type initial_value2(initial_size2, swap_test_class_type(2));
+  
+  vector_type object1 = initial_value1;
+  vector_type object2 = initial_value2;
 
   swap_test_class_type::reset();
   
@@ -46,6 +49,9 @@ int test_main(int, char*[])
   BOOST_CHECK_EQUAL(object1.size(),initial_size2);
   BOOST_CHECK_EQUAL(object2.size(),initial_size1);
 
+  BOOST_CHECK(object1 == initial_value2);
+  BOOST_CHECK(object2 == initial_value1);
+  
   BOOST_CHECK_EQUAL(swap_test_class_type::swap_count(),0);
   BOOST_CHECK_EQUAL(swap_test_class_type::copy_count(),0);
 

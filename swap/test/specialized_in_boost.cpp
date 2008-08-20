@@ -25,9 +25,17 @@ namespace boost
 
 int test_main(int, char*[])
 {
-  boost::swap_test_class object1;
-  boost::swap_test_class object2;
+  const boost::swap_test_class initial_value1(1);
+  const boost::swap_test_class initial_value2(2);
+
+  boost::swap_test_class object1 = initial_value1;
+  boost::swap_test_class object2 = initial_value2;
+  
+  boost::swap_test_class::reset();
   boost::swap(object1,object2);
+
+  BOOST_CHECK(object1 == initial_value2);
+  BOOST_CHECK(object2 == initial_value1);
 
   BOOST_CHECK_EQUAL(boost::swap_test_class::swap_count(),1);
   BOOST_CHECK_EQUAL(boost::swap_test_class::copy_count(),0);
