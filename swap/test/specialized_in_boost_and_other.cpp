@@ -44,10 +44,18 @@ namespace other
 
 int test_main(int, char*[])
 {
-  other::swap_test_class object1;
-  other::swap_test_class object2;
+  const other::swap_test_class initial_value1(1);
+  const other::swap_test_class initial_value2(2);
+
+  other::swap_test_class object1 = initial_value1;
+  other::swap_test_class object2 = initial_value2;
+  
+  other::swap_test_class::reset();
   boost::swap(object1,object2);
 
+  BOOST_CHECK(object1 == initial_value2);
+  BOOST_CHECK(object2 == initial_value1);
+  
   BOOST_CHECK_EQUAL(other::swap_test_class::swap_count(),1);
   BOOST_CHECK_EQUAL(other::swap_test_class::copy_count(),0);
 

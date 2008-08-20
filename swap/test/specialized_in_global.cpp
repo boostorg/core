@@ -19,10 +19,18 @@ void swap(swap_test_class& left, swap_test_class& right)
 
 int test_main(int, char*[])
 {
-  swap_test_class object1;
-  swap_test_class object2;
+  const swap_test_class initial_value1(1);
+  const swap_test_class initial_value2(2);
+
+  swap_test_class object1 = initial_value1;
+  swap_test_class object2 = initial_value2;
+  
+  swap_test_class::reset();
   boost::swap(object1,object2);
 
+  BOOST_CHECK(object1 == initial_value2);
+  BOOST_CHECK(object2 == initial_value1);
+  
   BOOST_CHECK_EQUAL(swap_test_class::swap_count(),1);
   BOOST_CHECK_EQUAL(swap_test_class::copy_count(),0);
 
