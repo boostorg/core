@@ -14,7 +14,7 @@
       <tt>template&lt;class T&gt; void swap(T&amp; <em>left</em>, T&amp; <em>right</em>);</tt>
     </p>
      
-    <!-- Intoduction -->
+    <!-- Introduction -->
     <p>
       The template function <tt>boost::swap</tt> allows the values of two variables to be swapped, using argument dependent lookup to select a specialized swap function if available. If no specialized swap function is available, <tt>std::swap</tt> is used.
     </p>
@@ -24,10 +24,10 @@
     <p>
       The generic <tt>std::swap</tt> function requires that the elements to be swapped are assignable and copy constructible. It is usually implemented using one copy construction and two assignments - this is often both unnecessarily restrictive and unnecessarily slow. In addition, where the generic swap implementation provides only the basic guarantee, specialized swap functions are often able to provide the no-throw exception guarantee (and it is considered best practice to do so where possible<sup><a href="#ref1">1</a></sup>).</p>
     <p>
-      The alternative to using argument dependent lookup in this situation is to provide a template specialization of std::swap for every type that requires a specialized swap. Although this is legal C++, no Boost libraries use this method, whereas many Boost libraries provide specialized swap functions in their own namespaces.
+      The alternative to using argument dependent lookup in this situation is to provide a template specialization of <tt>std::swap</tt> for every type that requires a specialized swap. Although this is legal C++, no Boost libraries use this method, whereas many Boost libraries provide specialized swap functions in their own namespaces.
     </p>
     <p>
-      <tt>boost::swap</tt> also supports swapping built-in arrays. Note that <tt>std::swap</tt> doesn't yet do so, but a request to add an overload of <tt>std::swap</tt> for built-in arrays has been well-received by the Library Working Group of the C++ Standards Committee<sup><a href="#ref2">2</a></sup>.      
+      <tt>boost::swap</tt> also supports swapping built-in arrays. Note that <tt>std::swap</tt> originally did not do so, but a request to add an overload of <tt>std::swap</tt> for built-in arrays has been accepted by the C++ Standards Committee<sup><a href="#ref2">2</a></sup>.
     </p>
     
     <!-- Exception Safety -->
@@ -45,11 +45,11 @@
     </ul>
     <p>Or:</p>
     <ul>
-      <li>A function with the signature <tt>swap(T&,T&)</tt> is available via argument dependent lookup</li>
+      <li>A function with the signature <tt>swap(T&amp;,T&amp;)</tt> is available via argument dependent lookup</li>
     </ul>
     <p>Or:</p>
     <ul>
-      <li>A template specialization of std::swap exists for T</li>
+      <li>A template specialization of <tt>std::swap</tt> exists for T</li>
     </ul>
     <p>Or:</p>
     <ul>
@@ -73,18 +73,18 @@
         <em><a href="mailto:Joseph.Gauterin@googlemail.com">Joseph Gauterin</a></em> - for the initial idea, implementation, tests, and documentation
       </li>
       <li>
-        <em>Steven Watanabe</em> - for the idea to make boost::swap less specialized than std::swap, thereby allowing the function to have the name 'swap' without introducing ambiguity
+        <em>Steven Watanabe</em> - for the idea to make <tt>boost::swap</tt> less specialized than <tt>std::swap</tt>, thereby allowing the function to have the name 'swap' without introducing ambiguity
       </li>      
     </ul>
 
     <!-- References -->
     <hr/>
     <p><sup><a id="ref1"/>[1]</sup>Scott Meyers, Effective C++ Third Edition, Item 25: "Consider support for a non-throwing swap"</p>
-    <p><sup><a id="ref2"/>[2]</sup><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-active.html#809">LWG issue 809 (std::swap should be overloaded for array types)</a></p>
+    <p><sup><a id="ref2"/>[2]</sup><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#809">LWG Defect Report 809 (std::swap should be overloaded for array types)</a></p>
 
     <!-- Copyright info -->    
     <hr/>
-    <p>Revised: 21 October 2008</p>
+    <p>Revised: 15 November 2008</p>
     <p>
       Copyright 2007, 2008 Joseph Gauterin. Use, modification, and distribution are subject to the Boost Software License, Version 1.0.
       (See accompanying file <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)
