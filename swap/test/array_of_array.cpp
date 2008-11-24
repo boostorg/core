@@ -33,32 +33,8 @@ namespace std
   }
 }
 
-// Tests swapping 1-dimensional arrays.
-void test_swapping_1D_arrays()
-{
-  const std::size_t dimension = 2;
-  const swap_test_class initial_array1[dimension] = { swap_test_class(1), swap_test_class(2) };
-  const swap_test_class initial_array2[dimension] = { swap_test_class(3), swap_test_class(4) };
-  
-  swap_test_class array1[dimension];
-  swap_test_class array2[dimension];
 
-  std::copy(initial_array1, initial_array1 + dimension, array1);
-  std::copy(initial_array2, initial_array2 + dimension, array2);
-  
-  swap_test_class::reset();
-  boost::swap(array1, array2);
-
-  BOOST_CHECK(std::equal(array1, array1 + dimension, initial_array2));
-  BOOST_CHECK(std::equal(array2, array2 + dimension, initial_array1));
-
-  BOOST_CHECK_EQUAL(swap_test_class::swap_count(), dimension);
-  BOOST_CHECK_EQUAL(swap_test_class::copy_count(), 0);
-}
-
-
-// Tests swapping 2-dimensional arrays.
-void test_swapping_2D_arrays()
+int test_main(int, char*[])
 {
   const std::size_t first_dimension = 3;
   const std::size_t second_dimension = 4;
@@ -76,7 +52,6 @@ void test_swapping_2D_arrays()
     ptr2[i].set_data( static_cast<int>(i + number_of_elements) );
   }
 
-  swap_test_class::reset();
   boost::swap(array1, array2);
 
   for (std::size_t i = 0; i < number_of_elements; ++i)
@@ -87,14 +62,6 @@ void test_swapping_2D_arrays()
 
   BOOST_CHECK_EQUAL(swap_test_class::swap_count(), number_of_elements);
   BOOST_CHECK_EQUAL(swap_test_class::copy_count(), 0);
-}
-
-
-int test_main(int, char*[])
-{
-  test_swapping_1D_arrays();
-  test_swapping_2D_arrays();
 
   return 0;
 }
-
