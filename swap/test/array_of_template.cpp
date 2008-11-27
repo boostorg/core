@@ -4,6 +4,8 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+// Tests swapping an array of swap_test_template<int> objects by means of boost::swap.
+
 #include <boost/utility/swap.hpp>
 #define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>
@@ -18,6 +20,7 @@ template <class T>
 class swap_test_template
 {
 public:
+  typedef T template_argument;
   swap_test_class swap_test_object;
 };
 
@@ -45,23 +48,23 @@ void swap(swap_test_template<T>& left, swap_test_template<T>& right)
 
 int test_main(int, char*[])
 {
-  const std::size_t dimension = 2;
-  const swap_test_template<int> initial_array1[dimension] = { swap_test_class(1), swap_test_class(2) };
-  const swap_test_template<int> initial_array2[dimension] = { swap_test_class(3), swap_test_class(4) };
+  const std::size_t array_size = 2;
+  const swap_test_template<int> initial_array1[array_size] = { swap_test_class(1), swap_test_class(2) };
+  const swap_test_template<int> initial_array2[array_size] = { swap_test_class(3), swap_test_class(4) };
   
-  swap_test_template<int> array1[dimension];
-  swap_test_template<int> array2[dimension];
+  swap_test_template<int> array1[array_size];
+  swap_test_template<int> array2[array_size];
 
-  std::copy(initial_array1, initial_array1 + dimension, array1);
-  std::copy(initial_array2, initial_array2 + dimension, array2);
+  std::copy(initial_array1, initial_array1 + array_size, array1);
+  std::copy(initial_array2, initial_array2 + array_size, array2);
   
   swap_test_class::reset();
   boost::swap(array1, array2);
 
-  BOOST_CHECK(std::equal(array1, array1 + dimension, initial_array2));
-  BOOST_CHECK(std::equal(array2, array2 + dimension, initial_array1));
+  BOOST_CHECK(std::equal(array1, array1 + array_size, initial_array2));
+  BOOST_CHECK(std::equal(array2, array2 + array_size, initial_array1));
 
-  BOOST_CHECK_EQUAL(swap_test_class::swap_count(), dimension);
+  BOOST_CHECK_EQUAL(swap_test_class::swap_count(), array_size);
   BOOST_CHECK_EQUAL(swap_test_class::copy_count(), 0);
 
   return 0;
