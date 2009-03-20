@@ -21,6 +21,14 @@ namespace boost
 namespace detail
 {
 
+template<class T> struct addr_impl_ref
+{
+    T & v_;
+
+    inline addr_impl_ref( T & v ): v_( v ) {}
+    inline operator T& () const { return v_; }
+};
+
 template<class T> struct addressof_impl
 {
     static inline T * f( T & v, long )
@@ -39,7 +47,15 @@ template<class T> struct addressof_impl
 
 template<class T> T * addressof( T & v )
 {
+#if BOOST_WORKAROUND( __BORLANDC__, < 0x560 )
+
     return boost::detail::addressof_impl<T>::f( v, 0 );
+
+#else
+
+    return boost::detail::addressof_impl<T>::f( boost::detail::addr_impl_ref<T>( v ), 0 );
+
+#endif
 }
 
 // Borland doesn't like casting an array reference to a char reference
