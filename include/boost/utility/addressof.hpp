@@ -47,7 +47,7 @@ template<class T> struct addressof_impl
 
 template<class T> T * addressof( T & v )
 {
-#if BOOST_WORKAROUND( __BORLANDC__, < 0x560 )
+#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x610 ) )
 
     return boost::detail::addressof_impl<T>::f( v, 0 );
 
