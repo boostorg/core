@@ -47,7 +47,7 @@ template<class T> struct addressof_impl
 
 template<class T> T * addressof( T & v )
 {
-#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x610 ) )
+#if defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x610 ) )
 
     return boost::detail::addressof_impl<T>::f( v, 0 );
 
@@ -58,9 +58,18 @@ template<class T> T * addressof( T & v )
 #endif
 }
 
+#if defined( __SUNPRO_CC ) && BOOST_WORKAROUND( __SUNPRO_CC, BOOST_TESTED_AT( 0x590 ) )
+
+template<class T, std::size_t N> T (*addressof(T (&t)[N]))[N]
+{
+    return &t;
+}
+
+#endif
+
 // Borland doesn't like casting an array reference to a char reference
 // but these overloads work around the problem.
-# if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if defined( __BORLANDC__ ) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 template<typename T,std::size_t N>
 T (*addressof(T (&t)[N]))[N]
 {
@@ -72,7 +81,7 @@ const T (*addressof(const T (&t)[N]))[N]
 {
    return reinterpret_cast<const T(*)[N]>(&t);
 }
-# endif
+#endif
 
 } // namespace boost
 
