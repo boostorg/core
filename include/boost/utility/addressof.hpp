@@ -60,7 +60,7 @@ template<class T> T * addressof( T & v )
 
 #if defined( __SUNPRO_CC ) && BOOST_WORKAROUND( __SUNPRO_CC, BOOST_TESTED_AT( 0x590 ) )
 
-template<class T, std::size_t N> T (*addressof(T (&t)[N]))[N]
+template<class T, int N> T (*addressof(T (&t)[N]))[N]
 {
     return &t;
 }
