@@ -60,7 +60,18 @@ template<class T> T * addressof( T & v )
 
 #if defined( __SUNPRO_CC ) && BOOST_WORKAROUND( __SUNPRO_CC, BOOST_TESTED_AT( 0x590 ) )
 
-template<class T, int N> T (*addressof(T (&t)[N]))[N]
+namespace detail
+{
+
+template<class T> struct addressof_addp
+{
+    typedef T * type;
+};
+
+} // namespace detail
+
+template< class T, std::size_t N >
+typename detail::addressof_addp< T[N] >::type addressof( T (&t)[N] )
 {
     return &t;
 }
