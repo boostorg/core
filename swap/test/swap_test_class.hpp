@@ -12,7 +12,7 @@
 
 class swap_test_class
 {
-  int m_data;	
+  int m_data;
 public:
   explicit swap_test_class(int arg = 0)
   :
