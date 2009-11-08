@@ -70,7 +70,7 @@ struct ref_wrapper
 
 struct copy_counter {
   static int count_;
-  copy_counter(copy_counter const& other) {
+  copy_counter(copy_counter const& /*other*/) {
     ++count_;
   }
   copy_counter() {}
