@@ -28,7 +28,7 @@ int main()
     BOOST_TEST( !ti.before( ti ) );
 
     char const * nti = ti.name();
-	std::cout << nti << std::endl;
+    std::cout << nti << std::endl;
 
     boost::detail::sp_typeinfo const & tv = BOOST_SP_TYPEID( void );
 
@@ -40,7 +40,7 @@ int main()
     BOOST_TEST( !tv.before( tv ) );
 
     char const * ntv = tv.name();
-	std::cout << ntv << std::endl;
+    std::cout << ntv << std::endl;
 
     BOOST_TEST( ti != tv );
     BOOST_TEST( !( ti == tv ) );
