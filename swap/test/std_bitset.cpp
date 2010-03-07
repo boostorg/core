@@ -17,8 +17,8 @@
 int test_main(int, char*[])
 {
   typedef std::bitset<8> bitset_type;
-  const bitset_type initial_value1 = 1ul;
-  const bitset_type initial_value2 = 2ul;
+  const bitset_type initial_value1 = 1;
+  const bitset_type initial_value2 = 2;
 
   bitset_type object1 = initial_value1;
   bitset_type object2 = initial_value2;
