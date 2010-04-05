@@ -1,4 +1,4 @@
-// Copyright (c) 2008 Joseph Gauterin, Niels Dekker
+// Copyright (c) 2008 - 2010 Joseph Gauterin, Niels Dekker
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at
