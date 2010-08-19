@@ -24,7 +24,6 @@
 //
 
 #include <boost/current_function.hpp>
-#include <boost/assert.hpp>
 #include <iostream>
 
 namespace boost
@@ -65,31 +64,10 @@ template<class T, class U> inline void test_eq_impl( char const * expr1, char co
     }
 }
 
-struct report_errors_reminder
-{
-  bool remembered_to_call_report_errors_function;
-  report_errors_reminder() : remembered_to_call_report_errors_function(false) {}
- ~report_errors_reminder()
-  {
-    BOOST_ASSERT(remembered_to_call_report_errors_function);    
-  }
-};
-
 } // namespace detail
-
-} // namespace boost
-namespace
-{
-  boost::detail::report_errors_reminder boost_report_errors_reminder;
-}
-
-namespace boost
-{
 
 inline int report_errors()
 {
-    boost_report_errors_reminder.remembered_to_call_report_errors_function = true;
-
     int errors = detail::test_errors();
 
     if( errors == 0 )
