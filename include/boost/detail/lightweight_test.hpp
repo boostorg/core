@@ -95,6 +95,22 @@ template<class T, class U> inline void test_eq_impl( char const * expr1, char co
     }
 }
 
+template<class T, class U> inline void test_ne_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, T const & t, U const & u )
+{
+    if( t != u )
+    {
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test '" << expr1 << " != " << expr2
+            << "' failed in function '" << function << "': "
+            << "'" << t << "' == '" << u << "'" << std::endl;
+        ++test_errors();
+    }
+}
+
 } // namespace detail
 
 inline int report_errors()
@@ -122,5 +138,6 @@ inline int report_errors()
 #define BOOST_TEST(expr) ((expr)? (void)0: ::boost::detail::test_failed_impl(#expr, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION))
 #define BOOST_ERROR(msg) ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION)
 #define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
 #endif // #ifndef BOOST_DETAIL_LIGHTWEIGHT_TEST_HPP_INCLUDED
