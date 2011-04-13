@@ -21,6 +21,7 @@
 <BR>
 <BR>
 Copyright 2003 Jaakko J&auml;rvi, Jeremiah Willcock, Andrew Lumsdaine.<BR>
+Copyright 2011 Matt Calabrese.<BR>
 <BR>
 <!--TOC section Introduction-->
 
@@ -81,7 +82,7 @@ definitions to find this out. Instantiating the latter definition with
 <PRE>int::result_type negate(const int&amp;);
 
 </PRE>
-where the return type is invalid. If this was an error, adding an unrelated function template 
+where the return type is invalid. If this were an error, adding an unrelated function template 
 (that was never called) could break otherwise valid code.
 Due to the SFINAE principle the above example is not, however, erroneous. 
 The latter definition of <TT>negate</TT> is simply removed from the overload resolution set.<BR>
@@ -154,6 +155,7 @@ typename enable_if&lt;boost::is_arithmetic&lt;T&gt;, T&gt;::type
 foo(T t) { return t; }
 
 </PRE>
+
 <!--TOC section Using <TT>enable_if</TT>-->
 
 <H2><A NAME="htoc5">3</A>&nbsp;&nbsp;Using <TT>enable_if</TT></H2><!--SEC END -->
@@ -162,8 +164,19 @@ foo(T t) { return t; }
 The <TT>enable_if</TT> templates are defined in
 <TT>boost/utility/enable_if.hpp</TT>, which is included by <TT>boost/utility.hpp</TT>.<BR>
 <BR>
-The <TT>enable_if</TT> template can be used either as the return type, or as an 
-extra argument. For example, the <TT>foo</TT> function in the previous section could also be written
+With respect to function templates, <TT>enable_if</TT> can be used in multiple different ways:
+
+<UL>
+<LI>As the return type of an instantiatied function
+<LI>As an extra parameter of an instantiated function
+<LI>As an extra template parameter (useful only in a compiler that supports C++0x default
+arguments for function template parameters, see <A href="#sec:enable_if_0x">Enabling function
+templates in C++0x</a> for details)
+</UL>
+
+In the previous section, the return type form of <TT>enable_if</TT> was shown. As an example
+of using the form of <TT>enable_if</TT> that works via an extra function parameter, the
+<TT>foo</TT> function in the previous section could also be written
 as:
 <PRE>template &lt;class T&gt;
 T foo(T t, typename enable_if&lt;boost::is_arithmetic&lt;T&gt; &gt;::type* dummy = 0); 
@@ -173,18 +186,80 @@ a default value to keep the parameter hidden from client code.
 Note that the second template argument was not given to <TT>enable_if</TT>, as the default 
 <TT>void</TT> gives the desired behavior.<BR>
 <BR>
-Whether to write the enabler as an argument or within the return type is
-largely a matter of taste, but for certain functions, only one
-alternative is possible:
+Which way to write the enabler is largely a matter of taste, but for certain functions, only a
+subset of the options is possible:
 <UL><LI>
-Operators have a fixed number of arguments, thus <TT>enable_if</TT> must be used in the return type.
-<LI>Constructors and destructors do not have a return type; an extra argument is the only option.
-<LI>There does not seem to be a way to specify an enabler for a conversion operator. Converting constructors,
-however, can have enablers as extra default arguments.
+Many operators have a fixed number of arguments, thus <TT>enable_if</TT> must be used either in the
+return type or in an extra template parameter.
+<LI>Functions that have a variadic parameter list must use either the return type form or an extra
+template parameter.
+<LI>Constructors do not have a return type so you must use either an extra function parameter or an
+extra template parameter.
+<LI>Constructors that have a variadic parameter list must an extra template parameter.
+<LI>Conversion operators can only be written with an extra template parameter.
 </UL>
+<!--TOC subsection Enabling function templates in C++0x-->
+
+<A NAME="sec:enable_if_0x"></A>
+<H3><A NAME="htoc7">3.1</A>&nbsp;&nbsp;Enabling function templates in C++0x</H3><!--SEC END -->
+
+In a compiler which supports C++0x default arguments for function template parameters, you can
+enable and disable function templates by adding an additional template parameter. This approach
+works in all situations where you would use either the return type form of <TT>enable_if</TT> or
+the function parameter form, including operators, constructors, variadic function templates, and
+even overloaded conversion operations.
+
+As an example:
+
+<PRE>#include &lt;boost/type_traits/is_arithmetic.hpp&gt;
+#include &lt;boost/type_traits/is_pointer.hpp&gt;
+#include &lt;boost/utility/enable_if.hpp&gt;
+
+class test
+{
+public:
+  // A constructor that works for any argument list of size 10
+  template&lt; class... T
+          , typename boost::enable_if_c&lt; sizeof...( T ) == 10, int &gt;::type = 0
+          &gt;
+  test( T&amp;&amp;... );
+
+  // A conversion operation that can convert to any arithmetic type
+  template&lt; class T
+          , typename boost::enable_if&lt; boost::is_arithmetic&lt; T &gt;, int &gt;::type = 0
+          &gt;
+  operator T() const;
+
+  // A conversion operation that can convert to any pointer type
+  template&lt; class T
+          , typename boost::enable_if&lt; boost::is_pointer&lt; T &gt;, int &gt;::type = 0
+          &gt;
+  operator T() const;
+};
+
+int main()
+{
+  // Works
+  test test_( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 );
+
+  // Fails as expected
+  test fail_construction( 1, 2, 3, 4, 5 );
+
+  // Works by calling the conversion operator enabled for arithmetic types
+  int arithmetic_object = test_;
+
+  // Works by calling the conversion operator enabled for pointer types
+  int* pointer_object = test_;
+
+  // Fails as expected
+  struct {} fail_conversion = test_;
+}
+
+</PRE>
+
 <!--TOC subsection Enabling template class specializations-->
 
-<H3><A NAME="htoc6">3.1</A>&nbsp;&nbsp;Enabling template class specializations</H3><!--SEC END -->
+<H3><A NAME="htoc7">3.2</A>&nbsp;&nbsp;Enabling template class specializations</H3><!--SEC END -->
 
 <A NAME="sec:enable_if_classes"></A>
 Class template specializations can be enabled or disabled with <TT>enable_if</TT>.
@@ -210,7 +285,7 @@ is the correct value.<BR>
 <BR>
 <!--TOC subsection Overlapping enabler conditions-->
 
-<H3><A NAME="htoc7">3.2</A>&nbsp;&nbsp;Overlapping enabler conditions</H3><!--SEC END -->
+<H3><A NAME="htoc8">3.3</A>&nbsp;&nbsp;Overlapping enabler conditions</H3><!--SEC END -->
 
 <A NAME="sec:overlapping_conditions"></A>
 Once the compiler has examined the enabling conditions and included the
@@ -239,7 +314,7 @@ partial specializations as well.<BR>
 <BR>
 <!--TOC subsection Lazy <TT>enable_if</TT>-->
 
-<H3><A NAME="htoc8">3.3</A>&nbsp;&nbsp;Lazy <TT>enable_if</TT></H3><!--SEC END -->
+<H3><A NAME="htoc9">3.4</A>&nbsp;&nbsp;Lazy <TT>enable_if</TT></H3><!--SEC END -->
 
 <A NAME="sec:enable_if_lazy"></A>
 In some cases it is necessary to avoid instantiating part of a
@@ -285,7 +360,7 @@ above example, <TT>is_multipliable&lt;T, U&gt;::value</TT> defines when
 <BR>
 <!--TOC subsection Compiler workarounds-->
 
-<H3><A NAME="htoc9">3.4</A>&nbsp;&nbsp;Compiler workarounds</H3><!--SEC END -->
+<H3><A NAME="htoc10">3.5</A>&nbsp;&nbsp;Compiler workarounds</H3><!--SEC END -->
 
 <A NAME="sec:workarounds"></A>
 Some compilers flag functions as ambiguous if the only distinguishing factor is a different 
@@ -367,9 +442,9 @@ David Vandevoorde and Nicolai&nbsp;M. Josuttis.
 Addison-Wesley, 2002.</DL>
 
 <hr/>
-   <p>Copyright Jaakko J&auml;rvi, Jeremiah Willcock and Andrew Lumsdaine<BR>
-<EM>{jajarvi|jewillco|lums}@osl.iu.edu</EM><BR>
-Indiana University<BR>
+   <p>Copyright Jaakko J&auml;rvi<sup>*</sup>, Jeremiah Willcock<sup>*</sup>, Andrew Lumsdaine<sup>*</sup>, Matt Calabrese<BR>
+<EM>{jajarvi|jewillco|lums}@osl.iu.edu, rivorus@gmail.com</EM><BR>
+<sup>*</sup>Indiana University<BR>
 Open Systems Lab<br/>
 Use, modification and distribution are subject to the
 Boost Software License, Version 1.0.
