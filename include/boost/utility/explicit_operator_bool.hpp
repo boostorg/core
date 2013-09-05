@@ -64,7 +64,7 @@ namespace boost {
 
 namespace detail {
 
-#if !defined(_MSC_VER)
+#if !defined(_MSC_VER) && !defined(__IBMCPP__)
 
     struct unspecified_bool
     {
@@ -78,7 +78,7 @@ namespace detail {
 
 #else
 
-    // MSVC is too eager to convert pointer to function to void* even though it shouldn't
+    // MSVC and VACPP are too eager to convert pointer to function to void* even though they shouldn't
     struct unspecified_bool
     {
         // NOTE TO THE USER: If you see this in error messages then you tried
