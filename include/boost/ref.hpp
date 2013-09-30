@@ -34,15 +34,7 @@ template<class T> class reference_wrapper
 public:
     typedef T type;
 
-#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, < 1300 )
-
-    explicit reference_wrapper(T& t): t_(&t) {}
-
-#else
-
     explicit reference_wrapper(T& t): t_(boost::addressof(t)) {}
-
-#endif
 
     operator T& () const { return *t_; }
 
