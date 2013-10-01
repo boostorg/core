@@ -30,17 +30,17 @@ namespace boost
 {
 
 template<class T> class reference_wrapper
-{ 
+{
 public:
     typedef T type;
 
-    explicit reference_wrapper(T& t): t_(boost::addressof(t)) {}
+    BOOST_FORCEINLINE explicit reference_wrapper(T& t): t_(boost::addressof(t)) {}
 
-    operator T& () const { return *t_; }
+    BOOST_FORCEINLINE operator T& () const { return *t_; }
 
-    T& get() const { return *t_; }
+    BOOST_FORCEINLINE T& get() const { return *t_; }
 
-    T* get_pointer() const { return t_; }
+    BOOST_FORCEINLINE T* get_pointer() const { return t_; }
 
 private:
 
@@ -53,12 +53,12 @@ private:
 #  define BOOST_REF_CONST const
 # endif
 
-template<class T> inline reference_wrapper<T> BOOST_REF_CONST ref(T & t)
-{ 
+template<class T> BOOST_FORCEINLINE  reference_wrapper<T> BOOST_REF_CONST ref(T & t)
+{
     return reference_wrapper<T>(t);
 }
 
-template<class T> inline reference_wrapper<T const> BOOST_REF_CONST cref(T const & t)
+template<class T> BOOST_FORCEINLINE  reference_wrapper<T const> BOOST_REF_CONST cref(T const & t)
 {
     return reference_wrapper<T const>(t);
 }
@@ -117,7 +117,7 @@ namespace detail
 {
   typedef char (&yes_reference_wrapper_t)[1];
   typedef char (&no_reference_wrapper_t)[2];
-      
+
   no_reference_wrapper_t is_reference_wrapper_test(...);
 
   template<typename T>
@@ -152,7 +152,7 @@ class is_reference_wrapper
         bool, value = (
              sizeof(detail::is_reference_wrapper_test(type<T>()))
             == sizeof(detail::yes_reference_wrapper_t)));
-    
+
     typedef ::boost::mpl::bool_<value> type;
 };
 
@@ -165,13 +165,13 @@ class unwrap_reference
 
 # endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-template <class T> inline typename unwrap_reference<T>::type&
+template <class T> BOOST_FORCEINLINE  typename unwrap_reference<T>::type&
 unwrap_ref(T& t)
 {
     return t;
 }
 
-template<class T> inline T* get_pointer( reference_wrapper<T> const & r )
+template<class T> BOOST_FORCEINLINE  T* get_pointer( reference_wrapper<T> const & r )
 {
     return r.get_pointer();
 }
