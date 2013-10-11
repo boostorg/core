@@ -135,10 +135,6 @@ struct iterator_traits<T const*>
 # include <boost/type_traits/detail/yes_no_type.hpp>
 # include <boost/type_traits/is_pointer.hpp>
 
-# ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#  include <boost/type_traits/is_same.hpp>
-#  include <boost/type_traits/remove_pointer.hpp>
-# endif
 # ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
 #  include <boost/type_traits/is_base_and_derived.hpp>
 # endif
