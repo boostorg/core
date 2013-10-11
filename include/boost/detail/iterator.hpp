@@ -86,8 +86,7 @@ using std::distance;
 
 # else
 
-#  if  !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)  \
-    && !defined(BOOST_MSVC_STD_ITERATOR)
+#  if  !defined(BOOST_MSVC_STD_ITERATOR)
 
 // This is the case where everything conforms except BOOST_NO_STD_ITERATOR_TRAITS
 
