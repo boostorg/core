@@ -71,7 +71,6 @@
 # endif // STLPort <= 4.1b4 && no partial specialization
 
 # if !defined(BOOST_NO_STD_ITERATOR_TRAITS)             \
-  && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
   && !defined(BOOST_MSVC_STD_ITERATOR)
     
 namespace boost { namespace detail {
