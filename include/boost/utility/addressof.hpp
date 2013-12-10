@@ -1,7 +1,7 @@
 // Copyright (C) 2002 Brad King (brad.king@kitware.com)
 //                    Douglas Gregor (gregod@cs.rpi.edu)
 //
-// Copyright (C) 2002, 2008 Peter Dimov
+// Copyright (C) 2002, 2008, 2013 Peter Dimov
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -14,6 +14,7 @@
 
 # include <boost/config.hpp>
 # include <boost/detail/workaround.hpp>
+# include <cstddef>
 
 namespace boost
 {
@@ -45,6 +46,60 @@ template<class T> struct addressof_impl
         return v;
     }
 };
+
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+
+#if defined( __clang__ ) && !defined( _LIBCPP_VERSION ) && !defined( BOOST_NO_CXX11_DECLTYPE )
+
+    typedef decltype(nullptr) addr_nullptr_t;
+
+#else
+
+    typedef std::nullptr_t addr_nullptr_t;
+
+#endif
+
+template<> struct addressof_impl< addr_nullptr_t >
+{
+    typedef addr_nullptr_t T;
+
+    static BOOST_FORCEINLINE T * f( T & v, int )
+    {
+        return &v;
+    }
+};
+
+template<> struct addressof_impl< addr_nullptr_t const >
+{
+    typedef addr_nullptr_t const T;
+
+    static BOOST_FORCEINLINE T * f( T & v, int )
+    {
+        return &v;
+    }
+};
+
+template<> struct addressof_impl< addr_nullptr_t volatile >
+{
+    typedef addr_nullptr_t volatile T;
+
+    static BOOST_FORCEINLINE T * f( T & v, int )
+    {
+        return &v;
+    }
+};
+
+template<> struct addressof_impl< addr_nullptr_t const volatile >
+{
+    typedef addr_nullptr_t const volatile T;
+
+    static BOOST_FORCEINLINE T * f( T & v, int )
+    {
+        return &v;
+    }
+};
+
+#endif
 
 } // namespace detail
 
