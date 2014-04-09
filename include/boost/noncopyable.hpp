@@ -22,19 +22,19 @@ namespace noncopyable_  // protection from unintended ADL
 {
   class noncopyable
   {
-   protected:
-#ifndef BOOST_NO_DEFAULTED_FUNCTIONS
-    BOOST_CONSTEXPR noncopyable() = default;
-    ~noncopyable() = default;
+  protected:
+#if !defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS) && !defined(BOOST_NO_CXX11_NON_PUBLIC_DEFAULTED_FUNCTIONS)
+      BOOST_CONSTEXPR noncopyable() = default;
+      ~noncopyable() = default;
 #else
-    noncopyable() {}
+      noncopyable() {}
       ~noncopyable() {}
 #endif
-#ifndef BOOST_NO_DELETED_FUNCTIONS
-        noncopyable( const noncopyable& ) = delete;
-        noncopyable& operator=( const noncopyable& ) = delete;
+#if !defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
+      noncopyable( const noncopyable& ) = delete;
+      noncopyable& operator=( const noncopyable& ) = delete;
 #else
-    private:  // emphasize the following members are private
+  private:  // emphasize the following members are private
       noncopyable( const noncopyable& );
       noncopyable& operator=( const noncopyable& );
 #endif
