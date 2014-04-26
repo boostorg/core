@@ -39,6 +39,19 @@
     }
 
 /*!
+ * \brief The macro defines a noexcept explicit operator of conversion to \c bool
+ *
+ * The macro should be used inside the definition of a class that has to
+ * support the conversion. The class should also implement <tt>operator!</tt>,
+ * in terms of which the conversion operator will be implemented.
+ */
+#define BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT()\
+    BOOST_FORCEINLINE explicit operator bool () const BOOST_NOEXCEPT\
+    {\
+        return !this->operator! ();\
+    }
+
+/*!
  * \brief The macro defines a constexpr explicit operator of conversion to \c bool
  *
  * The macro should be used inside the definition of a class that has to
@@ -46,7 +59,7 @@
  * in terms of which the conversion operator will be implemented.
  */
 #define BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL()\
-    BOOST_FORCEINLINE BOOST_CONSTEXPR explicit operator bool () const\
+    BOOST_FORCEINLINE BOOST_CONSTEXPR explicit operator bool () const BOOST_NOEXCEPT\
     {\
         return !this->operator! ();\
     }
@@ -101,8 +114,14 @@ namespace detail {
         return (!this->operator! () ? &boost::detail::unspecified_bool::true_value : (boost::detail::unspecified_bool_type)0);\
     }
 
+#define BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT()\
+    BOOST_FORCEINLINE operator boost::detail::unspecified_bool_type () const BOOST_NOEXCEPT\
+    {\
+        return (!this->operator! () ? &boost::detail::unspecified_bool::true_value : (boost::detail::unspecified_bool_type)0);\
+    }
+
 #define BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL()\
-    BOOST_FORCEINLINE BOOST_CONSTEXPR operator boost::detail::unspecified_bool_type () const\
+    BOOST_FORCEINLINE BOOST_CONSTEXPR operator boost::detail::unspecified_bool_type () const BOOST_NOEXCEPT\
     {\
         return (!this->operator! () ? &boost::detail::unspecified_bool::true_value : (boost::detail::unspecified_bool_type)0);\
     }
@@ -115,8 +134,14 @@ namespace detail {
         return !this->operator! ();\
     }
 
+#define BOOST_EXPLICIT_OPERATOR_BOOL()\
+    BOOST_FORCEINLINE operator bool () const BOOST_NOEXCEPT\
+    {\
+        return !this->operator! ();\
+    }
+
 #define BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL()\
-    BOOST_FORCEINLINE BOOST_CONSTEXPR operator bool () const\
+    BOOST_FORCEINLINE BOOST_CONSTEXPR operator bool () const BOOST_NOEXCEPT\
     {\
         return !this->operator! ();\
     }
