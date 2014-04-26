@@ -5,7 +5,7 @@
  *          http://www.boost.org/LICENSE_1_0.txt)
  */
 /*!
- * \file   explicit_operator_bool_compile.cpp
+ * \file   explicit_operator_bool.cpp
  * \author Andrey Semashev
  * \date   17.07.2010
  *
@@ -13,7 +13,7 @@
  *         the valid contexts.
  */
 
-#define BOOST_TEST_MODULE explicit_operator_bool_compile
+#define BOOST_TEST_MODULE explicit_operator_bool
 
 #include <boost/utility/explicit_operator_bool.hpp>
 
