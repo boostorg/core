@@ -21,12 +21,15 @@
 // avoid ambiguity when swapping objects of a Boost type that does
 // not have its own boost::swap overload.
 
-#include <algorithm> //for std::swap
+#include <utility> //for std::swap (C++11)
+#include <algorithm> //for std::swap (C++98)
 #include <cstddef> //for std::size_t
+#include <boost/config.hpp>
 
 namespace boost_swap_impl
 {
   template<class T>
+  BOOST_GPU_ENABLED
   void swap_impl(T& left, T& right)
   {
     using namespace std;//use std::swap if argument dependent lookup fails
@@ -34,6 +37,7 @@ namespace boost_swap_impl
   }
 
   template<class T, std::size_t N>
+  BOOST_GPU_ENABLED
   void swap_impl(T (& left)[N], T (& right)[N])
   {
     for (std::size_t i = 0; i < N; ++i)
@@ -46,6 +50,7 @@ namespace boost_swap_impl
 namespace boost
 {
   template<class T1, class T2>
+  BOOST_GPU_ENABLED
   void swap(T1& left, T2& right)
   {
     ::boost_swap_impl::swap_impl(left, right);
