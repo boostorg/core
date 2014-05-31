@@ -6,28 +6,8 @@
 // run-time test for "boost/ref.hpp" header content
 // see 'ref_ct_test.cpp' for compile-time part
 
-#if defined(_MSC_VER) && !defined(__ICL)
-# pragma warning(disable: 4786)  // identifier truncated in debug info
-# pragma warning(disable: 4710)  // function not inlined
-# pragma warning(disable: 4711)  // function selected for automatic inline expansion
-# pragma warning(disable: 4514)  // unreferenced inline removed
-#endif
-
 #include <boost/ref.hpp>
-
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
-# pragma warning(push, 3)
-#endif
-
-#include <iostream>
-
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
-# pragma warning(pop)
-#endif
-
-
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 namespace {
 using namespace boost;
@@ -60,11 +40,11 @@ struct ref_wrapper
 
     static void test(T x)
     {
-        BOOST_CHECK(passthru(ref(x)) == &x);
-        BOOST_CHECK(&ref(x).get() == &x);
+        BOOST_TEST(passthru(ref(x)) == &x);
+        BOOST_TEST(&ref(x).get() == &x);
 
-        BOOST_CHECK(cref_passthru(cref(x)) == &x);
-        BOOST_CHECK(&cref(x).get() == &x);
+        BOOST_TEST(cref_passthru(cref(x)) == &x);
+        BOOST_TEST(&cref(x).get() == &x);
     }
 };
 
@@ -102,20 +82,20 @@ void unwrap_test() {
   do_unwrap(ref(ci));
 
   copy_counter cc;
-  BOOST_CHECK(cc.count() == 0);
+  BOOST_TEST(cc.count() == 0);
 
   do_unwrap(cc);
   do_unwrap(ref(cc));
   do_unwrap(cref(cc));
 
-  BOOST_CHECK(cc.count() == 1);
-  BOOST_CHECK(unwrap_ref(ref(cc)).count() == 1); 
+  BOOST_TEST(cc.count() == 1);
+  BOOST_TEST(unwrap_ref(ref(cc)).count() == 1); 
 }
 
-int test_main(int, char * [])
+int main()
 {
     ref_wrapper<int>::test(1);
     ref_wrapper<int const>::test(1);
     unwrap_test();
-    return 0;
+    return boost::report_errors();
 }
