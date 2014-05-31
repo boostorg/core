@@ -1,0 +1,32 @@
+#  Boost.Core Library test Jamfile
+#
+#  Copyright (c) 2014 Peter Dimov
+#
+#  Distributed under the Boost Software License, Version 1.0.
+#  See accompanying file LICENSE_1_0.txt or copy at
+#  http://www.boost.org/LICENSE_1_0.txt
+
+# bring in rules for testing
+import testing ;
+
+test-suite "core"
+    :
+        [ run addressof_test.cpp ]
+        [ run addressof_test2.cpp ]
+        [ run addressof_np_test.cpp ]
+        [ run addressof_fn_test.cpp ]
+
+        [ compile-fail checked_delete_fail.cpp ]
+
+        [ compile ref_ct_test.cpp ]
+        [ run ref_test.cpp ]
+
+        [ run eif_constructors.cpp ]
+        [ run eif_dummy_arg_disambiguation.cpp ]
+        [ run eif_lazy.cpp ]
+        [ run eif_lazy_test.cpp ]
+        [ run eif_member_templates.cpp ]
+        [ run eif_namespace_disambiguation.cpp ]
+        [ run eif_no_disambiguation.cpp ]
+        [ run eif_partial_specializations.cpp ]
+    ;
