@@ -10,10 +10,9 @@
 //             Jeremiah Willcock (jewillco at osl.iu.edu)
 //             Andrew Lumsdaine (lums at osl.iu.edu)
 
-#include <boost/test/minimal.hpp>
-
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 using boost::enable_if;
 using boost::disable_if;
@@ -29,15 +28,15 @@ struct container {
   arithmetic_object(const T&) {return false;}
 };
 
-int test_main(int, char*[])
+int main()
 {
  
-  BOOST_CHECK(container().arithmetic_object(1));
-  BOOST_CHECK(container().arithmetic_object(1.0));
+  BOOST_TEST(container().arithmetic_object(1));
+  BOOST_TEST(container().arithmetic_object(1.0));
 
-  BOOST_CHECK(!container().arithmetic_object("1"));  
-  BOOST_CHECK(!container().arithmetic_object(static_cast<void*>(0)));  
+  BOOST_TEST(!container().arithmetic_object("1"));  
+  BOOST_TEST(!container().arithmetic_object(static_cast<void*>(0)));  
 
-  return 0;
+  return boost::report_errors();
 }
 

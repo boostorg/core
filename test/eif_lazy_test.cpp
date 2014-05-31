@@ -12,11 +12,9 @@
 
 // Testing all variations of lazy_enable_if.
 
-#include <boost/test/minimal.hpp>
-#include <boost/mpl/not.hpp>
-
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 using boost::lazy_enable_if;
 using boost::lazy_disable_if;
@@ -79,22 +77,22 @@ namespace B {
   foo2(T t) { return false; }
 }
 
-int test_main(int, char*[])
+int main()
 {
   using namespace A;
   using namespace B;
-  BOOST_CHECK(foo(1));
-  BOOST_CHECK(foo(1.0));
+  BOOST_TEST(foo(1));
+  BOOST_TEST(foo(1.0));
 
-  BOOST_CHECK(!foo("1"));  
-  BOOST_CHECK(!foo(static_cast<void*>(0)));  
+  BOOST_TEST(!foo("1"));  
+  BOOST_TEST(!foo(static_cast<void*>(0)));  
 
-  BOOST_CHECK(foo2(1));
-  BOOST_CHECK(foo2(1.0));
+  BOOST_TEST(foo2(1));
+  BOOST_TEST(foo2(1.0));
 
-  BOOST_CHECK(!foo2("1"));  
-  BOOST_CHECK(!foo2(static_cast<void*>(0)));  
+  BOOST_TEST(!foo2("1"));  
+  BOOST_TEST(!foo2(static_cast<void*>(0)));  
 
-  return 0;
+  return boost::report_errors();
 }
 

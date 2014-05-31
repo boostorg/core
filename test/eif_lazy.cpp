@@ -10,10 +10,9 @@
 //             Jeremiah Willcock (jewillco at osl.iu.edu)
 //             Andrew Lumsdaine (lums at osl.iu.edu)
 
-#include <boost/test/minimal.hpp>
-
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 using boost::enable_if_c;
 using boost::lazy_enable_if_c;
@@ -69,14 +68,14 @@ mult(const T& x, const U& y) {return x * y;}
 
 double mult(int i, double d) { return (double)i * d; }
 
-int test_main(int, char*[])
+int main()
 {
 
 
-  BOOST_CHECK(mult(1, 2) == 2);
+  BOOST_TEST(mult(1, 2) == 2);
 
-  BOOST_CHECK(mult(1, 3.0) == 3.0);
+  BOOST_TEST(mult(1, 3.0) == 3.0);
 
-  return 0;
+  return boost::report_errors();
 }
 

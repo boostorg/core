@@ -10,10 +10,9 @@
 //             Jeremiah Willcock (jewillco at osl.iu.edu)
 //             Andrew Lumsdaine (lums at osl.iu.edu)
 
-#include <boost/test/minimal.hpp>
-
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 using boost::enable_if;
 using boost::disable_if;
@@ -44,19 +43,19 @@ struct xstring
 };
 
 
-int test_main(int, char*[])
+int main()
 {
  
-  BOOST_CHECK(container(1).my_value);
-  BOOST_CHECK(container(1.0).my_value);
+  BOOST_TEST(container(1).my_value);
+  BOOST_TEST(container(1.0).my_value);
 
-  BOOST_CHECK(!container("1").my_value);  
-  BOOST_CHECK(!container(static_cast<void*>(0)).my_value);  
+  BOOST_TEST(!container("1").my_value);  
+  BOOST_TEST(!container(static_cast<void*>(0)).my_value);  
 
   char sa[] = "123456";
-  BOOST_CHECK(xstring<char>(sa, sa+6).data == 6);
+  BOOST_TEST(xstring<char>(sa, sa+6).data == 6);
 
 
-  return 0;
+  return boost::report_errors();
 }
 

@@ -10,10 +10,9 @@
 //             Jeremiah Willcock (jewillco at osl.iu.edu)
 //             Andrew Lumsdaine (lums at osl.iu.edu)
 
-#include <boost/test/minimal.hpp>
-
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 using boost::enable_if_c;
 using boost::disable_if_c;
@@ -47,21 +46,21 @@ struct tester2<T, typename disable_if<is_arithmetic<T> >::type> {
   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
-int test_main(int, char*[])
+int main()
 {
  
-  BOOST_CHECK(tester<int>::value);
-  BOOST_CHECK(tester<double>::value);
+  BOOST_TEST(tester<int>::value);
+  BOOST_TEST(tester<double>::value);
 
-  BOOST_CHECK(!tester<char*>::value);
-  BOOST_CHECK(!tester<void*>::value);
+  BOOST_TEST(!tester<char*>::value);
+  BOOST_TEST(!tester<void*>::value);
 
-  BOOST_CHECK(tester2<int>::value);
-  BOOST_CHECK(tester2<double>::value);
+  BOOST_TEST(tester2<int>::value);
+  BOOST_TEST(tester2<double>::value);
 
-  BOOST_CHECK(!tester2<char*>::value);
-  BOOST_CHECK(!tester2<void*>::value);
+  BOOST_TEST(!tester2<char*>::value);
+  BOOST_TEST(!tester2<void*>::value);
 
-  return 0;
+  return boost::report_errors();
 }
 
