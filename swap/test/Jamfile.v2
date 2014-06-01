@@ -7,7 +7,7 @@
 # bring in rules for testing
 import testing ;
 
-test-suite utility/swap
+test-suite core/swap
     :
     [ compile root_header_1.cpp                                  ]
     [ compile root_header_2.cpp                                  ]
