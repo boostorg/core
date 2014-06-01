@@ -11,7 +11,7 @@
         "Glen Fernandes <glenfe -at- live.com>",
         "Andrey Semashev <andrey.semashev -at- gmail.com>"
     ],
-    "description": "A collection of core utilities.",
+    "description": "A collection of simple core utilities with minimal dependencies.",
     "category": [
         "Miscellaneous"
     ]
