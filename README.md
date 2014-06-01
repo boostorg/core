@@ -1,4 +1,5 @@
-#![Boost.Core]
+Boost.Core
+==========
 
 Boost.Core, part of collection of the [Boost C++ Libraries](http://github.com/boostorg), is a collection of core utilities used by other Boost libraries.
 The criteria for inclusion is that the utility component be:
