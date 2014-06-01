@@ -134,7 +134,7 @@ namespace detail {
         return !this->operator! ();\
     }
 
-#define BOOST_EXPLICIT_OPERATOR_BOOL()\
+#define BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT()\
     BOOST_FORCEINLINE operator bool () const BOOST_NOEXCEPT\
     {\
         return !this->operator! ();\
