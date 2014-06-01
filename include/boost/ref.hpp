@@ -9,7 +9,6 @@
 
 #include <boost/config.hpp>
 #include <boost/utility/addressof.hpp>
-#include <boost/mpl/bool.hpp>
 #include <boost/detail/workaround.hpp>
 
 //
@@ -29,6 +28,8 @@
 namespace boost
 {
 
+// reference_wrapper
+
 template<class T> class reference_wrapper
 {
 public:
@@ -47,70 +48,100 @@ private:
     T* t_;
 };
 
+// ref
+
 # if defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) )
 #  define BOOST_REF_CONST
 # else
 #  define BOOST_REF_CONST const
 # endif
 
-template<class T> BOOST_FORCEINLINE  reference_wrapper<T> BOOST_REF_CONST ref(T & t)
+template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T & t )
 {
     return reference_wrapper<T>(t);
 }
 
-template<class T> BOOST_FORCEINLINE  reference_wrapper<T const> BOOST_REF_CONST cref(T const & t)
+// cref
+
+template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( T const & t )
 {
     return reference_wrapper<T const>(t);
 }
 
 # undef BOOST_REF_CONST
 
+// is_reference_wrapper
 
-template<typename T>
-class is_reference_wrapper
-    : public mpl::false_
+template<typename T> struct is_reference_wrapper
 {
+    BOOST_STATIC_CONSTANT( bool, value = false );
 };
 
-template<typename T>
-class unwrap_reference
+template<typename T> struct is_reference_wrapper< reference_wrapper<T> >
 {
- public:
+    BOOST_STATIC_CONSTANT( bool, value = true );
+};
+
+#if !defined(BOOST_NO_CV_SPECIALIZATIONS)
+
+template<typename T> struct is_reference_wrapper< reference_wrapper<T> const >
+{
+    BOOST_STATIC_CONSTANT( bool, value = true );
+};
+
+template<typename T> struct is_reference_wrapper< reference_wrapper<T> volatile >
+{
+    BOOST_STATIC_CONSTANT( bool, value = true );
+};
+
+template<typename T> struct is_reference_wrapper< reference_wrapper<T> const volatile >
+{
+    BOOST_STATIC_CONSTANT( bool, value = true );
+};
+
+#endif // !defined(BOOST_NO_CV_SPECIALIZATIONS)
+
+// unwrap_reference
+
+template<typename T> struct unwrap_reference
+{
     typedef T type;
 };
 
-#  define AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(X) \
-template<typename T> \
-class is_reference_wrapper< X > \
-    : public mpl::true_ \
-{ \
-}; \
-\
-template<typename T> \
-class unwrap_reference< X > \
-{ \
- public: \
-    typedef T type; \
-}; \
-/**/
+template<typename T> struct unwrap_reference< reference_wrapper<T> >
+{
+    typedef T type;
+};
 
-AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T>)
 #if !defined(BOOST_NO_CV_SPECIALIZATIONS)
-AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T> const)
-AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T> volatile)
-AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T> const volatile)
-#endif
 
-#  undef AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF
+template<typename T> struct unwrap_reference< reference_wrapper<T> const >
+{
+    typedef T type;
+};
 
+template<typename T> struct unwrap_reference< reference_wrapper<T> volatile >
+{
+    typedef T type;
+};
 
-template <class T> BOOST_FORCEINLINE  typename unwrap_reference<T>::type&
-unwrap_ref(T& t)
+template<typename T> struct unwrap_reference< reference_wrapper<T> const volatile >
+{
+    typedef T type;
+};
+
+#endif // !defined(BOOST_NO_CV_SPECIALIZATIONS)
+
+// unwrap_ref
+
+template<class T> BOOST_FORCEINLINE typename unwrap_reference<T>::type& unwrap_ref( T & t )
 {
     return t;
 }
 
-template<class T> BOOST_FORCEINLINE  T* get_pointer( reference_wrapper<T> const & r )
+// get_pointer
+
+template<class T> BOOST_FORCEINLINE T* get_pointer( reference_wrapper<T> const & r )
 {
     return r.get_pointer();
 }
