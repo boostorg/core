@@ -1,0 +1,50 @@
+[section:no_exceptions_support Header <boost/core/no_exceptions_support.hpp>]
+
+Example of use:
+
+``
+void foo() {
+  BOOST_TRY {
+    ...
+  } BOOST_CATCH(const std::bad_alloc&) {
+      ...
+      BOOST_RETHROW
+  } BOOST_CATCH(const std::exception& e) {
+      ...
+  }
+  BOOST_CATCH_END
+}
+``
+
+With exception support enabled it will expand into:
+
+``
+void foo() {
+  { try {
+    ...
+  } catch (const std::bad_alloc&) {
+      ...
+      throw;
+  } catch (const std::exception& e) {
+      ...
+  }
+  }
+}
+``
+
+With exception support disabled it will expand into:
+
+``
+void foo() {
+  { if(true) {
+    ...
+  } else if (false) {
+      ...
+  } else if (false)  {
+      ...
+  }
+  }
+}
+``
+
+[endsect]
