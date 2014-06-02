@@ -27,9 +27,9 @@
 #endif
 
 #if defined(__GNUC__)
-#pragma message "This header is deprecated, use boost/utility/null_deleter.hpp instead."
+#pragma message "This header is deprecated, use boost/core/null_deleter.hpp instead."
 #elif defined(_MSC_VER)
-#pragma message("This header is deprecated, use boost/utility/null_deleter.hpp instead.")
+#pragma message("This header is deprecated, use boost/core/null_deleter.hpp instead.")
 #endif
 
 namespace boost {
