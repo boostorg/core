@@ -38,6 +38,10 @@ Currently, the Core library contains:
    [`boost::enable_if`]
  ]
  [
+   [[link core.ignore_unused ignore_unused]]
+   [`boost::ignore_unused`]
+ ]
+ [
    [[link core.lightweight_test lightweight_test]]
    [`BOOST_TEST, BOOST_ERROR, BOOST_TEST_EQ, BOOST_TEST_NE,
      BOOST_TEST_THROWS, boost::report_errors`]
@@ -75,6 +79,7 @@ Currently, the Core library contains:
 [include:core addressof.qbk]
 [include:core checked_delete.qbk]
 [include:core explicit_operator_bool.qbk]
+[include:core ignore_unused.qbk]
 [include:core lightweight_test.qbk]
 [include:core no_exceptions_support.qbk]
 [include:core noncopyable.qbk]
