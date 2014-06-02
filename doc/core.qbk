@@ -1,0 +1,79 @@
+[library Boost.Core
+  [quickbook 1.5]
+  [id core]
+  [copyright 2014 Peter Dimov]
+  [copyright 2014 Glen Fernandes]
+  [copyright 2014 Andrey Semashev]
+  [dirname core]
+  [license Distributed under the
+    [@http://boost.org/LICENSE_1_0.txt Boost Software License,
+      Version 1.0].
+  ]
+]
+
+[section Introduction]
+
+The Boost.Core library is a collection of core utilities. The
+criteria for inclusion is that the utility component be:
+
+* simple,
+* used by other Boost libraries, and
+* not dependent on any other Boost modules except Core
+  itself, Config, Assert, Static Assert, or Predef.
+
+Currently, the Core library contains:
+
+[table 
+ [[Component][Utilities]]
+ [
+   [[link core.addressof addressof]]
+   [`boost::addressof`]
+ ]
+ [
+   [[@../../checked_delete.html checked_delete]]
+   [`boost::checked_delete`]
+ ]
+ [
+   [[@../../enable_if.html enable_if]]
+   [`boost::enable_if`]
+ ]
+ [
+   [[link core.lightweight_test lightweight_test]]
+   [`BOOST_TEST, BOOST_ERROR, BOOST_TEST_EQ, BOOST_TEST_NE,
+     BOOST_TEST_THROWS, boost::report_errors`]
+ ]
+ [
+   [[link core.no_exceptions_support no_exceptions_support]]
+   [`BOOST_TRY, BOOST_CATCH, BOOST_CATCH_END, BOOST_RETHROW`]
+ ]
+ [
+   [[link core.noncopyable noncopyable]]
+   [`boost::noncopyable`]
+ ]
+ [
+   [ref]
+   [`boost::ref`]
+ ]
+ [
+   [[@../../swap.html swap]]
+   [`boost::swap`]
+ ]
+ [
+   [null_deleter]
+   [`boost::null_deleter`]
+ ]
+ [
+   [[link core.explicit_operator_bool explicit_operator_bool]]
+   [`BOOST_EXPLICIT_OPERATOR_BOOL,
+     BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT,
+     BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL`]
+ ]
+]
+
+[endsect]
+
+[include:core addressof.qbk]
+[include:core explicit_operator_bool.qbk]
+[include:core lightweight_test.qbk]
+[include:core no_exceptions_support.qbk]
+[include:core noncopyable.qbk]

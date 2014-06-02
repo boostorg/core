@@ -1,0 +1,48 @@
+[section:lightweight_test Header <boost/core/lightweight_test.hpp>]
+
+If expression is false increases the error count and outputs a
+message containing `expression`.
+
+``
+BOOST_TEST(expression)
+``
+
+Increases error count and outputs a message containing
+`message`.
+
+``
+BOOST_ERROR(message)
+``
+
+If `expr1` != `expr2` increases the error count and outputs a
+message containing both expressions.
+
+``
+BOOST_TEST_EQ(expr1, expr2)
+``
+
+If `expr1` == `expr2` increases the error count and outputs a
+message containing both expressions.
+
+``
+BOOST_TEST_NE(expr1, expr2)
+``
+
+If BOOST_NO_EXCEPTIONS is NOT defined and if `expr` does not
+throw an exception of type `excep`, increases the error count
+and outputs a message containing the expression.
+
+If BOOST_NO_EXCEPTIONS is defined, this macro expands to
+nothing and `expr` is not evaluated.
+
+``
+BOOST_TEST_THROWS(expr, excep)
+``
+
+Returns the error count.
+
+``
+int boost::report_errors()
+``
+
+[endsect]
