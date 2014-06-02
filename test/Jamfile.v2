@@ -36,4 +36,8 @@ test-suite "core"
         [ compile-fail explicit_operator_bool_compile_fail_conv_pvoid.cpp ]
         [ compile-fail explicit_operator_bool_compile_fail_delete.cpp ]
         [ compile-fail explicit_operator_bool_compile_fail_shift.cpp ]
+
+	[ compile ignore_unused_test.cpp : <toolset>gcc:<cxxflags>"-Wunused-variable -Wunused-local-typedefs -Werror"
+                                           <toolset>clang:<cxxflags>"-Wunused-variable -Werror"
+                                           <toolset>msvc:<cxxflags>"/we4100 /we4101" ]
     ;
