@@ -34,8 +34,14 @@ Currently, the Core library contains:
    [`boost::checked_delete`]
  ]
  [
-   [[@../../enable_if.html enable_if]]
+   [[link core.enable_if enable_if]]
    [`boost::enable_if`]
+ ]
+ [
+   [[link core.explicit_operator_bool explicit_operator_bool]]
+   [`BOOST_EXPLICIT_OPERATOR_BOOL,
+     BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT,
+     BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL`]
  ]
  [
    [[link core.ignore_unused ignore_unused]]
@@ -55,6 +61,10 @@ Currently, the Core library contains:
    [`boost::noncopyable`]
  ]
  [
+   [[link core.null_deleter null_deleter]]
+   [`boost::null_deleter`]
+ ]
+ [
    [ref]
    [`boost::ref`]
  ]
@@ -62,26 +72,17 @@ Currently, the Core library contains:
    [[link core.swap swap]]
    [`boost::swap`]
  ]
- [
-   [[link core.null_deleter null_deleter]]
-   [`boost::null_deleter`]
- ]
- [
-   [[link core.explicit_operator_bool explicit_operator_bool]]
-   [`BOOST_EXPLICIT_OPERATOR_BOOL,
-     BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT,
-     BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL`]
- ]
 ]
 
 [endsect]
 
 [include:core addressof.qbk]
 [include:core checked_delete.qbk]
+[include:core enable_if.qbk]
 [include:core explicit_operator_bool.qbk]
 [include:core ignore_unused.qbk]
 [include:core lightweight_test.qbk]
 [include:core no_exceptions_support.qbk]
 [include:core noncopyable.qbk]
-[include:core swap.qbk]
 [include:core null_deleter.qbk]
+[include:core swap.qbk]

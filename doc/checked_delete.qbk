@@ -37,7 +37,7 @@ namespace boost
 
 [section checked_delete]
 
-[section `template<class T> void checked_delete(T * p);`]
+[section template<class T> void checked_delete(T * p);]
 
 * *Requires:* *T* must be a complete type. The expression
   `delete p` must be well-formed.
@@ -49,7 +49,7 @@ namespace boost
 
 [section checked_array_delete]
 
-[section `template<class T> void checked_array_delete(T * p);`]
+[section template<class T> void checked_array_delete(T * p);]
 
 * *Requires:* *T* must be a complete type. The expression 
   `delete [] p` must be well-formed.
@@ -70,7 +70,7 @@ template<class T> struct checked_deleter
 };
 ``
 
-[section `void checked_deleter<T>::operator()(T * p) const;`]
+[section void checked_deleter<T>::operator()(T * p) const;]
 
 * *Requires:* `T` must be a complete type. The expression
   `delete p` must be well-formed.
@@ -91,10 +91,11 @@ template<class T> struct checked_array_deleter
 };
 ``
 
-[section `void checked_array_deleter<T>::operator()(T * p) const;`]
+[section void checked_array_deleter<T>::operator()(T * p) const;]
+
 * *Requires:* `T` must be a complete type. The expression
   `delete [] p` must be well-formed.
-* `Effects:` `delete [] p;`
+* *Effects:* `delete [] p;`
 
 [endsect]
 

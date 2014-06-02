@@ -1,31 +1,53 @@
 [section:lightweight_test Header <boost/core/lightweight_test.hpp>]
 
-If expression is false increases the error count and outputs a
-message containing `expression`.
+[section BOOST_TEST]
 
 ``
 BOOST_TEST(expression)
 ``
 
-Increases error count and outputs a message containing
-`message`.
+If expression is false increases the error count and outputs a
+message containing `expression`.
+
+[endsect]
+
+[section BOOST_ERROR]
 
 ``
 BOOST_ERROR(message)
 ``
 
-If `expr1` != `expr2` increases the error count and outputs a
-message containing both expressions.
+Increases error count and outputs a message containing
+`message`.
+
+[endsect]
+
+[section BOOST_TEST_EQ]
 
 ``
 BOOST_TEST_EQ(expr1, expr2)
 ``
 
-If `expr1` == `expr2` increases the error count and outputs a
+If `expr1` != `expr2` increases the error count and outputs a
 message containing both expressions.
+
+[endsect]
+
+[section BOOST_TEST_NE]
 
 ``
 BOOST_TEST_NE(expr1, expr2)
+``
+
+If `expr1` == `expr2` increases the error count and outputs a
+message containing both expressions.
+
+[endsect]
+
+[section BOOST_TEST_THROWS]
+
+``
+BOOST_TEST_THROWS(expr, excep)
 ``
 
 If BOOST_NO_EXCEPTIONS is NOT defined and if `expr` does not
@@ -35,14 +57,32 @@ and outputs a message containing the expression.
 If BOOST_NO_EXCEPTIONS is defined, this macro expands to
 nothing and `expr` is not evaluated.
 
-``
-BOOST_TEST_THROWS(expr, excep)
-``
+[endsect]
 
-Returns the error count.
+[section report_errors]
 
 ``
 int boost::report_errors()
 ``
+
+Return the error count from `main`.
+
+Example:
+
+``
+#include <boost/core/lightweight_test.hpp>
+
+void sqr( int x ); // should return x * x
+
+int main()
+{
+     BOOST_TEST( sqr( 2 ) == 4 );
+     BOOST_TEST_EQ( sqr(-3), 9 );
+
+     return boost::report_errors();
+}
+``
+
+[endsect]
 
 [endsect]
