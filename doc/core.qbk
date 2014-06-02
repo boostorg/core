@@ -30,7 +30,7 @@ Currently, the Core library contains:
    [`boost::addressof`]
  ]
  [
-   [[@../../checked_delete.html checked_delete]]
+   [[link core.checked_delete checked_delete]]
    [`boost::checked_delete`]
  ]
  [
@@ -73,6 +73,7 @@ Currently, the Core library contains:
 [endsect]
 
 [include:core addressof.qbk]
+[include:core checked_delete.qbk]
 [include:core explicit_operator_bool.qbk]
 [include:core lightweight_test.qbk]
 [include:core no_exceptions_support.qbk]
