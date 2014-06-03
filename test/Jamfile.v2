@@ -16,7 +16,9 @@ test-suite "core"
         [ run addressof_np_test.cpp ]
         [ run addressof_fn_test.cpp ]
 
+        [ run checked_delete_test.cpp ]
         [ compile-fail checked_delete_fail.cpp ]
+        [ compile-fail checked_delete_fail2.cpp ]
 
         [ compile ref_ct_test.cpp ]
         [ run ref_test.cpp ]
@@ -43,4 +45,6 @@ test-suite "core"
                                            <toolset>msvc:<cxxflags>"/we4100 /we4101" ]
         [ run sp_typeinfo_test.cpp ]
         [ run sp_typeinfo_test.cpp : : : <rtti>off : sp_typeinfo_test_no_rtti ]
+
+        [ run visit_each_test.cpp ]
     ;
