@@ -47,4 +47,6 @@ test-suite "core"
         [ run sp_typeinfo_test.cpp : : : <rtti>off : sp_typeinfo_test_no_rtti ]
 
         [ run visit_each_test.cpp ]
+
+        [ run get_pointer_test.cpp ]
     ;
