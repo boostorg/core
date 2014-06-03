@@ -41,4 +41,6 @@ test-suite "core"
                                            <toolset>gcc:<cxxflags>"-Wunused-variable -Werror"
                                            <toolset>clang:<cxxflags>"-Wunused-variable -Werror"
                                            <toolset>msvc:<cxxflags>"/we4100 /we4101" ]
+        [ run sp_typeinfo_test.cpp ]
+        [ run sp_typeinfo_test.cpp : : : <rtti>off : sp_typeinfo_test_no_rtti ]
     ;
