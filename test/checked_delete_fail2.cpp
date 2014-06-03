@@ -22,6 +22,6 @@ namespace
 int main()
 {
     Incomplete * p = 0;
-    boost::checked_delete(p);          // should cause compile time error
+    boost::checked_array_delete(p);    // should cause compile time error
     return 0;
 }   // main
