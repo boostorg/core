@@ -1,4 +1,16 @@
-[section:checked_delete Header <boost/core/checked_delete.hpp>]
+[section:checked_delete checked_delete]
+
+[section Authors]
+
+* Beman Dawes
+* Dave Abrahams
+* Vladimir Prus
+* Rainer Deyke
+* John Maddock
+
+[endsect]
+
+[section Overview]
 
 The header *<boost/checked_delete.hpp>* defines two function
 templates, *checked_delete* and *checked_array_delete*, and two
@@ -20,6 +32,8 @@ silent, hard to track failures.
 The supplied function and class templates can be used to
 prevent these problems, as they require a complete type, and
 cause a compilation error otherwise.
+
+[endsect]
 
 [section Synopsis]
 

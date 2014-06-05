@@ -1,4 +1,14 @@
-[section:addressof Header <boost/core/addressof.hpp>]
+[section:addressof addressof]
+
+[section Authors]
+
+* Brad King
+* Douglas Gregor
+* Peter Dimov
+
+[endsect]
+
+[section Header <boost/core/addressof.hpp>]
 
 The header `<boost/core/addressof.hpp>` defines the function
 template `boost::addressof`. `boost::addressof(x)` returns the
@@ -7,5 +17,27 @@ address of `x`. Ordinarily, this address can be obtained by
 
 `boost::addressof` was originally contributed by Brad King
 based on ideas from discussion with Doug Gregor.
+
+[endsect]
+
+[section Example]
+
+``
+#include <boost/core/addressof.hpp>
+
+struct useless_type { };
+
+class nonaddressable {
+    useless_type operator&() const;
+};
+
+void f() {
+    nonaddressable x;
+    nonaddressable* xp = boost::addressof(x);
+    // nonaddressable* xpe = &x; /* error */
+}
+``
+
+[endsect]
 
 [endsect]

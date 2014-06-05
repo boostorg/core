@@ -1,4 +1,13 @@
-[section:lightweight_test Header <boost/core/lightweight_test.hpp>]
+[section:lightweight_test lightweight_test]
+
+[section Authors]
+
+* Peter Dimov
+* Beman Dawes
+
+[endsect]
+
+[section Header <boost/core/lightweight_test.hpp>]
 
 [section BOOST_TEST]
 
@@ -82,6 +91,8 @@ int main()
      return boost::report_errors();
 }
 ``
+
+[endsect]
 
 [endsect]
 

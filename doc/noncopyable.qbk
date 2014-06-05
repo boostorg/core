@@ -1,4 +1,12 @@
-[section:noncopyable Header <boost/core/noncopyable.hpp>]
+[section:noncopyable noncopyable]
+
+[section Authors]
+
+* Dave Abrahams
+
+[endsect]
+
+[section Header <boost/core/noncopyable.hpp>]
 
 The header `<boost/noncopyable.hpp>` defines the class
 `boost::noncopyable`. It is intended to be used as a private
@@ -9,5 +17,7 @@ from it inherits these properties.
 
 `boost::noncopyable` was originally contributed by Dave
 Abrahams.
+
+[endsect]
 
 [endsect]

@@ -30,63 +30,6 @@ criteria for inclusion is that the utility component be:
 * not dependent on any other Boost modules except Core
   itself, Config, Assert, Static Assert, or Predef.
 
-Currently, the Core library contains:
-
-[table
- [[Component][Utilities]]
- [
-   [[link core.addressof addressof]]
-   [`boost::addressof`]
- ]
- [
-   [[link core.checked_delete checked_delete]]
-   [`boost::checked_delete`]
- ]
- [
-   [[link core.enable_if enable_if]]
-   [`boost::enable_if`]
- ]
- [
-   [[link core.explicit_operator_bool explicit_operator_bool]]
-   [`BOOST_EXPLICIT_OPERATOR_BOOL,
-     BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT,
-     BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL`]
- ]
- [
-   [[link core.ignore_unused ignore_unused]]
-   [`boost::ignore_unused`]
- ]
- [
-   [[link core.lightweight_test lightweight_test]]
-   [`BOOST_TEST, BOOST_ERROR, BOOST_TEST_EQ, BOOST_TEST_NE,
-     BOOST_TEST_THROWS, boost::report_errors`]
- ]
- [
-   [[link core.no_exceptions_support no_exceptions_support]]
-   [`BOOST_TRY, BOOST_CATCH, BOOST_CATCH_END, BOOST_RETHROW`]
- ]
- [
-   [[link core.noncopyable noncopyable]]
-   [`boost::noncopyable`]
- ]
- [
-   [[link core.null_deleter null_deleter]]
-   [`boost::null_deleter`]
- ]
- [
-   [[link core.ref ref]]
-   [`boost::ref`]
- ]
- [
-   [[link core.scoped_enum scoped_enum]]
-   [Components for portable declaration of scoped enums.]
- ]
- [
-   [[link core.swap swap]]
-   [`boost::swap`]
- ]
-]
-
 [endsect]
 
 [include:core addressof.qbk]
