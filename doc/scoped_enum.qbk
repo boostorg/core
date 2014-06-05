@@ -148,12 +148,10 @@ such cases.
 
 [section Acknowledgments]
 
-Thanks to Andrey Semashev for pointing out that emulation through a namespace
-could not be used within classes.
+This scoped enum emulation was developed by Beman Dawes, Vicente J. Botet Escriba and Anthony Williams.
 
-Helpful comments and suggestions were also made by Kjell Elster, Phil Endecott,
-Joel Falcou, Mathias Gaunard, Felipe Magno de Almeida, Matt Calabrese, Vicente
-Botet, and Daniel James.
+Helpful comments and suggestions were also made by Kjell Elster, Phil Endecott, Joel Falcou, Mathias Gaunard, Felipe Magno de Almeida,
+Matt Calabrese, Daniel James and Andrey Semashev.
 
 [endsect]
 
