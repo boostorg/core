@@ -6,55 +6,53 @@
 #  See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt
 
-# bring in rules for testing
 import testing ;
 
-test-suite "core"
-    :
-        [ run addressof_test.cpp ]
-        [ run addressof_test2.cpp ]
-        [ run addressof_np_test.cpp ]
-        [ run addressof_fn_test.cpp ]
+run addressof_test.cpp ;
+run addressof_test2.cpp ;
+run addressof_np_test.cpp ;
+run addressof_fn_test.cpp ;
 
-        [ run checked_delete_test.cpp ]
-        [ compile-fail checked_delete_fail.cpp ]
-        [ compile-fail checked_delete_fail2.cpp ]
+run checked_delete_test.cpp ;
+compile-fail checked_delete_fail.cpp ;
+compile-fail checked_delete_fail2.cpp ;
 
-        [ compile ref_ct_test.cpp ]
-        [ run ref_test.cpp ]
+compile ref_ct_test.cpp ;
+run ref_test.cpp ;
 
-        [ run eif_constructors.cpp ]
-        [ run eif_dummy_arg_disambiguation.cpp ]
-        [ run eif_lazy.cpp ]
-        [ run eif_lazy_test.cpp ]
-        [ run eif_member_templates.cpp ]
-        [ run eif_namespace_disambiguation.cpp ]
-        [ run eif_no_disambiguation.cpp ]
-        [ run eif_partial_specializations.cpp ]
+run eif_constructors.cpp ;
+run eif_dummy_arg_disambiguation.cpp ;
+run eif_lazy.cpp ;
+run eif_lazy_test.cpp ;
+run eif_member_templates.cpp ;
+run eif_namespace_disambiguation.cpp ;
+run eif_no_disambiguation.cpp ;
+run eif_partial_specializations.cpp ;
 
-        [ run explicit_operator_bool.cpp ]
-        [ run explicit_operator_bool_noexcept.cpp ]
-        [ compile-fail explicit_operator_bool_compile_fail_conv_int.cpp ]
-        [ compile-fail explicit_operator_bool_compile_fail_conv_pvoid.cpp ]
-        [ compile-fail explicit_operator_bool_compile_fail_delete.cpp ]
-        [ compile-fail explicit_operator_bool_compile_fail_shift.cpp ]
+run explicit_operator_bool.cpp ;
+run explicit_operator_bool_noexcept.cpp ;
+compile-fail explicit_operator_bool_compile_fail_conv_int.cpp ;
+compile-fail explicit_operator_bool_compile_fail_conv_pvoid.cpp ;
+compile-fail explicit_operator_bool_compile_fail_delete.cpp ;
+compile-fail explicit_operator_bool_compile_fail_shift.cpp ;
 
-        [ compile ignore_unused_test.cpp : <toolset>gcc-4.8:<cxxflags>"-Wunused-variable -Wunused-local-typedefs -Werror"
-                                           <toolset>gcc:<cxxflags>"-Wunused-variable -Werror"
-                                           <toolset>clang:<cxxflags>"-Wunused-variable -Werror"
-                                           <toolset>msvc:<cxxflags>"/we4100 /we4101" ]
-        [ run sp_typeinfo_test.cpp ]
-        [ run sp_typeinfo_test.cpp : : : <rtti>off : sp_typeinfo_test_no_rtti ]
+compile ignore_unused_test.cpp : <toolset>gcc-4.8:<cxxflags>"-Wunused-variable -Wunused-local-typedefs -Werror"
+                                   <toolset>gcc:<cxxflags>"-Wunused-variable -Werror"
+                                   <toolset>clang:<cxxflags>"-Wunused-variable -Werror"
+                                   <toolset>msvc:<cxxflags>"/we4100 /we4101" ;
+run sp_typeinfo_test.cpp ;
+run sp_typeinfo_test.cpp : : : <rtti>off : sp_typeinfo_test_no_rtti ;
 
-        [ run visit_each_test.cpp ]
+run visit_each_test.cpp ;
 
-        [ run get_pointer_test.cpp ]
+run get_pointer_test.cpp ;
 
-        [ run lightweight_test_test.cpp ]
-        [ run-fail lightweight_test_fail.cpp ]
-        [ run-fail lightweight_test_fail2.cpp ]
-        [ run-fail lightweight_test_fail3.cpp ]
-        [ run-fail lightweight_test_fail4.cpp ]
-        [ run-fail lightweight_test_fail5.cpp ]
-        [ run-fail lightweight_test_fail6.cpp ]
-    ;
+run lightweight_test_test.cpp ;
+run lightweight_test_test.cpp : : : <exception-handling>off : lightweight_test_test_no_except ;
+
+run-fail lightweight_test_fail.cpp ;
+run-fail lightweight_test_fail2.cpp ;
+run-fail lightweight_test_fail3.cpp ;
+run-fail lightweight_test_fail4.cpp ;
+run-fail lightweight_test_fail5.cpp ;
+run-fail lightweight_test_fail6.cpp ;

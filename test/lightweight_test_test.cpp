@@ -14,15 +14,21 @@ struct X
 {
 };
 
+#if !defined( BOOST_NO_EXCEPTIONS )
+# define LWT_THROW( x ) throw x
+#else
+# define LWT_THROW( x ) ((void)(x))
+#endif
+
 void f( bool x )
 {
     if( x )
     {
-        throw X();
+        LWT_THROW( X() );
     }
     else
     {
-        throw 5;
+        LWT_THROW( 5 );
     }
 }
 
