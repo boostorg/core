@@ -1,3 +1,12 @@
+[/
+  Copyright (c) 2014 Glen Joseph Fernandes
+  glenfe at live dot com
+
+  Distributed under the Boost Software License,
+  Version 1.0. (See accompanying file LICENSE_1_0.txt
+  or copy at http://boost.org/LICENSE_1_0.txt)
+]
+
 [library Boost.Core
   [quickbook 1.5]
   [id core]
@@ -65,7 +74,7 @@ Currently, the Core library contains:
    [`boost::null_deleter`]
  ]
  [
-   [ref]
+   [[link core.ref ref]]
    [`boost::ref`]
  ]
  [
@@ -89,5 +98,6 @@ Currently, the Core library contains:
 [include:core no_exceptions_support.qbk]
 [include:core noncopyable.qbk]
 [include:core null_deleter.qbk]
+[include:core ref.qbk]
 [include:core scoped_enum.qbk]
 [include:core swap.qbk]
