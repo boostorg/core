@@ -22,6 +22,7 @@
 #include <boost/assert.hpp>
 #include <boost/current_function.hpp>
 #include <boost/core/no_exceptions_support.hpp>
+#include <boost/core/typeinfo.hpp>
 #include <iostream>
 
 //  IDE's like Visual Studio perform better if output goes to std::cout or
@@ -38,18 +39,20 @@ namespace detail
 
 struct report_errors_reminder
 {
-  bool called_report_errors_function;
-  report_errors_reminder() : called_report_errors_function(false) {}
- ~report_errors_reminder()
-  {
-    BOOST_ASSERT(called_report_errors_function);  // verify report_errors() was called  
-  }
+    bool called_report_errors_function;
+
+    report_errors_reminder() : called_report_errors_function(false) {}
+
+    ~report_errors_reminder()
+    {
+        BOOST_ASSERT(called_report_errors_function);  // verify report_errors() was called  
+    }
 };
 
 inline report_errors_reminder& report_errors_remind()
 {
-  static report_errors_reminder r;
-  return r;
+    static report_errors_reminder r;
+    return r;
 }
 
 inline int & test_errors()
@@ -115,6 +118,25 @@ template<class T, class U> inline void test_ne_impl( char const * expr1, char co
     }
 }
 
+template< class T > inline void test_trait_impl( char const * trait, void (*)( T ),
+  bool expected, char const * file, int line, char const * function )
+{
+    if( T::value == expected )
+    {
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): predicate '" << trait << "' ["
+            << BOOST_CORE_TYPEID(T).name() << "]"
+            << " test failed in function '" << function
+            << "' (should have been " << ( expected? "true": "false" ) << ")"
+            << std::endl;
+
+        ++boost::detail::test_errors();
+    }
+}
+
 } // namespace detail
 
 inline int report_errors()
@@ -140,9 +162,12 @@ inline int report_errors()
 } // namespace boost
 
 #define BOOST_TEST(expr) ((expr)? (void)0: ::boost::detail::test_failed_impl(#expr, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION))
-#define BOOST_ERROR(msg) ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION)
+
+#define BOOST_ERROR(msg) ( ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
+
 #define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+
 #ifndef BOOST_NO_EXCEPTIONS
    #define BOOST_TEST_THROWS( EXPR, EXCEP )                    \
       try {                                                    \
@@ -160,5 +185,8 @@ inline int report_errors()
 #else
    #define BOOST_TEST_THROWS( EXPR, EXCEP )
 #endif
+
+#define BOOST_TEST_TRAIT_TRUE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, true, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
+#define BOOST_TEST_TRAIT_FALSE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, false, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_HPP
