@@ -1,4 +1,12 @@
-[section:ignore_unused Header <boost/core/ignore_unused.hpp>]
+[section:ignore_unused ignore_unused]
+
+[section Authors]
+
+* Adam Wulkiewicz
+
+[endsect]
+
+[section Header <boost/core/ignore_unused.hpp>]
 
 The header `<boost/core/ignore_unused.hpp>` defines the function template
 `boost::ignore_unused()`. It may be used to suppress the "unused variable" or
@@ -7,23 +15,33 @@ can't be removed or commented out, e.g. when some blocks of the code are
 conditionally activated. C++11 variadic templates are used if they're supported,
 otherwise they're emulated with overloads.
 
-`boost::ignore_unused()` was contributed by Adam Wulkiewicz.
-
 Usage
 
-    boost::ignore_unused(v1, v2, v3);
-    boost::ignore_unused<T1, T2, T3>();
+``
+boost::ignore_unused(v1, v2, v3);
+boost::ignore_unused<T1, T2, T3>();
+``
 
 Example
 
-    int fun( int foo, int bar )
-    {
-       boost::ignore_unused(bar);
-    #ifdef ENABLE_DEBUG_OUTPUT
-       if ( foo < bar )
-          std::cerr << "warning! foo < bar";
-    #endif
-       return foo + 2;
-    }
+``
+int fun( int foo, int bar )
+{
+    boost::ignore_unused(bar);
+#ifdef ENABLE_DEBUG_OUTPUT
+    if ( foo < bar )
+        std::cerr << "warning! foo < bar";
+#endif
+    return foo + 2;
+}
+``
+
+[endsect]
+
+[section Acknowledgments]
+
+`boost::ignore_unused()` was contributed by Adam Wulkiewicz.
+
+[endsect]
 
 [endsect]

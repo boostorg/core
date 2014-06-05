@@ -1,4 +1,12 @@
-[section:no_exceptions_support Header <boost/core/no_exceptions_support.hpp>]
+[section:no_exceptions_support no_exceptions_support]
+
+[section Authors]
+
+* Pavel Vozenilek
+
+[endsect]
+
+[section Header <boost/core/no_exceptions_support.hpp>]
 
 Example of use:
 
@@ -46,5 +54,7 @@ void foo() {
   }
 }
 ``
+
+[endsect]
 
 [endsect]

@@ -1,4 +1,15 @@
-[section:ref Header <boost/core/ref.hpp>]
+[section:ref ref]
+
+[section Authors]
+
+* Jaakko J\u00E4rvi
+* Peter Dimov
+* Douglas Gregor
+* Dave Abrahams
+* Frank Mori Hess
+* Ronald Garcia
+
+[endsect]
 
 [section Introduction]
 

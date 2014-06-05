@@ -1,7 +1,20 @@
-[section:swap Header <boost/core/swap.hpp>]
+[section:swap swap]
+
+[section Authors]
+
+* Niels Dekker
+* Joseph Gauterin
+* Steven Watanabe
+* Eric Niebler
+
+[endsect]
+
+[section Header <boost/core/swap.hpp>]
 
 `template<class T> void swap(T& left, T& right);`
-     
+
+[endsect]
+
 [section Introduction]
 
 The template function `boost::swap` allows the values of two

@@ -1,4 +1,13 @@
-[section:scoped_enum Headers <boost/core/scoped_enum.hpp>, <boost/core/underlying_type.hpp>]
+[section:scoped_enum scoped_enum]
+
+[section Authors]
+
+* Beman Dawes
+* Vicente J. Botet Escriba
+
+[endsect]
+
+[section Overview]
 
 The `boost/core/scoped_enum.hpp` header contains a number of macros that can be used to generate
 C++11 scoped enums (7.2 \[dcl.enum\]) if the feature is supported by the compiler, otherwise emulate
@@ -96,7 +105,9 @@ Sample usage:
     sample = algae::green;
     foo( algae::cyan );
 
-[heading Deprecated syntax]
+[endsect]
+
+[section Deprecated syntax]
 
 In early versions of the header there were two ways to declare scoped enums, with different pros and cons to each.
 The other way used a different set of macros:
@@ -120,7 +131,9 @@ and `BOOST_SCOPED_ENUM` to `BOOST_SCOPED_ENUM_NATIVE`. Note also the semicolon b
 
 In the current version these macros produce equivalent result to the ones described above and are considered deprecated.
 
-[heading Acquiring the underlying type of the enum]
+[endsect]
+
+[section Acquiring the underlying type of the enum]
 
 The header `boost/core/underlying_type.hpp` defines the metafunction `boost::underlying_type` which can be used to
 obtain the underlying type of the scoped enum. This metafunction has support for emulated scoped enums declared with
@@ -131,7 +144,9 @@ Unfortunately, there are configurations which implement scoped enums but not `st
 `boost::underlying_type` has to be specialized by user. The macro `BOOST_NO_UNDERLYING_TYPE` is defined to indicate
 such cases.
 
-[heading Acknowledgements]
+[endsect]
+
+[section Acknowledgments]
 
 Thanks to Andrey Semashev for pointing out that emulation through a namespace
 could not be used within classes.
@@ -139,5 +154,7 @@ could not be used within classes.
 Helpful comments and suggestions were also made by Kjell Elster, Phil Endecott,
 Joel Falcou, Mathias Gaunard, Felipe Magno de Almeida, Matt Calabrese, Vicente
 Botet, and Daniel James.
+
+[endsect]
 
 [endsect]

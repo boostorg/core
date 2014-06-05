@@ -1,4 +1,12 @@
-[section:enable_if Header <boost/core/enable_if.hpp>]
+[section:enable_if enable_if]
+
+[section Authors]
+
+* Jaakko J\u00E4rvi
+* Jeremiah Willcock
+* Andrew Lumsdaine
+
+[endsect]
 
 [section Introduction]
 
@@ -13,7 +21,7 @@ be applied to enable class template specializations.
 Applications of `enable_if` are discussed in length in
 [link REF1 \[1\]] and [link REF2 \[2\]].
 
-[section Synopsis]
+[section Header <boost/core/enable_if.hpp>]
 
 ``
 namespace boost {
