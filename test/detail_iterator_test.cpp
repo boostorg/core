@@ -126,14 +126,14 @@ int main()
 */
     {
         int const N = 5;
-        T x[ N ];
+        T x[ N ] = {};
 
         BOOST_TEST_EQ( boost::detail::distance( x, x + N ), N );
     }
 
     {
         int const N = 5;
-        T const x[ N ];
+        T const x[ N ] = {};
 
         BOOST_TEST_EQ( boost::detail::distance( x, x + N ), N );
     }
