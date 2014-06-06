@@ -64,6 +64,11 @@ public:
     }
 };
 
+inline char const * demangled_name( core::typeinfo const & ti )
+{
+    return ti.name();
+}
+
 } // namespace core
 
 namespace detail
@@ -111,6 +116,7 @@ template<class T> struct core_typeid_< T const volatile >: core_typeid_< T >
 
 #else
 
+#include <boost/core/demangle.hpp>
 #include <typeinfo>
 
 namespace boost
@@ -128,6 +134,11 @@ typedef ::type_info typeinfo;
 typedef std::type_info typeinfo;
 
 #endif
+
+inline std::string demangled_name( core::typeinfo const & ti )
+{
+    return core::demangle( ti.name() );
+}
 
 } // namespace core
 

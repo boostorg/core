@@ -1,5 +1,5 @@
 //
-// Trivial test for core::demangled_name
+// Trivial test for core::demangle
 //
 // Copyright (c) 2014 Peter Dimov
 //
@@ -8,7 +8,7 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <boost/core/typeinfo.hpp>
+#include <boost/core/demangle.hpp>
 #include <iostream>
 
 template<class T1, class T2> struct Y1
@@ -17,7 +17,7 @@ template<class T1, class T2> struct Y1
 
 int main()
 {
-	typedef Y1<int, long> T;
-    std::cout << boost::core::demangled_name( BOOST_CORE_TYPEID( T ) );
+    typedef Y1<int, long> T;
+    std::cout << boost::core::demangle( typeid( T ).name() );
     return 0;
 }

@@ -59,7 +59,9 @@ run-fail lightweight_test_fail4.cpp ;
 run-fail lightweight_test_fail5.cpp ;
 run-fail lightweight_test_fail6.cpp ;
 run-fail lightweight_test_fail7.cpp ;
+run-fail lightweight_test_fail7.cpp : : : <rtti>off : lightweight_test_fail7_no_rtti ;
 run-fail lightweight_test_fail8.cpp ;
+run-fail lightweight_test_fail8.cpp : : : <rtti>off : lightweight_test_fail8_no_rtti ;
 
 run is_same_test.cpp ;
 
@@ -69,4 +71,7 @@ run typeinfo_test.cpp : : : <rtti>off : typeinfo_test_no_rtti ;
 run iterator_test.cpp ;
 run detail_iterator_test.cpp ;
 
+run demangle_test.cpp  : : : <test-info>always_show_run_output ;
+
 run demangled_name_test.cpp  : : : <test-info>always_show_run_output ;
+run demangled_name_test.cpp  : : : <rtti>off <test-info>always_show_run_output : demangled_name_test_no_rtti ;
