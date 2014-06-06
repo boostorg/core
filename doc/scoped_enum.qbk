@@ -127,7 +127,7 @@ The other way used a different set of macros:
     sample = algae::green;
     foo( algae::cyan );
 
-Here `BOOST_SCOPED_ENUM_START` correcponds to `BOOST_SCOPED_ENUM_DECLARE_BEGIN`, `BOOST_SCOPED_ENUM_END` to `BOOST_SCOPED_ENUM_DECLARE_END`
+Here `BOOST_SCOPED_ENUM_START` corresponds to `BOOST_SCOPED_ENUM_DECLARE_BEGIN`, `BOOST_SCOPED_ENUM_END` to `BOOST_SCOPED_ENUM_DECLARE_END`
 and `BOOST_SCOPED_ENUM` to `BOOST_SCOPED_ENUM_NATIVE`. Note also the semicolon before `BOOST_SCOPED_ENUM_END`.
 
 In the current version these macros produce equivalent result to the ones described above and are considered deprecated.
