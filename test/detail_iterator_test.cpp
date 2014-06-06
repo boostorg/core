@@ -10,7 +10,7 @@
 
 #include <boost/detail/iterator.hpp>
 #include <boost/core/is_same.hpp>
-#include <boost/core/lightweight_test.hpp>
+#include <boost/core/lightweight_test_trait.hpp>
 #include <cstddef>
 #include <list>
 

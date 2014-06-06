@@ -8,7 +8,7 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/lightweight_test_trait.hpp>
 
 template<class T1, class T2> struct Y1
 {

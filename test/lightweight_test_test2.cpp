@@ -1,5 +1,5 @@
 //
-// Negative test for BOOST_TEST_TRAIT_FALSE
+// Test for lightweight_test_trait.hpp
 //
 // Copyright (c) 2014 Peter Dimov
 //
@@ -32,7 +32,13 @@ struct X2
 
 int main()
 {
-    BOOST_TEST_TRAIT_FALSE(( Y1<X1::type, X2::type> ));
+    // BOOST_TEST_TRAIT_TRUE
+
+    BOOST_TEST_TRAIT_TRUE(( Y1<X1::type, X2::type> ));
+
+    // BOOST_TEST_TRAIT_FALSE
+
+    BOOST_TEST_TRAIT_FALSE(( Y2<X1::type, X2::type> ));
 
     return boost::report_errors();
 }

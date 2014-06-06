@@ -10,7 +10,7 @@
 //
 //  boost/core/lightweight_test.hpp - lightweight test library
 //
-//  Copyright (c) 2002, 2009 Peter Dimov
+//  Copyright (c) 2002, 2009, 2014 Peter Dimov
 //  Copyright (2) Beman Dawes 2010, 2011
 //  Copyright (3) Ion Gaztanaga 2013
 //
@@ -22,7 +22,6 @@
 #include <boost/assert.hpp>
 #include <boost/current_function.hpp>
 #include <boost/core/no_exceptions_support.hpp>
-#include <boost/core/typeinfo.hpp>
 #include <iostream>
 
 //  IDE's like Visual Studio perform better if output goes to std::cout or
@@ -118,25 +117,6 @@ template<class T, class U> inline void test_ne_impl( char const * expr1, char co
     }
 }
 
-template< class T > inline void test_trait_impl( char const * trait, void (*)( T ),
-  bool expected, char const * file, int line, char const * function )
-{
-    if( T::value == expected )
-    {
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): predicate '" << trait << "' ["
-            << BOOST_CORE_TYPEID(T).name() << "]"
-            << " test failed in function '" << function
-            << "' (should have been " << ( expected? "true": "false" ) << ")"
-            << std::endl;
-
-        ++boost::detail::test_errors();
-    }
-}
-
 } // namespace detail
 
 inline int report_errors()
@@ -185,8 +165,5 @@ inline int report_errors()
 #else
    #define BOOST_TEST_THROWS( EXPR, EXCEP )
 #endif
-
-#define BOOST_TEST_TRAIT_TRUE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, true, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
-#define BOOST_TEST_TRAIT_FALSE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, false, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_HPP
