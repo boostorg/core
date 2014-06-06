@@ -68,3 +68,5 @@ run typeinfo_test.cpp : : : <rtti>off : typeinfo_test_no_rtti ;
 
 run iterator_test.cpp ;
 run detail_iterator_test.cpp ;
+
+run demangled_name_test.cpp  : : : <test-info>always_show_run_output ;
