@@ -19,7 +19,6 @@
 
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/typeinfo.hpp>
-#include <boost/core/demangled_name.hpp>
 
 namespace boost
 {

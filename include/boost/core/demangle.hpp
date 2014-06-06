@@ -1,5 +1,5 @@
-#ifndef BOOST_CORE_DEMANGLED_NAME_HPP_INCLUDED
-#define BOOST_CORE_DEMANGLED_NAME_HPP_INCLUDED
+#ifndef BOOST_CORE_DEMANGLE_HPP_INCLUDED
+#define BOOST_CORE_DEMANGLE_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -7,7 +7,7 @@
 # pragma once
 #endif
 
-// core::demangled_name( BOOST_CORE_TYPEID(T) )
+// core::demangle
 //
 // Copyright 2014 Peter Dimov
 //
@@ -16,7 +16,6 @@
 // http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/config.hpp>
-#include <boost/core/typeinfo.hpp>
 #include <string>
 
 #if defined(__GLIBCXX__) || defined(__GLIBCPP__)
@@ -30,9 +29,6 @@ namespace boost
 {
 
 namespace core
-{
-
-namespace detail
 {
 
 #if defined( BOOST_CORE_HAS_CXXABI_H )
@@ -79,25 +75,10 @@ inline std::string demangle( char const * name )
 
 #endif
 
-} // namespace detail
-
-inline std::string demangled_name( core::typeinfo const & ti )
-{
-#if defined( BOOST_NO_TYPEID )
-
-    return ti.name();
-
-#else
-
-    return core::detail::demangle( ti.name() );
-
-#endif
-}
-
 } // namespace core
 
 } // namespace boost
 
 #undef BOOST_CORE_HAS_CXXABI_H
 
-#endif // #ifndef BOOST_CORE_DEMANGLED_NAME_HPP_INCLUDED
+#endif // #ifndef BOOST_CORE_DEMANGLE_HPP_INCLUDED
