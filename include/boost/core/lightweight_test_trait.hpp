@@ -19,6 +19,7 @@
 
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/typeinfo.hpp>
+#include <boost/core/demangled_name.hpp>
 
 namespace boost
 {
@@ -36,7 +37,7 @@ template< class T > inline void test_trait_impl( char const * trait, void (*)( T
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): predicate '" << trait << "' ["
-            << BOOST_CORE_TYPEID(T).name() << "]"
+            << boost::core::demangled_name( BOOST_CORE_TYPEID(T) ) << "]"
             << " test failed in function '" << function
             << "' (should have been " << ( expected? "true": "false" ) << ")"
             << std::endl;
