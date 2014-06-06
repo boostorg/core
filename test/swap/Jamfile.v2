@@ -7,31 +7,56 @@
 # bring in rules for testing
 import testing ;
 
-test-suite core/swap
-    :
-    [ compile root_header_1.cpp                                  ]
-    [ compile root_header_2.cpp                                  ]
-    [ compile lib_header_1.cpp                                   ]
-    [ compile lib_header_2.cpp                                   ]
-    [ compile mixed_headers_1.cpp                                ]
-    [ compile mixed_headers_2.cpp                                ]
-    [ run primitive.cpp ../../../test/build//boost_test_exec_monitor/<link>static                      ]
-    [ run specialized_in_boost.cpp ../../../test/build//boost_test_exec_monitor/<link>static           ]
-    [ run specialized_in_global.cpp ../../../test/build//boost_test_exec_monitor/<link>static          ]
-    [ run specialized_in_other.cpp ../../../test/build//boost_test_exec_monitor/<link>static           ]
-    [ run specialized_in_std.cpp ../../../test/build//boost_test_exec_monitor/<link>static             ]
-    [ run specialized_in_boost_and_other.cpp ../../../test/build//boost_test_exec_monitor/<link>static ]
-    [ run std_bitset.cpp ../../../test/build//boost_test_exec_monitor/<link>static                     ]
-    [ run std_dateorder.cpp ../../../test/build//boost_test_exec_monitor/<link>static                  ]
-    [ run std_string.cpp ../../../test/build//boost_test_exec_monitor/<link>static                     ]
-    [ run std_typeinfo_ptr.cpp ../../../test/build//boost_test_exec_monitor/<link>static               ]
-    [ run std_vector_of_boost.cpp ../../../test/build//boost_test_exec_monitor/<link>static            ]
-    [ run std_vector_of_global.cpp ../../../test/build//boost_test_exec_monitor/<link>static           ]
-    [ run std_vector_of_other.cpp ../../../test/build//boost_test_exec_monitor/<link>static            ]
-    [ run no_ambiguity_in_boost.cpp ../../../test/build//boost_test_exec_monitor/<link>static          ]
-    [ run array_of_array_of_class.cpp ../../../test/build//boost_test_exec_monitor/<link>static        ]
-    [ run array_of_array_of_int.cpp ../../../test/build//boost_test_exec_monitor/<link>static          ]
-    [ run array_of_class.cpp ../../../test/build//boost_test_exec_monitor/<link>static                 ]
-    [ run array_of_int.cpp ../../../test/build//boost_test_exec_monitor/<link>static                   ]
-    [ run array_of_template.cpp ../../../test/build//boost_test_exec_monitor/<link>static              ]
+local compile_tests =
+    root_header_1.cpp
+    root_header_2.cpp
+    lib_header_1.cpp
+    lib_header_2.cpp
+    mixed_headers_1.cpp
+    mixed_headers_2.cpp
     ;
+
+local run_tests =
+    primitive.cpp
+    specialized_in_boost.cpp
+    specialized_in_global.cpp
+    specialized_in_other.cpp
+    specialized_in_std.cpp
+    specialized_in_boost_and_other.cpp
+    std_bitset.cpp
+    std_dateorder.cpp
+    std_string.cpp
+    std_typeinfo_ptr.cpp
+    std_vector_of_boost.cpp
+    std_vector_of_global.cpp
+    std_vector_of_other.cpp
+    no_ambiguity_in_boost.cpp
+    array_of_array_of_class.cpp
+    array_of_array_of_int.cpp
+    array_of_class.cpp
+    array_of_int.cpp
+    array_of_template.cpp
+    ;
+
+rule test_all
+{
+    local all_rules ;
+    local file ;
+
+    for file in $(compile_tests)
+    {
+        local test_name = [ MATCH "([^.]*).cpp$" : $(file) ] ;
+        all_rules += [ compile $(file) : : "swap-$(test_name)" ] ;
+    }
+
+    for file in $(run_tests)
+    {
+        local test_name = [ MATCH "([^.]*).cpp$" : $(file) ] ;
+        all_rules += [ run $(file) ../../../test/build//boost_test_exec_monitor/<link>static : : : : "swap-$(test_name)" ] ;
+    }
+
+    #ECHO All rules: $(all_rules) ;
+    return $(all_rules) ;
+}
+
+test-suite core/swap : [ test_all r ] ;
