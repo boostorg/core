@@ -30,9 +30,8 @@ using std::distance;
 
 */
 
-struct C
-{
-};
+// struct C {} doesn't wotk with libc++.
+typedef std::forward_iterator_tag C;
 
 struct T
 {
