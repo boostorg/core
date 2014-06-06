@@ -65,3 +65,4 @@ run typeinfo_test.cpp ;
 run typeinfo_test.cpp : : : <rtti>off : typeinfo_test_no_rtti ;
 
 run iterator_test.cpp ;
+run detail_iterator_test.cpp ;
