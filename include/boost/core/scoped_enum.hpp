@@ -63,7 +63,7 @@ namespace boost
   inline
   typename EnumType::enum_type native_value(EnumType e)
   {
-    return e.native_value_();
+    return e.get_native_value_();
   }
 
 #else  // BOOST_NO_CXX11_SCOPED_ENUMS
@@ -126,7 +126,6 @@ namespace boost
 
 #define BOOST_SCOPED_ENUM_DECLARE_END2() \
         enum_type get_native_value_() const BOOST_NOEXCEPT { return enum_type(v_); } \
-        operator enum_type() const BOOST_NOEXCEPT { return get_native_value_(); } \
         friend bool operator ==(self_type lhs, self_type rhs) BOOST_NOEXCEPT { return enum_type(lhs.v_)==enum_type(rhs.v_); } \
         friend bool operator ==(self_type lhs, enum_type rhs) BOOST_NOEXCEPT { return enum_type(lhs.v_)==rhs; } \
         friend bool operator ==(enum_type lhs, self_type rhs) BOOST_NOEXCEPT { return lhs==enum_type(rhs.v_); } \
