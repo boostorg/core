@@ -18,11 +18,18 @@
 #include <boost/config.hpp>
 #include <string>
 
-#if defined(__GLIBCXX__) || defined(__GLIBCPP__)
+#if defined( __clang__ ) && defined( __has_include )
+# if __has_include(<cxxabi.h>)
+#  define BOOST_CORE_HAS_CXXABI_H
+# endif
+#elif defined( __GLIBCXX__ ) || defined( __GLIBCPP__ )
+# define BOOST_CORE_HAS_CXXABI_H
+#endif
+
+#if defined( BOOST_CORE_HAS_CXXABI_H )
 # include <cxxabi.h>
 # include <cstdlib>
 # include <cstddef>
-# define BOOST_CORE_HAS_CXXABI_H
 #endif
 
 namespace boost
