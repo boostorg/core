@@ -1,4 +1,5 @@
-{
+[
+    {
     "key": "core",
     "name": "Core",
     "authors": [
@@ -15,4 +16,21 @@
     "category": [
         "Miscellaneous"
     ]
-}
+    },
+    {
+        "key": "utility/swap",
+        "boost-version": "1.38.0",
+        "name": "Swap",
+        "authors": [
+            "Joseph Gauterin"
+        ],
+        "description": "Enhanced generic swap function.",
+        "documentation": "swap.html",
+        "category": [
+            "Miscellaneous"
+        ],
+        "maintainers": [
+            "Joseph Gauterin <joseph.gauterin -at- googlemail.com>"
+        ]
+    }
+]
