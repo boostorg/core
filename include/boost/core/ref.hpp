@@ -66,6 +66,14 @@ public:
     */
     BOOST_FORCEINLINE explicit reference_wrapper(T& t): t_(boost::addressof(t)) {}
 
+# if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+    /**
+     @remark Construction from a temporary object is disabled.
+    */
+    BOOST_DELETED_FUNCTION(reference_wrapper(T&& t))
+public:
+# endif
+
     /**
      @return The stored reference.
      @remark Does not throw.
@@ -143,6 +151,34 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST c
 }
 
 # undef BOOST_REF_CONST
+
+# if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+/**
+ @cond
+*/
+#  if defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
+#   define BOOST_REF_DELETE
+#  else
+#   define BOOST_REF_DELETE = delete
+#  endif
+/**
+ @endcond
+*/
+
+/**
+ @remark Construction from a temporary object is disabled.
+*/
+template<class T> void ref(T const&& t) BOOST_REF_DELETE;
+
+/**
+ @remark Construction from a temporary object is disabled.
+*/
+template<class T> void cref(T const&& t) BOOST_REF_DELETE;
+
+# undef BOOST_REF_DELETE
+
+# endif
 
 // is_reference_wrapper
 
