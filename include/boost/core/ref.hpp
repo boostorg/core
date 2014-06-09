@@ -20,6 +20,7 @@
 //
 //  Copyright (C) 2014 Glen Joseph Fernandes
 //  glenfe at live dot com
+//  Copyright (C) 2014 Agustin Berge
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -112,6 +113,15 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T 
     return reference_wrapper<T>(t);
 }
 
+/**
+ @return `ref(t.get())`
+ @remark Does not throw.
+*/
+template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( reference_wrapper<T> t )
+{
+    return reference_wrapper<T>(t.get());
+}
+
 // cref
 
 /**
@@ -121,6 +131,15 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T 
 template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( T const & t )
 {
     return reference_wrapper<T const>(t);
+}
+
+/**
+ @return `cref(t.get())`
+ @remark Does not throw.
+*/
+template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( reference_wrapper<T> t )
+{
+    return reference_wrapper<T const>(t.get());
 }
 
 # undef BOOST_REF_CONST
