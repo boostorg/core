@@ -1,4 +1,3 @@
-// Copyright 2002-2004 David Abrahams and Aleksey Gurtovoy
 // Copyright 2014 Agustin Berge
 //
 // Distributed under the Boost Software License, Version 1.0. (See
@@ -7,7 +6,7 @@
 
 #include <boost/ref.hpp>
 
-# if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 
 struct X {};
 
@@ -15,11 +14,9 @@ X const crv() { return X(); }
 
 int main()
 {
-  boost::reference_wrapper<X const> r = boost::ref(crv()); // this should produce an ERROR
-
-  return 0;
+    boost::reference_wrapper<X const> r = boost::ref(crv()); // this should produce an ERROR
 }
 
-# else
-#   error To fail, this test requires rvalue references
-# endif
+#else
+#  error To fail, this test requires rvalue references
+#endif

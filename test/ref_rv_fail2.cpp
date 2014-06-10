@@ -1,4 +1,3 @@
-// Copyright 2002-2004 David Abrahams and Aleksey Gurtovoy
 // Copyright 2014 Agustin Berge
 //
 // Distributed under the Boost Software License, Version 1.0. (See
@@ -9,7 +8,5 @@
 
 int main()
 {
-  boost::reference_wrapper<int> r = boost::ref(2); // this should produce an ERROR
-
-  return 0;
+    boost::reference_wrapper<int> r = boost::ref(2); // this should produce an ERROR
 }
