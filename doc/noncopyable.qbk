@@ -10,11 +10,11 @@
 
 [section:noncopyable noncopyable]
 
-[section Authors]
+[simplesect Authors]
 
 * Dave Abrahams
 
-[endsect]
+[endsimplesect]
 
 [section Header <boost/core/noncopyable.hpp>]
 

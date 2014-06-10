@@ -9,12 +9,12 @@
 
 [section:demangle demangle]
 
-[section Authors]
+[simplesect Authors]
 
 * Peter Dimov
 * Andrey Semashev
 
-[endsect]
+[endsimplesect]
 
 [section Header <boost/core/demangle.hpp>]
 

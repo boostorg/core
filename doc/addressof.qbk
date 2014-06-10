@@ -9,13 +9,13 @@
 
 [section:addressof addressof]
 
-[section Authors]
+[simplesect Authors]
 
 * Brad King
 * Douglas Gregor
 * Peter Dimov
 
-[endsect]
+[endsimplesect]
 
 [section Header <boost/core/addressof.hpp>]
 

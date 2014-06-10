@@ -1,6 +1,6 @@
 [section:ref ref]
 
-[section Authors]
+[simplesect Authors]
 
 * Jaakko J\u00E4rvi
 * Peter Dimov
@@ -9,7 +9,7 @@
 * Frank Mori Hess
 * Ronald Garcia
 
-[endsect]
+[endsimplesect]
 
 [section Introduction]
 
