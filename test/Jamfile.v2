@@ -19,6 +19,9 @@ compile-fail checked_delete_fail2.cpp ;
 
 compile ref_ct_test.cpp ;
 run ref_test.cpp ;
+compile-fail ref_rv_fail1.cpp ;
+compile-fail ref_rv_fail2.cpp ;
+compile-fail ref_rv_fail3.cpp ;
 
 run eif_constructors.cpp ;
 run eif_dummy_arg_disambiguation.cpp ;

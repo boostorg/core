@@ -20,6 +20,7 @@
 //
 //  Copyright (C) 2014 Glen Joseph Fernandes
 //  glenfe at live dot com
+//  Copyright (C) 2014 Agustin Berge
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -64,6 +65,14 @@ public:
      @remark Does not throw.
     */
     BOOST_FORCEINLINE explicit reference_wrapper(T& t): t_(boost::addressof(t)) {}
+
+# if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+    /**
+     @remark Construction from a temporary object is disabled.
+    */
+    BOOST_DELETED_FUNCTION(reference_wrapper(T&& t))
+public:
+# endif
 
     /**
      @return The stored reference.
@@ -112,6 +121,15 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T 
     return reference_wrapper<T>(t);
 }
 
+/**
+ @return `ref(t.get())`
+ @remark Does not throw.
+*/
+template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( reference_wrapper<T> t )
+{
+    return reference_wrapper<T>(t.get());
+}
+
 // cref
 
 /**
@@ -123,7 +141,44 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST c
     return reference_wrapper<T const>(t);
 }
 
+/**
+ @return `cref(t.get())`
+ @remark Does not throw.
+*/
+template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( reference_wrapper<T> t )
+{
+    return reference_wrapper<T const>(t.get());
+}
+
 # undef BOOST_REF_CONST
+
+# if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+/**
+ @cond
+*/
+#  if defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
+#   define BOOST_REF_DELETE
+#  else
+#   define BOOST_REF_DELETE = delete
+#  endif
+/**
+ @endcond
+*/
+
+/**
+ @remark Construction from a temporary object is disabled.
+*/
+template<class T> void ref(T const&& t) BOOST_REF_DELETE;
+
+/**
+ @remark Construction from a temporary object is disabled.
+*/
+template<class T> void cref(T const&& t) BOOST_REF_DELETE;
+
+# undef BOOST_REF_DELETE
+
+# endif
 
 // is_reference_wrapper
 
