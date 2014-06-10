@@ -1,0 +1,74 @@
+[/
+  Copyright 2014 Peter Dimov
+
+  Distributed under the Boost Software License, Version 1.0.
+
+  See accompanying file LICENSE_1_0.txt
+  or copy at http://boost.org/LICENSE_1_0.txt
+]
+
+[section:demangle demangle]
+
+[section Authors]
+
+* Peter Dimov
+* Andrey Semashev
+
+[endsect]
+
+[section Header <boost/core/demangle.hpp>]
+
+The header `<boost/core/demangle.hpp>` defines the function
+`boost::core::demangle`. It takes a mangled string such as
+those returned by `typeid(T).name()` on certain implementations
+such as `g++`, and returns its demangled, human-readable, form.
+
+[section Synopsis]
+
+``
+namespace boost
+{
+
+namespace core
+{
+    std::string demangle( char const * name );
+}
+
+}
+``
+
+[endsect]
+
+[section Example]
+
+``
+#include <boost/core/demangle.hpp>
+#include <typeinfo>
+#include <iostream>
+
+template<class T> struct X
+{
+};
+
+int main()
+{
+    char const * name = typeid( X<int> ).name();
+    
+    std::cout << name << std::endl; // prints 1XIiE
+    std::cout << boost::core::demangle( name ) << std::endl; // prints X<int>
+}
+``
+
+[endsect]
+
+[endsect]
+
+[section Acknowledgments]
+
+The implementation of `core::demangle` was taken from
+`boost/exception/detail/type_info.hpp`, which in turn was adapted
+from `boost/units/detail/utility.hpp`.
+
+[endsect]
+
+[endsect]

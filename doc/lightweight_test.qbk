@@ -119,7 +119,10 @@ Return the error count from `main`.
 ``
 #include <boost/core/lightweight_test.hpp>
 
-int sqr( int x ); // should return x * x
+int sqr( int x )
+{
+    return x * x;
+}
 
 int main()
 {
@@ -181,7 +184,7 @@ message containing `Trait`. Note the double set of parentheses.
 template<class T, class U> struct X
 {
     typedef T type;
-}
+};
 
 using boost::core::is_same;
 
