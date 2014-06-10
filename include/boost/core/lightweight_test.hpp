@@ -90,6 +90,7 @@ template<class T, class U> inline void test_eq_impl( char const * expr1, char co
 {
     if( t == u )
     {
+        report_errors_remind();
     }
     else
     {
@@ -106,6 +107,7 @@ template<class T, class U> inline void test_ne_impl( char const * expr1, char co
 {
     if( t != u )
     {
+        report_errors_remind();
     }
     else
     {
