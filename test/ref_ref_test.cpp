@@ -34,4 +34,6 @@ int main()
         boost::reference_wrapper< int const > r = boost::cref( boost::cref( x ) );
         BOOST_TEST_EQ( &r.get(), &x );
     }
+
+    return boost::report_errors();
 }
