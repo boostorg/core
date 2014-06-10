@@ -12,9 +12,9 @@
 
 [section Overview]
 
-The header *<boost/checked_delete.hpp>* defines two function
-templates, *checked_delete* and *checked_array_delete*, and two
-class templates, *checked_deleter* and *checked_array_deleter*.
+The header `<boost/checked_delete.hpp>` defines two function
+templates, `checked_delete` and `checked_array_delete`, and two
+class templates, `checked_deleter` and `checked_array_deleter`.
 
 The C++ Standard allows, in 5.3.5/5, pointers to incomplete
 class types to be deleted with a delete-expression. When the
@@ -25,7 +25,7 @@ unfortunately, not all do, and programmers sometimes ignore or
 disable warnings.
 
 A particularly troublesome case is when a smart pointer's
-destructor, such as *boost::scoped_ptr<T>::~scoped_ptr*, is
+destructor, such as `boost::scoped_ptr<T>::~scoped_ptr`, is
 instantiated with an incomplete type. This can often lead to
 silent, hard to track failures.
 
@@ -53,7 +53,7 @@ namespace boost
 
 [section template<class T> void checked_delete(T * p);]
 
-* *Requires:* *T* must be a complete type. The expression
+* *Requires:* `T` must be a complete type. The expression
   `delete p` must be well-formed.
 * *Effects:* `delete p;`
 
@@ -65,7 +65,7 @@ namespace boost
 
 [section template<class T> void checked_array_delete(T * p);]
 
-* *Requires:* *T* must be a complete type. The expression 
+* *Requires:* `T` must be a complete type. The expression
   `delete [] p` must be well-formed.
 * *Effects:* `delete [] p;`
 
@@ -117,9 +117,9 @@ template<class T> struct checked_array_deleter
 
 [section Acknowledgements]
 
-The function templates *checked_delete* and
-*checked_array_delete* were originally part of
-*<boost/utility.hpp>*, and the documentation
+The function templates `checked_delete` and
+`checked_array_delete` were originally part of
+`<boost/utility.hpp>`, and the documentation
 acknowledged Beman Dawes, Dave Abrahams,
 Vladimir Prus, Rainer Deyke, John Maddock, 
 and others as contributors.

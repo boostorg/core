@@ -1,3 +1,12 @@
+[/
+  Copyright 2014 Adam Wulkiewicz
+
+  Distributed under the Boost Software License, Version 1.0.
+
+  See accompanying file LICENSE_1_0.txt
+  or copy at http://boost.org/LICENSE_1_0.txt
+]
+
 [section:ignore_unused ignore_unused]
 
 [section Authors]
@@ -15,14 +24,16 @@ can't be removed or commented out, e.g. when some blocks of the code are
 conditionally activated. C++11 variadic templates are used if they're supported,
 otherwise they're emulated with overloads.
 
-Usage
+[section Usage]
 
 ``
 boost::ignore_unused(v1, v2, v3);
 boost::ignore_unused<T1, T2, T3>();
 ``
 
-Example
+[endsect]
+
+[section Example]
 
 ``
 int fun( int foo, int bar )
@@ -35,6 +46,8 @@ int fun( int foo, int bar )
     return foo + 2;
 }
 ``
+
+[endsect]
 
 [endsect]
 
