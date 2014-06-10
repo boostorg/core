@@ -9,11 +9,11 @@
 
 [section:ignore_unused ignore_unused]
 
-[section Authors]
+[simplesect Authors]
 
 * Adam Wulkiewicz
 
-[endsect]
+[endsimplesect]
 
 [section Header <boost/core/ignore_unused.hpp>]
 

@@ -10,11 +10,11 @@
 
 [section:no_exceptions_support no_exceptions_support]
 
-[section Authors]
+[simplesect Authors]
 
 * Pavel Vozenilek
 
-[endsect]
+[endsimplesect]
 
 [section Header <boost/core/no_exceptions_support.hpp>]
 

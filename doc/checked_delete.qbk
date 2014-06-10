@@ -1,6 +1,6 @@
 [section:checked_delete checked_delete]
 
-[section Authors]
+[simplesect Authors]
 
 * Beman Dawes
 * Dave Abrahams
@@ -8,7 +8,7 @@
 * Rainer Deyke
 * John Maddock
 
-[endsect]
+[endsimplesect]
 
 [section Overview]
 

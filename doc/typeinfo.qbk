@@ -9,11 +9,11 @@
 
 [section:typeinfo typeinfo]
 
-[section Authors]
+[simplesect Authors]
 
 * Peter Dimov
 
-[endsect]
+[endsimplesect]
 
 [section Header <boost/core/typeinfo.hpp>]
 

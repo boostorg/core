@@ -11,12 +11,12 @@
 
 [section:lightweight_test lightweight_test]
 
-[section Authors]
+[simplesect Authors]
 
 * Peter Dimov
 * Beman Dawes
 
-[endsect]
+[endsimplesect]
 
 [section Header <boost/core/lightweight_test.hpp>]
 

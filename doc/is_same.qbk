@@ -9,11 +9,11 @@
 
 [section:is_same is_same]
 
-[section Authors]
+[simplesect Authors]
 
 * Peter Dimov
 
-[endsect]
+[endsimplesect]
 
 [section Header <boost/core/is_same.hpp>]
 

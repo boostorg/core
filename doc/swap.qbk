@@ -1,13 +1,13 @@
 [section:swap swap]
 
-[section Authors]
+[simplesect Authors]
 
 * Niels Dekker
 * Joseph Gauterin
 * Steven Watanabe
 * Eric Niebler
 
-[endsect]
+[endsimplesect]
 
 [section Header <boost/core/swap.hpp>]
 
