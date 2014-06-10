@@ -22,6 +22,8 @@ run ref_test.cpp ;
 compile-fail ref_rv_fail1.cpp ;
 compile-fail ref_rv_fail2.cpp ;
 compile-fail ref_rv_fail3.cpp ;
+compile-fail ref_implicit_fail.cpp ;
+compile-fail ref_implicit_fail2.cpp ;
 
 run eif_constructors.cpp ;
 run eif_dummy_arg_disambiguation.cpp ;
