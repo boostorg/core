@@ -1,3 +1,14 @@
+[/
+  Copyright 2010, 2011 Beman Dawes
+  Copyright 2013 Ion Gaztanaga
+  Copyright 2014 Peter Dimov
+
+  Distributed under the Boost Software License, Version 1.0.
+
+  See accompanying file LICENSE_1_0.txt
+  or copy at http://boost.org/LICENSE_1_0.txt
+]
+
 [section:lightweight_test lightweight_test]
 
 [section Authors]
@@ -8,6 +19,31 @@
 [endsect]
 
 [section Header <boost/core/lightweight_test.hpp>]
+
+The header `<boost/core/lightweight_test.hpp>` is a
+lightweight test framework. It's useful for writing
+Boost regression tests for components that are dependencies
+of Boost.Test.
+
+When using `lightweight_test.hpp`, *do not forget* to
+`return boost::report_errors()` from `main`.
+
+[section Synopsis]
+
+``
+#define BOOST_TEST(expression) /*unspecified*/
+#define BOOST_ERROR(message) /*unspecified*/
+#define BOOST_TEST_EQ(expr1, expr2) /*unspecified*/
+#define BOOST_TEST_NE(expr1, expr2) /*unspecified*/
+#define BOOST_TEST_THROWS(expr, excep) /*unspecified*/
+
+namespace boost
+{
+    int report_errors();
+}
+``
+
+[endsect]
 
 [section BOOST_TEST]
 
@@ -37,7 +73,7 @@ Increases error count and outputs a message containing
 BOOST_TEST_EQ(expr1, expr2)
 ``
 
-If `expr1` != `expr2` increases the error count and outputs a
+If `expr1 != expr2` increases the error count and outputs a
 message containing both expressions.
 
 [endsect]
@@ -48,7 +84,7 @@ message containing both expressions.
 BOOST_TEST_NE(expr1, expr2)
 ``
 
-If `expr1` == `expr2` increases the error count and outputs a
+If `expr1 == expr2` increases the error count and outputs a
 message containing both expressions.
 
 [endsect]
@@ -59,11 +95,11 @@ message containing both expressions.
 BOOST_TEST_THROWS(expr, excep)
 ``
 
-If BOOST_NO_EXCEPTIONS is NOT defined and if `expr` does not
+If `BOOST_NO_EXCEPTIONS` is *not* defined and if `expr` does not
 throw an exception of type `excep`, increases the error count
 and outputs a message containing the expression.
 
-If BOOST_NO_EXCEPTIONS is defined, this macro expands to
+If `BOOST_NO_EXCEPTIONS` is defined, this macro expands to
 nothing and `expr` is not evaluated.
 
 [endsect]
@@ -76,19 +112,84 @@ int boost::report_errors()
 
 Return the error count from `main`.
 
-Example:
+[endsect]
+
+[section Example]
 
 ``
 #include <boost/core/lightweight_test.hpp>
 
-void sqr( int x ); // should return x * x
+int sqr( int x ); // should return x * x
 
 int main()
 {
-     BOOST_TEST( sqr( 2 ) == 4 );
-     BOOST_TEST_EQ( sqr(-3), 9 );
+    BOOST_TEST( sqr(2) == 4 );
+    BOOST_TEST_EQ( sqr(-3), 9 );
 
-     return boost::report_errors();
+    return boost::report_errors();
+}
+``
+
+[endsect]
+
+[endsect]
+
+[section Header <boost/core/lightweight_test_trait.hpp>]
+
+The header `<boost/core/lightweight_test_trait.hpp>` defines
+a couple of extra macros for testing compile-time traits that
+return a boolean value.
+
+[section Synopsis]
+
+``
+#define BOOST_TEST_TRAIT_TRUE((Trait)) /*unspecified*/
+#define BOOST_TEST_TRAIT_FALSE((Trait)) /*unspecified*/
+``
+
+[endsect]
+
+[section BOOST_TEST_TRAIT_TRUE]
+
+``
+BOOST_TEST_TRAIT_TRUE((Trait))
+``
+
+If `Trait::value != true` increases the error count and outputs a
+message containing `Trait`. Note the double set of parentheses; these
+enable `Trait` to contain a comma, which is common for templates.
+
+[endsect]
+
+[section BOOST_TEST_TRAIT_FALSE]
+
+``
+BOOST_TEST_TRAIT_FALSE((Trait))
+``
+
+If `Trait::value != false` increases the error count and outputs a
+message containing `Trait`. Note the double set of parentheses.
+
+[endsect]
+
+[section Example]
+
+``
+#include <boost/core/lightweight_test_trait.hpp>
+#include <boost/core/is_same.hpp>
+
+template<class T, class U> struct X
+{
+    typedef T type;
+}
+
+using boost::core::is_same;
+
+int main()
+{
+    BOOST_TEST_TRAIT_TRUE(( is_same<X<int, long>::type, int> ));
+
+    return boost::report_errors();
 }
 ``
 
