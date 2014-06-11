@@ -1,6 +1,7 @@
 [/
- / Copyright (C) 2007, 2008 Steven Watanabe, Joseph Gauterin, Niels Dekker
- / Copyright (C) 2014 Glen Fernandes
+ / Copyright (c) 2008 Joseph Gauterin
+ / Copyright (c) 2008, 2009 Niels Dekker
+ / Copyright (c) 2014 Glen Fernandes
  /
  / Distributed under the Boost Software License, Version 1.0. (See
  / accompanying file LICENSE_1_0.txt or copy at
@@ -33,7 +34,7 @@ select a specialized swap function if available. If no
 specialized swap function is available, `std::swap` is used.
 
 [endsect]
-    
+
 [section Rationale]
 
 The generic `std::swap` function requires that the elements
