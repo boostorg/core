@@ -21,6 +21,7 @@ doxygen ref_reference
     <doxygen:param>"PREDEFINED=BOOST_CORE_DOXYGEN \\
                     BOOST_SYMBOL_VISIBLE= \\
                     BOOST_FORCEINLINE=inline \\
+                    BOOST_GPU_ENABLED= \\
                     BOOST_STATIC_ASSERT(x)= \\
                     BOOST_STATIC_ASSERT_MSG(x,y)= \\
                     BOOST_STATIC_CONSTANT(x,y)=\"static constexpr x y\" \\
