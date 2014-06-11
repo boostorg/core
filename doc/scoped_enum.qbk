@@ -1,14 +1,12 @@
-[quickbook 1.5]
-
 [section:scoped_enum scoped_enum]
 
-[section Authors]
+[simplesect Authors]
 
 * Beman Dawes
 * Vicente J. Botet Escriba
 * Anthony Williams
 
-[endsect]
+[endsimplesect]
 
 [section Overview]
 
@@ -59,12 +57,9 @@ The enumeration can be forward declared:
 
     BOOST_SCOPED_ENUM_FORWARD_DECLARE(future_errc);
 
-There are however some limitations:
+There are however some limitations. First, the emulated scoped enum is not a C++ enum, so `is_enum< future_errc >` will be `false_type`.
 
-* The emulated scoped enum is not a C++ enum, so `is_enum< future_errc >` will be `false_type`.
-* The emulated scoped enum can not be used in switch nor in template arguments. For these cases the user needs to use some helpers.
-
-Instead of
+Second, the emulated scoped enum can not be used in switch nor in template arguments. For these cases the user needs to use some helpers. Instead of
 
     switch (ev)
     {
@@ -78,7 +73,7 @@ use
     case future_errc::broken_promise:
         // ...
 
-And instead of
+and instead of
 
     template <>
     struct is_error_code_enum< future_errc > :
@@ -94,13 +89,19 @@ use
     {
     };
 
-* Explicit conversion to the underlying type should be performed with `boost::underlying_cast` instead of `static_cast`:
+Lastly, explicit conversion to the underlying type should be performed with `boost::underlying_cast` instead of `static_cast`:
 
     unsigned int val = boost::underlying_cast< unsigned int >(ev);
 
-Sample usage:
+Here is usage example:
 
-    BOOST_SCOPED_ENUM_UT_DECLARE_BEGIN(algae, char) { green, red, cyan }; BOOST_SCOPED_ENUM_DECLARE_END(algae)
+    BOOST_SCOPED_ENUM_UT_DECLARE_BEGIN(algae, char)
+    {
+        green,
+        red,
+        cyan
+    }
+    BOOST_SCOPED_ENUM_DECLARE_END(algae)
     ...
     algae sample( algae::red );
     void foo( algae color );

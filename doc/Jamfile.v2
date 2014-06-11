@@ -18,6 +18,24 @@ doxygen ref_reference
     <doxygen:param>EXTRACT_PRIVATE=NO
     <doxygen:param>HIDE_UNDOC_MEMBERS=YES
     <doxygen:param>MACRO_EXPANSION=YES
+    <doxygen:param>"PREDEFINED=BOOST_CORE_DOXYGEN \\
+                    BOOST_SYMBOL_VISIBLE= \\
+                    BOOST_FORCEINLINE=inline \\
+                    BOOST_STATIC_ASSERT(x)= \\
+                    BOOST_STATIC_ASSERT_MSG(x,y)= \\
+                    BOOST_STATIC_CONSTANT(x,y)=\"static constexpr x y\" \\
+                    BOOST_RV_REF(x)=\"x&&\" \\
+                    BOOST_NESTED_TEMPLATE=template \\
+                    BOOST_CONSTEXPR=constexpr \\
+                    BOOST_CONSTEXPR_OR_CONST=constexpr \\
+                    BOOST_NOEXCEPT=noexcept \\
+                    BOOST_NOEXCEPT_IF(x)=noexcept(x) \\
+                    BOOST_NOEXCEPT_OR_NOTHROW=noexcept \\
+                    BOOST_COPY_ASSIGN_REF(x)=\"x const&\" \\
+                    BOOST_DEFAULTED_FUNCTION(x,y)=\"x = default;\" \\
+                    BOOST_DELETED_FUNCTION(x)=\"x = delete;\" \\
+                    BOOST_EXPLICIT_OPERATOR_BOOL()=\"explicit operator bool() const;\" \\
+                    BOOST_REF_CONST=const"
   ;
 
 xml core : core.qbk ;
