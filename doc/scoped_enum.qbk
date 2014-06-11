@@ -1,3 +1,13 @@
+[/
+ / Copyright (c) 2009 Beman Dawes
+ / Copyright (C) 2011-2012 Vicente J. Botet Escriba
+ / Copyright (C) 2012 Anthony Williams
+ / Copyright (c) 2014 Andrey Semashev
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
 [section:scoped_enum scoped_enum]
 
 [simplesect Authors]
