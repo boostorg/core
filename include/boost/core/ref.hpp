@@ -39,6 +39,12 @@
 namespace boost
 {
 
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, == 1600 )
+
+    struct ref_workaround_tag {};
+
+#endif
+
 // reference_wrapper
 
 /**
@@ -66,13 +72,19 @@ public:
     */
     BOOST_FORCEINLINE explicit reference_wrapper(T& t): t_(boost::addressof(t)) {}
 
-# if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, == 1600 )
+
+    BOOST_FORCEINLINE explicit reference_wrapper( T & t, ref_workaround_tag ): t_( boost::addressof( t ) ) {}
+
+#endif
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
     /**
      @remark Construction from a temporary object is disabled.
     */
     BOOST_DELETED_FUNCTION(reference_wrapper(T&& t))
 public:
-# endif
+#endif
 
     /**
      @return The stored reference.
@@ -103,11 +115,11 @@ private:
 /**
  @cond
 */
-# if defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) )
+#if defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) )
 #  define BOOST_REF_CONST
-# else
+#else
 #  define BOOST_REF_CONST const
-# endif
+#endif
 /**
  @endcond
 */
@@ -118,7 +130,15 @@ private:
 */
 template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T & t )
 {
-    return reference_wrapper<T>(t);
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, == 1600 )
+
+    return reference_wrapper<T>( t, ref_workaround_tag() );
+
+#else
+
+    return reference_wrapper<T>( t );
+
+#endif
 }
 
 /**
@@ -127,7 +147,7 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T 
 */
 template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( reference_wrapper<T> t )
 {
-    return reference_wrapper<T>(t.get());
+    return t;
 }
 
 // cref
@@ -150,18 +170,18 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST c
     return reference_wrapper<T const>(t.get());
 }
 
-# undef BOOST_REF_CONST
+#undef BOOST_REF_CONST
 
-# if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 
 /**
  @cond
 */
-#  if defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
-#   define BOOST_REF_DELETE
-#  else
-#   define BOOST_REF_DELETE = delete
-#  endif
+#if defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
+#  define BOOST_REF_DELETE
+#else
+#  define BOOST_REF_DELETE = delete
+#endif
 /**
  @endcond
 */
@@ -176,9 +196,9 @@ template<class T> void ref(T const&& t) BOOST_REF_DELETE;
 */
 template<class T> void cref(T const&& t) BOOST_REF_DELETE;
 
-# undef BOOST_REF_DELETE
+#undef BOOST_REF_DELETE
 
-# endif
+#endif
 
 // is_reference_wrapper
 
