@@ -26,7 +26,7 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
-//  See http://www.boost.org/libs/bind/ref.html for documentation.
+//  See http://www.boost.org/libs/core/doc/html/core/ref.html for documentation.
 //
 
 /**
