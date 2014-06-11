@@ -1,9 +1,10 @@
 [/
- /  Copyright (C) 1999, 2000 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
- /  Copyright (C) 2001, 2002 Peter Dimov
- /  Copyright (C) 2002 David Abrahams
- /  Copyright (C) 2014 Glen Joseph Fernandes
- /  Copyright (C) 2014 Agustin Berge
+ /  Copyright (c) 2001, 2002, 2006 Peter Dimov
+ /  Copyright (c) 2002 David Abrahams
+ /  Copyright (c) 2002 Aleksey Gurtovoy
+ /  Copyright (c) 2003, 2004 Douglas Gregor
+ /  Copyright (c) 2009 Ronald Garcia
+ /  Copyright (c) 2014 Glen Joseph Fernandes
  /
  / Distributed under the Boost Software License, Version 1.0. (See
  / accompanying file LICENSE_1_0.txt or copy at
