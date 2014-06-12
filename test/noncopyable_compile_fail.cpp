@@ -33,4 +33,4 @@ int main()
     object1 = object2;
     return 0;
 }   // main
-  
+
