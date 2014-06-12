@@ -51,6 +51,22 @@ class X: private boost::noncopyable
 
 [endsect]
 
+[section Rationale]
+
+Class noncopyable has protected constructor and destructor members to emphasize
+that it is to be used only as a base class. Dave Abrahams notes concern about
+the effect on compiler optimization of adding (even trivial inline) destructor
+declarations. He says:
+
+["Probably this concern is misplaced, because `noncopyable` will be used mostly
+for classes which own resources and thus have non-trivial destruction semantics.]
+
+With C++2011, using an optimized and trivial constructor and similar destructor
+can be enforced by declaring both and marking them `default`. This is done in
+the current implementation.
+
+[endsect]
+
 [endsect]
 
 [endsect]

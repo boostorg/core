@@ -22,7 +22,8 @@
 The header `<boost/core/addressof.hpp>` defines the function
 template `boost::addressof`. `boost::addressof(x)` returns the
 address of `x`. Ordinarily, this address can be obtained by
-`&x`, but the unary `&` operator can be overloaded.
+`&x`, but the unary `&` operator can be overloaded. `boost::addressof`
+avoids calling used-defined `operator&()`.
 
 `boost::addressof` was originally contributed by Brad King
 based on ideas from discussion with Doug Gregor.
