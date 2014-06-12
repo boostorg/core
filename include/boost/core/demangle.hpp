@@ -1,15 +1,10 @@
 #ifndef BOOST_CORE_DEMANGLE_HPP_INCLUDED
 #define BOOST_CORE_DEMANGLE_HPP_INCLUDED
 
-// MS compatible compilers support #pragma once
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
-# pragma once
-#endif
-
 // core::demangle
 //
 // Copyright 2014 Peter Dimov
+// Copyright 2014 Andrey Semashev
 //
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -17,6 +12,10 @@
 
 #include <boost/config.hpp>
 #include <string>
+
+#if defined(BOOST_HAS_PRAGMA_ONCE)
+# pragma once
+#endif
 
 #if defined( __clang__ ) && defined( __has_include )
 # if __has_include(<cxxabi.h>)
@@ -38,34 +37,56 @@ namespace boost
 namespace core
 {
 
+char const * demangle_alloc( char const * name ) BOOST_NOEXCEPT;
+void demangle_free( char const * name ) BOOST_NOEXCEPT;
+
+class scoped_demangled_name
+{
+private:
+    char const * m_p;
+
+public:
+    explicit scoped_demangled_name( char const * name ) BOOST_NOEXCEPT :
+        m_p( demangle_alloc( name ) )
+    {
+    }
+
+    ~scoped_demangled_name() BOOST_NOEXCEPT
+    {
+        demangle_free( m_p );
+    }
+
+    char const * get() const BOOST_NOEXCEPT
+    {
+        return m_p;
+    }
+
+    BOOST_DELETED_FUNCTION(scoped_demangled_name( scoped_demangled_name const& ))
+    BOOST_DELETED_FUNCTION(scoped_demangled_name& operator= ( scoped_demangled_name const& ))
+};
+
+
 #if defined( BOOST_CORE_HAS_CXXABI_H )
 
-// lifted from boost/exception/detail/type_info.hpp
+inline char const * demangle_alloc( char const * name ) BOOST_NOEXCEPT
+{
+    int status = 0;
+    std::size_t size = 0;
+    return abi::__cxa_demangle( name, NULL, &size, &status );
+}
+
+inline void demangle_free( char const * name ) BOOST_NOEXCEPT
+{
+    std::free( const_cast< char* >( name ) );
+}
 
 inline std::string demangle( char const * name )
 {
-    struct auto_free
+    scoped_demangled_name demangled_name( name );
+    char const * const p = demangled_name.get();
+    if( p )
     {
-        explicit auto_free( char * ptr ): p( ptr )
-        {
-        }
-
-        ~auto_free()
-        {
-            std::free( p );
-        }
-
-        char * p;
-    };
-
-    int status = 0;
-    std::size_t size = 0;
-
-    auto_free demangled( abi::__cxa_demangle( name, NULL, &size, &status ) );
-
-    if( demangled.p )
-    {
-        return demangled.p;
+        return p;
     }
     else
     {
@@ -74,6 +95,15 @@ inline std::string demangle( char const * name )
 }
 
 #else
+
+inline char const * demangle_alloc( char const * name ) BOOST_NOEXCEPT
+{
+    return name;
+}
+
+inline void demangle_free( char const * ) BOOST_NOEXCEPT
+{
+}
 
 inline std::string demangle( char const * name )
 {
