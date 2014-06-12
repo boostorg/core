@@ -29,7 +29,7 @@ run eif_namespace_disambiguation.cpp ;
 run eif_no_disambiguation.cpp ;
 run eif_partial_specializations.cpp ;
 
-compile-fail ../noncopyable_compile_fail.cpp ;
+compile-fail noncopyable_compile_fail.cpp ;
 
 run explicit_operator_bool.cpp ;
 run explicit_operator_bool_noexcept.cpp ;
