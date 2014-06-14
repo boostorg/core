@@ -189,12 +189,12 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST c
 /**
  @remark Construction from a temporary object is disabled.
 */
-template<class T> void ref(T const&& t) BOOST_REF_DELETE;
+template<class T> void ref(T const&&) BOOST_REF_DELETE;
 
 /**
  @remark Construction from a temporary object is disabled.
 */
-template<class T> void cref(T const&& t) BOOST_REF_DELETE;
+template<class T> void cref(T const&&) BOOST_REF_DELETE;
 
 #undef BOOST_REF_DELETE
 
