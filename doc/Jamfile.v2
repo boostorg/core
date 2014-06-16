@@ -46,7 +46,8 @@ boostbook standalone
     core
   :
     <dependency>ref_reference
-    <xsl:param>boost.root=http://boost.org/doc/libs/master
+    <xsl:param>boost.root=../../../..
     <xsl:param>generate.section.toc.level=1
     <xsl:param>toc.max.depth=1
+    <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/core/doc/html
   ;
