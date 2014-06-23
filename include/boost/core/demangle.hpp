@@ -37,8 +37,8 @@ namespace boost
 namespace core
 {
 
-char const * demangle_alloc( char const * name ) BOOST_NOEXCEPT;
-void demangle_free( char const * name ) BOOST_NOEXCEPT;
+inline char const * demangle_alloc( char const * name ) BOOST_NOEXCEPT;
+inline void demangle_free( char const * name ) BOOST_NOEXCEPT;
 
 class scoped_demangled_name
 {
