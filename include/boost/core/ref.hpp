@@ -141,15 +141,6 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T 
 #endif
 }
 
-/**
- @return `ref(t.get())`
- @remark Does not throw.
-*/
-template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( reference_wrapper<T> t )
-{
-    return t;
-}
-
 // cref
 
 /**
@@ -159,15 +150,6 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( re
 template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( T const & t )
 {
     return reference_wrapper<T const>(t);
-}
-
-/**
- @return `cref(t.get())`
- @remark Does not throw.
-*/
-template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( reference_wrapper<T> t )
-{
-    return reference_wrapper<T const>(t.get());
 }
 
 #undef BOOST_REF_CONST
