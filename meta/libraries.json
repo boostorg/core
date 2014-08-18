@@ -18,6 +18,24 @@
     ]
     },
     {
+        "key": "utility/enable_if",
+        "name": "Enable If",
+        "authors": [
+            "Jaakko J\u00e4rvi",
+            "Jeremiah Willcock",
+            "Andrew Lumsdaine"
+        ],
+        "description": "Selective inclusion of function template overloads.",
+        "documentation": "doc/html/core/enable_if.html",
+        "category": [
+            "Generic"
+        ],
+        "maintainers": [
+            "Jaakko Jarvi <jarvi -at- cs.tamu.edu>",
+            "Jeremiah Willcock <jewillco -at- osl.iu.edu>"
+        ]
+    },
+    {
         "key": "utility/swap",
         "boost-version": "1.38.0",
         "name": "Swap",
