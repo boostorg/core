@@ -26,10 +26,17 @@ template<class T> T * get_pointer(T * p)
 
 #if !defined( BOOST_NO_AUTO_PTR )
 
+#if defined( BOOST_GCC_CXX11 )
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 template<class T> T * get_pointer(std::auto_ptr<T> const& p)
 {
     return p.get();
 }
+#if defined( BOOST_GCC_CXX11 )
+#   pragma GCC diagnostic pop
+#endif
 
 #endif
 
