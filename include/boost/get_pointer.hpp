@@ -27,8 +27,10 @@ template<class T> T * get_pointer(T * p)
 #if !defined( BOOST_NO_AUTO_PTR )
 
 #if defined( __GNUC__ ) && (defined( __GXX_EXPERIMENTAL_CXX0X__ ) || (__cplusplus >= 201103L))
-#if defined( BOOST_GCC ) && BOOST_GCC >= 40600
+#if defined( BOOST_GCC )
+#if BOOST_GCC >= 40600
 #define BOOST_CORE_DETAIL_DISABLE_LIBSTDCXX_DEPRECATED_WARNINGS
+#endif // BOOST_GCC >= 40600
 #elif defined( __clang__ ) && defined( __has_warning )
 #if __has_warning("-Wdeprecated-declarations")
 #define BOOST_CORE_DETAIL_DISABLE_LIBSTDCXX_DEPRECATED_WARNINGS
