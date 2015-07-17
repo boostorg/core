@@ -26,7 +26,7 @@ template<class T> T * get_pointer(T * p)
 
 #if !defined( BOOST_NO_AUTO_PTR )
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && (defined( __GXX_EXPERIMENTAL_CXX0X__ ) || (__cplusplus >= 201103L))
 #if defined( BOOST_GCC ) && BOOST_GCC >= 40600
 #define BOOST_CORE_DETAIL_DISABLE_LIBSTDCXX_DEPRECATED_WARNINGS
 #elif defined( __clang__ ) && defined( __has_warning )
@@ -34,7 +34,7 @@ template<class T> T * get_pointer(T * p)
 #define BOOST_CORE_DETAIL_DISABLE_LIBSTDCXX_DEPRECATED_WARNINGS
 #endif // __has_warning("-Wdeprecated-declarations")
 #endif
-#endif // defined( __GNUC__ )
+#endif // defined( __GNUC__ ) && (defined( __GXX_EXPERIMENTAL_CXX0X__ ) || (__cplusplus >= 201103L))
 
 #if defined( BOOST_CORE_DETAIL_DISABLE_LIBSTDCXX_DEPRECATED_WARNINGS )
 // Disable libstdc++ warnings about std::auto_ptr being deprecated in C++11 mode
