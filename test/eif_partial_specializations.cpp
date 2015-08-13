@@ -14,7 +14,7 @@
 #include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-using boost::enable_if_type;
+using boost::enable_if_has_type;
 using boost::enable_if_c;
 using boost::disable_if_c;
 using boost::enable_if;
@@ -55,7 +55,7 @@ class tester3
 };
 
 template <class T>
-class tester3<T, typename enable_if_type<typename T::value_type>::type>
+class tester3<T, typename enable_if_has_type<typename T::value_type>::type>
 {
   typedef typename T::value_type type;
   BOOST_STATIC_CONSTANT(bool, value = true);
