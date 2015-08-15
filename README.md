@@ -16,7 +16,7 @@ The criteria for inclusion is that the utility component be:
 
 ### More information
 
-* [Documentation](http://boostorg.github.io/core)
+* [Documentation](http://boost.org/libs/core)
 
 ### License
 
