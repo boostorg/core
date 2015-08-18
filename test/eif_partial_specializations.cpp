@@ -48,14 +48,14 @@ struct tester2<T, typename disable_if<is_arithmetic<T> >::type> {
 };
 
 template <class T, class Enable = void>
-class tester3
+struct tester3
 {
   typedef T type;
   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
 template <class T>
-class tester3<T, typename enable_if_has_type<typename T::value_type>::type>
+struct tester3<T, typename enable_if_has_type<typename T::value_type>::type>
 {
   typedef typename T::value_type type;
   BOOST_STATIC_CONSTANT(bool, value = true);
