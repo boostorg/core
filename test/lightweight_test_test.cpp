@@ -43,6 +43,16 @@ int main()
     BOOST_TEST( x++ == 1 );
     BOOST_TEST( x == 2? true: false );
     BOOST_TEST( x == 2? &x: 0 );
+    
+    // BOOST_TEST_NOT
+    
+    BOOST_TEST_NOT( x == 1 );
+    BOOST_TEST_NOT( ++x == 2 );
+    BOOST_TEST_NOT( x++ == 2 );
+    BOOST_TEST_NOT( --x == 2 );
+    BOOST_TEST_NOT( x-- == 2 );
+    BOOST_TEST_NOT( x == 2? false: true );
+    BOOST_TEST_NOT( x == 2? 0: &x );
 
     // BOOST_TEST_EQ
 

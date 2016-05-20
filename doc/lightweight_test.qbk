@@ -32,6 +32,7 @@ When using `lightweight_test.hpp`, *do not forget* to
 
 ``
 #define BOOST_TEST(expression) /*unspecified*/
+#define BOOST_TEST_NOT(expression) /*unspecified*/
 #define BOOST_ERROR(message) /*unspecified*/
 #define BOOST_TEST_EQ(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_NE(expr1, expr2) /*unspecified*/
@@ -53,6 +54,17 @@ BOOST_TEST(expression)
 
 If expression is false increases the error count and outputs a
 message containing `expression`.
+
+[endsect]
+
+[section BOOST_TEST_NOT]
+
+``
+BOOST_TEST_NOT(expression)
+``
+
+If expression is true increases the error count and outputs a
+message containing `!(expression)`.
 
 [endsect]
 
