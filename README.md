@@ -8,6 +8,13 @@ The criteria for inclusion is that the utility component be:
 * used by other Boost libraries, and
 * not dependent on any other Boost modules except Core itself, Config, Assert, Static Assert, or Predef.
 
+### CI Status
+
+Branch   | Travis | Appveyor
+---------|--------|---------
+Develop  | [![Build Status](https://travis-ci.org/boostorg/core.svg?branch=develop)](https://travis-ci.org/boostorg/core) | [![Build Status](https://ci.appveyor.com/api/projects/status/github/boostorg/core?branch=develop&svg=true)](https://ci.appveyor.com/project/pdimov/core)
+Master   | [![Build Status](https://travis-ci.org/boostorg/core.svg?branch=master)](https://travis-ci.org/boostorg/core) | [![Build Status](https://ci.appveyor.com/api/projects/status/github/boostorg/core?branch=master&svg=true)](https://ci.appveyor.com/project/pdimov/core)
+
 ### Directories
 
 * **doc** - Documentation of the components
