@@ -6,6 +6,7 @@
 #  See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt
 
+import modules ;
 import testing ;
 
 run addressof_test.cpp ;
@@ -92,3 +93,6 @@ compile-fail scoped_enum_compile_fail_conv_from_int.cpp ;
 compile-fail scoped_enum_compile_fail_conv_to_int.cpp ;
 
 run underlying_type.cpp ;
+
+use-project /boost/core/swap : ./swap ;
+build-project ./swap ;
