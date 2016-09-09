@@ -36,3 +36,7 @@ script:
   - TOOLSET=gcc,clang
   - if [ $TRAVIS_OS_NAME == osx ]; then TOOLSET=clang; fi
   - ./b2 libs/core/test toolset=$TOOLSET
+
+notifications:
+  email:
+    on_success: always
