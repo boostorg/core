@@ -52,5 +52,8 @@ boostbook standalone
     <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/core/doc/html
   ;
 
-alias boostdoc : standalone
-    : : : <implicit-dependency>standalone ;
+###############################################################################
+alias boostdoc ;
+explicit boostdoc ;
+alias boostrelease : standalone ;
+explicit boostrelease ;
