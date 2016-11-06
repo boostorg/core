@@ -27,10 +27,12 @@ int main()
         delete p;
     }
 
+#if !defined( BOOST_NO_AUTO_PTR )
     {
         std::auto_ptr< X > p( new X );
         BOOST_TEST( get_pointer( p ) == p.get() );
     }
+#endif
 
 #if !defined( BOOST_NO_CXX11_SMART_PTR )
 
