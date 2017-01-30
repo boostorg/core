@@ -80,9 +80,6 @@ matrix:
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++03
 
     - os: linux
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++11
-
-    - os: linux
       env: TOOLSET=clang COMPILER=clang++-3.6 CXXSTD=c++03
 
     - os: linux
