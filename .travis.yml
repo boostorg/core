@@ -15,6 +15,103 @@ branches:
     - master
     - develop
 
+env:
+  matrix:
+    - BOGUS_JOB=true
+
+addons:
+  apt:
+    packages:
+      - g++-4.7
+      - g++-4.8
+      - g++-4.9
+      - g++-5
+      - g++-6
+      - clang-3.6
+      - clang-3.7
+      - clang-3.8
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise
+      - llvm-toolchain-precise-3.6
+      - llvm-toolchain-precise-3.7
+      - llvm-toolchain-precise-3.8
+
+matrix:
+
+  exclude:
+    - env: BOGUS_JOB=true
+
+  include:
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++ CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-4.7 CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-4.8 CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-4.9 CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-4.9 CXXSTD=c++11
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++11
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++14
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z
+
+    - os: linux
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=clang COMPILER=clang++-3.6 CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=clang COMPILER=clang++-3.6 CXXSTD=c++11
+
+    - os: linux
+      env: TOOLSET=clang COMPILER=clang++-3.7 CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=clang COMPILER=clang++-3.7 CXXSTD=c++11
+
+    - os: linux
+      env: TOOLSET=clang COMPILER=clang++-3.8 CXXSTD=c++03
+
+    - os: linux
+      env: TOOLSET=clang COMPILER=clang++-3.8 CXXSTD=c++11
+
+    - os: linux
+      env: TOOLSET=clang COMPILER=clang++-3.8 CXXSTD=c++14
+
+    - os: linux
+      env: TOOLSET=clang COMPILER=clang++-3.8 CXXSTD=c++1z
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++03
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++11
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14
+
 install:
   - cd ..
   - git clone -b $TRAVIS_BRANCH https://github.com/boostorg/boost.git boost-root
@@ -32,8 +129,8 @@ install:
   - ./b2 headers
 
 script:
-  - TOOLSET=gcc,clang
-  - if [ $TRAVIS_OS_NAME == osx ]; then TOOLSET=clang; fi
+  - |-
+    echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD ;" > ~/user-config.jam
   - ./b2 libs/core/test toolset=$TOOLSET
 
 notifications:
