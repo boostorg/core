@@ -13,6 +13,7 @@ run addressof_test.cpp ;
 run addressof_test2.cpp ;
 run addressof_np_test.cpp ;
 run addressof_fn_test.cpp ;
+compile addressof_constexpr_test.cpp ;
 
 run checked_delete_test.cpp ;
 compile-fail checked_delete_fail.cpp ;
