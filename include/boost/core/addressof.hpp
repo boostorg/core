@@ -15,20 +15,33 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_CORE_ADDRESSOF_HPP
 
 #include <boost/config.hpp>
+
+#if BOOST_MSVC_FULL_VER >= 190024215
+#define BOOST_CORE_HAS_BUILTIN_ADDRESSOF
+#elif BOOST_GCC >= 70000
+#define BOOST_CORE_HAS_BUILTIN_ADDRESSOF
+#elif defined(__has_builtin)
+#if __has_builtin(__builtin_addressof)
+#define BOOST_CORE_HAS_BUILTIN_ADDRESSOF
+#endif
+#endif
+
+#if defined(BOOST_CORE_HAS_BUILTIN_ADDRESSOF)
+namespace boost {
+
+template<class T>
+BOOST_CONSTEXPR inline T*
+addressof(T& o) BOOST_NOEXCEPT
+{
+    return __builtin_addressof(o);
+}
+
+} /* boost */
+#else
 #include <boost/detail/workaround.hpp>
 #include <cstddef>
 
-#if defined(BOOST_NO_SFINAE_EXPR) || \
-    defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || \
-    defined(BOOST_NO_CXX11_CONSTEXPR) || \
-    defined(BOOST_NO_CXX11_DECLTYPE) || \
-    (defined(BOOST_MSVC) && \
-        BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1900)))
-#define BOOST_CORE_NO_CONSTEXPR_ADDRESSOF
-#endif
-
 namespace boost {
-namespace core {
 namespace detail {
 
 template<class T>
@@ -46,8 +59,8 @@ private:
 template<class T>
 struct address_of {
     static BOOST_FORCEINLINE T* get(T& o, long) BOOST_NOEXCEPT {
-        return reinterpret_cast<T*>(&
-            const_cast<char&>(reinterpret_cast<const volatile char&>(o)));
+        return reinterpret_cast<T*>(&const_cast<
+            char&>(reinterpret_cast<const volatile char&>(o)));
     }
     static BOOST_FORCEINLINE T* get(T* p, int) BOOST_NOEXCEPT {
         return p;
@@ -58,45 +71,54 @@ struct address_of {
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && \
     (defined(__INTEL_COMPILER) || \
         (defined(__clang__) && !defined(_LIBCPP_VERSION)))
-typedef decltype(nullptr) null_type;
+typedef decltype(nullptr) addressof_null_t;
 #else
-typedef std::nullptr_t null_type;
+typedef std::nullptr_t addressof_null_t;
 #endif
 
 template<>
-struct address_of<null_type> {
-    typedef null_type type;
+struct address_of<addressof_null_t> {
+    typedef addressof_null_t type;
     static BOOST_FORCEINLINE type* get(type& o, int) BOOST_NOEXCEPT {
         return &o;
     }
 };
 
 template<>
-struct address_of<const null_type> {
-    typedef const null_type type;
+struct address_of<const addressof_null_t> {
+    typedef const addressof_null_t type;
     static BOOST_FORCEINLINE type* get(type& o, int) BOOST_NOEXCEPT {
         return &o;
     }
 };
 
 template<>
-struct address_of<volatile null_type> {
-    typedef volatile null_type type;
+struct address_of<volatile addressof_null_t> {
+    typedef volatile addressof_null_t type;
     static BOOST_FORCEINLINE type* get(type& o, int) BOOST_NOEXCEPT {
         return &o;
     }
 };
 
 template<>
-struct address_of<const volatile null_type> {
-    typedef const volatile null_type type;
+struct address_of<const volatile addressof_null_t> {
+    typedef const volatile addressof_null_t type;
     static BOOST_FORCEINLINE type* get(type& o, int) BOOST_NOEXCEPT {
         return &o;
     }
 };
 #endif
 
-#if defined(BOOST_CORE_NO_CONSTEXPR_ADDRESSOF)
+} /* detail */
+
+#if defined(BOOST_NO_SFINAE_EXPR) || \
+    defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || \
+    defined(BOOST_NO_CXX11_CONSTEXPR) || \
+    defined(BOOST_NO_CXX11_DECLTYPE) || \
+    (defined(BOOST_MSVC) && \
+        BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1900)))
+#define BOOST_CORE_NO_CONSTEXPR_ADDRESSOF
+
 template<class T>
 BOOST_FORCEINLINE T*
 addressof(T& o) BOOST_NOEXCEPT
@@ -105,122 +127,25 @@ addressof(T& o) BOOST_NOEXCEPT
         BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x610))) || \
     (defined(__SUNPRO_CC) && \
         BOOST_WORKAROUND(__SUNPRO_CC, <= 0x5120))
-    return address_of<T>::get(o, 0);
+    return detail::address_of<T>::get(o, 0);
 #else
-    return address_of<T>::get(addressof_ref<T>(o), 0);
+    return detail::address_of<T>::get(detail::addressof_ref<T>(o), 0);
 #endif
 }
-#else
-template<class T>
-struct add_rvalue_reference {
-    typedef T&& type;
-};
 
-template<class T>
-typename add_rvalue_reference<T>::type declval() BOOST_NOEXCEPT;
-
-template<class>
-struct make_void {
-    typedef void type;
-};
-
-template<class T, class E = void>
-struct has_member_address_operator {
-    static constexpr bool value = false;
-};
-
-template<class T>
-struct has_member_address_operator<T,
-    typename make_void<decltype(declval<T&>().operator&())>::type> {
-    static constexpr bool value = true;
-};
-
-#if defined(BOOST_INTEL) && BOOST_WORKAROUND(BOOST_INTEL, < 1600)
-struct addressable { };
-
-addressable* operator&(addressable&) BOOST_NOEXCEPT;
-#endif
-
-template<class T, class E = void>
-struct has_non_member_address_operator {
-    static constexpr bool value = false;
-};
-
-template<class T>
-struct has_non_member_address_operator<T,
-    typename make_void<decltype(operator&(declval<T&>()))>::type> {
-    static constexpr bool value = true;
-};
-
-template<class T, class E = void>
-struct is_addressable {
-    static constexpr bool value = false;
-};
-
-template<class T>
-struct is_addressable<T,
-    typename make_void<decltype(&declval<T&>())>::type> {
-    static constexpr bool value = true;
-};
-
-template<class T>
-struct has_constexpr_address {
-    static constexpr bool value = is_addressable<T>::value &&
-        !has_member_address_operator<T>::value &&
-        !has_non_member_address_operator<T>::value;
-};
-
-template<bool E, class T>
-struct address_if { };
-
-template<class T>
-struct address_if<true, T> {
-    typedef T* type;
-};
-
-template<class T>
-BOOST_FORCEINLINE
-typename address_if<!has_constexpr_address<T>::value, T>::type
-addressof(T& o) BOOST_NOEXCEPT
-{
-    return address_of<T>::get(addressof_ref<T>(o), 0);
-}
-
-template<class T>
-constexpr BOOST_FORCEINLINE
-typename address_if<has_constexpr_address<T>::value, T>::type
-addressof(T& o) BOOST_NOEXCEPT
-{
-    return &o;
-}
-#endif
-
-} /* detail */
-} /* core */
-
-template<class T>
-BOOST_CONSTEXPR BOOST_FORCEINLINE T*
-addressof(T& o) BOOST_NOEXCEPT
-{
-    return core::detail::addressof(o);
-}
-
-#if defined(BOOST_CORE_NO_CONSTEXPR_ADDRESSOF)
 #if defined(__SUNPRO_CC) && \
     BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
-namespace core {
 namespace detail {
 
 template<class T>
-struct add_pointer {
+struct addressof_result {
     typedef T* type;
 };
 
 } /* detail */
-} /* core */
 
 template<class T, std::size_t N>
-BOOST_FORCEINLINE typename core::detail::add_pointer<T[N]>::type
+BOOST_FORCEINLINE typename detail::addressof_result<T[N]>::type
 addressof(T (&o)[N]) BOOST_NOEXCEPT
 {
     return &o;
@@ -243,8 +168,108 @@ const T (*addressof(const T (&o)[N]) BOOST_NOEXCEPT)[N]
    return reinterpret_cast<const T(*)[N]>(&o);
 }
 #endif
+#else
+namespace detail {
+
+template<class T>
+struct addressof_rvalue {
+    typedef T&& type;
+};
+
+template<class T>
+typename addressof_rvalue<T>::type
+addressof_declval() BOOST_NOEXCEPT;
+
+template<class>
+struct addressof_make_void {
+    typedef void type;
+};
+
+template<class T, class E = void>
+struct addressof_member_operator {
+    static constexpr bool value = false;
+};
+
+template<class T>
+struct addressof_member_operator<T,
+    typename addressof_make_void<
+        decltype(addressof_declval<T&>().operator&())>::type> {
+    static constexpr bool value = true;
+};
+
+#if defined(BOOST_INTEL) && BOOST_WORKAROUND(BOOST_INTEL, < 1600)
+struct addressof_addressable { };
+
+addressof_addressable*
+operator&(addressof_addressable&) BOOST_NOEXCEPT;
+#endif
+
+template<class T, class E = void>
+struct addressof_non_member_operator {
+    static constexpr bool value = false;
+};
+
+template<class T>
+struct addressof_non_member_operator<T,
+    typename addressof_make_void<
+        decltype(operator&(addressof_declval<T&>()))>::type> {
+    static constexpr bool value = true;
+};
+
+template<class T, class E = void>
+struct addressof_expression {
+    static constexpr bool value = false;
+};
+
+template<class T>
+struct addressof_expression<T,
+    typename addressof_make_void<
+        decltype(&addressof_declval<T&>())>::type> {
+    static constexpr bool value = true;
+};
+
+template<class T>
+struct addressof_is_constexpr {
+    static constexpr bool value = addressof_expression<T>::value &&
+        !addressof_member_operator<T>::value &&
+        !addressof_non_member_operator<T>::value;
+};
+
+template<bool E, class T>
+struct addressof_if { };
+
+template<class T>
+struct addressof_if<true, T> {
+    typedef T* type;
+};
+
+template<class T>
+BOOST_FORCEINLINE
+typename addressof_if<!addressof_is_constexpr<T>::value, T>::type
+addressof(T& o) BOOST_NOEXCEPT
+{
+    return address_of<T>::get(addressof_ref<T>(o), 0);
+}
+
+template<class T>
+constexpr BOOST_FORCEINLINE
+typename addressof_if<addressof_is_constexpr<T>::value, T>::type
+addressof(T& o) BOOST_NOEXCEPT
+{
+    return &o;
+}
+
+} /* detail */
+
+template<class T>
+constexpr BOOST_FORCEINLINE T*
+addressof(T& o) BOOST_NOEXCEPT
+{
+    return detail::addressof(o);
+}
 #endif
 
 } /* boost */
+#endif
 
 #endif
