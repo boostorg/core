@@ -59,8 +59,8 @@ private:
 template<class T>
 struct address_of {
     static BOOST_FORCEINLINE T* get(T& o, long) BOOST_NOEXCEPT {
-        return reinterpret_cast<T*>(&const_cast<
-            char&>(reinterpret_cast<const volatile char&>(o)));
+        return reinterpret_cast<T*>(&
+            const_cast<char&>(reinterpret_cast<const volatile char&>(o)));
     }
     static BOOST_FORCEINLINE T* get(T* p, int) BOOST_NOEXCEPT {
         return p;
@@ -115,8 +115,7 @@ struct address_of<const volatile addressof_null_t> {
     defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || \
     defined(BOOST_NO_CXX11_CONSTEXPR) || \
     defined(BOOST_NO_CXX11_DECLTYPE) || \
-    (defined(BOOST_MSVC) && \
-        BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1900)))
+    defined(BOOST_MSVC_FULL_VER)
 #define BOOST_CORE_NO_CONSTEXPR_ADDRESSOF
 
 template<class T>
@@ -181,7 +180,7 @@ typename addressof_rvalue<T>::type
 addressof_declval() BOOST_NOEXCEPT;
 
 template<class>
-struct addressof_make_void {
+struct addressof_void {
     typedef void type;
 };
 
@@ -191,9 +190,8 @@ struct addressof_member_operator {
 };
 
 template<class T>
-struct addressof_member_operator<T,
-    typename addressof_make_void<
-        decltype(addressof_declval<T&>().operator&())>::type> {
+struct addressof_member_operator<T, typename
+    addressof_void<decltype(addressof_declval<T&>().operator&())>::type> {
     static constexpr bool value = true;
 };
 
@@ -210,9 +208,8 @@ struct addressof_non_member_operator {
 };
 
 template<class T>
-struct addressof_non_member_operator<T,
-    typename addressof_make_void<
-        decltype(operator&(addressof_declval<T&>()))>::type> {
+struct addressof_non_member_operator<T, typename
+    addressof_void<decltype(operator&(addressof_declval<T&>()))>::type> {
     static constexpr bool value = true;
 };
 
@@ -223,8 +220,7 @@ struct addressof_expression {
 
 template<class T>
 struct addressof_expression<T,
-    typename addressof_make_void<
-        decltype(&addressof_declval<T&>())>::type> {
+    typename addressof_void<decltype(&addressof_declval<T&>())>::type> {
     static constexpr bool value = true;
 };
 
