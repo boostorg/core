@@ -27,6 +27,10 @@ http://www.boost.org/LICENSE_1_0.txt)
 #endif
 
 #if defined(BOOST_CORE_HAS_BUILTIN_ADDRESSOF)
+#if defined(BOOST_NO_CXX11_CONSTEXPR)
+#define BOOST_CORE_NO_CONSTEXPR_ADDRESSOF
+#endif
+
 namespace boost {
 
 template<class T>
