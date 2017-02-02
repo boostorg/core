@@ -6,8 +6,8 @@ Copyright (C) 2002, 2008, 2013 Peter Dimov
 
 Copyright (C) 2017 Glen Joseph Fernandes (glenjofe@gmail.com)
 
-Distributed under the Boost Software License, Version 1.0. (See
-accompanying file LICENSE_1_0.txt or copy at
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE_1_0.txt or copy at
 http://www.boost.org/LICENSE_1_0.txt)
 */
 
@@ -57,6 +57,7 @@ public:
         return o_;
     }
 private:
+    addressof_ref& operator=(const addressof_ref&);
     T& o_;
 };
 
@@ -119,25 +120,22 @@ struct address_of<const volatile addressof_null_t> {
     defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || \
     defined(BOOST_NO_CXX11_CONSTEXPR) || \
     defined(BOOST_NO_CXX11_DECLTYPE) || \
-    defined(BOOST_MSVC_FULL_VER)
+    BOOST_WORKAROUND(BOOST_MSVC_FULL_VER, < 190024215)
 #define BOOST_CORE_NO_CONSTEXPR_ADDRESSOF
 
 template<class T>
 BOOST_FORCEINLINE T*
 addressof(T& o) BOOST_NOEXCEPT
 {
-#if (defined(__BORLANDC__) && \
-        BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x610))) || \
-    (defined(__SUNPRO_CC) && \
-        BOOST_WORKAROUND(__SUNPRO_CC, <= 0x5120))
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x610)) || \
+    BOOST_WORKAROUND(__SUNPRO_CC, <= 0x5120)
     return detail::address_of<T>::get(o, 0);
 #else
     return detail::address_of<T>::get(detail::addressof_ref<T>(o), 0);
 #endif
 }
 
-#if defined(__SUNPRO_CC) && \
-    BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
 namespace detail {
 
 template<class T>
@@ -155,8 +153,7 @@ addressof(T (&o)[N]) BOOST_NOEXCEPT
 }
 #endif
 
-#if defined(__BORLANDC__) && \
-    BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 template<class T, std::size_t N>
 BOOST_FORCEINLINE
 T (*addressof(T (&o)[N]) BOOST_NOEXCEPT)[N]
@@ -199,7 +196,9 @@ struct addressof_member_operator<T, typename
     static constexpr bool value = true;
 };
 
-#if defined(BOOST_INTEL) && BOOST_WORKAROUND(BOOST_INTEL, < 1600)
+#if BOOST_WORKAROUND(BOOST_INTEL, < 1600) || \
+    (defined(BOOST_GCC) && \
+        BOOST_WORKAROUND(BOOST_GCC, < 40800))
 struct addressof_addressable { };
 
 addressof_addressable*
