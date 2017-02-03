@@ -16,9 +16,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/config.hpp>
 
-#if BOOST_MSVC_FULL_VER >= 190024215
+#if defined(BOOST_MSVC_FULL_VER) && BOOST_MSVC_FULL_VER >= 190024215
 #define BOOST_CORE_HAS_BUILTIN_ADDRESSOF
-#elif BOOST_GCC >= 70000
+#elif defined(BOOST_GCC) && BOOST_GCC >= 70000
 #define BOOST_CORE_HAS_BUILTIN_ADDRESSOF
 #elif defined(__has_builtin)
 #if __has_builtin(__builtin_addressof)
@@ -120,7 +120,8 @@ struct address_of<const volatile addressof_null_t> {
     defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || \
     defined(BOOST_NO_CXX11_CONSTEXPR) || \
     defined(BOOST_NO_CXX11_DECLTYPE) || \
-    BOOST_WORKAROUND(BOOST_MSVC_FULL_VER, < 190024215)
+    BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1900)) || \
+    BOOST_WORKAROUND(BOOST_GCC, < 40800)
 #define BOOST_CORE_NO_CONSTEXPR_ADDRESSOF
 
 template<class T>
@@ -172,13 +173,7 @@ const T (*addressof(const T (&o)[N]) BOOST_NOEXCEPT)[N]
 namespace detail {
 
 template<class T>
-struct addressof_rvalue {
-    typedef T&& type;
-};
-
-template<class T>
-typename addressof_rvalue<T>::type
-addressof_declval() BOOST_NOEXCEPT;
+T&& addressof_declval() BOOST_NOEXCEPT;
 
 template<class>
 struct addressof_void {
@@ -196,9 +191,7 @@ struct addressof_member_operator<T, typename
     static constexpr bool value = true;
 };
 
-#if BOOST_WORKAROUND(BOOST_INTEL, < 1600) || \
-    (defined(BOOST_GCC) && \
-        BOOST_WORKAROUND(BOOST_GCC, < 40800))
+#if BOOST_WORKAROUND(BOOST_INTEL, < 1600)
 struct addressof_addressable { };
 
 addressof_addressable*
