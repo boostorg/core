@@ -65,7 +65,7 @@ int main()
     BOOST_TEST_EQ( ++x, ++y );
     BOOST_TEST_EQ( x++, y++ );
 
-    BOOST_TEST_EQ("abc", "xxxabc"+3); // make sure addresses are different
+    BOOST_TEST_EQ("xabc"+1, "yabc"+1); // make sure addresses are different
 
     // BOOST_TEST_NE
 
