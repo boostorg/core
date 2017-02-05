@@ -23,6 +23,7 @@
 #include <boost/current_function.hpp>
 #include <boost/core/no_exceptions_support.hpp>
 #include <iostream>
+#include <cstring>
 
 //  IDE's like Visual Studio perform better if output goes to std::cout or
 //  some other stream, so allow user to configure output stream:
@@ -118,6 +119,24 @@ template<class T, class U> inline void test_eq_impl( char const * expr1, char co
     }
 }
 
+// overload for const char*
+inline void test_eq_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, const char* t, const char* u )
+{
+    if( std::strcmp(t, u) == 0 )
+    {
+        report_errors_remind();
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test '" << expr1 << " == " << expr2
+            << "' failed in function '" << function << "': "
+            << "'" << t << "' != '" << u << "'" << std::endl;
+        ++test_errors();
+    }
+}
+
 template<class T, class U> inline void test_ne_impl( char const * expr1, char const * expr2,
   char const * file, int line, char const * function, T const & t, U const & u )
 {
@@ -129,6 +148,24 @@ template<class T, class U> inline void test_ne_impl( char const * expr1, char co
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " != " << expr2
+            << "' failed in function '" << function << "': "
+            << "'" << t << "' == '" << u << "'" << std::endl;
+        ++test_errors();
+    }
+}
+
+// overload for const char*
+inline void test_ne_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, const char* t, const char* u )
+{
+    if( std::strcmp(t, u) != 0 )
+    {
+        report_errors_remind();
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test '" << expr1 << " == " << expr2
             << "' failed in function '" << function << "': "
             << "'" << t << "' == '" << u << "'" << std::endl;
         ++test_errors();
