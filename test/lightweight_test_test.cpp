@@ -65,9 +65,7 @@ int main()
     BOOST_TEST_EQ( ++x, ++y );
     BOOST_TEST_EQ( x++, y++ );
 
-    const char* s1 = "abc"; // make sure addresses are different
-    const char* s2 = "abc"; // make sure addresses are different
-    BOOST_TEST_EQ(s1, s2);
+    BOOST_TEST_EQ("abc", "xxxabc"+3); // make sure addresses are different
 
     // BOOST_TEST_NE
 
