@@ -119,9 +119,27 @@ template<class T, class U> inline void test_eq_impl( char const * expr1, char co
     }
 }
 
-// overload for const char*
-inline void test_eq_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, const char* t, const char* u )
+// overloads for pointers compare and print addresses
+template<class T, class U> inline void test_eq_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, const T* const t, const U* const u )
+{
+    if( t == u )
+    {
+        report_errors_remind();
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test '" << expr1 << " == " << expr2
+            << "' failed in function '" << function << "': "
+            << "'" << (const void*)t << "' != '" << (const void*)u << "'" << std::endl;
+        ++test_errors();
+    }
+}
+
+// impl for cstring
+inline void test_cstr_eq_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, const char* const t, const char* const u )
 {
     if( std::strcmp(t, u) == 0 )
     {
@@ -154,9 +172,27 @@ template<class T, class U> inline void test_ne_impl( char const * expr1, char co
     }
 }
 
-// overload for const char*
-inline void test_ne_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, const char* t, const char* u )
+// overloads for pointers compare and print addresses
+template<class T, class U> inline void test_ne_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, const T* const t, const U* const u )
+{
+    if( t != u )
+    {
+        report_errors_remind();
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test '" << expr1 << " == " << expr2
+            << "' failed in function '" << function << "': "
+            << "'" << (const void*)t << "' == '" << (const void*)u << "'" << std::endl;
+        ++test_errors();
+    }
+}
+
+// impl for cstring
+inline void test_cstr_ne_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, const char* const t, const char* const u )
 {
     if( std::strcmp(t, u) != 0 )
     {
@@ -213,6 +249,9 @@ inline int report_errors()
 
 #define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+
+#define BOOST_TEST_CSTR_EQ(expr1,expr2) ( ::boost::detail::test_cstr_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_CSTR_NE(expr1,expr2) ( ::boost::detail::test_cstr_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
 #ifndef BOOST_NO_EXCEPTIONS
    #define BOOST_TEST_THROWS( EXPR, EXCEP )                    \
