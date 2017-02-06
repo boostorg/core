@@ -116,12 +116,10 @@ struct address_of<const volatile addressof_null_t> {
 
 } /* detail */
 
-#if defined(BOOST_NO_SFINAE_EXPR) || \
+#if defined(BOOST_NO_CXX11_SFINAE_EXPR) || \
     defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || \
     defined(BOOST_NO_CXX11_CONSTEXPR) || \
-    defined(BOOST_NO_CXX11_DECLTYPE) || \
-    BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1900)) || \
-    BOOST_WORKAROUND(BOOST_GCC, < 40800)
+    defined(BOOST_NO_CXX11_DECLTYPE)
 #define BOOST_CORE_NO_CONSTEXPR_ADDRESSOF
 
 template<class T>
