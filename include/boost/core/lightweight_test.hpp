@@ -102,6 +102,12 @@ inline void throw_failed_impl(char const * excep, char const * file, int line, c
 # pragma GCC diagnostic ignored "-Wsign-compare"
 #endif
 
+// specialize test output for char pointers to avoid printing as cstring
+template <class T> inline const T& test_output_impl(const T& v) { return v; }
+inline const void* test_output_impl(const char* v) { return v; }
+inline const void* test_output_impl(const unsigned char* v) { return v; }
+inline const void* test_output_impl(const signed char* v) { return v; }
+
 template<class T, class U> inline void test_eq_impl( char const * expr1, char const * expr2,
   char const * file, int line, char const * function, T const & t, U const & u )
 {
@@ -114,43 +120,7 @@ template<class T, class U> inline void test_eq_impl( char const * expr1, char co
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " == " << expr2
             << "' failed in function '" << function << "': "
-            << "'" << t << "' != '" << u << "'" << std::endl;
-        ++test_errors();
-    }
-}
-
-// overloads for pointers compare and print addresses
-template<class T, class U> inline void test_eq_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, const T* const t, const U* const u )
-{
-    if( t == u )
-    {
-        report_errors_remind();
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " == " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << (const void*)t << "' != '" << (const void*)u << "'" << std::endl;
-        ++test_errors();
-    }
-}
-
-// impl for cstring
-inline void test_cstr_eq_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, const char* const t, const char* const u )
-{
-    if( std::strcmp(t, u) == 0 )
-    {
-        report_errors_remind();
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " == " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << t << "' != '" << u << "'" << std::endl;
+            << "'" << test_output_impl(t) << "' != '" << test_output_impl(u) << "'" << std::endl;
         ++test_errors();
     }
 }
@@ -167,16 +137,15 @@ template<class T, class U> inline void test_ne_impl( char const * expr1, char co
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " != " << expr2
             << "' failed in function '" << function << "': "
-            << "'" << t << "' == '" << u << "'" << std::endl;
+            << "'" << test_output_impl(t) << "' == '" << test_output_impl(u) << "'" << std::endl;
         ++test_errors();
     }
 }
 
-// overloads for pointers compare and print addresses
-template<class T, class U> inline void test_ne_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, const T* const t, const U* const u )
+inline void test_cstr_eq_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, char const * const t, char const * const u )
 {
-    if( t != u )
+    if( std::strcmp(t, u) == 0 )
     {
         report_errors_remind();
     }
@@ -185,14 +154,13 @@ template<class T, class U> inline void test_ne_impl( char const * expr1, char co
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " == " << expr2
             << "' failed in function '" << function << "': "
-            << "'" << (const void*)t << "' == '" << (const void*)u << "'" << std::endl;
+            << "'" << t << "' != '" << u << "'" << std::endl;
         ++test_errors();
     }
 }
 
-// impl for cstring
 inline void test_cstr_ne_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, const char* const t, const char* const u )
+  char const * file, int line, char const * function, char const * const t, char const * const u )
 {
     if( std::strcmp(t, u) != 0 )
     {
