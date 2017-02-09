@@ -76,6 +76,8 @@ run-fail lightweight_test_fail7.cpp ;
 run-fail lightweight_test_fail7.cpp : : : <rtti>off : lightweight_test_fail7_no_rtti ;
 run-fail lightweight_test_fail8.cpp ;
 run-fail lightweight_test_fail8.cpp : : : <rtti>off : lightweight_test_fail8_no_rtti ;
+run-fail lightweight_test_fail9.cpp ;
+run-fail lightweight_test_fail10.cpp ;
 
 run is_same_test.cpp ;
 

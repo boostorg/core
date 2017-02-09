@@ -64,11 +64,15 @@ int main()
 
     BOOST_TEST_EQ( ++x, ++y );
     BOOST_TEST_EQ( x++, y++ );
+    BOOST_TEST_CSTR_EQ("xabc"+1, "yabc"+1); // equal cstrings, different addresses
+    BOOST_TEST_EQ( &y, &y );
 
     // BOOST_TEST_NE
 
     BOOST_TEST_NE( ++x, y );
     BOOST_TEST_NE( &x, &y );
+    BOOST_TEST_NE("xabc"+1, "yabc"+1); // equal cstrings, different addresses
+    BOOST_TEST_CSTR_NE("x", "y");
 
     // BOOST_TEST_THROWS
 
