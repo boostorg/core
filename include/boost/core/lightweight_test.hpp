@@ -107,6 +107,10 @@ template <class T> inline const T& test_output_impl(const T& v) { return v; }
 inline const void* test_output_impl(const char* v) { return v; }
 inline const void* test_output_impl(const unsigned char* v) { return v; }
 inline const void* test_output_impl(const signed char* v) { return v; }
+inline const void* test_output_impl(char* v) { return v; }
+inline const void* test_output_impl(unsigned char* v) { return v; }
+inline const void* test_output_impl(signed char* v) { return v; }
+template<class T> inline const void* test_output_impl(T volatile* v) { return const_cast<T*>(v); }
 
 template<class T, class U> inline void test_eq_impl( char const * expr1, char const * expr2,
   char const * file, int line, char const * function, T const & t, U const & u )
