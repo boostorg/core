@@ -187,9 +187,16 @@ void test_all_eq_impl(FormattedOutputFunction& output,
                       ForwardIterator1 first_begin, ForwardIterator1 first_end,
                       ForwardIterator2 second_begin, ForwardIterator2 second_end)
 {
-    if (std::distance(first_begin, first_end) != std::distance(second_begin, second_end))
+    typename std::iterator_traits<ForwardIterator1>::difference_type first_distance = std::distance(first_begin, first_end);
+    typename std::iterator_traits<ForwardIterator2>::difference_type second_distance = std::distance(second_begin, second_end);
+    if (first_distance != second_distance)
     {
-        ::boost::detail::error_impl("Container sizes are different", file, line, function);
+        output << file << "(" << line << "): "
+               << "Container sizes are different"
+               << " in function '" << function << "': "
+               << first_distance << " != " << second_distance
+               << std::endl;
+        ++test_errors();
     }
     else
     {
