@@ -189,13 +189,13 @@ void test_all_eq_impl(FormattedOutputFunction& output,
 {
     if (std::distance(first_begin, first_end) != std::distance(second_begin, second_end))
     {
-        ::boost::detail::error_impl("Container sizes are different", __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);
+        ::boost::detail::error_impl("Container sizes are different", file, line, function);
     }
     else
     {
         ForwardIterator1 first_it = first_begin;
         ForwardIterator2 second_it = second_begin;
-        bool first_iteration = true;
+        std::size_t error_count = 0;
         do
         {
             while ((first_it != first_end) && (second_it != second_end) && (*first_it == *second_it))
@@ -205,20 +205,27 @@ void test_all_eq_impl(FormattedOutputFunction& output,
             }
             if (first_it == first_end)
             {
-                boost::detail::report_errors_remind();
-                return;
+                break; // do-while
             }
-            if (first_iteration)
+            if (error_count == 0)
             {
-                first_iteration = true;
                 output << file << "(" << line << "): Container contents differ in function '" << function << "': mismatching indices";
             }
             output << " [" << std::distance(first_begin, first_it) << "] '" << *first_it << "' != '" << *second_it << "'";
             ++first_it;
             ++second_it;
+            ++error_count;
         } while (first_it != first_end);
-        output << std::endl;
-        ++boost::detail::test_errors();
+
+        if (error_count == 0)
+        {
+            boost::detail::report_errors_remind();
+        }
+        else
+        {
+            output << std::endl;
+            ++boost::detail::test_errors();
+        }
     }
 }
 
