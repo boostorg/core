@@ -19,6 +19,8 @@
 //  http://www.boost.org/LICENSE_1_0.txt
 //
 
+#include <iterator>
+#include <sstream>
 #include <boost/assert.hpp>
 #include <boost/current_function.hpp>
 #include <boost/core/no_exceptions_support.hpp>
@@ -180,6 +182,43 @@ inline void test_cstr_ne_impl( char const * expr1, char const * expr2,
     }
 }
 
+template<class FwdIt1, class FwdIt2>
+void test_all_eq_impl(char const * file, int line, char const * function,
+                      FwdIt1 first_begin, FwdIt1 first_end,
+                      FwdIt2 second_begin, FwdIt2 second_end)
+{
+    if (std::distance(first_begin, first_end) != std::distance(second_begin, second_end))
+    {
+        ::boost::detail::error_impl("Container sizes are different", __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);
+    }
+    else
+    {
+        FwdIt1 first_it = first_begin;
+        FwdIt2 second_it = second_begin;
+        std::ostringstream indices;
+        do
+        {
+            while ((first_it != first_end) && (second_it != second_end) && (*first_it == *second_it))
+            {
+                ++first_it;
+                ++second_it;
+            }
+            if (first_it == first_end)
+            {
+                boost::detail::report_errors_remind();
+                return;
+            }
+            indices << " [" << std::distance(first_begin, first_it) << "] '" << *first_it << "' != '" << *second_it << "'";
+            ++first_it;
+            ++second_it;
+        } while (first_it != first_end);
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): Container contents differ in function '" << function << "': mismatching indices"
+            << indices.str() << std::endl;
+        ++boost::detail::test_errors();
+    }
+}
+
 #if defined(_MSC_VER)
 # pragma warning(pop)
 #elif defined(__clang__) && defined(__has_warning)
@@ -224,6 +263,8 @@ inline int report_errors()
 
 #define BOOST_TEST_CSTR_EQ(expr1,expr2) ( ::boost::detail::test_cstr_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_CSTR_NE(expr1,expr2) ( ::boost::detail::test_cstr_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+
+#define BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2) ( ::boost::detail::test_all_eq_impl(__FILE__, __LINE__, BOOST_CURRENT_FUNCTION, begin1, end1, begin2, end2) )
 
 #ifndef BOOST_NO_EXCEPTIONS
    #define BOOST_TEST_THROWS( EXPR, EXCEP )                    \
