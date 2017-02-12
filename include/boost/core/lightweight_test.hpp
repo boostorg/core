@@ -218,7 +218,7 @@ void test_all_eq_impl(FormattedOutputFunction& output,
             {
                 output << file << "(" << line << "): Container contents differ in function '" << function << "': mismatching indices";
             }
-            output << " [" << std::distance(first_begin, first_it) << "] '" << *first_it << "' != '" << *second_it << "'";
+            output << " [" << std::distance(first_begin, first_it) << "] '" << test_output_impl(*first_it) << "' != '" << test_output_impl(*second_it) << "'";
             ++first_it;
             ++second_it;
             ++error_count;
