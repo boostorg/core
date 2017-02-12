@@ -223,16 +223,8 @@ void test_all_eq_impl(FormattedOutputFunction& output,
         ++error_count;
     } while (first_it != first_end);
 
-    while (first_it != first_end)
-    {
-        ++first_it;
-        ++first_index;
-    }
-    while (second_it != second_end)
-    {
-        ++second_it;
-        ++second_index;
-    }
+    first_index += std::distance(first_it, first_end);
+    second_index += std::distance(second_it, second_end);
     if (first_index != second_index)
     {
         if (error_count == 0)
