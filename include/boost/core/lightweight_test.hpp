@@ -192,6 +192,7 @@ void test_all_eq_impl(FormattedOutputFunction& output,
     typename std::iterator_traits<InputIterator1>::difference_type first_index = 0;
     typename std::iterator_traits<InputIterator2>::difference_type second_index = 0;
     std::size_t error_count = 0;
+    const std::size_t max_count = 8;
     do
     {
         while ((first_it != first_end) && (second_it != second_end) && (*first_it == *second_it))
@@ -208,6 +209,11 @@ void test_all_eq_impl(FormattedOutputFunction& output,
         if (error_count == 0)
         {
             output << file << "(" << line << "): Container contents differ in function '" << function << "':";
+        }
+        else if (error_count >= max_count)
+        {
+            output << " ...";
+            break;
         }
         output << " [" << first_index << "] '" << test_output_impl(*first_it) << "' != '" << test_output_impl(*second_it) << "'";
         ++first_it;
