@@ -128,7 +128,7 @@ Specialization of BOOST_TEST_NE which interprets expr1 and expr2 as pointers to 
 BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2)
 ``
 
-Compares the content of two containers. If they have different sizes, or if any pairwise element differs, increases the error count and outputs a message containing all differing elements.
+Compares the content of two sequences. If they have different sizes, or if any pairwise element differs, increases the error count and outputs a message containing at most 8 differing elements.
 
 [endsect]
 
