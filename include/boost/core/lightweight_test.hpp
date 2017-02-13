@@ -19,6 +19,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt
 //
 
+#include <iterator>
 #include <boost/assert.hpp>
 #include <boost/current_function.hpp>
 #include <boost/core/no_exceptions_support.hpp>
@@ -180,6 +181,74 @@ inline void test_cstr_ne_impl( char const * expr1, char const * expr2,
     }
 }
 
+template<class FormattedOutputFunction, class InputIterator1, class InputIterator2>
+void test_all_eq_impl(FormattedOutputFunction& output,
+                      char const * file, int line, char const * function,
+                      InputIterator1 first_begin, InputIterator1 first_end,
+                      InputIterator2 second_begin, InputIterator2 second_end)
+{
+    InputIterator1 first_it = first_begin;
+    InputIterator2 second_it = second_begin;
+    typename std::iterator_traits<InputIterator1>::difference_type first_index = 0;
+    typename std::iterator_traits<InputIterator2>::difference_type second_index = 0;
+    std::size_t error_count = 0;
+    const std::size_t max_count = 8;
+    do
+    {
+        while ((first_it != first_end) && (second_it != second_end) && (*first_it == *second_it))
+        {
+            ++first_it;
+            ++second_it;
+            ++first_index;
+            ++second_index;
+        }
+        if ((first_it == first_end) || (second_it == second_end))
+        {
+            break; // do-while
+        }
+        if (error_count == 0)
+        {
+            output << file << "(" << line << "): Container contents differ in function '" << function << "':";
+        }
+        else if (error_count >= max_count)
+        {
+            output << " ...";
+            break;
+        }
+        output << " [" << first_index << "] '" << test_output_impl(*first_it) << "' != '" << test_output_impl(*second_it) << "'";
+        ++first_it;
+        ++second_it;
+        ++first_index;
+        ++second_index;
+        ++error_count;
+    } while (first_it != first_end);
+
+    first_index += std::distance(first_it, first_end);
+    second_index += std::distance(second_it, second_end);
+    if (first_index != second_index)
+    {
+        if (error_count == 0)
+        {
+            output << file << "(" << line << "): Container sizes differ in function '" << function << "': size(" << first_index << ") != size(" << second_index << ")";
+        }
+        else
+        {
+            output << " [*] size(" << first_index << ") != size(" << second_index << ")";
+        }
+        ++error_count;
+    }
+
+    if (error_count == 0)
+    {
+        boost::detail::report_errors_remind();
+    }
+    else
+    {
+        output << std::endl;
+        ++boost::detail::test_errors();
+    }
+}
+
 #if defined(_MSC_VER)
 # pragma warning(pop)
 #elif defined(__clang__) && defined(__has_warning)
@@ -224,6 +293,8 @@ inline int report_errors()
 
 #define BOOST_TEST_CSTR_EQ(expr1,expr2) ( ::boost::detail::test_cstr_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_CSTR_NE(expr1,expr2) ( ::boost::detail::test_cstr_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+
+#define BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2) ( ::boost::detail::test_all_eq_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, begin1, end1, begin2, end2) )
 
 #ifndef BOOST_NO_EXCEPTIONS
    #define BOOST_TEST_THROWS( EXPR, EXCEP )                    \

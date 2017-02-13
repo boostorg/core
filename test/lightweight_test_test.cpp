@@ -8,6 +8,7 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
+#include <vector>
 #include <boost/detail/lightweight_test.hpp>
 
 struct X
@@ -73,6 +74,15 @@ int main()
     BOOST_TEST_NE( &x, &y );
     BOOST_TEST_NE("xabc"+1, "yabc"+1); // equal cstrings, different addresses
     BOOST_TEST_CSTR_NE("x", "y");
+
+    // BOOST_TEST_ALL_EQ
+    {
+        std::vector<int> xarray;
+        xarray.push_back(1);
+        xarray.push_back(2);
+        std::vector<int> yarray(xarray);
+        BOOST_TEST_ALL_EQ(xarray.begin(), xarray.end(), yarray.begin(), yarray.end());
+    }
 
     // BOOST_TEST_THROWS
 
