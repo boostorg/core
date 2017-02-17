@@ -36,6 +36,9 @@ When using `lightweight_test.hpp`, *do not forget* to
 #define BOOST_ERROR(message) /*unspecified*/
 #define BOOST_TEST_EQ(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_NE(expr1, expr2) /*unspecified*/
+#define BOOST_TEST_CSTR_EQ(expr1, expr2) /*unspecified*/
+#define BOOST_TEST_CSTR_NE(expr1, expr2) /*unspecified*/
+#define BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2) /* unspecified */
 #define BOOST_TEST_THROWS(expr, excep) /*unspecified*/
 
 namespace boost
@@ -98,6 +101,34 @@ BOOST_TEST_NE(expr1, expr2)
 
 If `expr1 == expr2` increases the error count and outputs a
 message containing both expressions.
+
+[endsect]
+
+[section BOOST_TEST_CSTR_EQ]
+
+``
+BOOST_TEST_CSTR_EQ(expr1, expr2)
+``
+
+Specialization of BOOST_TEST_EQ which interprets expr1 and expr2 as pointers to null-terminated byte strings (C strings). If `std::strcmp(expr1, expr2) != 0`, increase the error count and output a message containing both expressions.
+
+[endsect]
+
+[section BOOST_TEST_CSTR_NE]
+
+``
+BOOST_TEST_CSTR_NE(expr1, expr2)
+``
+
+Specialization of BOOST_TEST_NE which interprets expr1 and expr2 as pointers to null-terminated byte strings (C strings). If `std::strcmp(expr1, expr2) == 0`, increase the error count and output a message containing both expressions.
+
+[section BOOST_TEST_ALL_EQ]
+
+``
+BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2)
+``
+
+Compares the content of two sequences. If they have different sizes, or if any pairwise element differs, increases the error count and outputs a message containing at most 8 differing elements.
 
 [endsect]
 
