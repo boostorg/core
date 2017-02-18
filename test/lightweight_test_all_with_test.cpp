@@ -13,12 +13,8 @@
 #include <vector>
 #include <boost/core/lightweight_test.hpp>
 
-int test_vector()
+void test_vector()
 {
-    int failed_test_cases = 0;
-
-    // Successes
-
     {
         std::vector<int> x, y;
         x.push_back( 1 ); x.push_back( 2 ); x.push_back( 3 ); x.push_back( 4 );
@@ -39,56 +35,6 @@ int test_vector()
         y.push_back( 2 ); y.push_back( 3 ); y.push_back( 4 ); y.push_back( 5 );
         BOOST_TEST_ALL_WITH( x.begin(), x.end(), y.begin(), y.end(), std::less<int>() );
     }
-
-    // Failures
-
-    {
-        std::vector<int> x, y;
-        x.push_back( 1 );
-        BOOST_TEST_ALL_WITH( x.begin(), x.end(), y.begin(), y.end(), std::equal_to<int>() );
-        ++failed_test_cases;
-    }
-
-    {
-        std::vector<int> x, y;
-        y.push_back( 1 );
-        BOOST_TEST_ALL_WITH( x.begin(), x.end(), y.begin(), y.end(), std::equal_to<int>() );
-        ++failed_test_cases;
-    }
-
-    {
-        std::vector<int> x, y;
-        x.push_back( 1 ); x.push_back( 2 ); x.push_back( 3 ); x.push_back( 4 );
-        y.push_back( 1 ); y.push_back( 2 ); y.push_back( 3 );
-        BOOST_TEST_ALL_WITH( x.begin(), x.end(), y.begin(), y.end(), std::equal_to<int>() );
-        ++failed_test_cases;
-    }
-
-    {
-        std::vector<int> x, y;
-        x.push_back( 1 ); x.push_back( 2 ); x.push_back( 3 );
-        y.push_back( 1 ); y.push_back( 2 ); y.push_back( 3 ); y.push_back( 4 );
-        BOOST_TEST_ALL_WITH( x.begin(), x.end(), y.begin(), y.end(), std::equal_to<int>() );
-        ++failed_test_cases;
-    }
-
-    {
-        std::vector<int> x, y;
-        x.push_back( 1 ); x.push_back( 2 ); x.push_back( 3 ); x.push_back( 4 );
-        y.push_back( 1 ); y.push_back( 3 ); y.push_back( 2 ); y.push_back( 4 );
-        BOOST_TEST_ALL_WITH( x.begin(), x.end(), y.begin(), y.end(), std::equal_to<int>() );
-        ++failed_test_cases;
-    }
-
-    {
-        std::vector<int> x, y;
-        x.push_back( 1 ); x.push_back( 2 ); x.push_back( 3 ); x.push_back( 4 );
-        y.push_back( 1 ); y.push_back( 3 ); y.push_back( 2 ); y.push_back( 4 );
-        BOOST_TEST_ALL_WITH( x.begin(), x.end(), y.begin(), y.end(), std::less<int>() );
-        ++failed_test_cases;
-    }
-
-    return failed_test_cases;
 }
 
 template <typename T>
@@ -104,12 +50,8 @@ private:
     T tolerance;
 };
 
-int test_tolerance_predicate()
+void test_tolerance_predicate()
 {
-    int failed_test_cases = 0;
-
-    // Successes
-
     {
         std::vector<double> x, y;
         x.push_back( 1.0 ); x.push_back( 2.0 ); x.push_back( 3.0 ); x.push_back( 4.0 );
@@ -123,28 +65,12 @@ int test_tolerance_predicate()
         y.push_back( 1.0 - 1e-6 ); y.push_back( 1.0 + 1e-6 );
         BOOST_TEST_ALL_WITH( x.begin(), x.end(), y.begin(), y.end(), with_tolerance<double>(1e-5) );
     }
-
-    // Failures
-
-    {
-        std::vector<double> x, y;
-        x.push_back( 1.0 ); x.push_back( 1.0 );
-        y.push_back( 1.0 - 1e-4 ); y.push_back( 1.0 + 1e-4 );
-        BOOST_TEST_ALL_WITH( x.begin(), x.end(), y.begin(), y.end(), with_tolerance<double>(1e-5) );
-        ++failed_test_cases;
-    }
-
-    return failed_test_cases;
 }
 
 int main()
 {
-    int failed_test_cases = 0;
+    test_vector();
+    test_tolerance_predicate();
 
-    failed_test_cases += test_vector();
-    failed_test_cases += test_tolerance_predicate();
-
-    boost::report_errors();
-
-    return boost::detail::test_errors() != failed_test_cases;
+    return boost::report_errors();
 }
