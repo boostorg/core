@@ -39,6 +39,7 @@ When using `lightweight_test.hpp`, *do not forget* to
 #define BOOST_TEST_CSTR_EQ(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_CSTR_NE(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2) /* unspecified */
+#define BOOST_TEST_ALL_WITH(begin1, end1, begin2, end2, predicate) /* unspecified */
 #define BOOST_TEST_THROWS(expr, excep) /*unspecified*/
 
 namespace boost
@@ -129,6 +130,16 @@ BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2)
 ``
 
 Compares the content of two sequences. If they have different sizes, or if any pairwise element differs, increases the error count and outputs a message containing at most 8 differing elements.
+
+[endsect]
+
+[section BOOST_TEST_ALL_WITH]
+
+``
+BOOST_TEST_ALL_WITH(begin1, end1, begin2, end2, predicate)
+``
+
+Compares the content of two sequences. If they have different sizes, or if any pairwise element do not fulfill the binary predicate, increases the error count and outputs a message containing at most 8 differing elements.
 
 [endsect]
 
