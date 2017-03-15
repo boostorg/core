@@ -123,6 +123,8 @@ BOOST_TEST_CSTR_NE(expr1, expr2)
 
 Specialization of BOOST_TEST_NE which interprets expr1 and expr2 as pointers to null-terminated byte strings (C strings). If `std::strcmp(expr1, expr2) == 0`, increase the error count and output a message containing both expressions.
 
+[endsect]
+
 [section BOOST_TEST_ALL_EQ]
 
 ``
