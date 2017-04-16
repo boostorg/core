@@ -67,9 +67,9 @@ The enumeration can be forward declared:
 
     BOOST_SCOPED_ENUM_FORWARD_DECLARE(future_errc);
 
-There are however some limitations. First, the emulated scoped enum is not a C++ enum, so `is_enum< future_errc >` will be `false_type`.
+There are however some limitations. The emulated scoped enum is not a C++ enum, so `is_enum< future_errc >` will be `false_type`.
 
-Second, the emulated scoped enum can not be used in switch nor in template arguments. For these cases the user needs to use some helpers. Instead of
+The emulated scoped enum can not be used in switch nor in template arguments. For these cases the user needs to use some helpers. Instead of
 
     switch (ev)
     {
@@ -99,9 +99,28 @@ use
     {
     };
 
-Lastly, explicit conversion to the underlying type should be performed with `boost::underlying_cast` instead of `static_cast`:
+Explicit conversion to the underlying type should be performed with `boost::underlying_cast` instead of `static_cast`:
 
     unsigned int val = boost::underlying_cast< unsigned int >(ev);
+
+In C++03, scoped enums behave differently in case of calling an overloaded function when one overload takes a scoped enum as a paramter, and the other takes a parameter of an integral type. Consider the following code:
+
+    enum enum_regular { REGULAR_A, REGULAR_B };
+
+    BOOST_SCOPED_ENUM_DECLARE_BEGIN(enum_scoped)
+    {
+        a, b
+    }
+    BOOST_SCOPED_ENUM_DECLARE_END(enum_scoped)
+
+    void regular_or_int(enum_regular); // (1)
+    void regular_or_int(int);          // (2)
+    void scoped_or_int(enum_scoped);   // (3)
+    void scoped_or_int(int);           // (4)
+
+    regular_or_int(REGULAR_A);                  // calls (1) in C++03 and C++11
+    scoped_or_int(enum_scoped::a);              // calls (3) in C++11 but (4) in C++03!
+    scoped_or_int(enum_scoped(enum_scoped::a)); // calls (3) in C++03 and C++11
 
 Here is usage example:
 
