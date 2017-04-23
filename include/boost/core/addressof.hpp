@@ -262,4 +262,14 @@ addressof(T& o) BOOST_NOEXCEPT
 } /* boost */
 #endif
 
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && \
+    !defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
+namespace boost {
+
+template<class T>
+const T* addressof(const T&&) = delete;
+
+} /* boost */
+#endif
+
 #endif
