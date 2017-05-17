@@ -105,5 +105,12 @@ compile-fail scoped_enum_compile_fail_conv_to_int.cpp ;
 
 run underlying_type.cpp ;
 
+run pointer_traits_to_address_test.cpp ;
+run pointer_traits_pointer_test.cpp ;
+run pointer_traits_element_type_test.cpp ;
+run pointer_traits_difference_type_test.cpp ;
+run pointer_traits_rebind_test.cpp ;
+run pointer_traits_pointer_to_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
