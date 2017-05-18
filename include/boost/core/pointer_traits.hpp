@@ -25,10 +25,10 @@ struct pointer_traits;
 namespace detail {
 
 template<class U>
-static typename pointer_traits<U>::element_type*
+static typename boost::pointer_traits<U>::element_type*
 ptr_traits_address(U v) BOOST_NOEXCEPT
 {
-    return pointer_traits<U>::to_address(v);
+    return boost::pointer_traits<U>::to_address(v);
 }
 
 } /* detail */
@@ -62,7 +62,7 @@ struct pointer_traits<T*>
 #else
 namespace detail {
 
-struct ptr_traits_none { char first; char second; };
+struct ptr_traits_none { char first, second; };
 
 template<class T>
 struct ptr_traits_has_element {
@@ -101,10 +101,7 @@ struct ptr_traits_first<T<U1, U2, U3> > {
 #endif
 
 template<class T, bool = ptr_traits_has_element<T>::value>
-struct ptr_traits_element;
-
-template<class T>
-struct ptr_traits_element<T, true> {
+struct ptr_traits_element {
     typedef typename T::element_type type;
 };
 
@@ -125,10 +122,7 @@ public:
 };
 
 template<class T, bool = ptr_traits_has_difference<T>::value>
-struct ptr_traits_difference;
-
-template<class T>
-struct ptr_traits_difference<T, true> {
+struct ptr_traits_difference {
     typedef typename T::difference_type type;
 };
 
@@ -176,10 +170,7 @@ struct ptr_traits_rebind_to<T<U1, U2, U3>, V> {
 
 #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
 template<class T, class U, bool = ptr_traits_has_rebind<T>::value>
-struct ptr_traits_rebind;
-
-template<class T, class U>
-struct ptr_traits_rebind<T, U, true> {
+struct ptr_traits_rebind {
     typedef typename T::template rebind<U> type;
 };
 
