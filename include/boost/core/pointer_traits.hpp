@@ -131,13 +131,13 @@ struct ptr_traits_difference<T, false> {
     typedef std::ptrdiff_t type;
 };
 
-template<class T>
+template<class T, class V>
 struct ptr_traits_has_rebind {
 private:
     template<class U>
     static ptr_traits_none call(...);
     template<class U>
-    static char call(typename U::template rebind<U>* = 0);
+    static char call(typename U::template rebind<V>* = 0);
 public:
     BOOST_STATIC_CONSTEXPR bool value = sizeof(call<T>(0)) == 1;
 };
@@ -169,7 +169,7 @@ struct ptr_traits_rebind_to<T<U1, U2, U3>, V> {
 #endif
 
 #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
-template<class T, class U, bool = ptr_traits_has_rebind<T>::value>
+template<class T, class U, bool = ptr_traits_has_rebind<T, U>::value>
 struct ptr_traits_rebind {
     typedef typename T::template rebind<U> type;
 };
