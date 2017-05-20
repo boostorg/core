@@ -9,9 +9,7 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_POINTER_TRAITS_HPP
 
 #include <boost/config.hpp>
-#include <boost/detail/workaround.hpp>
-#if !defined(BOOST_NO_CXX11_ALLOCATOR) && \
-    !BOOST_WORKAROUND(BOOST_MSVC, < 1910)
+#if !defined(BOOST_NO_CXX11_POINTER_TRAITS)
 #include <memory>
 #else
 #include <boost/core/addressof.hpp>
@@ -33,8 +31,7 @@ ptr_traits_address(U v) BOOST_NOEXCEPT
 
 } /* detail */
 
-#if !defined(BOOST_NO_CXX11_ALLOCATOR) && \
-    !BOOST_WORKAROUND(BOOST_MSVC, < 1910)
+#if !defined(BOOST_NO_CXX11_POINTER_TRAITS)
 template<class T>
 struct pointer_traits
     : std::pointer_traits<T> {
@@ -72,7 +69,7 @@ private:
     template<class U>
     static char call(typename U::element_type* = 0);
 public:
-    BOOST_STATIC_CONSTEXPR bool value = sizeof(call<T>(0)) == 1;
+    static const bool value = sizeof(call<T>(0)) == 1;
 };
 
 template<class T>
@@ -118,7 +115,7 @@ private:
     template<class U>
     static char call(typename U::difference_type* = 0);
 public:
-    BOOST_STATIC_CONSTEXPR bool value = sizeof(call<T>(0)) == 1;
+    static const bool value = sizeof(call<T>(0)) == 1;
 };
 
 template<class T, bool = ptr_traits_has_difference<T>::value>
@@ -139,7 +136,7 @@ private:
     template<class U>
     static char call(typename U::template rebind<V>* = 0);
 public:
-    BOOST_STATIC_CONSTEXPR bool value = sizeof(call<T>(0)) == 1;
+    static const bool value = sizeof(call<T>(0)) == 1;
 };
 
 template<class T, class V>
