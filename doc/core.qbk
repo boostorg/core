@@ -49,6 +49,7 @@ criteria for inclusion is that the utility component be:
 [include no_exceptions_support.qbk]
 [include noncopyable.qbk]
 [include null_deleter.qbk]
+[include pointer_traits.qbk]
 [include ref.qbk]
 [include scoped_enum.qbk]
 [include swap.qbk]
