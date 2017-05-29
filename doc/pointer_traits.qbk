@@ -27,9 +27,9 @@ for obtaining raw pointers from pointers.
 
 [section Examples]
 
-The following function template can obtaining a raw pointer from a pointer,
-which works with null pointers and also is well defined when the pointer
-aliases storage that has no object constructed in it.
+The following function template obtains a raw pointer from a pointer and is
+well defined when the pointer aliases storage that has no object constructed
+in it.
 
 ```
 template<class T>
@@ -72,7 +72,9 @@ namespace boost {
 }
 ```
 
-[heading Member types]
+[section Member types]
+
+[heading `pointer_traits`]
 
 [ordered_list
   [`typedef` ['see below] `element_type;`
@@ -96,30 +98,42 @@ namespace boost {
           arguments; otherwise, the instantiation of `rebind_to` is
           ill-formed.]]]]]
 
-[heading Member functions]
+[endsect]
+
+[section Member functions]
+
+[heading `pointer_traits`]
 
 [ordered_list
-  [`static pointer pointer_traits::pointer_to(`['see below] `v);`
+  [`static pointer pointer_to(`['see below] `v);`
     [variablelist
       [[Remark]
         [If `element_type` is a void type, the type of `v` is unspecified;
           otherwise, it is `element_type&`.]]
       [[Returns]
         [A pointer to `v` obtained by calling `T::pointer_to(v)`.]]]]
-  [`static pointer pointer_traits<T*>::pointer_to(`['see below] `v) noexcept;`
+  [`static element_type* to_address(pointer v) noexcept;`
+    [variablelist
+      [[Requires]
+        [`v` is not a null pointer.]]
+      [[Returns]
+        [A pointer of type `element_type*` that references the same location
+          as the argument.]]]]]
+
+[heading `pointer_traits<T*>`]
+
+[ordered_list
+  [`static pointer pointer_to(`['see below] `v) noexcept;`
     [variablelist
       [[Remark]
         [If `element_type` is a void type, the type of `v` is unspecified;
           otherwise, it is `element_type&`.]]
       [[Returns]
         [The result of `std::addressof(v)`.]]]]
-  [`static element_type* pointer_traits::to_address(pointer v) noexcept;`
-    [variablelist
-      [[Returns]
-        [A plain pointer of type `element_type*` obtained by calling
-          `pointer_traits::to_address` on the value of `v.operator->()`.]]]]
-  [`static element_type* pointer_traits<T*>::to_address(pointer v) noexcept;`
+  [`static element_type* to_address(pointer v) noexcept;`
     [variablelist [[Returns] [The value of `v`.]]]]]
+
+[endsect]
 
 [endsect]
 
