@@ -41,6 +41,11 @@
 # endif
 #endif
 
+// Workaround: gabi++ does not define __cxa_demangle()
+#ifdef __GABIXX_CXXABI_H__
+# undef BOOST_CORE_HAS_CXXABI_H
+#endif
+
 namespace boost
 {
 
@@ -121,6 +126,8 @@ inline std::string demangle( char const * name )
 
 } // namespace boost
 
-#undef BOOST_CORE_HAS_CXXABI_H
+#ifdef BOOST_CORE_HAS_CXXABI_H
+# undef BOOST_CORE_HAS_CXXABI_H
+#endif
 
 #endif // #ifndef BOOST_CORE_DEMANGLE_HPP_INCLUDED
