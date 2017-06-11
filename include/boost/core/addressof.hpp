@@ -172,14 +172,19 @@ namespace detail {
 template<class T>
 T addressof_declval() BOOST_NOEXCEPT;
 
+template<class>
+struct addressof_void {
+    typedef void type;
+};
+
 template<class T, class E = void>
 struct addressof_member_operator {
     static constexpr bool value = false;
 };
 
 template<class T>
-struct addressof_member_operator<T,
-    decltype(addressof_declval<T&>().operator&(), void())> {
+struct addressof_member_operator<T, typename
+    addressof_void<decltype(addressof_declval<T&>().operator&())>::type> {
     static constexpr bool value = true;
 };
 
@@ -196,8 +201,8 @@ struct addressof_non_member_operator {
 };
 
 template<class T>
-struct addressof_non_member_operator<T,
-    decltype(operator&(addressof_declval<T&>()), void())> {
+struct addressof_non_member_operator<T, typename
+    addressof_void<decltype(operator&(addressof_declval<T&>()))>::type> {
     static constexpr bool value = true;
 };
 
@@ -208,7 +213,7 @@ struct addressof_expression {
 
 template<class T>
 struct addressof_expression<T,
-    decltype(&addressof_declval<T&>(), void())> {
+    typename addressof_void<decltype(&addressof_declval<T&>())>::type> {
     static constexpr bool value = true;
 };
 
