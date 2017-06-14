@@ -42,7 +42,7 @@ addressof(T& o) BOOST_NOEXCEPT
 
 } /* boost */
 #else
-#include <boost/detail/workaround.hpp>
+#include <boost/config/workaround.hpp>
 #include <cstddef>
 
 namespace boost {
