@@ -2,6 +2,7 @@
   Copyright 2010, 2011 Beman Dawes
   Copyright 2013 Ion Gaztanaga
   Copyright 2014, 2017 Peter Dimov
+  Copyright 2017 Kohei Takahashi
 
   Distributed under the Boost Software License, Version 1.0.
 
@@ -38,6 +39,8 @@ When using `lightweight_test.hpp`, *do not forget* to
 #define BOOST_TEST_NE(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_LT(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_LE(expr1, expr2) /*unspecified*/
+#define BOOST_TEST_GT(expr1, expr2) /*unspecified*/
+#define BOOST_TEST_GE(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_CSTR_EQ(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_CSTR_NE(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2) /* unspecified */
@@ -125,6 +128,28 @@ BOOST_TEST_LE(expr1, expr2)
 ``
 
 If `expr1 <= expr2` is not true increases the error count and outputs a
+message containing both expressions.
+
+[endsect]
+
+[section BOOST_TEST_GT]
+
+``
+BOOST_TEST_GT(expr1, expr2)
+``
+
+If `expr1 > expr2` is not true increases the error count and outputs a
+message containing both expressions.
+
+[endsect]
+
+[section BOOST_TEST_GE]
+
+``
+BOOST_TEST_GE(expr1, expr2)
+``
+
+If `expr1 >= expr2` is not true increases the error count and outputs a
 message containing both expressions.
 
 [endsect]
