@@ -70,6 +70,7 @@ run lightweight_test_all_eq_test.cpp ;
 run lightweight_test_all_with_test.cpp ;
 run lightweight_test_all_with_fail.cpp ;
 run lightweight_test_lt_le_test.cpp ;
+run lightweight_test_gt_ge_test.cpp ;
 
 run lightweight_test_eq_nullptr.cpp ;
 
@@ -87,6 +88,8 @@ run-fail lightweight_test_fail9.cpp ;
 run-fail lightweight_test_fail10.cpp ;
 run-fail lightweight_test_lt_fail.cpp ;
 run-fail lightweight_test_le_fail.cpp ;
+run-fail lightweight_test_gt_fail.cpp ;
+run-fail lightweight_test_ge_fail.cpp ;
 
 run is_same_test.cpp ;
 
