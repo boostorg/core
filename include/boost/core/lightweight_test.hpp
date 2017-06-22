@@ -186,6 +186,40 @@ template<class T, class U> inline void test_le_impl( char const * expr1, char co
     }
 }
 
+template<class T, class U> inline void test_gt_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, T const & t, U const & u )
+{
+    if( t > u )
+    {
+        report_errors_remind();
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test '" << expr1 << " > " << expr2
+            << "' failed in function '" << function << "': "
+            << "'" << test_output_impl(t) << "' <= '" << test_output_impl(u) << "'" << std::endl;
+        ++test_errors();
+    }
+}
+
+template<class T, class U> inline void test_ge_impl( char const * expr1, char const * expr2,
+  char const * file, int line, char const * function, T const & t, U const & u )
+{
+    if( t >= u )
+    {
+        report_errors_remind();
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test '" << expr1 << " >= " << expr2
+            << "' failed in function '" << function << "': "
+            << "'" << test_output_impl(t) << "' < '" << test_output_impl(u) << "'" << std::endl;
+        ++test_errors();
+    }
+}
+
 inline void test_cstr_eq_impl( char const * expr1, char const * expr2,
   char const * file, int line, char const * function, char const * const t, char const * const u )
 {
@@ -401,6 +435,8 @@ inline int report_errors()
 
 #define BOOST_TEST_LT(expr1,expr2) ( ::boost::detail::test_lt_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_LE(expr1,expr2) ( ::boost::detail::test_le_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_gt_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_ge_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
 #define BOOST_TEST_CSTR_EQ(expr1,expr2) ( ::boost::detail::test_cstr_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_CSTR_NE(expr1,expr2) ( ::boost::detail::test_cstr_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
