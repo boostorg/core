@@ -23,7 +23,7 @@ struct pointer_traits;
 namespace detail {
 
 template<class U>
-static typename boost::pointer_traits<U>::element_type*
+inline typename boost::pointer_traits<U>::element_type*
 ptr_traits_address(U v) BOOST_NOEXCEPT
 {
     return boost::pointer_traits<U>::to_address(v);
