@@ -239,6 +239,20 @@ struct pointer_traits<T*> {
 };
 #endif
 
+template<class T>
+inline typename pointer_traits<T>::element_type*
+to_address(const T& v) BOOST_NOEXCEPT
+{
+    return pointer_traits<T>::to_address(v);
+}
+
+template<class T>
+inline T*
+to_address(T* v) BOOST_NOEXCEPT
+{
+    return v;
+}
+
 } /* boost */
 
 #endif
