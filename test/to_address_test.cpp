@@ -21,6 +21,44 @@ private:
     T value_;
 };
 
+template<class T>
+class special {
+public:
+    special(T* value)
+        : value_(value) { }
+    T* get() const BOOST_NOEXCEPT {
+        return value_;
+    }
+private:
+    T* value_;
+};
+
+namespace boost {
+
+template<class T>
+struct pointer_traits<special<T> > {
+    typedef special<T> pointer;
+    typedef T element_type;
+    typedef std::ptrdiff_t difference_type;
+    template<class U>
+    struct rebind_to {
+        typedef special<U> type;
+    };
+#if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
+    template<class U>
+    using rebind = typename rebind_to<U>::type;
+#endif
+    template<class U>
+    static pointer pointer_to(U& v) BOOST_NOEXCEPT {
+        return pointer(&v);
+    }
+    static element_type* to_address(const pointer& v) BOOST_NOEXCEPT {
+        return v.get();
+    }
+};
+
+} /* boost */
+
 int main()
 {
     int i = 0;
@@ -56,6 +94,36 @@ int main()
     }
     {
         typedef pointer<const int*> type;
+        type p(&i);
+        BOOST_TEST(boost::to_address(p) == &i);
+    }
+    {
+        typedef special<int> type;
+        type p(&i);
+        BOOST_TEST(boost::to_address(p) == &i);
+    }
+    {
+        typedef special<void> type;
+        type p(&i);
+        BOOST_TEST(boost::to_address(p) == &i);
+    }
+    {
+        typedef special<const int> type;
+        type p(&i);
+        BOOST_TEST(boost::to_address(p) == &i);
+    }
+    {
+        typedef pointer<special<int> > type;
+        type p(&i);
+        BOOST_TEST(boost::to_address(p) == &i);
+    }
+    {
+        typedef pointer<special<void> > type;
+        type p(&i);
+        BOOST_TEST(boost::to_address(p) == &i);
+    }
+    {
+        typedef pointer<special<const int> > type;
         type p(&i);
         BOOST_TEST(boost::to_address(p) == &i);
     }

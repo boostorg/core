@@ -24,7 +24,7 @@ namespace detail {
 
 template<class U>
 inline typename boost::pointer_traits<U>::element_type*
-ptr_traits_address(U v) BOOST_NOEXCEPT
+ptr_traits_address(const U& v) BOOST_NOEXCEPT
 {
     return boost::pointer_traits<U>::to_address(v);
 }
@@ -40,7 +40,7 @@ struct pointer_traits
         typedef typename std::pointer_traits<T>::template rebind<U> type;
     };
     static typename std::pointer_traits<T>::element_type*
-    to_address(T v) BOOST_NOEXCEPT {
+    to_address(const T& v) BOOST_NOEXCEPT {
         return detail::ptr_traits_address(v.operator->());
     }
 };
@@ -211,7 +211,7 @@ struct pointer_traits {
     pointer_to(typename detail::ptr_traits_value<element_type>::type& v) {
         return pointer::pointer_to(v);
     }
-    static element_type* to_address(pointer v) BOOST_NOEXCEPT {
+    static element_type* to_address(const pointer& v) BOOST_NOEXCEPT {
         return detail::ptr_traits_address(v.operator->());
     }
 };
