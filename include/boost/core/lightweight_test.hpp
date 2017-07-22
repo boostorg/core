@@ -19,11 +19,11 @@
 //  http://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <iterator>
+#include <boost/core/no_exceptions_support.hpp>
 #include <boost/assert.hpp>
 #include <boost/current_function.hpp>
-#include <boost/core/no_exceptions_support.hpp>
 #include <iostream>
+#include <iterator>
 #include <cstring>
 #include <cstddef>
 
