@@ -114,7 +114,7 @@ namespace boost {
 [[Remark]
 [If `element_type` is a void type, the type of `v` is unspecified; otherwise,
   it is `element_type&`.]]
-[[Returns] [The result of `std::addressof(v)`.]]]]]
+[[Returns] [The result of `boost::addressof(v)`.]]]]]
 [[`static element_type* to_address(pointer v) noexcept;`]
 [[variablelist [[Returns] [The value of `v`.]]]]]]
 
@@ -124,8 +124,8 @@ namespace boost {
 
 [variablelist
 [[`template<class T> typename pointer_traits<T>::element_type*
-  to_address(const T& v);`]
-[[variablelist [[Returns] [`pointer_traits<T>::to_address(v)`.]]]]]]
+  to_address(const T& v) noexcept;`]
+[[variablelist [[Returns] [`boost::pointer_traits<T>::to_address(v)`.]]]]]]
 
 [endsect]
 
