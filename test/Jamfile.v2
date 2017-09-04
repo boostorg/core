@@ -1,6 +1,6 @@
 #  Boost.Core Library test Jamfile
 #
-#  Copyright (c) 2014 Peter Dimov
+#  Copyright (c) 2014, 2017 Peter Dimov
 #
 #  Distributed under the Boost Software License, Version 1.0.
 #  See accompanying file LICENSE_1_0.txt or copy at
@@ -9,6 +9,10 @@
 import modules ;
 import testing ;
 
+# quick test (for CI)
+run quick.cpp ;
+
+# full test suite
 run addressof_test.cpp ;
 run addressof_test2.cpp ;
 run addressof_np_test.cpp ;
