@@ -177,8 +177,9 @@ matrix:
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=03,11,14,1z
 
 install:
+  - BOOST_BRANCH=develop && [ "$TRAVIS_BRANCH" == "master" ] && BOOST_BRANCH=master || true
   - cd ..
-  - git clone -b $TRAVIS_BRANCH https://github.com/boostorg/boost.git boost-root
+  - git clone -b $BOOST_BRANCH https://github.com/boostorg/boost.git boost-root
   - cd boost-root
   - git submodule init libs/assert
   - git submodule init libs/config
