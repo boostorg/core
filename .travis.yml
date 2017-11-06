@@ -47,6 +47,7 @@ matrix:
             - g++-4.8
           sources:
             - ubuntu-toolchain-r-test
+
     - os: linux
       compiler: g++-4.9
       env: TOOLSET=gcc COMPILER=g++-4.9 CXXSTD=03,11
@@ -195,7 +196,7 @@ install:
 script:
   - |-
     echo "using $TOOLSET : : $COMPILER ;" > ~/user-config.jam
-  - ./b2 libs/core/test toolset=$TOOLSET cxxstd=$CXXSTD
+  - ./b2 -j 3 libs/core/test toolset=$TOOLSET cxxstd=$CXXSTD
 
 notifications:
   email:
