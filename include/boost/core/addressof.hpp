@@ -127,9 +127,10 @@ addressof(T& o) BOOST_NOEXCEPT
 {
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x610)) || \
     BOOST_WORKAROUND(__SUNPRO_CC, <= 0x5120)
-    return detail::address_of<T>::get(o, 0);
+    return boost::detail::address_of<T>::get(o, 0);
 #else
-    return detail::address_of<T>::get(detail::addressof_ref<T>(o), 0);
+    return boost::detail::address_of<T>::
+        get(boost::detail::addressof_ref<T>(o), 0);
 #endif
 }
 
