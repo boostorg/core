@@ -17,20 +17,6 @@ Distributed under the Boost Software License, Version 1.0.
 
 namespace boost {
 
-template<class T>
-struct pointer_traits;
-
-namespace detail {
-
-template<class U>
-inline typename boost::pointer_traits<U>::element_type*
-ptr_to_address(const U& v) BOOST_NOEXCEPT
-{
-    return boost::pointer_traits<U>::to_address(v);
-}
-
-} /* detail */
-
 #if !defined(BOOST_NO_CXX11_POINTER_TRAITS)
 template<class T>
 struct pointer_traits
@@ -39,10 +25,6 @@ struct pointer_traits
     struct rebind_to {
         typedef typename std::pointer_traits<T>::template rebind<U> type;
     };
-    static typename std::pointer_traits<T>::element_type*
-    to_address(const T& v) BOOST_NOEXCEPT {
-        return detail::ptr_to_address(v.operator->());
-    }
 };
 
 template<class T>
@@ -52,9 +34,6 @@ struct pointer_traits<T*>
     struct rebind_to {
         typedef U* type;
     };
-    static T* to_address(T* v) BOOST_NOEXCEPT {
-        return v;
-    }
 };
 #else
 namespace detail {
@@ -111,34 +90,34 @@ struct ptr_difference<T,
 };
 
 template<class T, class V>
-struct ptr_rebind_to;
+struct ptr_transform;
 
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 template<template<class, class...> class T, class U, class... Args, class V>
-struct ptr_rebind_to<T<U, Args...>, V> {
+struct ptr_transform<T<U, Args...>, V> {
     typedef T<V, Args...> type;
 };
 #else
 template<template<class> class T, class U, class V>
-struct ptr_rebind_to<T<U>, V> {
+struct ptr_transform<T<U>, V> {
     typedef T<V> type;
 };
 
 template<template<class, class> class T, class U1, class U2, class V>
-struct ptr_rebind_to<T<U1, U2>, V> {
+struct ptr_transform<T<U1, U2>, V> {
     typedef T<V, U2> type;
 };
 
 template<template<class, class, class> class T,
     class U1, class U2, class U3, class V>
-struct ptr_rebind_to<T<U1, U2, U3>, V> {
+struct ptr_transform<T<U1, U2, U3>, V> {
     typedef T<V, U2, U3> type;
 };
 #endif
 
 template<class T, class U, class = void>
 struct ptr_rebind {
-    typedef typename ptr_rebind_to<T, U>::type type;
+    typedef typename ptr_transform<T, U>::type type;
 };
 
 #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
@@ -178,9 +157,6 @@ struct pointer_traits {
     pointer_to(typename detail::ptr_value<element_type>::type& v) {
         return pointer::pointer_to(v);
     }
-    static element_type* to_address(const pointer& v) BOOST_NOEXCEPT {
-        return detail::ptr_to_address(v.operator->());
-    }
 };
 
 template<class T>
@@ -200,25 +176,58 @@ struct pointer_traits<T*> {
     pointer_to(typename detail::ptr_value<T>::type& v) BOOST_NOEXCEPT {
         return boost::addressof(v);
     }
-    static T* to_address(T* v) BOOST_NOEXCEPT {
-        return v;
-    }
 };
 #endif
 
 template<class T>
-inline typename pointer_traits<T>::element_type*
-to_address(const T& v) BOOST_NOEXCEPT
-{
-    return pointer_traits<T>::to_address(v);
-}
-
-template<class T>
-inline T*
+BOOST_CONSTEXPR inline T*
 to_address(T* v) BOOST_NOEXCEPT
 {
     return v;
 }
+
+#if !defined(BOOST_NO_CXX11_SFINAE_EXPR) && \
+    !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
+namespace detail {
+
+template<class T>
+inline T*
+ptr_address(T* v, int) BOOST_NOEXCEPT
+{
+    return v;
+}
+
+template<class T>
+inline auto
+ptr_address(const T& v, int) BOOST_NOEXCEPT
+-> decltype(boost::pointer_traits<T>::to_address(v))
+{
+    return boost::pointer_traits<T>::to_address(v);
+}
+
+template<class T>
+inline auto
+ptr_address(const T& v, long) BOOST_NOEXCEPT
+{
+    return boost::detail::ptr_address(v.operator->(), 0);
+}
+
+} /* detail */
+
+template<class T>
+inline auto
+to_address(const T& v) BOOST_NOEXCEPT
+{
+    return boost::detail::ptr_address(v, 0);
+}
+#else
+template<class T>
+inline typename pointer_traits<T>::element_type*
+to_address(const T& v) BOOST_NOEXCEPT
+{
+    return boost::to_address(v.operator->());
+}
+#endif
 
 } /* boost */
 

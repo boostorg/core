@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Glen Joseph Fernandes
+Copyright 2017-2018 Glen Joseph Fernandes
 (glenjofe@gmail.com)
 
 Distributed under the Boost Software License, Version 1.0.
@@ -9,123 +9,163 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/core/lightweight_test.hpp>
 
 template<class T>
-class pointer {
+class P1 {
 public:
-    typedef typename boost::pointer_traits<T>::element_type element_type;
-    pointer(T value)
-        : value_(value) { }
-    T operator->() const BOOST_NOEXCEPT {
-        return value_;
+    explicit P1(T* p)
+        : p_(p) { }
+    T* operator->() const BOOST_NOEXCEPT {
+        return p_;
     }
 private:
-    T value_;
+    T* p_;
 };
 
 template<class T>
-class special {
+class P2 {
 public:
-    special(T* value)
-        : value_(value) { }
-    T* get() const BOOST_NOEXCEPT {
-        return value_;
+    explicit P2(T* p)
+        : p_(p) { }
+    P1<T> operator->() const BOOST_NOEXCEPT {
+        return p_;
     }
 private:
-    T* value_;
+    P1<T> p_;
+};
+
+#if !defined(BOOST_NO_CXX11_SFINAE_EXPR) && \
+    !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
+template<class T>
+class P3 {
+public:
+    explicit P3(T* p)
+        : p_(p) { }
+    T* get() const BOOST_NOEXCEPT {
+        return p_;
+    }
+private:
+    T* p_;
 };
 
 namespace boost {
 
 template<class T>
-struct pointer_traits<special<T> > {
-    typedef special<T> pointer;
-    typedef T element_type;
-    typedef std::ptrdiff_t difference_type;
-    template<class U>
-    struct rebind_to {
-        typedef special<U> type;
-    };
-#if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
-    template<class U>
-    using rebind = typename rebind_to<U>::type;
-#endif
-    template<class U>
-    static pointer pointer_to(U& v) BOOST_NOEXCEPT {
-        return pointer(&v);
-    }
-    static element_type* to_address(const pointer& v) BOOST_NOEXCEPT {
-        return v.get();
+struct pointer_traits<P3<T> > {
+    static T* to_address(const P3<T>& p) BOOST_NOEXCEPT {
+        return p.get();
     }
 };
 
 } /* boost */
 
+template<class T>
+class P4 {
+public:
+    explicit P4(T* p)
+        : p_(p) { }
+    T* operator->() const BOOST_NOEXCEPT {
+        return 0;
+    }
+    T* get() const BOOST_NOEXCEPT {
+        return p_;
+    }
+private:
+    int* p_;
+};
+
+namespace boost {
+
+template<class T>
+struct pointer_traits<P4<T> > {
+    static T* to_address(const P4<T>& p) BOOST_NOEXCEPT {
+        return p.get();
+    }
+};
+
+} /* boost */
+
+#if !defined(BOOST_NO_CXX11_POINTER_TRAITS)
+template<class T>
+class P5 {
+public:
+    explicit P5(T* p)
+        : p_(p) { }
+    T* get() const BOOST_NOEXCEPT {
+        return p_;
+    }
+private:
+    T* p_;
+};
+
+namespace std {
+
+template<class T>
+struct pointer_traits<P5<T> > {
+    static T* to_address(const P5<T>& p) BOOST_NOEXCEPT {
+        return p.get();
+    }
+};
+
+} /* std */
+
+template<class T>
+class P6 {
+public:
+    explicit P6(T* p)
+        : p_(p) { }
+    T* get() const BOOST_NOEXCEPT {
+        return p_;
+    }
+private:
+    T* p_;
+};
+
+namespace boost {
+
+template<class T>
+struct pointer_traits<P6<T> > {
+    static T* to_address(const P6<T>& p) BOOST_NOEXCEPT {
+        return p.get();
+    }
+};
+
+} /* boost */
+
+namespace std {
+
+template<class T>
+struct pointer_traits<P6<T> > {
+    static T* to_address(const P6<T>& p) BOOST_NOEXCEPT {
+        return 0;
+    }
+};
+
+} /* std */
+
+#endif
+#endif
+
 int main()
 {
     int i = 0;
-    {
-        typedef int* type;
-        type p = &i;
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef pointer<int*> type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef pointer<pointer<int*> > type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef void* type;
-        type p = &i;
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef pointer<void*> type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef const int* type;
-        type p = &i;
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef pointer<const int*> type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef special<int> type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef special<void> type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef special<const int> type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef pointer<special<int> > type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef pointer<special<void> > type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
-    {
-        typedef pointer<special<const int> > type;
-        type p(&i);
-        BOOST_TEST(boost::to_address(p) == &i);
-    }
+    BOOST_TEST(boost::to_address(&i) == &i);
+    int* p = &i;
+    BOOST_TEST(boost::to_address(p) == &i);
+    P1<int> p1(&i);
+    BOOST_TEST(boost::to_address(p1) == &i);
+    P2<int> p2(&i);
+    BOOST_TEST(boost::to_address(p2) == &i);
+#if !defined(BOOST_NO_CXX11_SFINAE_EXPR) && \
+    !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
+    P3<int> p3(&i);
+    BOOST_TEST(boost::to_address(p3) == &i);
+    P4<int> p4(&i);
+    BOOST_TEST(boost::to_address(p4) == &i);
+#if !defined(BOOST_NO_CXX11_POINTER_TRAITS)
+    P5<int> p5(&i);
+    BOOST_TEST(boost::to_address(p5) == &i);
+    P6<int> p6(&i);
+    BOOST_TEST(boost::to_address(p6) == &i);
+#endif
+#endif
     return boost::report_errors();
 }
