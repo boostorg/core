@@ -121,7 +121,8 @@ namespace boost {
 [[Returns]
 [A pointer of type `element_type*` that references the same location as the
   argument `p`.]]
-[[Note] [This function should be the inverse of `pointer_to`. If defined, it
+[[Note]
+[This function should be the inverse of `pointer_to`. If defined, it
   customizes the behavior of the non-member function `to_address`.]]]]]]
 
 [endsect]

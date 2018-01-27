@@ -186,8 +186,7 @@ to_address(T* v) BOOST_NOEXCEPT
     return v;
 }
 
-#if !defined(BOOST_NO_CXX11_SFINAE_EXPR) && \
-    !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
+#if !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
 namespace detail {
 
 template<class T>

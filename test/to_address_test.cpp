@@ -32,8 +32,7 @@ private:
     P1<T> p_;
 };
 
-#if !defined(BOOST_NO_CXX11_SFINAE_EXPR) && \
-    !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
+#if !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
 template<class T>
 class P3 {
 public:
@@ -47,14 +46,12 @@ private:
 };
 
 namespace boost {
-
 template<class T>
 struct pointer_traits<P3<T> > {
     static T* to_address(const P3<T>& p) BOOST_NOEXCEPT {
         return p.get();
     }
 };
-
 } /* boost */
 
 template<class T>
@@ -73,14 +70,12 @@ private:
 };
 
 namespace boost {
-
 template<class T>
 struct pointer_traits<P4<T> > {
     static T* to_address(const P4<T>& p) BOOST_NOEXCEPT {
         return p.get();
     }
 };
-
 } /* boost */
 
 #if !defined(BOOST_NO_CXX11_POINTER_TRAITS)
@@ -97,14 +92,12 @@ private:
 };
 
 namespace std {
-
 template<class T>
 struct pointer_traits<P5<T> > {
     static T* to_address(const P5<T>& p) BOOST_NOEXCEPT {
         return p.get();
     }
 };
-
 } /* std */
 
 template<class T>
@@ -120,27 +113,22 @@ private:
 };
 
 namespace boost {
-
 template<class T>
 struct pointer_traits<P6<T> > {
     static T* to_address(const P6<T>& p) BOOST_NOEXCEPT {
         return p.get();
     }
 };
-
 } /* boost */
 
 namespace std {
-
 template<class T>
 struct pointer_traits<P6<T> > {
     static T* to_address(const P6<T>& p) BOOST_NOEXCEPT {
         return 0;
     }
 };
-
 } /* std */
-
 #endif
 #endif
 
@@ -154,8 +142,7 @@ int main()
     BOOST_TEST(boost::to_address(p1) == &i);
     P2<int> p2(&i);
     BOOST_TEST(boost::to_address(p2) == &i);
-#if !defined(BOOST_NO_CXX11_SFINAE_EXPR) && \
-    !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
+#if !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
     P3<int> p3(&i);
     BOOST_TEST(boost::to_address(p3) == &i);
     P4<int> p4(&i);
