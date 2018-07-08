@@ -10,34 +10,50 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include <boost/config.hpp>
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+#include <boost/config/workaround.hpp>
 #include <utility>
 #endif
 
 namespace boost {
-
-#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-template<class T, class U = T>
-BOOST_CXX14_CONSTEXPR inline T exchange(T& t, U&& u)
-{
-    T v = std::move(t);
-    t = std::forward<U>(u);
-    return v;
-}
-#else
 namespace detail {
 
 template<class T>
-struct exchanger {
+struct exchange_type {
     typedef T type;
 };
 
 } /* detail */
 
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 template<class T>
-inline T exchange(T& t, const typename detail::exchanger<T>::type& u)
+inline T exchange(T& t, const typename detail::exchange_type<T>::type& u)
 {
     T v = t;
     t = u;
+    return v;
+}
+#elif BOOST_WORKAROUND(BOOST_MSVC, < 1800)
+template<class T>
+inline T exchange(T& t, const typename detail::exchange_type<T>::type& u)
+{
+    T v = std::move(t);
+    t = u;
+    return v;
+}
+
+template<class T>
+inline T exchange(T& t, typename detail::exchange_type<T>::type&& u)
+{
+    T v = std::move(t);
+    t = std::move(u);
+    return v;
+}
+#else
+template<class T, class U = T>
+BOOST_CXX14_CONSTEXPR inline T exchange(T& t, U&& u)
+{
+    T v = std::move(t);
+    t = std::forward<U>(u);
     return v;
 }
 #endif
