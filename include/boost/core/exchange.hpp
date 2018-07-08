@@ -32,7 +32,8 @@ inline T exchange(T& t, const typename detail::exchange_type<T>::type& u)
     t = u;
     return v;
 }
-#elif BOOST_WORKAROUND(BOOST_MSVC, < 1800)
+#else
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
 template<class T>
 inline T exchange(T& t, const typename detail::exchange_type<T>::type& u)
 {
@@ -56,6 +57,7 @@ BOOST_CXX14_CONSTEXPR inline T exchange(T& t, U&& u)
     t = std::forward<U>(u);
     return v;
 }
+#endif
 #endif
 
 } /* boost */
