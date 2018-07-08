@@ -121,5 +121,8 @@ run pointer_traits_rebind_test.cpp ;
 run pointer_traits_pointer_to_test.cpp ;
 run to_address_test.cpp ;
 
+run exchange_test.cpp ;
+run exchange_move_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
