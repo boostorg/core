@@ -15,18 +15,10 @@ Distributed under the Boost Software License, Version 1.0.
 #endif
 
 namespace boost {
-namespace detail {
-
-template<class T>
-struct exchange_type {
-    typedef T type;
-};
-
-} /* detail */
 
 #if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-template<class T>
-inline T exchange(T& t, const typename detail::exchange_type<T>::type& u)
+template<class T, class U>
+inline T exchange(T& t, const U& u)
 {
     T v = t;
     t = u;
@@ -34,19 +26,11 @@ inline T exchange(T& t, const typename detail::exchange_type<T>::type& u)
 }
 #else
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
-template<class T>
-inline T exchange(T& t, const typename detail::exchange_type<T>::type& u)
+template<class T, class U>
+inline T exchange(T& t, U&& u)
 {
     T v = std::move(t);
-    t = u;
-    return v;
-}
-
-template<class T>
-inline T exchange(T& t, typename detail::exchange_type<T>::type&& u)
-{
-    T v = std::move(t);
-    t = std::move(u);
+    t = std::forward<U>(u);
     return v;
 }
 #else
