@@ -44,8 +44,6 @@ public:
         return i_;
     }
 private:
-    C2(const C2&);
-    C2& operator=(const C2&);
     int i_;
 };
 
