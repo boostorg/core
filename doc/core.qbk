@@ -42,6 +42,7 @@ criteria for inclusion is that the utility component be:
 [include checked_delete.qbk]
 [include demangle.qbk]
 [include enable_if.qbk]
+[include exchange.qbk]
 [include explicit_operator_bool.qbk]
 [include ignore_unused.qbk]
 [include is_same.qbk]
