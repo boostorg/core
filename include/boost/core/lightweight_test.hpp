@@ -119,55 +119,55 @@ template<class T> inline const void* test_output_impl(T volatile* v) { return co
 inline const void* test_output_impl(std::nullptr_t) { return nullptr; }
 #endif
 
-template <template <class> class BinaryPredicate>
+template <class BinaryPredicate>
 struct test_output_traits {};
 
-template <>
-struct test_output_traits<std::equal_to> {
+template <typename T>
+struct test_output_traits<std::equal_to<T> > {
     static const char* op() { return "=="; }
     static const char* anti_op() { return "!="; }
 };
 
-template <>
-struct test_output_traits<std::not_equal_to> {
+template <typename T>
+struct test_output_traits<std::not_equal_to<T> > {
     static const char* op() { return "!="; }
     static const char* anti_op() { return "=="; }
 };
 
-template <>
-struct test_output_traits<std::greater> {
+template <typename T>
+struct test_output_traits<std::greater<T> > {
     static const char* op() { return ">"; }
     static const char* anti_op() { return "<="; }
 };
 
-template <>
-struct test_output_traits<std::less> {
+template <typename T>
+struct test_output_traits<std::less<T> > {
     static const char* op() { return "<"; }
     static const char* anti_op() { return ">="; }
 };
 
-template <>
-struct test_output_traits<std::greater_equal> {
+template <typename T>
+struct test_output_traits<std::greater_equal<T> > {
     static const char* op() { return ">="; }
     static const char* anti_op() { return "<"; }
 };
 
-template <>
-struct test_output_traits<std::less_equal> {
+template <typename T>
+struct test_output_traits<std::less_equal<T> > {
     static const char* op() { return "<="; }
     static const char* anti_op() { return ">"; }
 };
 
-template <>
-struct test_output_traits<boost::core::close_to> {
+template <typename T>
+struct test_output_traits<boost::core::close_to<T> > {
     static const char* op() { return "~="; }
     static const char* anti_op() { return "!="; }
 };
 
-template<template <class> class BinaryPredicate, class T, class U>
-inline void test_impl(char const * expr1, char const * expr2,
-                      char const * file, int line, char const * function,
-                      T const & t, U const & u, BinaryPredicate<T> pred = BinaryPredicate<T>())
+template<class T, class U, class BinaryPredicate>
+inline void test_with_impl(char const * expr1, char const * expr2,
+                           char const * file, int line, char const * function,
+                           T const & t, U const & u, BinaryPredicate pred)
 {
     if( pred(t, u) )
     {
@@ -181,6 +181,14 @@ inline void test_impl(char const * expr1, char const * expr2,
             << "'" << test_output_impl(t) << "' " << test_output_traits<BinaryPredicate>::anti_op() << " '" << test_output_impl(u) << "'" << std::endl;
         ++test_errors();
     }
+}
+
+template<template <class> class BinaryPredicate, class T, class U>
+inline void test_impl(char const * expr1, char const * expr2,
+                      char const * file, int line, char const * function,
+                      T const & t, U const & u)
+{
+    test_with_impl(expr1, expr2, file, line, function, t, u, BinaryPredicate<T>());
 }
 
 inline void test_cstr_eq_impl( char const * expr1, char const * expr2,
@@ -401,7 +409,7 @@ inline int report_errors()
 #define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_impl<std::greater>(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_impl<std::greater_equal>(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
-// #define BOOST_TEST_IS_CLOSE(expr1, expr2, rtol, atol) ( ::boost::detail::test_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::core::close_to<double>(rtol, atol)) )
+#define BOOST_TEST_CLOSE(expr1, expr2, rtol, atol) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::core::close_to<double>(rtol, atol)) )
 
 #define BOOST_TEST_CSTR_EQ(expr1,expr2) ( ::boost::detail::test_cstr_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_CSTR_NE(expr1,expr2) ( ::boost::detail::test_cstr_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
