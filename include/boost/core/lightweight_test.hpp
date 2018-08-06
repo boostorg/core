@@ -20,14 +20,15 @@
 //
 
 #include <boost/core/no_exceptions_support.hpp>
-#include <boost/core/close_to.hpp>
 #include <boost/assert.hpp>
 #include <boost/current_function.hpp>
 #include <iostream>
 #include <iterator>
 #include <cstring>
 #include <cstddef>
-#include <functional>
+#include <cmath>
+#include <limits>
+#include <algorithm>
 
 //  IDE's like Visual Studio perform better if output goes to std::cout or
 //  some other stream, so allow user to configure output stream:
@@ -120,49 +121,69 @@ template<class T> inline const void* test_output_impl(T volatile* v) { return co
 inline const void* test_output_impl(std::nullptr_t) { return nullptr; }
 #endif
 
-template <class BinaryPredicate>
-struct test_output_traits {};
-
-template <typename T>
-struct test_output_traits<std::equal_to<T> > {
+struct equal_to {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t == u; }
     static const char* op() { return "=="; }
     static const char* anti_op() { return "!="; }
 };
 
-template <typename T>
-struct test_output_traits<std::not_equal_to<T> > {
+struct not_equal_to {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t != u; }
     static const char* op() { return "!="; }
     static const char* anti_op() { return "=="; }
 };
 
-template <typename T>
-struct test_output_traits<std::greater<T> > {
-    static const char* op() { return ">"; }
-    static const char* anti_op() { return "<="; }
-};
-
-template <typename T>
-struct test_output_traits<std::less<T> > {
+struct less {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t < u; }
     static const char* op() { return "<"; }
     static const char* anti_op() { return ">="; }
 };
 
-template <typename T>
-struct test_output_traits<std::greater_equal<T> > {
-    static const char* op() { return ">="; }
-    static const char* anti_op() { return "<"; }
-};
-
-template <typename T>
-struct test_output_traits<std::less_equal<T> > {
+struct less_equal {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t <= u; }
     static const char* op() { return "<="; }
     static const char* anti_op() { return ">"; }
 };
 
-template <typename T>
-struct test_output_traits<boost::core::close_to<T> > {
+struct greater {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t > u; }
+    static const char* op() { return ">"; }
+    static const char* anti_op() { return "<="; }
+};
+
+struct greater_equal {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t >= u; }
+    static const char* op() { return ">="; }
+    static const char* anti_op() { return "<"; }
+};
+
+// close_to<T> returns true when arguments deviate within a tolerance
+template <class T>
+struct close_to
+{
+    close_to(T relative_tolerance = std::numeric_limits<T>::epsilon(),
+             T absolute_tolerance = T(0)) BOOST_NOEXCEPT
+        : relative(relative_tolerance),
+          absolute(absolute_tolerance)
+    {}
+
+    bool operator() (const T& lhs, const T& rhs) const BOOST_NOEXCEPT
+    {
+        return std::abs(lhs - rhs) <= std::max(relative * std::max(std::abs(lhs), std::abs(rhs)), absolute);
+    }
+
     static const char* op() { return "~="; }
     static const char* anti_op() { return "!="; }
+
+private:
+    const T relative;
+    const T absolute;
 };
 
 template<class T, class U, class BinaryPredicate>
@@ -177,19 +198,11 @@ inline void test_with_impl(char const * expr1, char const * expr2,
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " " << test_output_traits<BinaryPredicate>::op() << " " << expr2
+            << file << "(" << line << "): test '" << expr1 << " " << BinaryPredicate::op() << " " << expr2
             << "' failed in function '" << function << "': "
-            << "'" << test_output_impl(t) << "' " << test_output_traits<BinaryPredicate>::anti_op() << " '" << test_output_impl(u) << "'" << std::endl;
+            << "'" << test_output_impl(t) << "' " << BinaryPredicate::anti_op() << " '" << test_output_impl(u) << "'" << std::endl;
         ++test_errors();
     }
-}
-
-template<template <class> class BinaryPredicate, class T, class U>
-inline void test_impl(char const * expr1, char const * expr2,
-                      char const * file, int line, char const * function,
-                      T const & t, U const & u)
-{
-    test_with_impl(expr1, expr2, file, line, function, t, u, BinaryPredicate<T>());
 }
 
 inline void test_cstr_eq_impl( char const * expr1, char const * expr2,
@@ -402,15 +415,15 @@ inline int report_errors()
 
 #define BOOST_ERROR(msg) ( ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 
-#define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_impl<std::equal_to>(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
-#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_impl<std::not_equal_to>(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::equal_to() ) )
+#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::not_equal_to() ) )
 
-#define BOOST_TEST_LT(expr1,expr2) ( ::boost::detail::test_impl<std::less>(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
-#define BOOST_TEST_LE(expr1,expr2) ( ::boost::detail::test_impl<std::less_equal>(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
-#define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_impl<std::greater>(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
-#define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_impl<std::greater_equal>(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_LT(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::less() ) )
+#define BOOST_TEST_LE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::less_equal() ) )
+#define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::greater() ) )
+#define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::greater_equal() ) )
 
-#define BOOST_TEST_CLOSE(expr1, expr2, rtol, atol) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::core::close_to<double>(rtol, atol)) )
+#define BOOST_TEST_CLOSE(expr1, expr2, rtol, atol) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::close_to<double>(rtol, atol)) )
 
 #define BOOST_TEST_CSTR_EQ(expr1,expr2) ( ::boost::detail::test_cstr_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_CSTR_NE(expr1,expr2) ( ::boost::detail::test_cstr_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
