@@ -27,6 +27,7 @@
 #include <iterator>
 #include <cstring>
 #include <cstddef>
+#include <functional>
 
 //  IDE's like Visual Studio perform better if output goes to std::cout or
 //  some other stream, so allow user to configure output stream:
