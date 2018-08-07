@@ -247,7 +247,7 @@ inline void test_cstr_ne_impl( char const * expr1, char const * expr2,
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " == " << expr2
+            << file << "(" << line << "): test '" << expr1 << " != " << expr2
             << "' failed in function '" << function << "': "
             << "'" << t << "' == '" << u << "'" << std::endl;
         ++test_errors();
