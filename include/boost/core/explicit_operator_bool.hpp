@@ -53,6 +53,8 @@
         return !this->operator! ();\
     }
 
+#if !BOOST_WORKAROUND(BOOST_GCC, < 40700)
+
 /*!
  * \brief The macro defines a constexpr explicit operator of conversion to \c bool
  *
@@ -65,6 +67,12 @@
     {\
         return !this->operator! ();\
     }
+
+#else
+
+#define BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL() BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT()
+
+#endif
 
 #else // !defined(BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS)
 
@@ -122,19 +130,11 @@ namespace detail {
         return (!this->operator! () ? &boost::detail::unspecified_bool::true_value : (boost::detail::unspecified_bool_type)0);\
     }
 
-#if BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40700)
-
-#define BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL() BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT()
-
-#else
-
 #define BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL()\
     BOOST_FORCEINLINE BOOST_CONSTEXPR operator boost::detail::unspecified_bool_type () const BOOST_NOEXCEPT\
     {\
         return (!this->operator! () ? &boost::detail::unspecified_bool::true_value : (boost::detail::unspecified_bool_type)0);\
     }
-
-#endif
 
 #else // !defined(BOOST_NO_UNSPECIFIED_BOOL)
 
