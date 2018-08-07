@@ -22,6 +22,9 @@ int main()
     BOOST_TEST_EQ( p1, nullptr );
     BOOST_TEST_NE( p2, nullptr );
 
+    BOOST_TEST_EQ( nullptr, p1 );
+    BOOST_TEST_NE( nullptr, p2 );
+
 #endif
 
     return boost::report_errors();
