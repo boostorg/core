@@ -19,6 +19,7 @@
 #define BOOST_CORE_EXPLICIT_OPERATOR_BOOL_HPP
 
 #include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
@@ -121,11 +122,19 @@ namespace detail {
         return (!this->operator! () ? &boost::detail::unspecified_bool::true_value : (boost::detail::unspecified_bool_type)0);\
     }
 
+#if BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40700)
+
+#define BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL() BOOST_EXPLICIT_OPERATOR_BOOL_NOEXCEPT()
+
+#else
+
 #define BOOST_CONSTEXPR_EXPLICIT_OPERATOR_BOOL()\
     BOOST_FORCEINLINE BOOST_CONSTEXPR operator boost::detail::unspecified_bool_type () const BOOST_NOEXCEPT\
     {\
         return (!this->operator! () ? &boost::detail::unspecified_bool::true_value : (boost::detail::unspecified_bool_type)0);\
     }
+
+#endif
 
 #else // !defined(BOOST_NO_UNSPECIFIED_BOOL)
 
