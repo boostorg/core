@@ -160,10 +160,10 @@ struct lw_test_ge {
     static const char* anti_op() { return "<"; }
 };
 
-template<class T, class U, class BinaryPredicate>
-inline void test_with_impl(char const * expr1, char const * expr2,
+template<class BinaryPredicate, class T, class U>
+inline void test_with_impl(BinaryPredicate pred, char const * expr1, char const * expr2,
                            char const * file, int line, char const * function,
-                           T const & t, U const & u, BinaryPredicate pred)
+                           T const & t, U const & u)
 {
     if( pred(t, u) )
     {
@@ -389,13 +389,13 @@ inline int report_errors()
 
 #define BOOST_ERROR(msg) ( ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 
-#define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_eq() ) )
-#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_ne() ) )
+#define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_eq(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_ne(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
-#define BOOST_TEST_LT(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_lt() ) )
-#define BOOST_TEST_LE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_le() ) )
-#define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_gt() ) )
-#define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_ge() ) )
+#define BOOST_TEST_LT(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_lt(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_LE(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_le(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_gt(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_ge(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
 #define BOOST_TEST_CSTR_EQ(expr1,expr2) ( ::boost::detail::test_cstr_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_CSTR_NE(expr1,expr2) ( ::boost::detail::test_cstr_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
