@@ -121,69 +121,46 @@ template<class T> inline const void* test_output_impl(T volatile* v) { return co
 inline const void* test_output_impl(std::nullptr_t) { return nullptr; }
 #endif
 
-struct equal_to {
+struct lw_test_eq {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t == u; }
     static const char* op() { return "=="; }
     static const char* anti_op() { return "!="; }
 };
 
-struct not_equal_to {
+struct lw_test_ne {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t != u; }
     static const char* op() { return "!="; }
     static const char* anti_op() { return "=="; }
 };
 
-struct less {
+struct lw_test_lt {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t < u; }
     static const char* op() { return "<"; }
     static const char* anti_op() { return ">="; }
 };
 
-struct less_equal {
+struct lw_test_le {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t <= u; }
     static const char* op() { return "<="; }
     static const char* anti_op() { return ">"; }
 };
 
-struct greater {
+struct lw_test_gt {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t > u; }
     static const char* op() { return ">"; }
     static const char* anti_op() { return "<="; }
 };
 
-struct greater_equal {
+struct lw_test_ge {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t >= u; }
     static const char* op() { return ">="; }
     static const char* anti_op() { return "<"; }
-};
-
-// close_to<T> returns true when arguments deviate within a tolerance
-template <class T>
-struct close_to
-{
-    close_to(T relative_tolerance = std::numeric_limits<T>::epsilon(),
-             T absolute_tolerance = T(0)) BOOST_NOEXCEPT
-        : relative(relative_tolerance),
-          absolute(absolute_tolerance)
-    {}
-
-    bool operator() (const T& lhs, const T& rhs) const BOOST_NOEXCEPT
-    {
-        return std::abs(lhs - rhs) <= std::max(relative * std::max(std::abs(lhs), std::abs(rhs)), absolute);
-    }
-
-    static const char* op() { return "~="; }
-    static const char* anti_op() { return "!="; }
-
-private:
-    const T relative;
-    const T absolute;
 };
 
 template<class T, class U, class BinaryPredicate>
@@ -415,15 +392,13 @@ inline int report_errors()
 
 #define BOOST_ERROR(msg) ( ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 
-#define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::equal_to() ) )
-#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::not_equal_to() ) )
+#define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_eq() ) )
+#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_ne() ) )
 
-#define BOOST_TEST_LT(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::less() ) )
-#define BOOST_TEST_LE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::less_equal() ) )
-#define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::greater() ) )
-#define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::greater_equal() ) )
-
-#define BOOST_TEST_CLOSE(expr1, expr2, rtol, atol) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::close_to<double>(rtol, atol)) )
+#define BOOST_TEST_LT(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_lt() ) )
+#define BOOST_TEST_LE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_le() ) )
+#define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_gt() ) )
+#define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_with_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2, ::boost::detail::lw_test_ge() ) )
 
 #define BOOST_TEST_CSTR_EQ(expr1,expr2) ( ::boost::detail::test_cstr_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_CSTR_NE(expr1,expr2) ( ::boost::detail::test_cstr_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
