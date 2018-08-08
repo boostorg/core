@@ -47,7 +47,7 @@ struct report_errors_reminder
 
     ~report_errors_reminder()
     {
-        BOOST_ASSERT(called_report_errors_function);  // verify report_errors() was called  
+        BOOST_ASSERT(called_report_errors_function);  // verify report_errors() was called
     }
 };
 
@@ -118,104 +118,63 @@ template<class T> inline const void* test_output_impl(T volatile* v) { return co
 inline const void* test_output_impl(std::nullptr_t) { return nullptr; }
 #endif
 
-template<class T, class U> inline void test_eq_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, T const & t, U const & u )
-{
-    if( t == u )
-    {
-        report_errors_remind();
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " == " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << test_output_impl(t) << "' != '" << test_output_impl(u) << "'" << std::endl;
-        ++test_errors();
-    }
-}
+struct lw_test_eq {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t == u; }
+    static const char* op() { return "=="; }
+    static const char* anti_op() { return "!="; }
+};
 
-template<class T, class U> inline void test_ne_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, T const & t, U const & u )
-{
-    if( t != u )
-    {
-        report_errors_remind();
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " != " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << test_output_impl(t) << "' == '" << test_output_impl(u) << "'" << std::endl;
-        ++test_errors();
-    }
-}
+struct lw_test_ne {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t != u; }
+    static const char* op() { return "!="; }
+    static const char* anti_op() { return "=="; }
+};
 
-template<class T, class U> inline void test_lt_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, T const & t, U const & u )
-{
-    if( t < u )
-    {
-        report_errors_remind();
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " < " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << test_output_impl(t) << "' >= '" << test_output_impl(u) << "'" << std::endl;
-        ++test_errors();
-    }
-}
+struct lw_test_lt {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t < u; }
+    static const char* op() { return "<"; }
+    static const char* anti_op() { return ">="; }
+};
 
-template<class T, class U> inline void test_le_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, T const & t, U const & u )
-{
-    if( t <= u )
-    {
-        report_errors_remind();
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " <= " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << test_output_impl(t) << "' > '" << test_output_impl(u) << "'" << std::endl;
-        ++test_errors();
-    }
-}
+struct lw_test_le {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t <= u; }
+    static const char* op() { return "<="; }
+    static const char* anti_op() { return ">"; }
+};
 
-template<class T, class U> inline void test_gt_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, T const & t, U const & u )
-{
-    if( t > u )
-    {
-        report_errors_remind();
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " > " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << test_output_impl(t) << "' <= '" << test_output_impl(u) << "'" << std::endl;
-        ++test_errors();
-    }
-}
+struct lw_test_gt {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t > u; }
+    static const char* op() { return ">"; }
+    static const char* anti_op() { return "<="; }
+};
 
-template<class T, class U> inline void test_ge_impl( char const * expr1, char const * expr2,
-  char const * file, int line, char const * function, T const & t, U const & u )
+struct lw_test_ge {
+    template <typename T, typename U>
+    bool operator()(const T& t, const U& u) const { return t >= u; }
+    static const char* op() { return ">="; }
+    static const char* anti_op() { return "<"; }
+};
+
+template<class BinaryPredicate, class T, class U>
+inline void test_with_impl(BinaryPredicate pred, char const * expr1, char const * expr2,
+                           char const * file, int line, char const * function,
+                           T const & t, U const & u)
 {
-    if( t >= u )
+    if( pred(t, u) )
     {
         report_errors_remind();
     }
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " >= " << expr2
+            << file << "(" << line << "): test '" << expr1 << " " << pred.op() << " " << expr2
             << "' failed in function '" << function << "': "
-            << "'" << test_output_impl(t) << "' < '" << test_output_impl(u) << "'" << std::endl;
+            << "'" << test_output_impl(t) << "' " << pred.anti_op() << " '" << test_output_impl(u) << "'" << std::endl;
         ++test_errors();
     }
 }
@@ -430,13 +389,13 @@ inline int report_errors()
 
 #define BOOST_ERROR(msg) ( ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 
-#define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
-#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_eq(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_ne(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
-#define BOOST_TEST_LT(expr1,expr2) ( ::boost::detail::test_lt_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
-#define BOOST_TEST_LE(expr1,expr2) ( ::boost::detail::test_le_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
-#define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_gt_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
-#define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_ge_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_LT(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_lt(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_LE(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_le(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_GT(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_gt(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
+#define BOOST_TEST_GE(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_ge(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
 #define BOOST_TEST_CSTR_EQ(expr1,expr2) ( ::boost::detail::test_cstr_eq_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_CSTR_NE(expr1,expr2) ( ::boost::detail::test_cstr_ne_impl(#expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
