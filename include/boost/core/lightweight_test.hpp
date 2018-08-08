@@ -172,9 +172,9 @@ inline void test_with_impl(BinaryPredicate pred, char const * expr1, char const 
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " " << BinaryPredicate::op() << " " << expr2
+            << file << "(" << line << "): test '" << expr1 << " " << pred.op() << " " << expr2
             << "' failed in function '" << function << "': "
-            << "'" << test_output_impl(t) << "' " << BinaryPredicate::anti_op() << " '" << test_output_impl(u) << "'" << std::endl;
+            << "'" << test_output_impl(t) << "' " << pred.anti_op() << " '" << test_output_impl(u) << "'" << std::endl;
         ++test_errors();
     }
 }
