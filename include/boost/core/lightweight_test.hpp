@@ -122,42 +122,36 @@ struct lw_test_eq {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t == u; }
     static const char* op() { return "=="; }
-    static const char* anti_op() { return "!="; }
 };
 
 struct lw_test_ne {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t != u; }
     static const char* op() { return "!="; }
-    static const char* anti_op() { return "=="; }
 };
 
 struct lw_test_lt {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t < u; }
     static const char* op() { return "<"; }
-    static const char* anti_op() { return ">="; }
 };
 
 struct lw_test_le {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t <= u; }
     static const char* op() { return "<="; }
-    static const char* anti_op() { return ">"; }
 };
 
 struct lw_test_gt {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t > u; }
     static const char* op() { return ">"; }
-    static const char* anti_op() { return "<="; }
 };
 
 struct lw_test_ge {
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t >= u; }
     static const char* op() { return ">="; }
-    static const char* anti_op() { return "<"; }
 };
 
 template<class BinaryPredicate, class T, class U>
@@ -173,8 +167,8 @@ inline void test_with_impl(BinaryPredicate pred, char const * expr1, char const 
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " " << pred.op() << " " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << test_output_impl(t) << "' " << pred.anti_op() << " '" << test_output_impl(u) << "'" << std::endl;
+            << "' ('" << test_output_impl(t) << "' " << pred.op() << " '" << test_output_impl(u)
+            << "') failed in function '" << function << "'" << std::endl;
         ++test_errors();
     }
 }
@@ -189,9 +183,8 @@ inline void test_cstr_eq_impl( char const * expr1, char const * expr2,
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " == " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << t << "' != '" << u << "'" << std::endl;
+            << file << "(" << line << "): test '" << expr1 << " == " << expr2 << "' ('" << t
+            << "' == '" << u << "') failed in function '" << function << "'" << std::endl;
         ++test_errors();
     }
 }
@@ -206,9 +199,8 @@ inline void test_cstr_ne_impl( char const * expr1, char const * expr2,
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " != " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << t << "' == '" << u << "'" << std::endl;
+            << file << "(" << line << "): test '" << expr1 << " != " << expr2 << "' ('" << t
+            << "' != '" << u << "') failed in function '" << function << "'" << std::endl;
         ++test_errors();
     }
 }
