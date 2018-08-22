@@ -123,5 +123,8 @@ run to_address_test.cpp ;
 run exchange_test.cpp ;
 run exchange_move_test.cpp ;
 
+run empty_value_test.cpp ;
+run empty_value_size_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
