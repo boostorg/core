@@ -20,7 +20,14 @@ namespace boost {
 
 namespace noncopyable_  // protection from unintended ADL
 {
-  class noncopyable
+#ifndef BOOST_NONCOPYABLE_BASE_TOKEN_DEFINED
+#define BOOST_NONCOPYABLE_BASE_TOKEN_DEFINED
+
+  struct base_token {};
+
+#endif // #ifndef BOOST_NONCOPYABLE_BASE_TOKEN_DEFINED
+
+  class noncopyable: base_token
   {
   protected:
 #if !defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS) && !defined(BOOST_NO_CXX11_NON_PUBLIC_DEFAULTED_FUNCTIONS)
