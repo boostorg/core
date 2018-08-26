@@ -34,7 +34,7 @@ void test_bool()
 {
     const boost::empty_value<bool> v1(boost::empty_init_t(), true);
     BOOST_TEST(v1.get());
-    boost::empty_value<bool> v2;
+    boost::empty_value<bool> v2 = boost::empty_init_t();
     BOOST_TEST(!v2.get());
     v2 = v1;
     BOOST_TEST(v2.get());
