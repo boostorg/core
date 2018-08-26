@@ -55,7 +55,7 @@ public:
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template<class... Args>
-    empty_value(empty_init_t, Args&&... args)
+    explicit empty_value(empty_init_t, Args&&... args)
         : value_(std::forward<Args>(args)...) { }
 #else
     template<class U>
@@ -97,7 +97,7 @@ public:
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template<class... Args>
-    empty_value(empty_init_t, Args&&... args)
+    explicit empty_value(empty_init_t, Args&&... args)
         : T(std::forward<Args>(args)...) { }
 #else
     template<class U>
