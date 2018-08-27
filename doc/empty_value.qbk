@@ -44,23 +44,29 @@ public:
         , empty_value<Allocator, 1>(empty_init_t(), a)
         , ptr_() { }
 
-    const Ptr& pointer() const
-    { return ptr_; }
+    const Ptr& pointer() const {
+        return ptr_;
+    }
 
-    Ptr& pointer()
-    { return ptr_; }
+    Ptr& pointer() {
+        return ptr_;
+    }
 
-    const Compare& compare() const
-    { return empty_value<Compare, 0>::get(); }
+    const Compare& compare() const {
+        return empty_value<Compare, 0>::get();
+    }
 
-    Compare& compare()
-    { return empty_value<Compare, 0>::get(); }
+    Compare& compare() {
+        return empty_value<Compare, 0>::get();
+    }
 
-    const Allocator& allocator() const
-    { return empty_value<Allocator, 1>::get(); }
+    const Allocator& allocator() const {
+        return empty_value<Allocator, 1>::get();
+    }
 
-    Allocator& allocator()
-    { return empty_value<Allocator, 1>::get(); }
+    Allocator& allocator() {
+        return empty_value<Allocator, 1>::get();
+    }
 
 private:
     Ptr ptr_;
