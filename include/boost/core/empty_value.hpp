@@ -40,7 +40,7 @@ struct use_empty_value_base {
 
 struct empty_init_t { };
 
-template<class T, unsigned = 0, bool = use_empty_value_base<T>::value>
+template<class T, unsigned N = 0, bool E = use_empty_value_base<T>::value>
 class empty_value {
 public:
 #if !defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS)
