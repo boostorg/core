@@ -14,6 +14,9 @@
 //  Copyright (2) Beman Dawes 2010, 2011
 //  Copyright (3) Ion Gaztanaga 2013
 //
+//  Copyright 2018 Glen Joseph Fernandes
+//  (glenjofe@gmail.com)
+//
 //  Distributed under the Boost Software License, Version 1.0.
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt
@@ -39,29 +42,34 @@ namespace boost
 namespace detail
 {
 
-struct report_errors_reminder
-{
-    bool called_report_errors_function;
+class test_result {
+public:
+    test_result()
+        : report_errors_called_(false)
+        , errors_(0) { }
 
-    report_errors_reminder() : called_report_errors_function(false) {}
-
-    ~report_errors_reminder()
-    {
-        BOOST_ASSERT(called_report_errors_function);  // verify report_errors() was called
+    ~test_result() {
+        BOOST_ASSERT(report_errors_called_);
     }
+
+    void error() {
+        ++errors_;
+    }
+
+    int done() {
+        report_errors_called_ = true;
+        return errors_;
+    }
+
+private:
+    bool report_errors_called_;
+    int errors_;
 };
 
-inline report_errors_reminder& report_errors_remind()
+inline test_result& test_results()
 {
-    static report_errors_reminder r;
-    return r;
-}
-
-inline int & test_errors()
-{
-    static int x = 0;
-    report_errors_remind();
-    return x;
+    static test_result instance;
+    return instance;
 }
 
 inline void test_failed_impl(char const * expr, char const * file, int line, char const * function)
@@ -69,7 +77,7 @@ inline void test_failed_impl(char const * expr, char const * file, int line, cha
     BOOST_LIGHTWEIGHT_TEST_OSTREAM
       << file << "(" << line << "): test '" << expr << "' failed in function '"
       << function << "'" << std::endl;
-    ++test_errors();
+    test_results().error();
 }
 
 inline void error_impl(char const * msg, char const * file, int line, char const * function)
@@ -77,7 +85,7 @@ inline void error_impl(char const * msg, char const * file, int line, char const
     BOOST_LIGHTWEIGHT_TEST_OSTREAM
       << file << "(" << line << "): " << msg << " in function '"
       << function << "'" << std::endl;
-    ++test_errors();
+    test_results().error();
 }
 
 inline void throw_failed_impl(char const * excep, char const * file, int line, char const * function)
@@ -85,7 +93,7 @@ inline void throw_failed_impl(char const * excep, char const * file, int line, c
    BOOST_LIGHTWEIGHT_TEST_OSTREAM
     << file << "(" << line << "): Exception '" << excep << "' not thrown in function '"
     << function << "'" << std::endl;
-   ++test_errors();
+   test_results().error();
 }
 
 // In the comparisons below, it is possible that T and U are signed and unsigned integer types, which generates warnings in some compilers.
@@ -161,7 +169,7 @@ inline void test_with_impl(BinaryPredicate pred, char const * expr1, char const 
 {
     if( pred(t, u) )
     {
-        report_errors_remind();
+        test_results();
     }
     else
     {
@@ -169,7 +177,7 @@ inline void test_with_impl(BinaryPredicate pred, char const * expr1, char const 
             << file << "(" << line << "): test '" << expr1 << " " << pred.op() << " " << expr2
             << "' ('" << test_output_impl(t) << "' " << pred.op() << " '" << test_output_impl(u)
             << "') failed in function '" << function << "'" << std::endl;
-        ++test_errors();
+        test_results().error();
     }
 }
 
@@ -178,14 +186,14 @@ inline void test_cstr_eq_impl( char const * expr1, char const * expr2,
 {
     if( std::strcmp(t, u) == 0 )
     {
-        report_errors_remind();
+        test_results();
     }
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " == " << expr2 << "' ('" << t
             << "' == '" << u << "') failed in function '" << function << "'" << std::endl;
-        ++test_errors();
+        test_results().error();
     }
 }
 
@@ -194,14 +202,14 @@ inline void test_cstr_ne_impl( char const * expr1, char const * expr2,
 {
     if( std::strcmp(t, u) != 0 )
     {
-        report_errors_remind();
+        test_results();
     }
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " != " << expr2 << "' ('" << t
             << "' != '" << u << "') failed in function '" << function << "'" << std::endl;
-        ++test_errors();
+        test_results().error();
     }
 }
 
@@ -264,12 +272,12 @@ void test_all_eq_impl(FormattedOutputFunction& output,
 
     if (error_count == 0)
     {
-        boost::detail::report_errors_remind();
+        test_results();
     }
     else
     {
         output << std::endl;
-        ++boost::detail::test_errors();
+        test_results().error();
     }
 }
 
@@ -333,12 +341,12 @@ void test_all_with_impl(FormattedOutputFunction& output,
 
     if (error_count == 0)
     {
-        report_errors_remind();
+        test_results();
     }
     else
     {
         output << std::endl;
-        ++test_errors();
+        test_results().error();
     }
 }
 
@@ -356,9 +364,7 @@ void test_all_with_impl(FormattedOutputFunction& output,
 
 inline int report_errors()
 {
-    boost::detail::report_errors_remind().called_report_errors_function = true;
-
-    int errors = boost::detail::test_errors();
+    int errors = boost::detail::test_results().done();
 
     if( errors == 0 )
     {

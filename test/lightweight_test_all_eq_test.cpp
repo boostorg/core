@@ -120,7 +120,5 @@ int main()
         ++test_cases;
     }
 
-    boost::report_errors();
-
-    return boost::detail::test_errors() != test_cases;
+    return !boost::report_errors();
 }
