@@ -23,10 +23,10 @@
 //
 
 #include <boost/core/no_exceptions_support.hpp>
-#include <boost/assert.hpp>
 #include <boost/current_function.hpp>
 #include <iostream>
 #include <iterator>
+#include <cstdlib>
 #include <cstring>
 #include <cstddef>
 
@@ -45,11 +45,14 @@ namespace detail
 class test_result {
 public:
     test_result()
-        : report_errors_called_(false)
+        : report_(false)
         , errors_(0) { }
 
     ~test_result() {
-        BOOST_ASSERT(report_errors_called_);
+        if (!report_) {
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM << "report_errors() not called" << std::endl;
+            std::abort();
+        }
     }
 
     void error() {
@@ -57,12 +60,12 @@ public:
     }
 
     int done() {
-        report_errors_called_ = true;
+        report_ = true;
         return errors_;
     }
 
 private:
-    bool report_errors_called_;
+    bool report_;
     int errors_;
 };
 
@@ -382,7 +385,7 @@ inline int report_errors()
 
 } // namespace boost
 
-#define BOOST_TEST(expr) ((expr)? (void)0: ::boost::detail::test_failed_impl(#expr, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION))
+#define BOOST_TEST(expr) ((expr)? (void)::boost::detail::test_results(): ::boost::detail::test_failed_impl(#expr, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION))
 #define BOOST_TEST_NOT(expr) BOOST_TEST(!(expr))
 
 #define BOOST_ERROR(msg) ( ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
