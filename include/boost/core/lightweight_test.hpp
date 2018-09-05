@@ -58,10 +58,8 @@ public:
 
 #if defined(_MSC_VER)
             ::_exit( 3 );
-#elif 1
-            ::_Exit( 3 );
 #else
-            std::abort();
+            ::_Exit( 3 );
 #endif
         }
     }
