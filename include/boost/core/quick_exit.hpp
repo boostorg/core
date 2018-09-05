@@ -18,6 +18,12 @@
 #include <boost/config.hpp>
 #include <cstdlib>
 
+#if defined(__CYGWIN__) && __cplusplus < 201103L
+
+extern "C" _Noreturn void quick_exit(int);
+
+#endif
+
 namespace boost
 {
 
@@ -26,6 +32,10 @@ BOOST_NORETURN void quick_exit( int code ) BOOST_NOEXCEPT
 #if defined(_MSC_VER) && _MSC_VER < 1900
 
     ::_exit( code );
+
+#elif defined(__APPLE__)
+
+    ::_Exit( code );
 
 #else
 
