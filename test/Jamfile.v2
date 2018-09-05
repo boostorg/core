@@ -89,6 +89,7 @@ run-fail lightweight_test_fail8.cpp ;
 run-fail lightweight_test_fail8.cpp : : : <rtti>off : lightweight_test_fail8_no_rtti ;
 run-fail lightweight_test_fail9.cpp ;
 run-fail lightweight_test_fail10.cpp ;
+run-fail lightweight_test_fail11.cpp ;
 run-fail lightweight_test_lt_fail.cpp ;
 run-fail lightweight_test_le_fail.cpp ;
 run-fail lightweight_test_gt_fail.cpp ;

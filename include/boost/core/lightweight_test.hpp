@@ -46,11 +46,15 @@ class test_result {
 public:
     test_result()
         : report_(false)
-        , errors_(0) { }
+        , errors_(0) {
+#ifdef BOOST_MSVC
+        ::_set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+#endif
+    }
 
     ~test_result() {
         if (!report_) {
-            BOOST_LIGHTWEIGHT_TEST_OSTREAM << "report_errors() not called" << std::endl;
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM << "main() should return report_errors()" << std::endl;
             std::abort();
         }
     }
