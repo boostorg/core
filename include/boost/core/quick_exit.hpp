@@ -21,9 +21,17 @@
 namespace boost
 {
 
-void quick_exit( int code )
+BOOST_NORETURN void quick_exit( int code ) BOOST_NOEXCEPT
 {
-    std::quick_exit( code );
+#if defined(_MSC_VER) && _MSC_VER < 1900
+
+    ::_exit( code );
+
+#else
+
+    ::quick_exit( code );
+
+#endif
 }
 
 } // namespace boost
