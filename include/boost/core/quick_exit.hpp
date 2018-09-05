@@ -18,6 +18,12 @@
 #include <boost/config.hpp>
 #include <cstdlib>
 
+#if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
+
+_CRTIMP __cdecl __MINGW_NOTHROW  void _exit (int) __MINGW_ATTRIB_NORETURN;
+
+#endif
+
 #if defined(__CYGWIN__) && __cplusplus < 201103L
 
 extern "C" _Noreturn void quick_exit(int);
@@ -30,6 +36,10 @@ namespace boost
 BOOST_NORETURN void quick_exit( int code ) BOOST_NOEXCEPT
 {
 #if defined(_MSC_VER) && _MSC_VER < 1900
+
+    ::_exit( code );
+
+#elif defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
 
     ::_exit( code );
 
