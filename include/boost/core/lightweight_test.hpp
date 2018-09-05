@@ -422,6 +422,7 @@ inline int report_errors()
          (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
       }                                                        \
       catch(EXCEP const&) {                                    \
+         ::boost::detail::test_results();                      \
       }                                                        \
       catch(...) {                                             \
          ::boost::detail::throw_failed_impl                    \
