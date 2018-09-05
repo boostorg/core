@@ -127,5 +127,8 @@ run exchange_move_test.cpp ;
 run empty_value_test.cpp ;
 run empty_value_size_test.cpp ;
 
+run quick_exit_test.cpp ;
+run-fail quick_exit_fail.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
