@@ -47,7 +47,7 @@ public:
     test_result()
         : report_(false)
         , errors_(0) {
-#ifdef BOOST_MSVC
+#if defined(BOOST_MSVC) || ( defined(_MSC_VER) && defined(__clang__) )
         ::_set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
 #endif
     }
