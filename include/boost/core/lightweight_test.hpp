@@ -55,14 +55,7 @@ public:
     ~test_result() {
         if (!report_) {
             BOOST_LIGHTWEIGHT_TEST_OSTREAM << "main() should return report_errors()" << std::endl;
-
-#if defined(_MSC_VER)
-            ::_exit( 3 );
-#elif defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
             std::abort();
-#else
-            ::_Exit( 3 );
-#endif
         }
     }
 
