@@ -64,13 +64,12 @@ public:
         }
     }
 
-    void error() {
-        ++errors_;
+    int& errors() {
+        return errors_;
     }
 
-    int done() {
+    void done() {
         report_ = true;
-        return errors_;
     }
 
 private:
@@ -84,12 +83,17 @@ inline test_result& test_results()
     return instance;
 }
 
+inline int& test_errors()
+{
+    return test_results().errors();
+}
+
 inline void test_failed_impl(char const * expr, char const * file, int line, char const * function)
 {
     BOOST_LIGHTWEIGHT_TEST_OSTREAM
       << file << "(" << line << "): test '" << expr << "' failed in function '"
       << function << "'" << std::endl;
-    test_results().error();
+    ++test_results().errors();
 }
 
 inline void error_impl(char const * msg, char const * file, int line, char const * function)
@@ -97,7 +101,7 @@ inline void error_impl(char const * msg, char const * file, int line, char const
     BOOST_LIGHTWEIGHT_TEST_OSTREAM
       << file << "(" << line << "): " << msg << " in function '"
       << function << "'" << std::endl;
-    test_results().error();
+    ++test_results().errors();
 }
 
 inline void throw_failed_impl(char const * excep, char const * file, int line, char const * function)
@@ -105,7 +109,7 @@ inline void throw_failed_impl(char const * excep, char const * file, int line, c
    BOOST_LIGHTWEIGHT_TEST_OSTREAM
     << file << "(" << line << "): Exception '" << excep << "' not thrown in function '"
     << function << "'" << std::endl;
-   test_results().error();
+   ++test_results().errors();
 }
 
 // In the comparisons below, it is possible that T and U are signed and unsigned integer types, which generates warnings in some compilers.
@@ -189,7 +193,7 @@ inline void test_with_impl(BinaryPredicate pred, char const * expr1, char const 
             << file << "(" << line << "): test '" << expr1 << " " << pred.op() << " " << expr2
             << "' ('" << test_output_impl(t) << "' " << pred.op() << " '" << test_output_impl(u)
             << "') failed in function '" << function << "'" << std::endl;
-        test_results().error();
+        ++test_results().errors();
     }
 }
 
@@ -205,7 +209,7 @@ inline void test_cstr_eq_impl( char const * expr1, char const * expr2,
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " == " << expr2 << "' ('" << t
             << "' == '" << u << "') failed in function '" << function << "'" << std::endl;
-        test_results().error();
+        ++test_results().errors();
     }
 }
 
@@ -221,7 +225,7 @@ inline void test_cstr_ne_impl( char const * expr1, char const * expr2,
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " != " << expr2 << "' ('" << t
             << "' != '" << u << "') failed in function '" << function << "'" << std::endl;
-        test_results().error();
+        ++test_results().errors();
     }
 }
 
@@ -289,7 +293,7 @@ void test_all_eq_impl(FormattedOutputFunction& output,
     else
     {
         output << std::endl;
-        test_results().error();
+        ++test_results().errors();
     }
 }
 
@@ -358,7 +362,7 @@ void test_all_with_impl(FormattedOutputFunction& output,
     else
     {
         output << std::endl;
-        test_results().error();
+        ++test_results().errors();
     }
 }
 
@@ -376,8 +380,10 @@ void test_all_with_impl(FormattedOutputFunction& output,
 
 inline int report_errors()
 {
-    int errors = boost::detail::test_results().done();
+    boost::detail::test_result& result = boost::detail::test_results();
+    result.done();
 
+    int errors = result.errors();
     if( errors == 0 )
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
