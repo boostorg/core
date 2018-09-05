@@ -42,7 +42,7 @@ template< class T > inline void test_trait_impl( char const * trait, void (*)( T
             << "' (should have been " << ( expected? "true": "false" ) << ")"
             << std::endl;
 
-        test_results().error();
+        ++test_results().errors();
     }
 }
 
