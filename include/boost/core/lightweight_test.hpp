@@ -55,7 +55,14 @@ public:
     ~test_result() {
         if (!report_) {
             BOOST_LIGHTWEIGHT_TEST_OSTREAM << "main() should return report_errors()" << std::endl;
+
+#if defined(_MSC_VER)
+            ::_exit( 3 );
+#elif 1
+            ::_Exit( 3 );
+#else
             std::abort();
+#endif
         }
     }
 
