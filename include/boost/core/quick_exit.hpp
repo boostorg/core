@@ -20,7 +20,7 @@
 
 #if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
 
-_CRTIMP __cdecl __MINGW_NOTHROW  void _exit (int) __MINGW_ATTRIB_NORETURN;
+extern "C" _CRTIMP __cdecl __MINGW_NOTHROW  void _exit (int) __MINGW_ATTRIB_NORETURN;
 
 #endif
 
