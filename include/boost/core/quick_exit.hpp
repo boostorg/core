@@ -39,7 +39,7 @@ BOOST_NORETURN void quick_exit( int code ) BOOST_NOEXCEPT
 
     ::_exit( code );
 
-#elif defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
+#elif defined(__MINGW32__)
 
     ::_exit( code );
 
