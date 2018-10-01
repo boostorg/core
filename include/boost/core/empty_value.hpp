@@ -40,9 +40,13 @@ struct use_empty_value_base {
 
 struct empty_init_t { };
 
+namespace empty_ {
+
 template<class T, unsigned N = 0, bool E = use_empty_value_base<T>::value>
 class empty_value {
 public:
+    typedef T type;
+
 #if !defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS)
     empty_value() = default;
 #else
@@ -85,6 +89,8 @@ template<class T, unsigned N>
 class empty_value<T, N, true>
     : T {
 public:
+    typedef T type;
+
 #if !defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS)
     empty_value() = default;
 #else
@@ -119,6 +125,10 @@ public:
     }
 };
 #endif
+
+} /* empty_ */
+
+using empty_::empty_value;
 
 } /* boost */
 

@@ -85,6 +85,8 @@ struct empty_init_t { };
 template<class T, unsigned Index = 0, bool Empty = ``/see below/``>
 class empty_value {
 public:
+    typedef T type;
+
     empty_value() = default;
 
     template<class... Args>
@@ -104,6 +106,12 @@ public:
 [[`T`][The type of value to store]]
 [[`Index`][Optional: Specify to create a distinct base type]]
 [[`Empty`][Optional: Specify to force inheritance from type]]]
+
+[endsect]
+
+[section Member types]
+
+[variablelist [[`type`][The template parameter `T`]]]
 
 [endsect]
 
