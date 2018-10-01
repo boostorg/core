@@ -92,9 +92,9 @@ public:
     template<class... Args>
     explicit empty_value(empty_init_t, Args&&... args);
 
-    const T& get() const;
+    const T& get() const noexcept;
 
-    T& get();
+    T& get() noexcept;
 };
 
 } /* boost */
@@ -127,8 +127,8 @@ public:
 [section Member functions]
 
 [variablelist
-[[`const T& get() const;`][Returns the value]]
-[[`T& get();`][Returns the value]]]
+[[`const T& get() const noexcept;`][Returns the value]]
+[[`T& get() noexcept;`][Returns the value]]]
 
 [endsect]
 

@@ -42,7 +42,8 @@ struct empty_init_t { };
 
 namespace empty_ {
 
-template<class T, unsigned N = 0, bool E = use_empty_value_base<T>::value>
+template<class T, unsigned N = 0,
+    bool E = boost::use_empty_value_base<T>::value>
 class empty_value {
 public:
     typedef T type;
@@ -53,22 +54,22 @@ public:
     empty_value() { }
 #endif
 
-    empty_value(empty_init_t)
+    empty_value(boost::empty_init_t)
         : value_() { }
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template<class... Args>
-    explicit empty_value(empty_init_t, Args&&... args)
+    explicit empty_value(boost::empty_init_t, Args&&... args)
         : value_(std::forward<Args>(args)...) { }
 #else
     template<class U>
-    empty_value(empty_init_t, U&& value)
+    empty_value(boost::empty_init_t, U&& value)
         : value_(std::forward<U>(value)) { }
 #endif
 #else
     template<class U>
-    empty_value(empty_init_t, const U& value)
+    empty_value(boost::empty_init_t, const U& value)
         : value_(value) { }
 #endif
 
@@ -97,22 +98,22 @@ public:
     empty_value() { }
 #endif
 
-    empty_value(empty_init_t)
+    empty_value(boost::empty_init_t)
         : T() { }
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template<class... Args>
-    explicit empty_value(empty_init_t, Args&&... args)
+    explicit empty_value(boost::empty_init_t, Args&&... args)
         : T(std::forward<Args>(args)...) { }
 #else
     template<class U>
-    empty_value(empty_init_t, U&& value)
+    empty_value(boost::empty_init_t, U&& value)
         : T(std::forward<U>(value)) { }
 #endif
 #else
     template<class U>
-    empty_value(empty_init_t, const U& value)
+    empty_value(boost::empty_init_t, const U& value)
         : T(value) { }
 #endif
 
