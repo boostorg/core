@@ -47,7 +47,7 @@ public:
     test_result()
         : report_(false)
         , errors_(0) {
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && (_MSC_VER > 1310)
         ::_set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
 #endif
     }
