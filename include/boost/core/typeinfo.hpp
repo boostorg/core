@@ -74,7 +74,7 @@ inline char const * demangled_name( core::typeinfo const & ti )
 namespace detail
 {
 
-template<class T> struct core_typeid_
+template<class T> struct BOOST_SYMBOL_VISIBLE core_typeid_
 {
     static boost::core::typeinfo ti_;
 
