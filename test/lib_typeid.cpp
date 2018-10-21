@@ -11,7 +11,7 @@
 # define EXPORT
 #endif
 
-EXPORT boost::core::typeinfo const * get_typeid_int()
+EXPORT boost::core::typeinfo const & get_typeid_int()
 {
-    return &BOOST_CORE_TYPEID( int );
+    return BOOST_CORE_TYPEID( int );
 }
