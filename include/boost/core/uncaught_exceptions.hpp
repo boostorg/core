@@ -16,6 +16,9 @@
  * https://github.com/panaseleus/stack_unwinding/blob/master/boost/exception/uncaught_exception_count.hpp
  */
 
+#ifndef BOOST_CORE_UNCAUGHT_EXCEPTIONS_HPP_INCLUDED_
+#define BOOST_CORE_UNCAUGHT_EXCEPTIONS_HPP_INCLUDED_
+
 #include <exception>
 #include <boost/config.hpp>
 
@@ -91,3 +94,5 @@ inline unsigned int uncaught_exceptions() BOOST_NOEXCEPT
 } // namespace core
 
 } // namespace boost
+
+#endif // BOOST_CORE_UNCAUGHT_EXCEPTIONS_HPP_INCLUDED_
