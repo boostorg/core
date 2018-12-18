@@ -26,14 +26,16 @@
 #pragma once
 #endif
 
-namespace boost {
+// Visual Studio 14 supports N4152 std::uncaught_exceptions()
+#if (defined(__cpp_lib_uncaught_exceptions) && __cpp_lib_uncaught_exceptions >= 201411) || \
+    (defined(_MSC_VER) && _MSC_VER >= 1900)
+#define BOOST_CORE_HAS_UNCAUGHT_EXCEPTIONS
+#endif
 
-namespace core {
-
-namespace detail {
+#if !defined(BOOST_CORE_HAS_UNCAUGHT_EXCEPTIONS)
 
 // cxxabi.h availability macro
-#if defined(__has_include) && (!defined(BOOST_GCC) || (__GNUC__ + 0) >= 5)
+#if defined(__has_include) && (!defined(BOOST_GCC) || (__GNUC__ >= 5))
 #   if __has_include(<cxxabi.h>)
 #       define BOOST_CORE_HAS_CXXABI_H
 #   endif
@@ -41,32 +43,43 @@ namespace detail {
 #   define BOOST_CORE_HAS_CXXABI_H
 #endif
 
-#if defined(__cpp_lib_uncaught_exceptions) && __cpp_lib_uncaught_exceptions >= 201411
-#define BOOST_CORE_HAS_UNCAUGHT_EXCEPTIONS
-#elif defined(BOOST_CORE_HAS_CXXABI_H)
+#if defined(BOOST_CORE_HAS_CXXABI_H)
 // MinGW GCC 4.4 seem to not work the same way the newer GCC versions do. As a result, __cxa_get_globals based implementation will always return 0.
 // Just disable it for now and fall back to std::uncaught_exception().
 #if !defined(__MINGW32__) || (defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)))
-// Only GCC 4.7 declares __cxa_get_globals() in cxxabi.h, older compilers do not expose this function but it's there
 #define BOOST_CORE_HAS_CXA_GET_GLOBALS
-extern "C" void* __cxa_get_globals();
+#include <cxxabi.h>
+// Only GCC 4.7 declares __cxa_get_globals() in cxxabi.h, older compilers do not expose this function but it's there
+#if defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407
+namespace __cxxabiv1 {
+struct __cxa_eh_globals;
+extern "C" __cxa_eh_globals* __cxa_get_globals() BOOST_NOEXCEPT_OR_NOTHROW __attribute__((__const__));
+} // namespace __cxxabiv1
+#endif // defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407
 #endif
-#elif defined(_MSC_VER)
-#if _MSC_VER >= 1900
-// Visual Studio 14 supports N4152 std::uncaught_exceptions()
-#define BOOST_CORE_HAS_UNCAUGHT_EXCEPTIONS
-#elif _MSC_VER >= 1400
-#define BOOST_CORE_HAS_GETPTD
-extern "C" void* _getptd();
-#endif
-#endif
+#endif // defined(BOOST_CORE_HAS_CXXABI_H)
 
+#if defined(_MSC_VER) && _MSC_VER >= 1400
+#define BOOST_CORE_HAS_GETPTD
+namespace boost {
+namespace core {
+namespace detail {
+extern "C" void* _getptd();
 } // namespace detail
+} // namespace core
+} // namespace boost
+#endif // defined(_MSC_VER) && _MSC_VER >= 1400
+
+#endif // !defined(BOOST_CORE_HAS_UNCAUGHT_EXCEPTIONS)
 
 #if !defined(BOOST_CORE_HAS_UNCAUGHT_EXCEPTIONS) && !defined(BOOST_CORE_HAS_CXA_GET_GLOBALS) && !defined(BOOST_CORE_HAS_GETPTD)
 //! This macro is defined when `uncaught_exceptions` is not guaranteed to return values greater than 1 if multiple exceptions are pending
 #define BOOST_CORE_UNCAUGHT_EXCEPTIONS_EMULATED
 #endif
+
+namespace boost {
+
+namespace core {
 
 //! Returns the number of currently pending exceptions
 inline unsigned int uncaught_exceptions() BOOST_NOEXCEPT
@@ -76,7 +89,7 @@ inline unsigned int uncaught_exceptions() BOOST_NOEXCEPT
     return static_cast< unsigned int >(std::uncaught_exceptions());
 #elif defined(BOOST_CORE_HAS_CXA_GET_GLOBALS)
     // Tested on {clang 3.2,GCC 3.5.6,GCC 4.1.2,GCC 4.4.6,GCC 4.4.7}x{x32,x64}
-    return *(reinterpret_cast< const unsigned int* >(static_cast< const char* >(boost::core::detail::__cxa_get_globals()) + sizeof(void*))); // __cxa_eh_globals::uncaughtExceptions, x32 offset - 0x4, x64 - 0x8
+    return *(reinterpret_cast< const unsigned int* >(reinterpret_cast< const char* >(::abi::__cxa_get_globals()) + sizeof(void*))); // __cxa_eh_globals::uncaughtExceptions, x32 offset - 0x4, x64 - 0x8
 #elif defined(BOOST_CORE_HAS_GETPTD)
     // MSVC specific. Tested on {MSVC2005SP1,MSVC2008SP1,MSVC2010SP1,MSVC2012}x{x32,x64}.
     return *(reinterpret_cast< const unsigned int* >(static_cast< const char* >(boost::core::detail::_getptd()) + (sizeof(void*) == 8 ? 0x100 : 0x90))); // _tiddata::_ProcessingThrow, x32 offset - 0x90, x64 - 0x100
@@ -86,13 +99,13 @@ inline unsigned int uncaught_exceptions() BOOST_NOEXCEPT
 #endif
 }
 
+} // namespace core
+
+} // namespace boost
+
 #undef BOOST_CORE_HAS_CXXABI_H
 #undef BOOST_CORE_HAS_CXA_GET_GLOBALS
 #undef BOOST_CORE_HAS_UNCAUGHT_EXCEPTIONS
 #undef BOOST_CORE_HAS_GETPTD
-
-} // namespace core
-
-} // namespace boost
 
 #endif // BOOST_CORE_UNCAUGHT_EXCEPTIONS_HPP_INCLUDED_
