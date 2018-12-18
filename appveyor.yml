@@ -63,7 +63,7 @@ install:
   - git submodule init libs/type_traits
   - git submodule init tools/build
   - git submodule init tools/boost_install
-  - git submodule update
+  - git submodule update --jobs 4
   - xcopy /s /e /q %APPVEYOR_BUILD_FOLDER% libs\core
   - cmd /c bootstrap
   - b2 headers
