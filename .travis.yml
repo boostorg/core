@@ -266,7 +266,7 @@ install:
   - git submodule init libs/type_traits
   - git submodule init tools/build
   - git submodule init tools/boost_install
-  - git submodule update
+  - git submodule update --jobs 4
   - cp -r $TRAVIS_BUILD_DIR/* libs/core
   - ./bootstrap.sh
   - ./b2 headers
