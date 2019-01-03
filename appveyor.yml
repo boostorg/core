@@ -73,4 +73,4 @@ build: off
 test_script:
   - PATH=%ADDPATH%%PATH%
   - if not "%CXXSTD%" == "" set CXXSTD=cxxstd=%CXXSTD%
-  - b2 -j 3 libs/core/test toolset=%TOOLSET% %CXXSTD%
+  - b2 -j %NUMBER_OF_PROCESSORS% libs/core/test toolset=%TOOLSET% %CXXSTD%
