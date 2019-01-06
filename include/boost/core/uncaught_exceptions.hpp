@@ -47,15 +47,15 @@
 // MinGW GCC 4.4 seem to not work the same way the newer GCC versions do. As a result, __cxa_get_globals based implementation will always return 0.
 // Just disable it for now and fall back to std::uncaught_exception().
 #if !defined(__MINGW32__) || (defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)))
-#define BOOST_CORE_HAS_CXA_GET_GLOBALS
 #include <cxxabi.h>
-// Only GCC 4.7 declares __cxa_get_globals() in cxxabi.h, older compilers do not expose this function but it's there
-#if defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407
+#define BOOST_CORE_HAS_CXA_GET_GLOBALS
+// Only MinGW GCC 4.7 declares __cxa_get_globals() in cxxabi.h, older compilers do not expose this function but it's there
+#if defined(__MINGW32__) && defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407
 namespace __cxxabiv1 {
 struct __cxa_eh_globals;
 extern "C" __cxa_eh_globals* __cxa_get_globals() BOOST_NOEXCEPT_OR_NOTHROW __attribute__((__const__));
 } // namespace __cxxabiv1
-#endif // defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407
+#endif // defined(__MINGW32__) && defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407
 #endif
 #endif // defined(BOOST_CORE_HAS_CXXABI_H)
 
