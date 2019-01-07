@@ -50,13 +50,14 @@
 #include <cxxabi.h>
 
 // On Linux with clang and libc++, there is a version of cxxabi.h from libc++-abi that doesn't declare __cxa_get_globals, but provides __cxa_uncaught_exceptions.
-#if defined(_LIBCPPABI_VERSION)
+// The function only appeared in version 1002.
+#if defined(_LIBCPPABI_VERSION) && _LIBCPPABI_VERSION >= 1002
 #define BOOST_CORE_HAS_CXA_UNCAUGHT_EXCEPTIONS
 #else
 #define BOOST_CORE_HAS_CXA_GET_GLOBALS
 // On MinGW only GCC 4.7 declares __cxa_get_globals() in cxxabi.h, older compilers do not expose this function but it's there.
 // Note that at least on FreeBSD 11, cxxabi.h declares __cxa_get_globals with a different exception specification, so we can't declare the function unconditionally.
-#if (defined(__MINGW32__) && defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407)
+#if (defined(__MINGW32__) && defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407) || defined(_LIBCPPABI_VERSION)
 namespace __cxxabiv1 {
 struct __cxa_eh_globals;
 extern "C" __cxa_eh_globals* __cxa_get_globals() BOOST_NOEXCEPT_OR_NOTHROW __attribute__((__const__));
