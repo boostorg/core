@@ -240,6 +240,7 @@ matrix:
         apt:
           packages:
             - libc++-dev
+            - libc++abi-dev
 
     - os: linux
       compiler: clang++-libc++
@@ -248,10 +249,12 @@ matrix:
         apt:
           packages:
             - libc++-dev
+            - libc++abi-dev
 
     - os: osx
       compiler: clang++
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=03,11,14,1z
+      osx_image: xcode10.1
 
     - os: linux
       compiler: g++
