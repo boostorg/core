@@ -49,25 +49,37 @@
 #if !(defined(__MINGW32__) && (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 405))
 #include <cxxabi.h>
 
-// On Linux with clang and libc++, there is a version of cxxabi.h from libc++-abi that doesn't declare __cxa_get_globals, but provides __cxa_uncaught_exceptions.
-// The function only appeared in version 1002.
+// On Linux with clang and libc++, there is a version of cxxabi.h from libc++abi that doesn't declare __cxa_get_globals, but provides __cxa_uncaught_exceptions.
+// The function only appeared in version 1002 of the library.
 #if defined(_LIBCPPABI_VERSION) && _LIBCPPABI_VERSION >= 1002
 #define BOOST_CORE_HAS_CXA_UNCAUGHT_EXCEPTIONS
 #else
+#include <cstring>
 #define BOOST_CORE_HAS_CXA_GET_GLOBALS
-// On MinGW only GCC 4.7 declares __cxa_get_globals() in cxxabi.h, older compilers do not expose this function but it's there.
+// At least on MinGW and Linux, only GCC since 4.7 declares __cxa_get_globals() in cxxabi.h. Older versions of GCC do not expose this function but it's there.
+// On OpenBSD, it seems, the declaration is also missing.
 // Note that at least on FreeBSD 11, cxxabi.h declares __cxa_get_globals with a different exception specification, so we can't declare the function unconditionally.
-#if (defined(__MINGW32__) && defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407) || defined(_LIBCPPABI_VERSION)
+#if !defined(__FreeBSD__) && \
+    ( \
+        (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407) || \
+        defined(__OpenBSD__) || \
+        defined(_LIBCPPABI_VERSION) \
+    )
 namespace __cxxabiv1 {
 struct __cxa_eh_globals;
+#if defined(__OpenBSD__)
+extern "C" __cxa_eh_globals* __cxa_get_globals();
+#else
 extern "C" __cxa_eh_globals* __cxa_get_globals() BOOST_NOEXCEPT_OR_NOTHROW __attribute__((__const__));
+#endif
 } // namespace __cxxabiv1
 #endif
 #endif
-#endif
+#endif // !(defined(__MINGW32__) && (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 405))
 #endif // defined(BOOST_CORE_HAS_CXXABI_H)
 
 #if defined(_MSC_VER) && _MSC_VER >= 1400
+#include <cstring>
 #define BOOST_CORE_HAS_GETPTD
 namespace boost {
 namespace core {
@@ -100,10 +112,14 @@ inline unsigned int uncaught_exceptions() BOOST_NOEXCEPT
     return static_cast< unsigned int >(abi::__cxa_uncaught_exceptions());
 #elif defined(BOOST_CORE_HAS_CXA_GET_GLOBALS)
     // Tested on {clang 3.2,GCC 3.5.6,GCC 4.1.2,GCC 4.4.6,GCC 4.4.7}x{x32,x64}
-    return *(reinterpret_cast< const unsigned int* >(reinterpret_cast< const char* >(::abi::__cxa_get_globals()) + sizeof(void*))); // __cxa_eh_globals::uncaughtExceptions, x32 offset - 0x4, x64 - 0x8
+    unsigned int count;
+    std::memcpy(&count, reinterpret_cast< const unsigned char* >(::abi::__cxa_get_globals()) + sizeof(void*), sizeof(count)); // __cxa_eh_globals::uncaughtExceptions, x32 offset - 0x4, x64 - 0x8
+    return count;
 #elif defined(BOOST_CORE_HAS_GETPTD)
     // MSVC specific. Tested on {MSVC2005SP1,MSVC2008SP1,MSVC2010SP1,MSVC2012}x{x32,x64}.
-    return *(reinterpret_cast< const unsigned int* >(static_cast< const char* >(boost::core::detail::_getptd()) + (sizeof(void*) == 8 ? 0x100 : 0x90))); // _tiddata::_ProcessingThrow, x32 offset - 0x90, x64 - 0x100
+    unsigned int count;
+    std::memcpy(&count, static_cast< const unsigned char* >(boost::core::detail::_getptd()) + (sizeof(void*) == 8u ? 0x100 : 0x90), sizeof(count)); // _tiddata::_ProcessingThrow, x32 offset - 0x90, x64 - 0x100
+    return count;
 #else
     // Portable C++03 implementation. Does not allow to detect multiple nested exceptions.
     return static_cast< unsigned int >(std::uncaught_exception());
