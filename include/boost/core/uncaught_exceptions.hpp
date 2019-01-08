@@ -48,17 +48,14 @@
 // Just disable it for now and fall back to std::uncaught_exception().
 #if !(defined(__MINGW32__) && (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 405))
 #include <cxxabi.h>
-
-// On Linux with clang and libc++, there is a version of cxxabi.h from libc++abi that doesn't declare __cxa_get_globals, but provides __cxa_uncaught_exceptions.
-// The function only appeared in version 1002 of the library.
-#if defined(_LIBCPPABI_VERSION) && _LIBCPPABI_VERSION >= 1002
-#define BOOST_CORE_HAS_CXA_UNCAUGHT_EXCEPTIONS
-#else
 #include <cstring>
 #define BOOST_CORE_HAS_CXA_GET_GLOBALS
 // At least on MinGW and Linux, only GCC since 4.7 declares __cxa_get_globals() in cxxabi.h. Older versions of GCC do not expose this function but it's there.
 // On OpenBSD, it seems, the declaration is also missing.
 // Note that at least on FreeBSD 11, cxxabi.h declares __cxa_get_globals with a different exception specification, so we can't declare the function unconditionally.
+// On Linux with clang and libc++ and on OS X, there is a version of cxxabi.h from libc++abi that doesn't declare __cxa_get_globals, but provides __cxa_uncaught_exceptions.
+// The function only appeared in version _LIBCPPABI_VERSION >= 1002 of the library. Unfortunately, there are linking errors about undefined reference to __cxa_uncaught_exceptions,
+// so we avoid using it and forward-declare __cxa_get_globals instead.
 #if !defined(__FreeBSD__) && \
     ( \
         (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407) || \
@@ -73,7 +70,6 @@ extern "C" __cxa_eh_globals* __cxa_get_globals();
 extern "C" __cxa_eh_globals* __cxa_get_globals() BOOST_NOEXCEPT_OR_NOTHROW __attribute__((__const__));
 #endif
 } // namespace __cxxabiv1
-#endif
 #endif
 #endif // !(defined(__MINGW32__) && (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 405))
 #endif // defined(BOOST_CORE_HAS_CXXABI_H)
@@ -107,9 +103,6 @@ inline unsigned int uncaught_exceptions() BOOST_NOEXCEPT
 #if defined(BOOST_CORE_HAS_UNCAUGHT_EXCEPTIONS)
     // C++17 implementation
     return static_cast< unsigned int >(std::uncaught_exceptions());
-#elif defined(BOOST_CORE_HAS_CXA_UNCAUGHT_EXCEPTIONS)
-    // libc++abi extension
-    return static_cast< unsigned int >(abi::__cxa_uncaught_exceptions());
 #elif defined(BOOST_CORE_HAS_CXA_GET_GLOBALS)
     // Tested on {clang 3.2,GCC 3.5.6,GCC 4.1.2,GCC 4.4.6,GCC 4.4.7}x{x32,x64}
     unsigned int count;
@@ -132,7 +125,6 @@ inline unsigned int uncaught_exceptions() BOOST_NOEXCEPT
 
 #undef BOOST_CORE_HAS_CXXABI_H
 #undef BOOST_CORE_HAS_CXA_GET_GLOBALS
-#undef BOOST_CORE_HAS_CXA_UNCAUGHT_EXCEPTIONS
 #undef BOOST_CORE_HAS_UNCAUGHT_EXCEPTIONS
 #undef BOOST_CORE_HAS_GETPTD
 
