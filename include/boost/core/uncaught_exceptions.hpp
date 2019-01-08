@@ -54,8 +54,8 @@
 // On OpenBSD, it seems, the declaration is also missing.
 // Note that at least on FreeBSD 11, cxxabi.h declares __cxa_get_globals with a different exception specification, so we can't declare the function unconditionally.
 // On Linux with clang and libc++ and on OS X, there is a version of cxxabi.h from libc++abi that doesn't declare __cxa_get_globals, but provides __cxa_uncaught_exceptions.
-// The function only appeared in version _LIBCPPABI_VERSION >= 1002 of the library. Unfortunately, there are linking errors about undefined reference to __cxa_uncaught_exceptions,
-// so we avoid using it and forward-declare __cxa_get_globals instead.
+// The function only appeared in version _LIBCPPABI_VERSION >= 1002 of the library. Unfortunately, there are linking errors about undefined reference to __cxa_uncaught_exceptions
+// on Ubuntu Trusty and OS X, so we avoid using it and forward-declare __cxa_get_globals instead.
 #if !defined(__FreeBSD__) && \
     ( \
         (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407) || \
