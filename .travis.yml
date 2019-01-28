@@ -280,15 +280,6 @@ matrix:
       - cmake --build .
       - cmake --build . --target check
 
-    - os: linux
-      compiler: g++
-      env: CMAKE_SUBDIR_TEST=1
-      script:
-      - cd libs/core/test/cmake_subdir_test && mkdir __build__ && cd __build__
-      - cmake ..
-      - cmake --build .
-      - cmake --build . --target check
-
 install:
   - BOOST_BRANCH=develop
   - if [ "$TRAVIS_BRANCH" = "master" ]; then BOOST_BRANCH=master; fi
