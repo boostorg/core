@@ -47,15 +47,15 @@ template< class T > inline void test_trait_impl( char const * trait, void (*)( T
     }
 }
 
-template<class T1, class T2> inline bool test_trait_same_impl_( boost::core::is_same<T1, T2> )
+template<class T> inline bool test_trait_same_impl_( T )
 {
-    return boost::core::is_same<T1, T2>::value;
+    return T::value;
 }
 
-template<class T1, class T2> inline void test_trait_same_impl( char const * types, void (*)( boost::core::is_same<T1, T2> ),
-  char const * file, int line, char const * function )
+template<class T1, class T2> inline void test_trait_same_impl( char const * types,
+  boost::core::is_same<T1, T2> same, char const * file, int line, char const * function )
 {
-    if( test_trait_same_impl_( boost::core::is_same<T1, T2>() ) )
+    if( test_trait_same_impl_( same ) )
     {
         test_results();
     }
@@ -78,6 +78,6 @@ template<class T1, class T2> inline void test_trait_same_impl( char const * type
 
 #define BOOST_TEST_TRAIT_TRUE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, true, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 #define BOOST_TEST_TRAIT_FALSE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, false, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
-#define BOOST_TEST_TRAIT_SAME(...) ( ::boost::detail::test_trait_same_impl(#__VA_ARGS__, (void(*)(::boost::core::is_same<__VA_ARGS__>))0, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
+#define BOOST_TEST_TRAIT_SAME(...) ( ::boost::detail::test_trait_same_impl(#__VA_ARGS__, ::boost::core::is_same<__VA_ARGS__>(), __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_TRAIT_HPP
