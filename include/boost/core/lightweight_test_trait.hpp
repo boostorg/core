@@ -9,7 +9,7 @@
 
 // boost/core/lightweight_test_trait.hpp
 //
-// BOOST_TEST_TRAIT_TRUE, BOOST_TEST_TRAIT_FALSE
+// BOOST_TEST_TRAIT_TRUE, BOOST_TEST_TRAIT_FALSE, BOOST_TEST_TRAIT_SAME
 //
 // Copyright 2014 Peter Dimov
 //
@@ -19,6 +19,7 @@
 
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/typeinfo.hpp>
+#include <boost/core/is_same.hpp>
 
 namespace boost
 {
@@ -46,11 +47,37 @@ template< class T > inline void test_trait_impl( char const * trait, void (*)( T
     }
 }
 
+template<class T1, class T2> inline bool test_trait_same_impl_( boost::core::is_same<T1, T2> )
+{
+    return boost::core::is_same<T1, T2>::value;
+}
+
+template<class T1, class T2> inline void test_trait_same_impl( char const * types, void (*)( boost::core::is_same<T1, T2> ),
+  char const * file, int line, char const * function )
+{
+    if( test_trait_same_impl_( boost::core::is_same<T1, T2>() ) )
+    {
+        test_results();
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << file << "(" << line << "): test 'is_same<" << types << ">'"
+            << " failed in function '" << function
+            << "' ('" << boost::core::demangled_name( BOOST_CORE_TYPEID(T1) )
+            << "' != '" << boost::core::demangled_name( BOOST_CORE_TYPEID(T2) ) << "')"
+            << std::endl;
+
+        ++test_results().errors();
+    }
+}
+
 } // namespace detail
 
 } // namespace boost
 
 #define BOOST_TEST_TRAIT_TRUE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, true, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 #define BOOST_TEST_TRAIT_FALSE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, false, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
+#define BOOST_TEST_TRAIT_SAME(...) ( ::boost::detail::test_trait_same_impl(#__VA_ARGS__, (void(*)(::boost::core::is_same<__VA_ARGS__>))0, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_TRAIT_HPP
