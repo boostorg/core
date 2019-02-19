@@ -9,67 +9,63 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/core/lightweight_test.hpp>
 
 struct empty {
-    operator bool() const {
-        return false;
+    int value() const {
+        return 1;
     }
-    operator bool() {
-        return true;
+    int value() {
+        return 2;
     }
 };
 
 class type {
 public:
-    type()
-        : value_(false) { }
-    explicit type(bool value)
-        : value_(value) { }
-    operator bool() const {
-        return value_;
+    explicit type(int count)
+        : value_(count) { }
+    int value() const {
+        return value_ + 1;
+    }
+    int value() {
+        return value_ + 2;
     }
 private:
-    bool value_;
+    int value_;
 };
 
-void test_bool()
+void test_int()
 {
-    const boost::empty_value<bool> v1(boost::empty_init_t(), true);
-    BOOST_TEST(v1.get());
-    boost::empty_value<bool> v2 = boost::empty_init_t();
-    BOOST_TEST(!v2.get());
+    const boost::empty_value<int> v1(boost::empty_init_t(), 7);
+    BOOST_TEST(v1.get() == 7);
+    boost::empty_value<int> v2 = boost::empty_init_t();
+    BOOST_TEST(v2.get() == 0);
     v2 = v1;
-    BOOST_TEST(v2.get());
-    v2.get() = false;
-    BOOST_TEST(!v2.get());
+    BOOST_TEST(v2.get() == 7);
+    v2.get() = 8;
+    BOOST_TEST(v2.get() == 8);
 }
 
 void test_empty()
 {
-    empty e;
-    const boost::empty_value<empty> v1(boost::empty_init_t(), e);
-    BOOST_TEST(!v1.get());
+    const boost::empty_value<empty> v1 = boost::empty_init_t();
+    BOOST_TEST(v1.get().value() == 1);
     boost::empty_value<empty> v2;
-    BOOST_TEST(v2.get());
-    v2 = v1;
-    BOOST_TEST(v2.get());
-    v2.get() = empty();
-    BOOST_TEST(v2.get());
+    BOOST_TEST(v2.get().value() == 2);
 }
 
 void test_type()
 {
-    const boost::empty_value<type> v1(boost::empty_init_t(), true);
-    BOOST_TEST(v1.get());
-    boost::empty_value<type> v2;
-    BOOST_TEST(!v2.get());
+    const boost::empty_value<type> v1(boost::empty_init_t(), 2);
+    BOOST_TEST(v1.get().value() == 3);
+    boost::empty_value<type> v2(boost::empty_init_t(), 3);
+    BOOST_TEST(v2.get().value() == 5);
     v2 = v1;
-    BOOST_TEST(v2.get());
-    v2.get() = type();
-    BOOST_TEST(!v2.get());
+    BOOST_TEST(v2.get().value() == 4);
+    v2.get() = type(4);
+    BOOST_TEST(v2.get().value() == 6);
 }
 
 int main()
 {
-    test_bool();
+    test_int();
     test_empty();
     test_type();
     return boost::report_errors();
