@@ -9,7 +9,7 @@
  * \author Andrey Semashev
  * \date   2018-11-10
  *
- * \brief  This header provides an `uncaught_exception` function implementation, which was introduced in C++17.
+ * \brief  This header provides an `uncaught_exceptions` function implementation, which was introduced in C++17.
  *
  * The code in this file is based on the implementation by Evgeny Panasyuk:
  *
