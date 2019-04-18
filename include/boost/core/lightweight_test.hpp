@@ -373,7 +373,7 @@ void test_all_with_impl(FormattedOutputFunction& output,
 
 } // namespace detail
 
-inline int report_errors()
+inline int report_errors(int expected_errors = 0)
 {
     boost::detail::test_result& result = boost::detail::test_results();
     result.done();
@@ -389,7 +389,7 @@ inline int report_errors()
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
           << errors << " error" << (errors == 1? "": "s") << " detected." << std::endl;
-        return 1;
+        return errors == expected_errors ? 0 : 1;
     }
 }
 

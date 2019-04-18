@@ -33,5 +33,5 @@ int main()
     BOOST_TEST_TRAIT_SAME(X::type, Y<float, int>::type);
     BOOST_TEST_TRAIT_SAME(Y<int, float>, Y<int, double>);
 
-    return boost::report_errors() == 10;
+    return boost::report_errors(10);
 }
