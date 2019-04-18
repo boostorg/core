@@ -52,6 +52,44 @@ template<class T> inline bool test_trait_same_impl_( T )
     return T::value;
 }
 
+template <class T>
+struct test_trait_stream_type {
+  static void stream() {
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM
+      << boost::core::demangled_name( BOOST_CORE_TYPEID(T) );
+  }
+};
+
+template <class T>
+struct test_trait_stream_type<T const>  {
+  static void stream() {
+    test_trait_stream_type<T>::stream();
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM << " const"; }
+};
+
+template <class T>
+struct test_trait_stream_type<T volatile> {
+  static void stream() {
+    test_trait_stream_type<T>::stream();
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM << " volatile"; }
+};
+
+template <class T>
+struct test_trait_stream_type<T&>  {
+  static void stream() {
+    test_trait_stream_type<T>::stream();
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM << "&";
+  }
+};
+
+template <class T>
+struct test_trait_stream_type<T*>  {
+  static void stream() {
+    test_trait_stream_type<T>::stream();
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM << "*";
+  }
+};
+
 template<class T1, class T2> inline void test_trait_same_impl( char const * types,
   boost::core::is_same<T1, T2> same, char const * file, int line, char const * function )
 {
@@ -64,9 +102,15 @@ template<class T1, class T2> inline void test_trait_same_impl( char const * type
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test 'is_same<" << types << ">'"
             << " failed in function '" << function
-            << "' ('" << boost::core::demangled_name( BOOST_CORE_TYPEID(T1) )
-            << "' != '" << boost::core::demangled_name( BOOST_CORE_TYPEID(T2) ) << "')"
-            << std::endl;
+            << "' ('";
+
+        test_trait_stream_type<T1>::stream();
+
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM << "' != '";
+
+        test_trait_stream_type<T2>::stream();
+
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM << "')" << std::endl;
 
         ++test_results().errors();
     }

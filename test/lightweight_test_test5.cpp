@@ -22,6 +22,18 @@ template<class T1, class T2> struct Y
 
 int main()
 {
+    typedef X& XR;
+    typedef X* XP;
+    typedef X** XPP;
+    typedef X const XC;
+    typedef X const& XCR;
+    typedef X const* XCP;
+    typedef X const* const XCPC;
+    BOOST_TEST_TRAIT_SAME(X, XR);
+    BOOST_TEST_TRAIT_SAME(X, XP);
+    BOOST_TEST_TRAIT_SAME(XP, XPP);
+    BOOST_TEST_TRAIT_SAME(XCR, XR);
+    BOOST_TEST_TRAIT_SAME(XCP, XCPC);
     BOOST_TEST_TRAIT_SAME(char[1], char[2]);
     BOOST_TEST_TRAIT_SAME(char[1], char[]);
     BOOST_TEST_TRAIT_SAME(char[1], char*);
@@ -33,5 +45,5 @@ int main()
     BOOST_TEST_TRAIT_SAME(X::type, Y<float, int>::type);
     BOOST_TEST_TRAIT_SAME(Y<int, float>, Y<int, double>);
 
-    return boost::report_errors() == 10;
+    return boost::report_errors() == 15;
 }
