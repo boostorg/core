@@ -212,10 +212,10 @@ nothing and `expr` is not evaluated.
 [section report_errors]
 
 ``
-int boost::report_errors(int expected_errors = 0)
+int boost::report_errors()
 ``
 
-Return the exit code from `main` (see example below). The exit code is 0, if the number of encountered errors is equal to number of expected errors (defaults to 0). Otherwise, the exit code is 1.
+Return the error count from `main`.
 
 [endsect]
 
