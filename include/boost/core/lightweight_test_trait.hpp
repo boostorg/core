@@ -17,10 +17,10 @@
 // See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt
 
+#include <boost/config.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/typeinfo.hpp>
 #include <boost/core/is_same.hpp>
-#include <boost/config.hpp>
 
 namespace boost
 {
@@ -55,7 +55,7 @@ template<class T> inline bool test_trait_same_impl_( T )
 
 template <class T>
 struct test_trait_print_type {
-  static void stream() {
+  static void print() {
     BOOST_LIGHTWEIGHT_TEST_OSTREAM
       << boost::core::demangled_name( BOOST_CORE_TYPEID(T) );
   }
@@ -63,22 +63,22 @@ struct test_trait_print_type {
 
 template <class T>
 struct test_trait_print_type<T const>  {
-  static void stream() {
-    test_trait_print_type<T>::stream();
+  static void print() {
+    test_trait_print_type<T>::print();
     BOOST_LIGHTWEIGHT_TEST_OSTREAM << " const"; }
 };
 
 template <class T>
 struct test_trait_print_type<T volatile> {
-  static void stream() {
-    test_trait_print_type<T>::stream();
+  static void print() {
+    test_trait_print_type<T>::print();
     BOOST_LIGHTWEIGHT_TEST_OSTREAM << " volatile"; }
 };
 
 template <class T>
 struct test_trait_print_type<T&>  {
-  static void stream() {
-    test_trait_print_type<T>::stream();
+  static void print() {
+    test_trait_print_type<T>::print();
     BOOST_LIGHTWEIGHT_TEST_OSTREAM << "&";
   }
 };
@@ -86,8 +86,8 @@ struct test_trait_print_type<T&>  {
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 template <class T>
 struct test_trait_print_type<T&&>  {
-  static void stream() {
-    test_trait_print_type<T>::stream();
+  static void print() {
+    test_trait_print_type<T>::print();
     BOOST_LIGHTWEIGHT_TEST_OSTREAM << "&&";
   }
 };
@@ -107,11 +107,11 @@ template<class T1, class T2> inline void test_trait_same_impl( char const * type
             << " failed in function '" << function
             << "' ('";
 
-        test_trait_print_type<T1>::stream();
+        test_trait_print_type<T1>::print();
 
         BOOST_LIGHTWEIGHT_TEST_OSTREAM << "' != '";
 
-        test_trait_print_type<T2>::stream();
+        test_trait_print_type<T2>::print();
 
         BOOST_LIGHTWEIGHT_TEST_OSTREAM << "')" << std::endl;
 
