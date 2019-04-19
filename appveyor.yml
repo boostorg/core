@@ -62,6 +62,7 @@ install:
   - git submodule init libs/config
   - git submodule init libs/predef
   - git submodule init libs/static_assert
+  - git submodule init libs/throw_exception
   - git submodule init libs/type_traits
   - git submodule init tools/build
   - git submodule init tools/boost_install
