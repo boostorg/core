@@ -17,10 +17,10 @@
 // See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt
 
-#include <boost/config.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/typeinfo.hpp>
 #include <boost/core/is_same.hpp>
+#include <boost/config.hpp>
 
 namespace boost
 {
