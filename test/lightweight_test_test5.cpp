@@ -9,6 +9,7 @@
 //
 
 #include <boost/core/lightweight_test_trait.hpp>
+#include <boost/config.hpp>
 
 struct X
 {
@@ -25,15 +26,17 @@ int main()
     typedef X& XR;
     typedef X* XP;
     typedef X** XPP;
-    typedef X const XC;
     typedef X const& XCR;
     typedef X const* XCP;
     typedef X const* const XCPC;
     BOOST_TEST_TRAIT_SAME(X, XR);
-    BOOST_TEST_TRAIT_SAME(X, XP);
     BOOST_TEST_TRAIT_SAME(XP, XPP);
     BOOST_TEST_TRAIT_SAME(XCR, XR);
     BOOST_TEST_TRAIT_SAME(XCP, XCPC);
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+    typedef X&& XRR;
+    BOOST_TEST_TRAIT_SAME(XR, XRR);
+#endif
     BOOST_TEST_TRAIT_SAME(char[1], char[2]);
     BOOST_TEST_TRAIT_SAME(char[1], char[]);
     BOOST_TEST_TRAIT_SAME(char[1], char*);
