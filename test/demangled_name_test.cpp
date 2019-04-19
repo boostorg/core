@@ -18,6 +18,18 @@ template<class T1, class T2> struct Y1
 int main()
 {
     typedef Y1<int, long> T;
-    std::cout << boost::core::demangled_name( BOOST_CORE_TYPEID( T ) );
+    typedef T* TP;
+    typedef T& TR;
+    typedef T const TC;
+    typedef T const * const TCPC;
+    typedef T const & TCR;
+    std::cout
+        << '"' << boost::core::demangled_name( BOOST_CORE_TYPEID( T ) ) << "\"\n"
+        << '"' << boost::core::demangled_name( BOOST_CORE_TYPEID( TP ) ) << "\"\n"
+        << '"' << boost::core::demangled_name( BOOST_CORE_TYPEID( TR ) ) << "\"\n"
+        << '"' << boost::core::demangled_name( BOOST_CORE_TYPEID( TC ) ) << "\"\n"
+        << '"' << boost::core::demangled_name( BOOST_CORE_TYPEID( TCPC ) ) << "\"\n"
+        << '"' << boost::core::demangled_name( BOOST_CORE_TYPEID( TCR ) ) << "\"\n"
+        << std::flush;
     return 0;
 }

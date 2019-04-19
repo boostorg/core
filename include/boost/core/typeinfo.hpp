@@ -133,10 +133,39 @@ template<class T> struct core_typeid_< T const volatile >: core_typeid_< T >
 #else
 
 #include <boost/core/demangle.hpp>
+#include <boost/type.hpp>
 #include <typeinfo>
+#include <string>
 
 namespace boost
 {
+
+namespace detail
+{
+
+std::string unwrap_type_name(const std::string& demangled_name) {
+    // Find first occurence of "type" from boost::type.
+    std::string::size_type begin = demangled_name.find("type");
+    if (begin == std::string::npos) {
+        // Couldn't find "type" string. Return source string.
+        return demangled_name;
+    }
+    // skip one leading "<" and any space characters
+    begin = demangled_name.find('<', begin);
+    if (begin == std::string::npos)
+        return demangled_name;
+    ++begin;
+    while (begin != demangled_name.size() && demangled_name[begin] == ' ') ++begin;
+    // remove trailing ">" and any space characters
+    std::string::size_type last = demangled_name.rfind('>');
+    if (last == std::string::npos)
+        return demangled_name;
+    --last;
+    while (last != begin && demangled_name[last] == ' ') --last;
+    return demangled_name.substr(begin, last - begin + 1);
+}
+
+} // namespace detail
 
 namespace core
 {
@@ -153,14 +182,15 @@ typedef std::type_info typeinfo;
 
 inline std::string demangled_name( core::typeinfo const & ti )
 {
-    return core::demangle( ti.name() );
+    return boost::detail::unwrap_type_name(core::demangle( ti.name() ));
 }
 
 } // namespace core
 
 } // namespace boost
 
-#define BOOST_CORE_TYPEID(T) typeid(T)
+
+#define BOOST_CORE_TYPEID(T) typeid(boost::type<T>)
 
 #endif
 
