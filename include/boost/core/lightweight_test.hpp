@@ -383,14 +383,13 @@ inline int report_errors(int expected_errors = 0)
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
           << "No errors detected." << std::endl;
-        return 0;
     }
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
           << errors << " error" << (errors == 1? "": "s") << " detected." << std::endl;
-        return errors == expected_errors ? 0 : 1;
     }
+    return errors == expected_errors ? 0 : 1;
 }
 
 } // namespace boost
