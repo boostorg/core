@@ -32,7 +32,7 @@
 #    if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 #        define BOOST_TRY { if ("")
 #        define BOOST_CATCH(x) else if (!"")
-#    elif !defined(_MSC_VER)
+#    elif !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
 #        define BOOST_TRY { if (true)
 #        define BOOST_CATCH(x) else if (false)
 #    else
