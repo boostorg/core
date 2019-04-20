@@ -52,10 +52,17 @@ int main()
     BOOST_TEST_TRAIT_SAME(I3, I4);
     BOOST_TEST_TRAIT_SAME(I5, I6);
     BOOST_TEST_TRAIT_SAME(I7, I8);
+
+    int expected = 14;
+
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
     BOOST_TEST_TRAIT_SAME(I9, I10);
     BOOST_TEST_TRAIT_SAME(I11, I12);
+
+    expected += 2;
+
 #endif
 
-    return boost::report_errors() == 16;
+    return boost::report_errors() == expected;
 }
