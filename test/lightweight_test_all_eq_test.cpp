@@ -120,5 +120,5 @@ int main()
         ++test_cases;
     }
 
-    return !boost::report_errors();
+    return boost::report_errors() == test_cases;
 }

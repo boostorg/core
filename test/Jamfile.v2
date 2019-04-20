@@ -69,14 +69,15 @@ run get_pointer_test.cpp ;
 run lightweight_test_test.cpp ;
 run lightweight_test_test.cpp : : : <exception-handling>off : lightweight_test_test_no_except ;
 run lightweight_test_test2.cpp ;
-run lightweight_test_all_eq_test.cpp ;
 run lightweight_test_all_with_test.cpp ;
-run lightweight_test_all_with_fail.cpp ;
 run lightweight_test_lt_le_test.cpp ;
 run lightweight_test_gt_ge_test.cpp ;
 run lightweight_test_eq_nullptr.cpp ;
 run lightweight_test_test3.cpp ;
 run lightweight_test_test4.cpp ;
+
+run-fail lightweight_test_all_eq_test.cpp ;
+run-fail lightweight_test_all_with_fail.cpp ;
 
 run-fail lightweight_test_fail.cpp ;
 run-fail lightweight_test_fail2.cpp ;
