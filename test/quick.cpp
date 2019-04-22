@@ -24,7 +24,6 @@
 #include <boost/core/pointer_traits.hpp>
 #include <boost/ref.hpp>
 #include <boost/core/scoped_enum.hpp>
-#include <boost/detail/sp_typeinfo.hpp>
 #include <boost/core/typeinfo.hpp>
 #include <boost/core/underlying_type.hpp>
 #include <boost/visit_each.hpp>
