@@ -61,7 +61,7 @@ struct default_allocator {
 
     BOOST_CONSTEXPR std::size_t max_size() const BOOST_NOEXCEPT {
 #if defined(PTRDIFF_MAX) && defined(SIZE_MAX) && (PTRDIFF_MAX < SIZE_MAX)
-        return PTRDIFF_MAX / sizeof(T);
+        return PTRDIFF_MAX;
 #else
         return ~static_cast<std::size_t>(0) / sizeof(T);
 #endif
