@@ -109,7 +109,7 @@ namespace boost {
 [[Remark]
 [If `element_type` is a void type, the type of `v` is unspecified; otherwise,
   it is `element_type&`.]]
-[[Returns] [`addressof(v)`.]]]]]]
+[[Returns][`addressof(v)`.]]]]]]
 
 [endsect]
 
@@ -131,9 +131,11 @@ namespace boost {
 
 [variablelist
 [[`template<class T> constexpr T* to_address(T* v) noexcept;`]
-[[variablelist [[Returns] [`v`.]]]]]
+[[variablelist
+[[Returns][`v`.]]]]]
 [[`template<class T> auto to_address(const T& v) noexcept;`]
-[[variablelist [[Returns] [`pointer_traits<T>::to_address(v)` if that
+[[variablelist
+[[Returns][`pointer_traits<T>::to_address(v)` if that
   expression is well-formed, otherwise `to_address(v.operator->())`.]]]]]]
 
 [endsect]

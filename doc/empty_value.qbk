@@ -111,7 +111,8 @@ public:
 
 [section Member types]
 
-[variablelist [[`type`][The template parameter `T`]]]
+[variablelist
+[[`type`][The template parameter `T`]]]
 
 [endsect]
 
