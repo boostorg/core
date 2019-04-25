@@ -10,11 +10,14 @@ Distributed under the Boost Software License, Version 1.0.
 
 class type {
 public:
-    explicit type(int) { }
+    explicit type(double value)
+        : value_(value) { }
 
 private:
     type(const type&);
     type& operator=(const type&);
+
+    double value_;
 };
 
 void test_value_type()
@@ -157,7 +160,7 @@ void test_allocate()
     a.deallocate(p, 1);
     p = a.allocate(0);
     a.deallocate(p, 0);
-    BOOST_TEST_THROWS(a.allocate(a.max_size()), std::bad_alloc);
+    BOOST_TEST_THROWS(a.allocate(a.max_size() + 1), std::bad_alloc);
 }
 
 void test_allocate_deallocate()
