@@ -78,9 +78,6 @@ struct default_allocator {
         if (n > max_size()) {
             boost::throw_exception(std::bad_alloc());
         }
-        if (!n) {
-            return 0;
-        }
         void* p = ::operator new(sizeof(T) * n, std::nothrow);
         if (!p) {
             boost::throw_exception(std::bad_alloc());
