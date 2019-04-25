@@ -135,11 +135,20 @@ void test_construct_other()
     (void)a5;
 }
 
+#if defined(PTRDIFF_MAX) && defined(SIZE_MAX)
+template<class T>
+std::size_t max_size()
+{
+    return PTRDIFF_MAX < SIZE_MAX / sizeof(T)
+        ? PTRDIFF_MAX : SIZE_MAX / sizeof(T);
+}
+#else
 template<class T>
 std::size_t max_size()
 {
     return ~static_cast<std::size_t>(0) / sizeof(T);
 }
+#endif
 
 void test_max_size()
 {
