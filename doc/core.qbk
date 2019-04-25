@@ -40,6 +40,7 @@ criteria for inclusion is that the utility component be:
 
 [include addressof.qbk]
 [include checked_delete.qbk]
+[include default_allocator.qbk]
 [include demangle.qbk]
 [include empty_value.qbk]
 [include enable_if.qbk]
