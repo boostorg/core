@@ -7,6 +7,8 @@ Distributed under the Boost Software License, Version 1.0.
 */
 #include <boost/core/default_allocator.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
+#include <vector>
+#include <list>
 
 class type {
 public:
@@ -42,6 +44,42 @@ void test_pointer()
         boost::default_allocator<int[5]>::pointer);
     BOOST_TEST_TRAIT_SAME(void*,
         boost::default_allocator<void>::pointer);
+}
+
+void test_const_pointer()
+{
+    BOOST_TEST_TRAIT_SAME(const int*,
+        boost::default_allocator<int>::const_pointer);
+    BOOST_TEST_TRAIT_SAME(const type*,
+        boost::default_allocator<type>::const_pointer);
+    BOOST_TEST_TRAIT_SAME(const int(*)[5],
+        boost::default_allocator<int[5]>::const_pointer);
+    BOOST_TEST_TRAIT_SAME(const void*,
+        boost::default_allocator<void>::const_pointer);
+}
+
+void test_reference()
+{
+    BOOST_TEST_TRAIT_SAME(int&,
+        boost::default_allocator<int>::reference);
+    BOOST_TEST_TRAIT_SAME(type&,
+        boost::default_allocator<type>::reference);
+    BOOST_TEST_TRAIT_SAME(int(&)[5],
+        boost::default_allocator<int[5]>::reference);
+    BOOST_TEST_TRAIT_SAME(void,
+        boost::default_allocator<void>::reference);
+}
+
+void test_const_reference()
+{
+    BOOST_TEST_TRAIT_SAME(const int&,
+        boost::default_allocator<int>::const_reference);
+    BOOST_TEST_TRAIT_SAME(const type&,
+        boost::default_allocator<type>::const_reference);
+    BOOST_TEST_TRAIT_SAME(const int(&)[5],
+        boost::default_allocator<int[5]>::const_reference);
+    BOOST_TEST_TRAIT_SAME(const void,
+        boost::default_allocator<void>::const_reference);
 }
 
 void test_size_type()
@@ -203,10 +241,25 @@ void test_not_equals()
         boost::default_allocator<int>()));
 }
 
+void test_container()
+{
+    std::vector<int, boost::default_allocator<int> > v;
+    v.push_back(1);
+    BOOST_TEST(v.size() == 1);
+    BOOST_TEST(v.front() == 1);
+    std::list<int, boost::default_allocator<int> > l;
+    l.push_back(1);
+    BOOST_TEST(l.size() == 1);
+    BOOST_TEST(l.front() == 1);
+}
+
 int main()
 {
     test_value_type();
     test_pointer();
+    test_const_pointer();
+    test_reference();
+    test_const_reference();
     test_size_type();
     test_difference_type();
     test_propagate_on_container_move_assignment();
@@ -219,5 +272,6 @@ int main()
     test_allocate_deallocate();
     test_equals();
     test_not_equals();
+    test_container();
     return boost::report_errors();
 }

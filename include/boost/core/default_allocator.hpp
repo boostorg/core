@@ -12,6 +12,12 @@ Distributed under the Boost Software License, Version 1.0.
 #include <new>
 #include <climits>
 
+#if defined(BOOST_NO_CXX11_ALLOCATOR)
+#define BOOST_CORE_NO_CXX11_ALLOCATOR
+#elif defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 60000
+#define BOOST_CORE_NO_CXX11_ALLOCATOR
+#endif
+
 namespace boost {
 
 #if defined(BOOST_NO_EXCEPTIONS)
@@ -36,9 +42,27 @@ struct true_type {
 };
 
 template<class T>
+struct add_reference {
+    typedef T& type;
+};
+
+template<>
+struct add_reference<void> {
+    typedef void type;
+};
+
+template<>
+struct add_reference<const void> {
+    typedef const void type;
+};
+
+template<class T>
 struct default_allocator {
     typedef T value_type;
     typedef T* pointer;
+    typedef const T* const_pointer;
+    typedef typename add_reference<T>::type reference;
+    typedef typename add_reference<const T>::type const_reference;
     typedef std::size_t size_type;
     typedef std::ptrdiff_t difference_type;
     typedef true_type propagate_on_container_move_assignment;
@@ -95,6 +119,18 @@ struct default_allocator {
 
     void deallocate(T* p, std::size_t) {
         ::operator delete(p, std::nothrow);
+    }
+#endif
+
+#if defined(BOOST_CORE_NO_CXX11_ALLOCATOR)
+    template<class U, class V>
+    void construct(U* p, const V& v) {
+        ::new(p) U(v);
+    }
+
+    template<class U>
+    void destroy(U* p) {
+        p->~U();
     }
 #endif
 };
