@@ -12,9 +12,7 @@ Distributed under the Boost Software License, Version 1.0.
 #include <new>
 #include <climits>
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-#define BOOST_CORE_NO_CXX11_ALLOCATOR
-#elif defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 60000
+#if defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 60000
 #define BOOST_CORE_NO_CXX11_ALLOCATOR
 #endif
 
@@ -122,7 +120,7 @@ struct default_allocator {
     }
 #endif
 
-#if defined(BOOST_CORE_NO_CXX11_ALLOCATOR)
+#if defined(BOOST_NO_CXX11_ALLOCATOR) || defined(BOOST_CORE_NO_CXX11_ALLOCATOR)
     template<class U, class V>
     void construct(U* p, const V& v) {
         ::new(p) U(v);

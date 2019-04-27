@@ -27,6 +27,19 @@ detects the absence of these members to provide more optimal construction.
 
 [endsect]
 
+[section Examples]
+
+The following snippet shows the use of this allocator as the default allocator
+for a container.
+
+```
+template<class Key, class Compare = std::less<Key>,
+    class Allocator = boost::default_allocator<Key> >
+class FlatSet;
+```
+
+[endsect]
+
 [section Reference]
 
 ```
@@ -64,7 +77,7 @@ constexpr bool operator==(const default_allocator<T>&,
     const default_allocator<U>&) noexcept;
 
 template<class T, class U>
-constexpr operator!=(const default_allocator<T>&,
+constexpr bool operator!=(const default_allocator<T>&,
     const default_allocator<U>&) noexcept;
 
 } /* boost */
@@ -73,7 +86,6 @@ constexpr operator!=(const default_allocator<T>&,
 [section Members]
 
 [variablelist
-
 [[`constexpr std::size_t max_size() const noexcept;`]
 [[variablelist
 [[Returns][The largest value `N` for which the call `allocate(N)` might
