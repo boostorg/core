@@ -137,6 +137,7 @@ run-fail quick_exit_fail.cpp ;
 compile use_default_test.cpp ;
 
 run default_allocator_test.cpp ;
+run noinit_adaptor_test.cpp ;
 
 lib lib_typeid : lib_typeid.cpp : <link>shared:<define>LIB_TYPEID_DYN_LINK=1 ;
 
