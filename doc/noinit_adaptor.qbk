@@ -34,8 +34,7 @@ initialization of elements of a trivial type, which are later assigned values.
 
 int main()
 {
-    std::vector<int,
-        boost::noinit_adaptor<std::allocator<int> > > v(5);
+    std::vector<int, boost::noinit_adaptor<std::allocator<int> > > v(5);
     std::iota(v.begin(), v.end(), 1);
 }
 ```
@@ -133,6 +132,15 @@ operator!=(const noinit_adaptor<T>& lhs,
 const noinit_adaptor<U>& rhs) noexcept;`]
 [[variablelist
 [[Returns][`!(lhs == rhs)`.]]]]]]
+
+[endsect]
+
+[section Free functions]
+
+[variablelist
+[[`template<class A> noinit_adaptor<A> noinit_adapt(const A& a) noexcept;`]
+[[variablelist
+[[Returns][`noinit_adaptor<A>(a)`.]]]]]]
 
 [endsect]
 

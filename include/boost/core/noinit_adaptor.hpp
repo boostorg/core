@@ -91,6 +91,13 @@ operator!=(const noinit_adaptor<T>& lhs,
     return !(lhs == rhs);
 }
 
+template<class A>
+inline noinit_adaptor<A>
+noinit_adapt(const A& a) BOOST_NOEXCEPT
+{
+    return noinit_adaptor<A>(a);
+}
+
 } /* boost */
 
 #endif

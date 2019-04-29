@@ -19,36 +19,36 @@ public:
         typedef creator<U> other;
     };
 
-    creator(int* count)
-        : count_(count) { }
+    creator(int state)
+        : state_(state) { }
 
     template<class U>
     creator(const creator<U>& other)
-        : count_(other.count()) { }
+        : state_(other.state()) { }
 
     template<class U, class V>
     void construct(U*, const V&) {
-        ++(*count_);
+        BOOST_ERROR("construct");
     }
 
     template<class U>
     void destroy(U*) {
-        --(*count_);
+        BOOST_ERROR("destroy");
     }
 
-    int* count() const {
-        return count_;
+    int state() const {
+        return state_;
     }
 
 private:
-    int* count_;
+    int state_;
 };
 
 template<class T, class U>
 inline bool
 operator==(const creator<T>& lhs, const creator<U>& rhs)
 {
-    return lhs.count() == rhs.count();
+    return lhs.state() == rhs.state();
 }
 
 template<class T, class U>
@@ -73,35 +73,28 @@ private:
     int value_;
 };
 
+inline bool
+operator==(const type& lhs, const type& rhs)
+{
+    return lhs.value() == rhs.value();
+}
+
+template<class A>
+void test(const A& allocator)
+{
+    std::vector<int, A> v(allocator);
+    v.push_back(1);
+    BOOST_TEST(v.front() == 1);
+    v.clear();
+    v.resize(5);
+    v.front() = 1;
+}
+
 int main()
 {
-    {
-        int c = 0;
-        std::vector<int, boost::noinit_adaptor<creator<int> > > v(&c);
-        BOOST_TEST(c == 0);
-        v.push_back(1);
-        BOOST_TEST(v.front() == 1);
-        v.push_back(2);
-        BOOST_TEST(c == 0);
-        v.clear();
-        BOOST_TEST(c == 0);
-        v.resize(5);
-        BOOST_TEST(c == 0);
-        v.front() = 1;
-    }
-    {
-        int c = 0;
-        std::vector<type, boost::noinit_adaptor<creator<type> > > v(&c);
-        BOOST_TEST(c == 0);
-        v.push_back(1);
-        BOOST_TEST(v.front().value() == 1);
-        v.push_back(2);
-        BOOST_TEST(c == 0);
-        v.clear();
-        BOOST_TEST(c == 0);
-        v.resize(5);
-        BOOST_TEST(c == 0);
-        v.front() = 1;
-    }
+    test(boost::noinit_adaptor<creator<int> >(1));
+    test(boost::noinit_adaptor<creator<type> >(2));
+    test(boost::noinit_adapt(creator<int>(3)));
+    test(boost::noinit_adapt(creator<type>(4)));
     return boost::report_errors();
 }
