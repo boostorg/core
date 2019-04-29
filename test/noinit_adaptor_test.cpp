@@ -82,7 +82,7 @@ operator==(const type& lhs, const type& rhs)
 template<class A>
 void test(const A& allocator)
 {
-    std::vector<int, A> v(allocator);
+    std::vector<typename A::value_type, A> v(allocator);
     v.push_back(1);
     BOOST_TEST(v.front() == 1);
     v.clear();
