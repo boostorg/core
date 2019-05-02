@@ -81,6 +81,9 @@ template<class T, class U>
 bool operator!=(const noinit_adaptor<T>& lhs,
     const noinit_adaptor<U>& rhs) noexcept;
 
+template<class A>
+noinit_adaptor<A> noinit_adapt(const A& a) noexcept;
+
 } /* boost */
 ```
 

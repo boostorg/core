@@ -9,9 +9,13 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_NOINIT_ADAPTOR_HPP
 
 #include <boost/config.hpp>
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
 #include <memory>
+#endif
 #include <new>
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #include <utility>
+#endif
 
 namespace boost {
 

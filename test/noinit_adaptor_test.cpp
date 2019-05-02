@@ -6,8 +6,8 @@ Distributed under the Boost Software License, Version 1.0.
 (http://www.boost.org/LICENSE_1_0.txt)
 */
 #include <boost/core/default_allocator.hpp>
-#include <boost/core/noinit_adaptor.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/core/noinit_adaptor.hpp>
 #include <vector>
 
 template<class T>
