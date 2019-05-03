@@ -75,41 +75,41 @@ void alloc_construct_n(A& a, T* p, std::size_t n, const T* l, std::size_t m);
 [variablelist
 [[`template<class A, class T> void alloc_destroy(A& a, T* p);`]
 [[variablelist
-[[Requires][`A` is an _Allocator_]]
+[[Requires][`A` is an /Allocator/]]
 [[Effects][`std::allocator_traits<A>::destroy(a, p)`.]]]]]
 [[`template<class A, class T> void alloc_destroy_n(A& a, T* p,
 std::size_t n);`]
 [[variablelist
-[[Requires][`A` is an _Allocator_]]
+[[Requires][`A` is an /Allocator/]]
 [[Effects]
-[Destroys each element in reverse order by calling
+[Destroys each /i/th element in reverse order by calling
 `std::allocator_traits<A>::destroy(a, &p[i])`.]]]]]
 [[`template<class A, class T, class U> void alloc_construct(A& a, T* p,
 U&&... u);`]
 [[variablelist
-[[Requires][`A` is an _Allocator_]]
+[[Requires][`A` is an /Allocator/]]
 [[Effects]
 [`std::allocator_traits<A>::construct(a, p, std::forward<U>(u)...)`.]]]]]
 [[`template<class A, class T> void alloc_construct_n(A& a, T* p,
 std::size_t n);`]
 [[variablelist
-[[Requires][`A` is an _Allocator_]]
+[[Requires][`A` is an /Allocator/]]
 [[Effects]
-[Constructs each element in order by calling
+[Constructs each /i/th element in order by calling
 `std::allocator_traits<A>::construct(a, &p[i])`.]]
 [[Remarks]
-[If an exception is thrown, destroys each element in reverse order by
-calling `std::allocator_traits<A>::destroy(a, &p[i])`.]]]]]
+[If an exception is thrown, destroys each already constructed /j/th element in
+reverse order by calling `std::allocator_traits<A>::destroy(a, &p[j])`.]]]]]
 [[`template<class A, class T> void alloc_construct_n(A& a, T* p, std::size_t n,
 const T* l, std::size_t m);`]
 [[variablelist
-[[Requires][`A` is an _Allocator_]]
+[[Requires][`A` is an /Allocator/]]
 [[Effects]
-[Constructs each element in order by calling
+[Constructs each /i/th element in order by calling
 `std::allocator_traits<A>::construct(a, &p[i], l[i % m])`.]]
 [[Remarks]
-[If an exception is thrown, destroys each element in reverse order by
-calling `std::allocator_traits<A>::destroy(a, &p[i])`.]]]]]]
+[If an exception is thrown, destroys each already constructed /j/th element in
+reverse order by calling `std::allocator_traits<A>::destroy(a, &p[j])`.]]]]]]
 
 [endsect]
 
