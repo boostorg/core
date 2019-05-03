@@ -23,7 +23,7 @@ and whose `destroy(ptr)` invokes `value_type` destructor directly.
 
 [endsect]
 
-[section Example]
+[section Examples]
 
 The following example shows use of this allocator adaptor to achieve default
 initialization of elements of a trivial type, which are later assigned values.
@@ -31,11 +31,31 @@ initialization of elements of a trivial type, which are later assigned values.
 ```
 #include <boost/core/noinit_adaptor.hpp>
 #include <numeric>
+#include <vector>
 
 int main()
 {
     std::vector<int, boost::noinit_adaptor<std::allocator<int> > > v(5);
     std::iota(v.begin(), v.end(), 1);
+}
+```
+
+The `allocate_shared_noinit` function templates are now implemented simply
+using `allocate_shared` with `noinit_adaptor`.
+
+```
+template<class T, class A>
+enable_if_t<is_unbounded_array_v<T>, shared_ptr<T> >
+allocate_shared_noinit(const A& a, size_t n)
+{
+    return allocate_shared<T>(boost::noinit_adapt(a), n);
+}
+
+template<class T, class A>
+enable_if_t<!is_unbounded_array_v<T>, shared_ptr<T> >
+allocate_shared_noinit(const A& a)
+{
+    return allocate_shared<T>(boost::noinit_adapt(a));
 }
 ```
 
