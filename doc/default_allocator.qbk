@@ -38,6 +38,19 @@ template<class Key, class Compare = std::less<Key>,
 class FlatSet;
 ```
 
+Facilities like `make_shared` can be implemented using `allocate_shared` with
+`default_allocator`.
+
+```
+template<class T, class... Args>
+enable_if_t<!is_array_v<T>, shared_ptr<T> >
+make_shared(Args&&... args)
+{
+    return allocate_shared<T>(boost::default_allocator<remove_cv_t<T> >(),
+        std::forward<Args>(args)...);
+}
+```
+
 [endsect]
 
 [section Reference]
