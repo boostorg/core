@@ -169,12 +169,4 @@ const noinit_adaptor<U>& rhs) noexcept;`]
 
 [endsect]
 
-[section Compatibility]
-
-When `BOOST_NO_CXX11_ALLOCATOR` is defined, and the C++11 allocator model is
-not supported, these functions invoke constructors and destructors directly
-without going through the supplied allocator.
-
-[endsect]
-
 [endsect]
