@@ -6,7 +6,7 @@ Distributed under the Boost Software License, Version 1.0.
 (http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[section:alloc_construct alloc_construct]
+[section:alloc_construct alloc_construct, alloc_destroy]
 
 [simplesect Authors]
 
@@ -38,7 +38,7 @@ auto create(A& a, std::size_t n)
     try {
         boost::alloc_construct_n(a, boost::to_address(p), n);
     } catch (...) {
-        a.deallocate(n);
+        a.deallocate(p, n);
         throw;
     }
     return p;
