@@ -105,6 +105,21 @@ void test_construct_n_list()
     a.deallocate(p, 3);
 }
 
+void test_construct_n_iterator()
+{
+    boost::default_allocator<type> a;
+    type* p = a.allocate(3);
+    type l[] = { type(1), type(2), type(3) };
+    boost::alloc_construct_n(a, p, 3, &l[0]);
+    BOOST_TEST_EQ(type::count, 6);
+    BOOST_TEST_EQ(p[0].value(), 1);
+    BOOST_TEST_EQ(p[1].value(), 2);
+    BOOST_TEST_EQ(p[2].value(), 3);
+    boost::alloc_destroy_n(a, p, 3);
+    BOOST_TEST_EQ(type::count, 3);
+    a.deallocate(p, 3);
+}
+
 int main()
 {
     test_construct();
@@ -115,5 +130,6 @@ int main()
 #endif
     test_construct_n();
     test_construct_n_list();
+    test_construct_n_iterator();
     return boost::report_errors();
 }

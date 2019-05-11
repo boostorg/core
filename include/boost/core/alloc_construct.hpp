@@ -130,6 +130,17 @@ alloc_construct_n(A& a, T* p, std::size_t n, const T* l, std::size_t m)
     }
     hold.size() = 0;
 }
+
+template<class A, class T, class I>
+inline void
+alloc_construct_n(A& a, T* p, std::size_t n, I b)
+{
+    detail::alloc_destroyer<A, T> hold(a, p);
+    for (std::size_t& i = hold.size(); i < n; void(++i), void(++b)) {
+        std::allocator_traits<A>::construct(a, p + i, *b);
+    }
+    hold.size() = 0;
+}
 #else
 template<class A, class T>
 inline void
@@ -199,6 +210,17 @@ alloc_construct_n(A& a, T* p, std::size_t n, const T* l, std::size_t m)
     detail::alloc_destroyer<A, T> hold(a, p);
     for (std::size_t& i = hold.size(); i < n; ++i) {
         ::new(static_cast<void*>(p + i)) T(l[i % m]);
+    }
+    hold.size() = 0;
+}
+
+template<class A, class T, class I>
+inline void
+alloc_construct_n(A& a, T* p, std::size_t n, I b)
+{
+    detail::alloc_destroyer<A, T> hold(a, p);
+    for (std::size_t& i = hold.size(); i < n; void(++i), void(++b)) {
+        ::new(static_cast<void*>(p + i)) T(*b);
     }
     hold.size() = 0;
 }
