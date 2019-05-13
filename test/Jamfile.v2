@@ -127,6 +127,9 @@ run to_address_test.cpp ;
 run exchange_test.cpp ;
 run exchange_move_test.cpp ;
 
+run first_scalar_test.cpp ;
+compile first_scalar_constexpr_test.cpp ;
+
 run empty_value_test.cpp ;
 run empty_value_size_test.cpp ;
 run empty_value_final_test.cpp ;
