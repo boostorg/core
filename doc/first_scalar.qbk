@@ -16,10 +16,11 @@ Distributed under the Boost Software License, Version 1.0.
 
 [section Overview]
 
-The header <boost/core/first_scalar.hpp> provides the function template
+The header <boost/core/first_scalar.hpp> provides the function templates
 `boost::first_scalar` that can be used to obtain a pointer to the first scalar
-element of an array. Given a pointer of type `T*` it returns a pointer of type
-`remove_all_extents_t<T>*`.
+element of an array. Given a pointer of type `T*` they return a pointer of
+type `remove_all_extents_t<T>*`. The functions are `constexpr` and can be used
+in constant expressions.
 
 [endsect]
 
@@ -77,6 +78,13 @@ noexcept;`]
 [[Returns][`first_scalar(&(*p)[0])`.]]]]]]
 
 [endsect]
+
+[endsect]
+
+[section History]
+
+Glen Fernandes implemented `first_scalar`. Peter Dimov suggested a change for
+GCC to support an additional `constexpr` use.
 
 [endsect]
 

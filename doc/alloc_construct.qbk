@@ -116,7 +116,9 @@ reverse order by calling `std::allocator_traits<A>::destroy(a, &p[j])`.]]]]]
 [[`template<class A, class T, class I> void alloc_construct_n(A& a, T* p,
 std::size_t n, I begin);`]
 [[variablelist
-[[Requires][`A` is an /Allocator/; `I` is an /InputIterator/]]
+[[Requires]
+[[itemized_list
+[`A` is an /Allocator/][`I` is an /InputIterator/]]]]
 [[Effects]
 [Constructs each `i`-th element in order by calling
 `std::allocator_traits<A>::construct(a, &p[i], *begin++])`.]]
@@ -140,7 +142,7 @@ without going through the supplied allocator.
 
 Glen Fernandes originally implemented this functionality in Boost.Smart_Ptr and
 later moved these functions to Boost.Core for use in other Boost libraries,
-such as Boost.Multi_Array.
+such as Boost.Multi_Array and Boost.Histogram.
 
 [endsect]
 

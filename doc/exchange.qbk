@@ -18,7 +18,8 @@ Distributed under the Boost Software License, Version 1.0.
 
 The header <boost/core/exchange.hpp> provides the function template
 `boost::exchange` which is an implementation of the `std::exchange`
-function introduced in C++14.
+function introduced in C++14. `boost::exchange(o, v)` replaces the
+value of `o` with `v` and returns the old value of `o`.
 
 [endsect]
 

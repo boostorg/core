@@ -47,15 +47,14 @@ struct creator {
         ::operator delete(ptr);
     }
 
-    template<class U, class V>
-    void construct(U* ptr, const V& value) {
-        ::new(static_cast<void*>(ptr)) U(value + 1);
+    template<class V>
+    void construct(type* ptr, const V& value) {
+        ::new(static_cast<void*>(ptr)) type(value + 1);
         ++type::count;
     }
 
-    template<class U>
-    void destroy(U* ptr) {
-        ptr->~U();
+    void destroy(type* ptr) {
+        ptr->~type();
         --type::count;
     }
 };
