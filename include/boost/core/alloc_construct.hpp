@@ -107,6 +107,13 @@ alloc_construct(A& a, T* p, const U& u)
 {
     std::allocator_traits<A>::construct(a, p, u);
 }
+
+template<class A, class T, class U>
+inline void
+alloc_construct(A& a, T* p, U& u)
+{
+    std::allocator_traits<A>::construct(a, p, u);
+}
 #endif
 
 template<class A, class T>
@@ -176,6 +183,13 @@ alloc_construct(A& a, T* p, U&& u)
 template<class A, class T, class U>
 inline void
 alloc_construct(A&, T* p, const U& u)
+{
+    ::new(static_cast<void*>(p)) T(u);
+}
+
+template<class A, class T, class U>
+inline void
+alloc_construct(A&, T* p, U& u)
 {
     ::new(static_cast<void*>(p)) T(u);
 }
