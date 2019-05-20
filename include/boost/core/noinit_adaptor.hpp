@@ -71,6 +71,11 @@ struct noinit_adaptor
     void construct(U* p, const V& v) {
         ::new((void*)p) U(v);
     }
+
+    template<class U, class V>
+    void construct(U* p, V& v) {
+        ::new((void*)p) U(v);
+    }
 #endif
 
     template<class U>
