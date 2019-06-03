@@ -10,7 +10,7 @@
 #include <boost/config.hpp>
 
 //
-//  boost/checked_delete.hpp
+//  boost/core/checked_delete.hpp
 //
 //  Copyright (c) 2002, 2003 Peter Dimov
 //  Copyright (c) 2003 Daniel Frey

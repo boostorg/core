@@ -12,8 +12,8 @@
 // boost::swap two template argumetns, thereby making it less specialized
 // than std::swap.
 
-#include <boost/utility/swap.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/core/swap.hpp>
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
 

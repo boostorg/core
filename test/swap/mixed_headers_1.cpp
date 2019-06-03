@@ -7,5 +7,5 @@
 // Tests that the swap headers work when both are included
 
 #include <boost/swap.hpp>
-#include <boost/utility/swap.hpp>
+#include <boost/core/swap.hpp>
 

@@ -10,8 +10,8 @@
 
 #define BOOST_ALLOW_DEPRECATED_HEADERS
 
+#include <boost/core/lightweight_test.hpp>
 #include <boost/detail/sp_typeinfo.hpp>
-#include <boost/detail/lightweight_test.hpp>
 #include <iostream>
 
 int main()

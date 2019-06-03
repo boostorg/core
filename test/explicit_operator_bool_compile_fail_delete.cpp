@@ -15,7 +15,7 @@
 
 #define BOOST_TEST_MODULE util_explicit_operator_bool_delete
 
-#include <boost/utility/explicit_operator_bool.hpp>
+#include <boost/core/explicit_operator_bool.hpp>
 
 namespace {
 

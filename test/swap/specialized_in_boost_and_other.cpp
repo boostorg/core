@@ -14,8 +14,8 @@
 // Borland 5.9.3. Users of those compilers might consider adding a swap overload
 // to the boost namespace.
 
-#include <boost/utility/swap.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/core/swap.hpp>
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
 

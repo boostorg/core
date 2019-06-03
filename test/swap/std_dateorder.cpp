@@ -8,8 +8,8 @@
 // std::time_base::dateorder is an enumerated type. It does not have an
 // std::swap overload or template specialization.
 
-#include <boost/utility/swap.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/core/swap.hpp>
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
 

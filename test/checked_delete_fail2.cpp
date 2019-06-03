@@ -9,7 +9,7 @@
 //  Revision History
 //  21 May 01  Initial version (Beman Dawes)
 
-#include <boost/checked_delete.hpp>  // for checked_delete
+#include <boost/core/checked_delete.hpp>  // for checked_delete
 
 //  This program demonstrates compiler errors when trying to delete an
 //  incomplete type.

@@ -21,7 +21,7 @@
 
 [section Overview]
 
-The header `<boost/checked_delete.hpp>` defines two function
+The header `<boost/core/checked_delete.hpp>` defines two function
 templates, `checked_delete` and `checked_array_delete`, and two
 class templates, `checked_deleter` and `checked_array_deleter`.
 

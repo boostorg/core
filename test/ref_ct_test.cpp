@@ -3,10 +3,10 @@
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-// compile-time test for "boost/ref.hpp" header content
+// compile-time test for "boost/core/ref.hpp" header content
 // see 'ref_test.cpp' for run-time part
 
-#include <boost/ref.hpp>
+#include <boost/core/ref.hpp>
 #include <boost/core/is_same.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/detail/workaround.hpp>

@@ -172,7 +172,7 @@ foo(T t) { return t; }
 [section:using_enable_if Using enable_if]
 
 The `enable_if` templates are defined in
-`boost/utility/enable_if.hpp`, which is included by
+`boost/core/enable_if.hpp`, which is included by
 `boost/utility.hpp`.
 
 With respect to function templates, `enable_if` can be used in
@@ -233,7 +233,7 @@ As an example:
 ``
 #include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/type_traits/is_pointer.hpp>
-#include <boost/utility/enable_if.hpp>
+#include <boost/core/enable_if.hpp>
 
 class test
 {
