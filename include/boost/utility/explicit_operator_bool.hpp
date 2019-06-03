@@ -9,8 +9,8 @@
 #ifndef BOOST_UTILITY_EXPLICIT_OPERATOR_BOOL_HPP
 #define BOOST_UTILITY_EXPLICIT_OPERATOR_BOOL_HPP
 
-// The header file at this path is deprecated;
-// use boost/core/explicit_operator_bool.hpp instead.
+#include <boost/config/header_deprecated.hpp>
+BOOST_HEADER_DEPRECATED( "<boost/core/explicit_operator_bool.hpp>" )
 
 #include <boost/core/explicit_operator_bool.hpp>
 
