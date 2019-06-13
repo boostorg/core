@@ -56,10 +56,13 @@
 // On Linux with clang and libc++ and on OS X, there is a version of cxxabi.h from libc++abi that doesn't declare __cxa_get_globals, but provides __cxa_uncaught_exceptions.
 // The function only appeared in version _LIBCPPABI_VERSION >= 1002 of the library. Unfortunately, there are linking errors about undefined reference to __cxa_uncaught_exceptions
 // on Ubuntu Trusty and OS X, so we avoid using it and forward-declare __cxa_get_globals instead.
+// On QNX SDP 7.0 (QCC 5.4.0), there are multiple cxxabi.h, one from glibcxx from gcc and another from libc++abi from LLVM. The latter is included first by qcc. It is missing
+// the declaration of __cxa_get_globals but it is also patched by QNX developers to not define _LIBCPPABI_VERSION. https://github.com/boostorg/core/issues/59
 #if !defined(__FreeBSD__) && \
     ( \
         (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 407) || \
         defined(__OpenBSD__) || \
+        (defined(__QNXNTO__) && !defined(__GLIBCXX__) && !defined(__GLIBCPP__)) || \
         defined(_LIBCPPABI_VERSION) \
     )
 namespace __cxxabiv1 {
