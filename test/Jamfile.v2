@@ -75,6 +75,7 @@ run lightweight_test_gt_ge_test.cpp ;
 run lightweight_test_eq_nullptr.cpp ;
 run lightweight_test_test3.cpp ;
 run lightweight_test_test4.cpp ;
+run lightweight_test_test5.cpp ;
 
 run-fail lightweight_test_all_eq_test.cpp ;
 run-fail lightweight_test_all_with_fail.cpp ;
@@ -92,7 +93,6 @@ run-fail lightweight_test_fail8.cpp : : : <rtti>off : lightweight_test_fail8_no_
 run-fail lightweight_test_fail9.cpp ;
 run-fail lightweight_test_fail10.cpp ;
 run-fail lightweight_test_fail11.cpp ;
-run-fail lightweight_test_fail12.cpp ;
 run-fail lightweight_test_lt_fail.cpp ;
 run-fail lightweight_test_le_fail.cpp ;
 run-fail lightweight_test_gt_fail.cpp ;
