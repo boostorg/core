@@ -101,5 +101,5 @@ int main()
     test_cases += fail_vector();
     test_cases += fail_tolerance_predicate();
 
-    return boost::report_errors() == test_cases;
+    return boost::report_errors().error_count() == test_cases ? 0 : 1;
 }

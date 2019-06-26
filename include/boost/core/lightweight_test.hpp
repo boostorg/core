@@ -373,7 +373,58 @@ void test_all_with_impl(FormattedOutputFunction& output,
 
 } // namespace detail
 
-inline int report_errors()
+//! Testing report
+class test_report
+{
+private:
+    int m_error_count;
+
+public:
+    explicit test_report(int error_count) BOOST_NOEXCEPT :
+        m_error_count(error_count)
+    {
+    }
+
+    //! Returns the number of test errors
+    int error_count() const BOOST_NOEXCEPT { return m_error_count; }
+
+    //! Operator for converting to result of main()
+    operator int () const BOOST_NOEXCEPT { return m_error_count > 0 ? 1 : 0; }
+
+    // Protection against comparing report_errors() with the number of errors. Earlier versions of report_errors() did not return
+    // the number of errors, so such comparisons used to give a wrong result and now cause a hard compile time error.
+    // Call report_errors().error_count() if you need to check the error count, but make sure you return the correct value from main().
+    BOOST_DELETED_FUNCTION(bool operator== (int))
+    BOOST_DELETED_FUNCTION(bool operator!= (int))
+    BOOST_DELETED_FUNCTION(bool operator< (int))
+    BOOST_DELETED_FUNCTION(bool operator> (int))
+    BOOST_DELETED_FUNCTION(bool operator>= (int))
+    BOOST_DELETED_FUNCTION(bool operator<= (int))
+};
+
+#if !defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
+#define BOOST_LIGHTWEIGHT_TEST_DELETED_FUNCTION_MARK = delete
+#else
+#define BOOST_LIGHTWEIGHT_TEST_DELETED_FUNCTION_MARK
+#endif
+
+bool operator== (int, test_report const&) BOOST_LIGHTWEIGHT_TEST_DELETED_FUNCTION_MARK;
+bool operator!= (int, test_report const&) BOOST_LIGHTWEIGHT_TEST_DELETED_FUNCTION_MARK;
+bool operator< (int, test_report const&) BOOST_LIGHTWEIGHT_TEST_DELETED_FUNCTION_MARK;
+bool operator> (int, test_report const&) BOOST_LIGHTWEIGHT_TEST_DELETED_FUNCTION_MARK;
+bool operator<= (int, test_report const&) BOOST_LIGHTWEIGHT_TEST_DELETED_FUNCTION_MARK;
+bool operator>= (int, test_report const&) BOOST_LIGHTWEIGHT_TEST_DELETED_FUNCTION_MARK;
+
+#undef BOOST_LIGHTWEIGHT_TEST_DELETED_FUNCTION_MARK
+
+//! Returns the number of test errors encountered
+inline int get_error_count() BOOST_NOEXCEPT
+{
+    return boost::detail::test_results().errors();
+}
+
+//! Prints the number of test errors and returns test report suitable for returning from main()
+inline test_report report_errors()
 {
     boost::detail::test_result& result = boost::detail::test_results();
     result.done();
@@ -383,14 +434,14 @@ inline int report_errors()
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
           << "No errors detected." << std::endl;
-        return 0;
     }
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
           << errors << " error" << (errors == 1? "": "s") << " detected." << std::endl;
-        return 1;
     }
+
+    return test_report(errors);
 }
 
 } // namespace boost

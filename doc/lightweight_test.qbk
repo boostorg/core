@@ -49,7 +49,9 @@ When using `lightweight_test.hpp`, *do not forget* to
 
 namespace boost
 {
-    int report_errors();
+    class test_report;
+    int get_error_count();
+    test_report report_errors();
 }
 ``
 
@@ -212,10 +214,47 @@ nothing and `expr` is not evaluated.
 [section report_errors]
 
 ``
-int boost::report_errors()
+boost::test_report boost::report_errors()
 ``
 
-Return the error count from `main`.
+Returns the test report. The report can be converted to an `int` to be returned from `main`.
+
+[endsect]
+
+[section test_report]
+
+``
+class test_report
+{
+public:
+    int error_count() const noexcept;
+    operator int() const noexcept;
+};
+``
+
+Contains information about test results.
+
+``
+int test_report::error_count() const noexcept;
+``
+
+The method returns the number of failed checks.
+
+``
+test_report::operator int() const noexcept;
+``
+
+Returns 0 if there are no failed checks and 1 otherwise. This operator is suitable for obtaining result code to return from `main`.
+
+[endsect]
+
+[section get_error_count]
+
+``
+int boost::get_error_count();
+``
+
+Returns the number of failed checks.
 
 [endsect]
 

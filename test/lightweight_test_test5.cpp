@@ -64,5 +64,5 @@ int main()
 
 #endif
 
-    return boost::report_errors() == expected;
+    return boost::report_errors().error_count() == expected ? 0 : 1;
 }
