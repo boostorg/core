@@ -379,6 +379,7 @@ inline int report_errors()
     result.done();
 
     int errors = result.errors();
+
     if( errors == 0 )
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
@@ -389,7 +390,9 @@ inline int report_errors()
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
           << errors << " error" << (errors == 1? "": "s") << " detected." << std::endl;
     }
-    return errors;
+
+    // `return report_errors();` from main only supports 8 bit exit codes
+    return errors < 256? errors: 255;
 }
 
 } // namespace boost
