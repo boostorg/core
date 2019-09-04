@@ -24,8 +24,8 @@ Serialization library.
 The following snippet shows use in a member serialize function:
 
 ```
-template<class Archive>
-void serialize(Archive& archive, unsigned)
+template<class A>
+void serialize(A& archive, unsigned)
 {
     archive & boost::make_nvp("x", x_) & boost::make_nvp("y", y_);
 }
@@ -48,14 +48,14 @@ class nvp {
 
     const T& const_value() const noexcept;
 
-    template<class Archive>
-    void save(Archive& archive, unsigned) const;
+    template<class A>
+    void save(A& archive, unsigned) const;
 
-    template<class Archive>
-    void load(Archive& archive, unsigned);
+    template<class A>
+    void load(A& archive, unsigned);
 
-    template<class Archive>
-    void serialize(Archive& archive, unsigned);
+    template<class A>
+    void serialize(A& archive, unsigned);
 };
 
 template<class T>
@@ -85,13 +85,13 @@ const nvp<T> make_nvp(const char* name, T& value) noexcept;
 [Returns the stored value pointer.]]
 [[`const T& const_value() const noexcept;`]
 [Returns the stored value pointer.]]
-[[`template<class Archive> void save(Archvie& archive, unsigned) const;`]
+[[`template<class A> void save(A& archive, unsigned) const;`]
 [Calls `archive.operator<<(const_value())`.]]
-[[`template<class Archive> void load(Archvie& archive, unsigned);`]
+[[`template<class A> void load(A& archive, unsigned);`]
 [Calls `archive.operator>>(value())`.]]
-[[`template<class Archive> void serialize(Archvie& archive,
+[[`template<class A> void serialize(A& archive,
 unsigned version);`]
-[Calls `save(archive, version)` if `Archive::is_saving` is a true type,
+[Calls `save(archive, version)` if `A::is_saving` is a true type,
 otherwise `load(archive, version)`.]]]
 
 [endsect]
