@@ -56,24 +56,6 @@ void test()
     BOOST_TEST_EQ(&p.value(), &v);
 }
 
-void test_save()
-{
-    int v = 1;
-    boost::nvp<int> p("name", v);
-    saver s(0);
-    p.save(s, unsigned());
-    BOOST_TEST_EQ(s.get(), 1);
-}
-
-void test_load()
-{
-    int v = 1;
-    boost::nvp<int> p("name", v);
-    loader l(5);
-    p.load(l, unsigned());
-    BOOST_TEST_EQ(p.value(), 5);
-}
-
 void test_serialize()
 {
     int v = 1;
@@ -117,8 +99,6 @@ void test_factory()
 int main()
 {
     test();
-    test_save();
-    test_load();
     test_serialize();
     test_deserialize();
     test_trait();

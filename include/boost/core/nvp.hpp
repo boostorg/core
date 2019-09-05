@@ -52,16 +52,6 @@ public:
     }
 
     template<class A>
-    void save(A& a, unsigned) const {
-        a.operator<<(*v_);
-    }
-
-    template<class A>
-    void load(A& a, unsigned) {
-        a.operator>>(*v_);
-    }
-
-    template<class A>
     void serialize(A& a, unsigned) {
         archive(a, detail::nvp_bool<A::is_saving::value>());
     }

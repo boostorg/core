@@ -40,6 +40,7 @@ namespace boost {
 
 template<class T>
 class nvp {
+public:
     nvp(const char* name, T& value) noexcept;
 
     const char* name() const noexcept;
@@ -49,13 +50,7 @@ class nvp {
     const T& const_value() const noexcept;
 
     template<class A>
-    void save(A& archive, unsigned) const;
-
-    template<class A>
-    void load(A& archive, unsigned);
-
-    template<class A>
-    void serialize(A& archive, unsigned);
+    void serialize(A& archive, unsigned version);
 };
 
 template<class T>
@@ -80,26 +75,22 @@ const nvp<T> make_nvp(const char* name, T& value) noexcept;
 
 [variablelist
 [[`const char* name() const noexcept;`]
-[Returns the stored name pointer.]]
+[Returns a pointer to the name.]]
 [[`T& value() const noexcept;`]
-[Returns the stored value pointer.]]
+[Returns a reference to the value.]]
 [[`const T& const_value() const noexcept;`]
-[Returns the stored value pointer.]]
-[[`template<class A> void save(A& archive, unsigned) const;`]
-[Calls `archive.operator<<(const_value())`.]]
-[[`template<class A> void load(A& archive, unsigned);`]
-[Calls `archive.operator>>(value())`.]]
+[Returns a reference to the value.]]
 [[`template<class A> void serialize(A& archive,
 unsigned version);`]
-[Calls `save(archive, version)` if `A::is_saving` is a true type,
-otherwise `load(archive, version)`.]]]
+[Calls `archive.operator<<(const_value())` if `A::is_saving` is a true type,
+otherwise `archive.operator>>(value())`.]]]
 
 [endsect]
 
 [section Traits]
 
 [variablelist
-[[`template<class T> class is_nvp;`]
+[[`template<class T> struct is_nvp;`]
 [Provides static constant `value` equal to true if `T` is an NVP type,
 otherwise false.]]]
 
@@ -118,7 +109,7 @@ noexcept;`]
 
 [section Acknowledgments]
 
-Robert Ramey originally implemented nvp in the Serialization library. Glen
+Robert Ramey originally implemented NVP in the Serialization library. Glen
 Fernandes implemented this new (but compatible) version in the Core library.
 
 [endsect]
