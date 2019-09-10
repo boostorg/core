@@ -76,14 +76,11 @@ void test_deserialize()
 
 void test_trait()
 {
-    BOOST_TEST_TRAIT_TRUE((boost::is_nvp<boost::nvp<int> >));
     BOOST_TEST_TRAIT_FALSE((boost::is_nvp<int>));
+    BOOST_TEST_TRAIT_TRUE((boost::is_nvp<boost::nvp<int> >));
     BOOST_TEST_TRAIT_TRUE((boost::is_nvp<const boost::nvp<int> >));
-    BOOST_TEST_TRAIT_FALSE((boost::is_nvp<const int>));
     BOOST_TEST_TRAIT_TRUE((boost::is_nvp<volatile boost::nvp<int> >));
-    BOOST_TEST_TRAIT_FALSE((boost::is_nvp<volatile int>));
     BOOST_TEST_TRAIT_TRUE((boost::is_nvp<const volatile boost::nvp<int> >));
-    BOOST_TEST_TRAIT_FALSE((boost::is_nvp<const volatile int>));
 }
 
 void test_factory()

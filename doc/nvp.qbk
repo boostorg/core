@@ -50,7 +50,7 @@ public:
     const T& const_value() const noexcept;
 
     template<class A>
-    void serialize(A& archive, unsigned version);
+    void serialize(A& archive, unsigned);
 };
 
 template<class T>
@@ -80,8 +80,7 @@ const nvp<T> make_nvp(const char* name, T& value) noexcept;
 [Returns a reference to the value.]]
 [[`const T& const_value() const noexcept;`]
 [Returns a reference to the value.]]
-[[`template<class A> void serialize(A& archive,
-unsigned version);`]
+[[`template<class A> void serialize(A& archive, unsigned);`]
 [Calls `archive.operator<<(const_value())` if `A::is_saving` is a true type,
 otherwise `archive.operator>>(value())`.]]]
 

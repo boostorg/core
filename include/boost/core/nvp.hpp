@@ -19,7 +19,7 @@ struct nvp_bool {
     typedef bool value_type;
     typedef nvp_bool type;
 
-    BOOST_STATIC_CONSTANT(bool, value = V);
+    BOOST_STATIC_CONSTEXPR bool value = V;
 
     BOOST_CONSTEXPR operator bool() const BOOST_NOEXCEPT {
         return V;
@@ -29,6 +29,9 @@ struct nvp_bool {
         return V;
     }
 };
+
+template<bool V>
+BOOST_CONSTEXPR_OR_CONST bool nvp_bool<V>::value;
 
 } /* detail */
 
