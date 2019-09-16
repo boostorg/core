@@ -54,6 +54,8 @@ template<class T>
 const nvp<T> make_nvp(const char* name, T& value) noexcept;
 
 } /* boost */
+
+#define BOOST_NVP(object) ``['see below]``
 ```
 
 [section Constructors]
@@ -83,6 +85,14 @@ const nvp<T> make_nvp(const char* name, T& value) noexcept;
 [[`template<class T> const nvp<T> make_nvp(const char* name, T& value)
 noexcept;`]
 [Returns `nvp<T>(name, value)`.]]]
+
+[endsect]
+
+[section Macros]
+
+[variablelist
+[[`#define BOOST_NVP(object) see below`]
+[Expands to `boost::make_nvp(BOOST_STRINGIZE(object), object)`.]]]
 
 [endsect]
 

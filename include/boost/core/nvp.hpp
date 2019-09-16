@@ -46,4 +46,6 @@ make_nvp(const char* n, T& v) BOOST_NOEXCEPT
 
 } /* boost */
 
+#define BOOST_NVP(v) boost::make_nvp(BOOST_STRINGIZE(v), v)
+
 #endif
