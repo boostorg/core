@@ -48,13 +48,7 @@ public:
     T& value() const noexcept;
 
     const T& const_value() const noexcept;
-
-    template<class A>
-    void serialize(A& archive, unsigned);
 };
-
-template<class T>
-struct is_nvp;
 
 template<class T>
 const nvp<T> make_nvp(const char* name, T& value) noexcept;
@@ -79,19 +73,7 @@ const nvp<T> make_nvp(const char* name, T& value) noexcept;
 [[`T& value() const noexcept;`]
 [Returns a reference to the value.]]
 [[`const T& const_value() const noexcept;`]
-[Returns a reference to the value.]]
-[[`template<class A> void serialize(A& archive, unsigned);`]
-[Calls `archive.operator<<(const_value())` if `A::is_saving` is a true type,
-otherwise `archive.operator>>(value())`.]]]
-
-[endsect]
-
-[section Traits]
-
-[variablelist
-[[`template<class T> struct is_nvp;`]
-[Provides static constant `value` equal to true if `T` is an NVP type,
-otherwise false.]]]
+[Returns a reference to the value.]]]
 
 [endsect]
 
