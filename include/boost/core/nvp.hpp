@@ -12,6 +12,7 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/config.hpp>
 
 namespace boost {
+namespace serialization {
 
 template<class T>
 class nvp {
@@ -36,6 +37,10 @@ private:
     const char* n_;
     T* v_;
 };
+
+} /* serialization */
+
+using serialization::nvp;
 
 template<class T>
 inline const nvp<T>
