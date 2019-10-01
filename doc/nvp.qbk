@@ -98,7 +98,7 @@ noexcept;`]
 
 [endsect]
 
-[section Acknowledgments]
+[section History]
 
 Robert Ramey originally implemented NVP in the Serialization library. Glen
 Fernandes implemented this new (but compatible) version in the Core library.
