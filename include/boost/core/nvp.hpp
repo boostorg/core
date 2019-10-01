@@ -38,16 +38,17 @@ private:
     T* v_;
 };
 
-} /* serialization */
-
-using serialization::nvp;
-
 template<class T>
 inline const nvp<T>
 make_nvp(const char* n, T& v) BOOST_NOEXCEPT
 {
     return nvp<T>(n, v);
 }
+
+} /* serialization */
+
+using serialization::nvp;
+using serialization::make_nvp;
 
 } /* boost */
 
