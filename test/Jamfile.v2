@@ -152,6 +152,7 @@ run alloc_construct_throws_test.cpp ;
 run alloc_construct_cxx11_test.cpp ;
 
 run nvp_test.cpp ;
+run class_version_test.cpp ;
 
 lib lib_typeid : lib_typeid.cpp : <link>shared:<define>LIB_TYPEID_DYN_LINK=1 ;
 
