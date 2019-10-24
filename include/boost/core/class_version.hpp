@@ -26,7 +26,7 @@ namespace serialization {
 
 // default implementation, to be specialized by users as needed
 template<class T>
-struct version : core::int_c<0> {};
+struct version : ::boost::core::int_c<0> {};
 
 } /* serialization */
 
@@ -35,7 +35,7 @@ struct version : core::int_c<0> {};
 #define BOOST_CLASS_VERSION(T, N) \
 namespace boost { \
 namespace serialization { \
-template <> struct version<T> : core::int_c<N> {}; \
+template <> struct version<T> : ::boost::core::int_c<N> {}; \
 } /* serialization */ \
 } /* boost */
 
