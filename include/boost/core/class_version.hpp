@@ -12,31 +12,34 @@
 #include <boost/config.hpp>
 
 namespace boost {
-
 namespace core {
+
 template <int N>
 struct int_c {
   typedef int value_type;
   enum { value = N };
   operator value_type() const { return N; }
 };
+
 } /* core */
+
+// default implementation, to be specialized by users as needed, must be top-level
+template <class T>
+struct class_version : ::boost::core::int_c<0> {};
 
 namespace serialization {
 
-// default implementation, to be specialized by users as needed
+// for backward compatibility
 template<class T>
-struct version : ::boost::core::int_c<0> {};
+struct version : ::boost::class_version<T> {};
 
 } /* serialization */
 
 } /* boost */
 
-#define BOOST_SERIALIZATION_VERSION(T, N) \
-namespace boost { \
-namespace serialization { \
-template <> struct version<T> : ::boost::core::int_c<N> {}; \
-} /* serialization */ \
-} /* boost */
+#define BOOST_CLASS_VERSION(T, N)                                          \
+namespace boost {                                                          \
+template <> struct ::boost::class_version<T> : ::boost::core::int_c<N> {}; \
+}
 
 #endif
