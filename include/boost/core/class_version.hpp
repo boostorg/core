@@ -32,7 +32,7 @@ struct version : ::boost::core::int_c<0> {};
 
 } /* boost */
 
-#define BOOST_CLASS_VERSION(T, N) \
+#define BOOST_SERIALIZATION_VERSION(T, N) \
 namespace boost { \
 namespace serialization { \
 template <> struct version<T> : ::boost::core::int_c<N> {}; \

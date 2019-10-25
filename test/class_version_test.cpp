@@ -20,21 +20,23 @@ struct foo {};
 struct bar {};
 
 namespace boost {
-template <> struct version<bar> : core::int_c<2> {};
+namespace serialization {
+template <> struct version<bar> : core::int_c<2> {};  
+}
 }
 
 void test_version()
 {
-    BOOST_TEST_EQ(boost::version<foo>::value, 0);
-    BOOST_TEST_EQ(boost::version<bar>::value, 2);
+    BOOST_TEST_EQ(boost::serialization::version<foo>::value, 0);
+    BOOST_TEST_EQ(boost::serialization::version<bar>::value, 2);
 }
 
 struct baz {};
-BOOST_CLASS_VERSION(baz, 3);
+BOOST_SERIALIZATION_VERSION(baz, 3);
 
 void test_macro()
 {
-    BOOST_TEST_EQ(boost::version<baz>::value, 3);
+    BOOST_TEST_EQ(boost::serialization::version<baz>::value, 3);
 }
 
 int main()
