@@ -23,7 +23,7 @@ struct int_c {
 
 } /* core */
 
-// default implementation, to be specialized by users as needed, must be top-level
+// default implementation, to be specialized by users as needed
 template <class T>
 struct class_version : ::boost::core::int_c<0> {};
 
@@ -39,7 +39,7 @@ struct version : ::boost::class_version<T> {};
 
 #define BOOST_CLASS_VERSION(T, N)                                          \
 namespace boost {                                                          \
-template <> struct ::boost::class_version<T> : ::boost::core::int_c<N> {}; \
+template <> struct class_version<T> : ::boost::core::int_c<N> {}; \
 }
 
 #endif
