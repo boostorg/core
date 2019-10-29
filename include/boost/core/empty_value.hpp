@@ -40,6 +40,8 @@ struct use_empty_value_base {
 
 struct empty_init_t { };
 
+BOOST_INLINE_VARIABLE BOOST_CONSTEXPR_OR_CONST empty_init_t empty_init = empty_init_t();
+
 namespace empty_ {
 
 template<class T, unsigned N = 0,
