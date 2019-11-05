@@ -7,6 +7,90 @@
 # pragma once
 #endif
 
+#if 1
+
+#include <boost/config.hpp>
+#include <functional>
+
+namespace boost
+{
+
+using std::reference_wrapper;
+using std::ref;
+using std::cref;
+
+// is_reference_wrapper
+
+template<typename T> struct is_reference_wrapper
+{
+    BOOST_STATIC_CONSTANT( bool, value = false );
+};
+
+template<typename T> struct is_reference_wrapper< reference_wrapper<T> >
+{
+    BOOST_STATIC_CONSTANT( bool, value = true );
+};
+
+template<typename T> struct is_reference_wrapper< reference_wrapper<T> const >
+{
+    BOOST_STATIC_CONSTANT( bool, value = true );
+};
+
+template<typename T> struct is_reference_wrapper< reference_wrapper<T> volatile >
+{
+    BOOST_STATIC_CONSTANT( bool, value = true );
+};
+
+template<typename T> struct is_reference_wrapper< reference_wrapper<T> const volatile >
+{
+    BOOST_STATIC_CONSTANT( bool, value = true );
+};
+
+// unwrap_reference
+
+template<typename T> struct unwrap_reference
+{
+    typedef T type;
+};
+
+template<typename T> struct unwrap_reference< reference_wrapper<T> >
+{
+    typedef T type;
+};
+
+template<typename T> struct unwrap_reference< reference_wrapper<T> const >
+{
+    typedef T type;
+};
+
+template<typename T> struct unwrap_reference< reference_wrapper<T> volatile >
+{
+    typedef T type;
+};
+
+template<typename T> struct unwrap_reference< reference_wrapper<T> const volatile >
+{
+    typedef T type;
+};
+
+// unwrap_ref
+
+template<class T> BOOST_FORCEINLINE typename unwrap_reference<T>::type& unwrap_ref( T & t )
+{
+    return t;
+}
+
+// get_pointer
+
+template<class T> BOOST_FORCEINLINE T* get_pointer( reference_wrapper<T> const & r )
+{
+    return std::addressof( r.get() );
+}
+
+} // namespace boost
+
+#else
+
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
 #include <boost/core/addressof.hpp>
@@ -298,5 +382,7 @@ template<class T> BOOST_FORCEINLINE T* get_pointer( reference_wrapper<T> const &
 */
 
 } // namespace boost
+
+#endif
 
 #endif // #ifndef BOOST_CORE_REF_HPP
