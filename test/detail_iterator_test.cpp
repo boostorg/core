@@ -8,6 +8,7 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
+#define BOOST_ALLOW_DEPRECATED_HEADERS
 #include <boost/detail/iterator.hpp>
 #include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
