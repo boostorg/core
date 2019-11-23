@@ -22,8 +22,18 @@ environment:
       ADDRMD: 32,64
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      TOOLSET: msvc-14.1,clang-win
+      TOOLSET: msvc-14.1
       ADDRMD: 32,64
+      CXXSTD: 14,17
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      TOOLSET: clang-win
+      ADDRMD: 32
+      CXXSTD: 14,17
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      TOOLSET: clang-win
+      ADDRMD: 64
       CXXSTD: 14,17
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
