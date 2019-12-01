@@ -23,24 +23,12 @@
 
 #include <boost/core/enable_if.hpp>
 #include <boost/config.hpp>
-#include <cstddef> //for std::size_t
-
-// try to include std::swap from the most lightweight header
-#if defined(BOOST_DINKUMWARE_STDLIB)
-# include <utility>
-#elif defined(_LIBCPP_VERSION) // since the first commit
-# include <type_traits>
-#elif defined(__GLIBCXX__) && __GLIBCXX__ > 20080621 // GCC 4.4
-# include <bits/move.h>
-#elif defined(__GLIBCXX__) && __GLIBCXX__ > 20071010 // GCC 4.3
-# include <bits/stl_move.h>
-#elif defined(__GLIBCXX__) || defined(__GLIBCPP__) // && __GLIBCPP__ > 20001005 // GCC 2.97
-# include <bits/stl_algobase.h>
-#elif __cplusplus >= 201103L
-# include <utility>
-#else // C++98/03 fallback
-# include <algorithm>
+#if __cplusplus >= 201103L
+#include <utility> //for std::swap (C++11)
+#else
+#include <algorithm> //for std::swap (C++98)
 #endif
+#include <cstddef> //for std::size_t
 
 namespace boost_swap_impl
 {
