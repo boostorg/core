@@ -23,7 +23,7 @@
 
 #include <boost/core/enable_if.hpp>
 #include <boost/config.hpp>
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L || defined(BOOST_MSVC)
 #include <utility> //for std::swap (C++11)
 #else
 #include <algorithm> //for std::swap (C++98)
