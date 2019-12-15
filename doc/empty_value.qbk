@@ -97,6 +97,8 @@ public:
     T& get() noexcept;
 };
 
+inline constexpr empty_init_t empty_init{ };
+
 } /* boost */
 ```
 
