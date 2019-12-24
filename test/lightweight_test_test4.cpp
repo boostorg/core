@@ -8,6 +8,7 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
+#define BOOST_ALLOW_DEPRECATED_HEADERS
 #include <boost/core/lightweight_test_trait.hpp>
 
 struct X

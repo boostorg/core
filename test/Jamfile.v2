@@ -104,6 +104,9 @@ run-fail lightweight_test_le_fail.cpp ;
 run-fail lightweight_test_gt_fail.cpp ;
 run-fail lightweight_test_ge_fail.cpp ;
 
+run lightweight_test_same.cpp ;
+run-fail lightweight_test_same_fail.cpp ;
+
 run is_same_test.cpp ;
 
 run typeinfo_test.cpp ;
