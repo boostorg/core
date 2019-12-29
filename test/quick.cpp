@@ -19,10 +19,10 @@
 #include <boost/core/ignore_unused.hpp>
 #include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 #include <boost/core/null_deleter.hpp>
 #include <boost/core/pointer_traits.hpp>
-#include <boost/ref.hpp>
+#include <boost/core/ref.hpp>
 #include <boost/core/scoped_enum.hpp>
 #include <boost/core/typeinfo.hpp>
 #include <boost/core/underlying_type.hpp>

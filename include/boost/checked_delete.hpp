@@ -9,8 +9,8 @@
 #ifndef BOOST_CHECKED_DELETE_HPP
 #define BOOST_CHECKED_DELETE_HPP
 
-// The header file at this path is deprecated;
-// use boost/core/checked_delete.hpp instead.
+#include <boost/config/header_deprecated.hpp>
+BOOST_HEADER_DEPRECATED( "<boost/core/checked_delete.hpp>" )
 
 #include <boost/core/checked_delete.hpp>
 

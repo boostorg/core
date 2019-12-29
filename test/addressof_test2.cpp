@@ -10,7 +10,7 @@
 // For more information, see http://www.boost.org
 
 
-#include <boost/utility/addressof.hpp>
+#include <boost/core/addressof.hpp>
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
 #pragma warning(push, 3)
@@ -22,7 +22,7 @@
 #pragma warning(pop)
 #endif
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/lightweight_test.hpp>
 
 template<class T> void scalar_test( T * = 0 )
 {

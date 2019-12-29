@@ -9,8 +9,8 @@
 #ifndef BOOST_NONCOPYABLE_HPP
 #define BOOST_NONCOPYABLE_HPP
 
-// The header file at this path is deprecated;
-// use boost/core/noncopyable.hpp instead.
+#include <boost/config/header_deprecated.hpp>
+BOOST_HEADER_DEPRECATED( "<boost/core/noncopyable.hpp>" )
 
 #include <boost/core/noncopyable.hpp>
 

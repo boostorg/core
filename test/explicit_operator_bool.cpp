@@ -15,7 +15,7 @@
 
 #define BOOST_TEST_MODULE explicit_operator_bool
 
-#include <boost/utility/explicit_operator_bool.hpp>
+#include <boost/core/explicit_operator_bool.hpp>
 
 namespace {
 

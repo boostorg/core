@@ -9,8 +9,8 @@
 #ifndef BOOST_DETAIL_LIGHTWEIGHT_TEST_HPP
 #define BOOST_DETAIL_LIGHTWEIGHT_TEST_HPP
 
-// The header file at this path is deprecated;
-// use boost/core/lightweight_test.hpp instead.
+#include <boost/config/header_deprecated.hpp>
+BOOST_HEADER_DEPRECATED( "<boost/core/lightweight_test.hpp>" )
 
 #include <boost/core/lightweight_test.hpp>
 

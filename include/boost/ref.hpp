@@ -9,8 +9,8 @@
 #ifndef BOOST_REF_HPP
 #define BOOST_REF_HPP
 
-// The header file at this path is deprecated;
-// use boost/core/ref.hpp instead.
+#include <boost/config/header_deprecated.hpp>
+BOOST_HEADER_DEPRECATED( "<boost/core/ref.hpp>" )
 
 #include <boost/core/ref.hpp>
 

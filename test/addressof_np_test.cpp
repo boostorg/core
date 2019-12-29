@@ -6,8 +6,8 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <boost/utility/addressof.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/addressof.hpp>
+#include <boost/core/lightweight_test.hpp>
 #include <cstddef>
 
 #if defined( BOOST_NO_CXX11_NULLPTR )

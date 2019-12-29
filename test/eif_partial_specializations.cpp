@@ -10,9 +10,9 @@
 //             Jeremiah Willcock (jewillco at osl.iu.edu)
 //             Andrew Lumsdaine (lums at osl.iu.edu)
 
-#include <boost/utility/enable_if.hpp>
+#include <boost/core/enable_if.hpp>
+#include <boost/core/lightweight_test.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
-#include <boost/detail/lightweight_test.hpp>
 
 using boost::enable_if_has_type;
 using boost::enable_if_c;

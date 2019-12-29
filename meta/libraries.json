@@ -18,7 +18,7 @@
     ]
     },
     {
-        "key": "utility/enable_if",
+        "key": "core/enable_if",
         "name": "Enable If",
         "authors": [
             "Jaakko J\u00e4rvi",
@@ -36,7 +36,7 @@
         ]
     },
     {
-        "key": "utility/swap",
+        "key": "core/swap",
         "boost-version": "1.38.0",
         "name": "Swap",
         "authors": [

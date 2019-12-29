@@ -1,5 +1,5 @@
 //
-// Test for boost/iterator.hpp
+// Test for boost/detail/iterator.hpp
 //
 // Copyright 2014 Peter Dimov
 //
@@ -8,9 +8,9 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <boost/iterator.hpp>
 #include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
+#include <boost/detail/iterator.hpp>
 
 /*
 

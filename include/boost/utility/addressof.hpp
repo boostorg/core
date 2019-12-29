@@ -9,8 +9,8 @@
 #ifndef BOOST_UTILITY_ADDRESSOF_HPP
 #define BOOST_UTILITY_ADDRESSOF_HPP
 
-// The header file at this path is deprecated;
-// use boost/core/addressof.hpp instead.
+#include <boost/config/header_deprecated.hpp>
+BOOST_HEADER_DEPRECATED( "<boost/core/addressof.hpp>" )
 
 #include <boost/core/addressof.hpp>
 
