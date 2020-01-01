@@ -30,6 +30,10 @@
 #include <cstring>
 #include <cstddef>
 
+#if defined(_MSC_VER) && defined(_CPPLIB_VER) && defined(_DEBUG)
+# include <crtdbg.h>
+#endif
+
 //  IDE's like Visual Studio perform better if output goes to std::cout or
 //  some other stream, so allow user to configure output stream:
 #ifndef BOOST_LIGHTWEIGHT_TEST_OSTREAM
@@ -48,7 +52,13 @@ public:
         : report_(false)
         , errors_(0) {
 #if defined(_MSC_VER) && (_MSC_VER > 1310)
+        // disable message boxes on assert(), abort()
         ::_set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+#endif
+#if defined(_MSC_VER) && defined(_CPPLIB_VER) && defined(_DEBUG)
+        // disable message boxes on iterator debugging violations
+        _CrtSetReportMode( _CRT_ASSERT, _CRTDBG_MODE_FILE );
+        _CrtSetReportFile( _CRT_ASSERT, _CRTDBG_FILE_STDERR );
 #endif
     }
 
