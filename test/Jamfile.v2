@@ -169,3 +169,5 @@ run no_exceptions_support_test.cpp : : : <exception-handling>off : no_exceptions
 
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
+
+run crtdbg_test.cpp ;
