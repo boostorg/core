@@ -16,7 +16,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/utility/addressof.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/lightweight_test.hpp>
 
 
 void f0()

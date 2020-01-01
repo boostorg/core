@@ -12,7 +12,7 @@
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/lightweight_test.hpp>
 
 using boost::enable_if_c;
 using boost::lazy_enable_if_c;

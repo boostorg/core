@@ -20,7 +20,7 @@
 #pragma warning(pop)
 #endif
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/lightweight_test.hpp>
 
 template<class T> void scalar_test( T * = 0 )
 {

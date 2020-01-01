@@ -7,7 +7,7 @@
 // see 'ref_ct_test.cpp' for compile-time part
 
 #include <boost/ref.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/lightweight_test.hpp>
 
 namespace {
 using namespace boost;

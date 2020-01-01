@@ -9,7 +9,7 @@
 #include <boost/ref.hpp>
 #include <boost/core/is_same.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/detail/workaround.hpp>
+#include <boost/config/workaround.hpp>
 
 namespace {
 

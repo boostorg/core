@@ -18,7 +18,7 @@
 
 #if !defined(BOOST_NO_CXX11_NOEXCEPT)
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/lightweight_test.hpp>
 #include <boost/utility/explicit_operator_bool.hpp>
 
 namespace {

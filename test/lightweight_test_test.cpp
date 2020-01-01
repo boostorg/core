@@ -9,7 +9,7 @@
 //
 
 #include <vector>
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/core/lightweight_test.hpp>
 
 struct X
 {
