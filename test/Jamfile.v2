@@ -55,10 +55,12 @@ compile-fail explicit_operator_bool_compile_fail_conv_pvoid.cpp ;
 compile-fail explicit_operator_bool_compile_fail_delete.cpp ;
 compile-fail explicit_operator_bool_compile_fail_shift.cpp ;
 
-compile ignore_unused_test.cpp : <toolset>gcc-4.8:<cxxflags>"-Wunused-variable -Wunused-local-typedefs -Werror"
-                                   <toolset>gcc:<cxxflags>"-Wunused-variable -Werror"
-                                   <toolset>clang:<cxxflags>"-Wunused-variable -Werror"
-                                   <toolset>msvc:<cxxflags>"/we4100 /we4101" ;
+compile ignore_unused_test.cpp
+  : <warnings>extra
+    <toolset>gcc:<warnings-as-errors>on
+    <toolset>clang:<warnings-as-errors>on
+    <toolset>msvc::<warnings-as-errors>on ;
+
 run sp_typeinfo_test.cpp ;
 run sp_typeinfo_test.cpp : : : <rtti>off : sp_typeinfo_test_no_rtti ;
 
@@ -75,7 +77,8 @@ run lightweight_test_gt_ge_test.cpp ;
 run lightweight_test_eq_nullptr.cpp ;
 run lightweight_test_test3.cpp ;
 run lightweight_test_test4.cpp ;
-run lightweight_test_test5.cpp : : :
+run lightweight_test_test5.cpp
+  : : :
     <warnings>extra
     <toolset>msvc:<warnings-as-errors>on
     <toolset>gcc:<warnings-as-errors>on
@@ -112,9 +115,12 @@ run typeinfo_test.cpp : : : <rtti>off : typeinfo_test_no_rtti ;
 run iterator_test.cpp ;
 run detail_iterator_test.cpp ;
 
-run demangle_test.cpp  : : : <test-info>always_show_run_output ;
+run demangle_test.cpp
+  : : : <test-info>always_show_run_output ;
 
-run demangled_name_test.cpp  : : : <test-info>always_show_run_output ;
+run demangled_name_test.cpp
+  : : : <test-info>always_show_run_output ;
+
 run demangled_name_test.cpp  : : : <rtti>off <test-info>always_show_run_output : demangled_name_test_no_rtti ;
 
 run scoped_enum.cpp ;
@@ -161,8 +167,10 @@ run test_lib_typeid.cpp lib_typeid : : : <link>static : test_lib_typeid_static ;
 run test_lib_typeid.cpp lib_typeid : : : <link>shared <rtti>off : test_lib_typeid_shared_no_rtti ;
 run test_lib_typeid.cpp lib_typeid : : : <link>static <rtti>off : test_lib_typeid_static_no_rtti ;
 
-run uncaught_exceptions.cpp : : : <exception-handling>on ;
-run uncaught_exceptions_np.cpp : : : <exception-handling>on ;
+run uncaught_exceptions.cpp
+  : : : <exception-handling>on ;
+run uncaught_exceptions_np.cpp
+  : : : <exception-handling>on ;
 
 run no_exceptions_support_test.cpp ;
 run no_exceptions_support_test.cpp : : : <exception-handling>off : no_exceptions_support_test_nx ;
