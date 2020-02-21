@@ -93,12 +93,21 @@ inline int& test_errors()
     return test_results().errors();
 }
 
-inline void test_failed_impl(char const * expr, char const * file, int line, char const * function)
+inline bool test_impl(char const * expr, char const * file, int line, char const * function, bool v)
 {
-    BOOST_LIGHTWEIGHT_TEST_OSTREAM
-      << file << "(" << line << "): test '" << expr << "' failed in function '"
-      << function << "'" << std::endl;
-    ++test_results().errors();
+    if( v )
+    {
+        test_results();
+        return true;
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+          << file << "(" << line << "): test '" << expr << "' failed in function '"
+          << function << "'" << std::endl;
+        ++test_results().errors();
+        return false;
+    }
 }
 
 inline void error_impl(char const * msg, char const * file, int line, char const * function)
@@ -417,7 +426,7 @@ inline int report_errors()
 
 } // namespace boost
 
-#define BOOST_TEST(expr) ((expr)? ((void)::boost::detail::test_results(), true): (::boost::detail::test_failed_impl(#expr, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION), false))
+#define BOOST_TEST(expr) ( ::boost::detail::test_impl(#expr, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, (expr)? true: false) )
 #define BOOST_TEST_NOT(expr) BOOST_TEST(!(expr))
 
 #define BOOST_ERROR(msg) ( ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
