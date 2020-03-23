@@ -49,7 +49,7 @@ BOOST_NORETURN void quick_exit( int code ) BOOST_NOEXCEPT
 
 #else
 
-    ::quick_exit( code );
+    std::quick_exit( code );
 
 #endif
 }
