@@ -16,7 +16,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/config.hpp>
-#include <cstdlib>
+#include <stdlib.h>
 
 #if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
 
@@ -49,7 +49,7 @@ BOOST_NORETURN void quick_exit( int code ) BOOST_NOEXCEPT
 
 #else
 
-    std::quick_exit( code );
+    ::quick_exit( code );
 
 #endif
 }
