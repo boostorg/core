@@ -139,8 +139,7 @@ public:
 
 using empty_::empty_value;
 
-BOOST_INLINE_VARIABLE
-BOOST_CONSTEXPR_OR_CONST empty_init_t empty_init = empty_init_t();
+BOOST_INLINE_CONSTEXPR empty_init_t empty_init = empty_init_t();
 
 } /* boost */
 
