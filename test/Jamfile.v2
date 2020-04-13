@@ -161,6 +161,24 @@ run alloc_construct_cxx11_test.cpp ;
 
 run nvp_test.cpp ;
 
+run allocator_value_type_test.cpp ;
+run allocator_pointer_test.cpp ;
+run allocator_const_pointer_test.cpp ;
+run allocator_void_pointer_test.cpp ;
+run allocator_const_void_pointer_test.cpp ;
+run allocator_difference_type_test.cpp ;
+run allocator_size_type_test.cpp ;
+run allocator_pocca_test.cpp ;
+run allocator_pocma_test.cpp ;
+run allocator_pocs_test.cpp ;
+run allocator_is_always_equal_test.cpp ;
+run allocator_rebind_test.cpp ;
+run allocator_allocate_test.cpp ;
+run allocator_allocate_hint_test.cpp ;
+run allocator_deallocate_test.cpp ;
+run allocator_max_size_test.cpp ;
+run allocator_soccc_test.cpp ;
+
 lib lib_typeid : lib_typeid.cpp : <link>shared:<define>LIB_TYPEID_DYN_LINK=1 ;
 
 run test_lib_typeid.cpp lib_typeid : : : <link>shared : test_lib_typeid_shared ;
