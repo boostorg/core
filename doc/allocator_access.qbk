@@ -209,7 +209,7 @@ if this `A` is `A<U, Args>`.]]]
 [variablelist
 [[`template<class A>
 allocator_pointer_t<A> allocator_allocate(A& a, allocator_size_type_t<A> n);`]
-[Calls `a.allcoate(n)`.]]
+[Calls `a.allocate(n)`.]]
 [[`template<class A> allocator_pointer_t<A> allocator_allocate(A& a,
 allocator_size_type_t<A> n, allocator_const_void_pointer_t<A> hint);`]
 [Calls `a.allocate(n, hint)` if valid, otherwise calls `a.allocate(n)`.]]
