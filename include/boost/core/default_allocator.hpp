@@ -9,8 +9,8 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_DEFAULT_ALLOCATOR_HPP
 
 #include <boost/config.hpp>
+#include <limits>
 #include <new>
-#include <climits>
 
 #if defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 60000
 #define BOOST_CORE_NO_CXX11_ALLOCATOR
@@ -81,16 +81,12 @@ struct default_allocator {
     BOOST_CONSTEXPR default_allocator(const default_allocator<U>&)
         BOOST_NOEXCEPT { }
 
-#if defined(PTRDIFF_MAX) && defined(SIZE_MAX)
     BOOST_CONSTEXPR std::size_t max_size() const BOOST_NOEXCEPT {
-        return PTRDIFF_MAX < SIZE_MAX / sizeof(T)
-            ? PTRDIFF_MAX : SIZE_MAX / sizeof(T);
+        return std::numeric_limits<std::ptrdiff_t>::max()
+            < std::numeric_limits<std::size_t>::max() / sizeof(T)
+            ? std::numeric_limits<std::ptrdiff_t>::max()
+            : std::numeric_limits<std::size_t>::max() / sizeof(T);
     }
-#else
-    BOOST_CONSTEXPR std::size_t max_size() const BOOST_NOEXCEPT {
-        return ~static_cast<std::size_t>(0) / sizeof(T);
-    }
-#endif
 
 #if !defined(BOOST_NO_EXCEPTIONS)
     T* allocate(std::size_t n) {
