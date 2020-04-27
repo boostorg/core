@@ -9,7 +9,6 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_DEFAULT_ALLOCATOR_HPP
 
 #include <boost/config.hpp>
-#include <limits>
 #include <new>
 
 #if defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 60000
@@ -82,10 +81,7 @@ struct default_allocator {
         BOOST_NOEXCEPT { }
 
     BOOST_CONSTEXPR std::size_t max_size() const BOOST_NOEXCEPT {
-        return std::numeric_limits<std::ptrdiff_t>::max()
-            < std::numeric_limits<std::size_t>::max() / sizeof(T)
-            ? std::numeric_limits<std::ptrdiff_t>::max()
-            : std::numeric_limits<std::size_t>::max() / sizeof(T);
+        return static_cast<std::size_t>(-1) / (2 < sizeof(T) ? sizeof(T) : 2);
     }
 
 #if !defined(BOOST_NO_EXCEPTIONS)
@@ -125,6 +121,7 @@ struct default_allocator {
     template<class U>
     void destroy(U* p) {
         p->~U();
+        (void)p;
     }
 #endif
 };
