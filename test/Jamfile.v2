@@ -165,7 +165,6 @@ run default_allocator_test.cpp
         <toolset>clang:<warnings-as-errors>on ;
 
 run noinit_adaptor_test.cpp ;
-run noinit_adaptor_test.cpp ;
 run alloc_construct_test.cpp ;
 run alloc_construct_throws_test.cpp ;
 run alloc_construct_cxx11_test.cpp ;
