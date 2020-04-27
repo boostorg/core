@@ -39,6 +39,10 @@ void f( bool x )
     }
 }
 
+#if defined(__GNUC__)
+# pragma GCC diagnostic ignored "-Waddress"
+#endif
+
 #if defined(__clang__) && defined(__has_warning)
 # if __has_warning( "-Wstring-plus-int" )
 #  pragma clang diagnostic ignored "-Wstring-plus-int"
