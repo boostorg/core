@@ -76,10 +76,15 @@ run lightweight_test_lt_le_test.cpp ;
 run lightweight_test_gt_ge_test.cpp ;
 run lightweight_test_eq_nullptr.cpp ;
 run lightweight_test_test3.cpp ;
-run lightweight_test_test4.cpp ;
+run lightweight_test_test4.cpp
+  : : :
+    <warnings>pedantic
+    <toolset>msvc:<warnings-as-errors>on
+    <toolset>gcc:<warnings-as-errors>on
+    <toolset>clang:<warnings-as-errors>on ;
 run lightweight_test_test5.cpp
   : : :
-    <warnings>extra
+    <warnings>pedantic
     <toolset>msvc:<warnings-as-errors>on
     <toolset>gcc:<warnings-as-errors>on
     <toolset>clang:<warnings-as-errors>on
