@@ -158,7 +158,13 @@ run-fail quick_exit_fail.cpp ;
 
 compile use_default_test.cpp ;
 
-run default_allocator_test.cpp ;
+run default_allocator_test.cpp
+  : : : <warnings>pedantic
+        <toolset>msvc:<warnings-as-errors>on
+        <toolset>gcc:<warnings-as-errors>on
+        <toolset>clang:<warnings-as-errors>on ;
+
+run noinit_adaptor_test.cpp ;
 run noinit_adaptor_test.cpp ;
 run alloc_construct_test.cpp ;
 run alloc_construct_throws_test.cpp ;
