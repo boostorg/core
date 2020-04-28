@@ -68,26 +68,31 @@ run visit_each_test.cpp ;
 
 run get_pointer_test.cpp ;
 
-run lightweight_test_test.cpp ;
-run lightweight_test_test.cpp : : : <exception-handling>off : lightweight_test_test_no_except ;
-run lightweight_test_test2.cpp ;
-run lightweight_test_all_with_test.cpp ;
-run lightweight_test_lt_le_test.cpp ;
-run lightweight_test_gt_ge_test.cpp ;
-run lightweight_test_eq_nullptr.cpp ;
-run lightweight_test_test3.cpp ;
-run lightweight_test_test4.cpp
-  : : :
-    <warnings>pedantic
+local pedantic-errors = <warnings>pedantic
     <toolset>msvc:<warnings-as-errors>on
     <toolset>gcc:<warnings-as-errors>on
     <toolset>clang:<warnings-as-errors>on ;
+
+run lightweight_test_test.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_test.cpp : : :
+  <exception-handling>off $(pedantic-errors) : lightweight_test_test_no_except ;
+run lightweight_test_test2.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_all_with_test.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_lt_le_test.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_gt_ge_test.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_eq_nullptr.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_test3.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_test4.cpp
+  : : : $(pedantic-errors) ;
 run lightweight_test_test5.cpp
-  : : :
-    <warnings>pedantic
-    <toolset>msvc:<warnings-as-errors>on
-    <toolset>gcc:<warnings-as-errors>on
-    <toolset>clang:<warnings-as-errors>on
+  : : : $(pedantic-errors)
     <toolset>gcc-4.4.7:<cxxflags>-Wno-sign-compare ;
 
 run-fail lightweight_test_all_eq_test.cpp ;
@@ -112,7 +117,8 @@ run-fail lightweight_test_le_fail.cpp ;
 run-fail lightweight_test_gt_fail.cpp ;
 run-fail lightweight_test_ge_fail.cpp ;
 
-run lightweight_test_bool.cpp ;
+run lightweight_test_bool.cpp
+  : : : $(pedantic-errors) ;
 
 run is_same_test.cpp ;
 
