@@ -24,6 +24,7 @@
 
 #include <boost/current_function.hpp>
 #include <boost/config.hpp>
+#include <exception>
 #include <iostream>
 #include <iterator>
 #include <cstdlib>
@@ -118,11 +119,27 @@ inline void error_impl(char const * msg, char const * file, int line, char const
     ++test_results().errors();
 }
 
-inline void throw_failed_impl(char const * excep, char const * file, int line, char const * function)
+inline void throw_failed_impl(const char* expr, char const * excep, char const * file, int line, char const * function)
 {
    BOOST_LIGHTWEIGHT_TEST_OSTREAM
-    << file << "(" << line << "): Exception '" << excep << "' not thrown in function '"
+    << file << "(" << line << "): expression '" << expr << "' did not throw exception '" << excep << "' in function '"
     << function << "'" << std::endl;
+   ++test_results().errors();
+}
+
+inline void no_throw_failed_impl(const char* expr, const char* file, int line, const char* function)
+{
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM
+        << file << "(" << line << "): expression '" << expr << "' threw an exception in function '"
+        << function << "'" << std::endl;
+   ++test_results().errors();
+}
+
+inline void no_throw_failed_impl(const char* expr, const char* what, const char* file, int line, const char* function)
+{
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM
+        << file << "(" << line << "): expression '" << expr << "' threw an exception in function '"
+        << function << "': " << what << std::endl;
    ++test_results().errors();
 }
 
@@ -446,22 +463,38 @@ inline int report_errors()
 #define BOOST_TEST_ALL_WITH(begin1, end1, begin2, end2, predicate) ( ::boost::detail::test_all_with_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, begin1, end1, begin2, end2, predicate) )
 
 #ifndef BOOST_NO_EXCEPTIONS
-   #define BOOST_TEST_THROWS( EXPR, EXCEP )                    \
-      try {                                                    \
-         EXPR;                                                 \
-         ::boost::detail::throw_failed_impl                    \
-         (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
-      }                                                        \
-      catch(EXCEP const&) {                                    \
-         ::boost::detail::test_results();                      \
-      }                                                        \
-      catch(...) {                                             \
-         ::boost::detail::throw_failed_impl                    \
-         (#EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
-      }                                                        \
+   #define BOOST_TEST_THROWS( EXPR, EXCEP )                           \
+      try {                                                           \
+         EXPR;                                                        \
+         ::boost::detail::throw_failed_impl                           \
+         (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
+      }                                                               \
+      catch(EXCEP const&) {                                           \
+         ::boost::detail::test_results();                             \
+      }                                                               \
+      catch(...) {                                                    \
+         ::boost::detail::throw_failed_impl                           \
+         (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
+      }                                                               \
    //
 #else
    #define BOOST_TEST_THROWS( EXPR, EXCEP )
+#endif
+
+#ifndef BOOST_NO_EXCEPTIONS
+#  define BOOST_TEST_NO_THROW(EXPR)                                    \
+    try {                                                              \
+        EXPR;                                                          \
+    } catch (const std::exception& e) {                                \
+        ::boost::detail::no_throw_failed_impl                          \
+        (#EXPR, e.what(), __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
+    } catch (...) {                                                    \
+        ::boost::detail::no_throw_failed_impl                          \
+        (#EXPR, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);           \
+    }
+    //
+#else
+#  define BOOST_TEST_NO_THROW(EXPR)
 #endif
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_HPP

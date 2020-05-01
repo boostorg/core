@@ -108,5 +108,9 @@ int main()
     BOOST_TEST_THROWS( f(true), X );
     BOOST_TEST_THROWS( f(false), int );
 
+    // BOOST_TEST_NO_THROW
+
+    BOOST_TEST_NO_THROW(++y);
+
     return boost::report_errors();
 }
