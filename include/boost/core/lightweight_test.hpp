@@ -494,7 +494,7 @@ inline int report_errors()
     }
     //
 #else
-#  define BOOST_TEST_NO_THROW(EXPR)
+#  define BOOST_TEST_NO_THROW(EXPR) { EXPR; }
 #endif
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_HPP
