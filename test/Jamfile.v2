@@ -68,21 +68,31 @@ run visit_each_test.cpp ;
 
 run get_pointer_test.cpp ;
 
-run lightweight_test_test.cpp ;
-run lightweight_test_test.cpp : : : <exception-handling>off : lightweight_test_test_no_except ;
-run lightweight_test_test2.cpp ;
-run lightweight_test_all_with_test.cpp ;
-run lightweight_test_lt_le_test.cpp ;
-run lightweight_test_gt_ge_test.cpp ;
-run lightweight_test_eq_nullptr.cpp ;
-run lightweight_test_test3.cpp ;
-run lightweight_test_test4.cpp ;
-run lightweight_test_test5.cpp
-  : : :
-    <warnings>extra
+local pedantic-errors = <warnings>pedantic
     <toolset>msvc:<warnings-as-errors>on
     <toolset>gcc:<warnings-as-errors>on
-    <toolset>clang:<warnings-as-errors>on
+    <toolset>clang:<warnings-as-errors>on ;
+
+run lightweight_test_test.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_test.cpp : : :
+  <exception-handling>off $(pedantic-errors) : lightweight_test_test_no_except ;
+run lightweight_test_test2.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_all_with_test.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_lt_le_test.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_gt_ge_test.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_eq_nullptr.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_test3.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_test4.cpp
+  : : : $(pedantic-errors) ;
+run lightweight_test_test5.cpp
+  : : : $(pedantic-errors)
     <toolset>gcc-4.4.7:<cxxflags>-Wno-sign-compare ;
 
 run-fail lightweight_test_all_eq_test.cpp ;
@@ -102,12 +112,15 @@ run-fail lightweight_test_fail9.cpp ;
 run-fail lightweight_test_fail10.cpp ;
 run-fail lightweight_test_fail11.cpp : ;
 run-fail lightweight_test_fail12.cpp ;
+run-fail lightweight_test_fail13.cpp ;
+run-fail lightweight_test_fail14.cpp ;
 run-fail lightweight_test_lt_fail.cpp ;
 run-fail lightweight_test_le_fail.cpp ;
 run-fail lightweight_test_gt_fail.cpp ;
 run-fail lightweight_test_ge_fail.cpp ;
 
-run lightweight_test_bool.cpp ;
+run lightweight_test_bool.cpp
+  : : : $(pedantic-errors) ;
 
 run is_same_test.cpp ;
 
@@ -153,13 +166,36 @@ run-fail quick_exit_fail.cpp ;
 
 compile use_default_test.cpp ;
 
-run default_allocator_test.cpp ;
+run default_allocator_test.cpp
+  : : : <warnings>pedantic
+        <toolset>msvc:<warnings-as-errors>on
+        <toolset>gcc:<warnings-as-errors>on
+        <toolset>clang:<warnings-as-errors>on ;
+
 run noinit_adaptor_test.cpp ;
 run alloc_construct_test.cpp ;
 run alloc_construct_throws_test.cpp ;
 run alloc_construct_cxx11_test.cpp ;
 
 run nvp_test.cpp ;
+
+run allocator_value_type_test.cpp ;
+run allocator_pointer_test.cpp ;
+run allocator_const_pointer_test.cpp ;
+run allocator_void_pointer_test.cpp ;
+run allocator_const_void_pointer_test.cpp ;
+run allocator_difference_type_test.cpp ;
+run allocator_size_type_test.cpp ;
+run allocator_pocca_test.cpp ;
+run allocator_pocma_test.cpp ;
+run allocator_pocs_test.cpp ;
+run allocator_is_always_equal_test.cpp ;
+run allocator_rebind_test.cpp ;
+run allocator_allocate_test.cpp ;
+run allocator_allocate_hint_test.cpp ;
+run allocator_deallocate_test.cpp ;
+run allocator_max_size_test.cpp ;
+run allocator_soccc_test.cpp ;
 
 lib lib_typeid : lib_typeid.cpp : <link>shared:<define>LIB_TYPEID_DYN_LINK=1 ;
 

@@ -46,6 +46,7 @@ When using `lightweight_test.hpp`, *do not forget* to
 #define BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2) /* unspecified */
 #define BOOST_TEST_ALL_WITH(begin1, end1, begin2, end2, predicate) /* unspecified */
 #define BOOST_TEST_THROWS(expr, excep) /*unspecified*/
+#define BOOST_TEST_NO_THROW(expr) /*unspecified*/
 
 namespace boost
 {
@@ -206,6 +207,20 @@ and outputs a message containing the expression.
 
 If `BOOST_NO_EXCEPTIONS` is defined, this macro expands to
 nothing and `expr` is not evaluated.
+
+[endsect]
+
+[section BOOST_TEST_NO_THROW]
+
+``
+BOOST_TEST_NO_THROW(expr)
+``
+
+If `BOOST_NO_EXCEPTIONS` is *not* defined and if `expr` throws an exception,
+increases the error count and outputs a message containing the expression
+and (if possible) the exception message.
+
+If `BOOST_NO_EXCEPTIONS` is defined, `expr` is evaluated.
 
 [endsect]
 

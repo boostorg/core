@@ -8,8 +8,14 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <vector>
+#if defined(_MSC_VER)
+# pragma warning( disable: 4702 ) // unreachable code
+# pragma warning( disable: 4530 ) // unwind without /EHsc from <ostream>
+# pragma warning( disable: 4577 ) // noexcept without /EHsc from <exception>
+#endif
+
 #include <boost/core/lightweight_test.hpp>
+#include <vector>
 
 struct X
 {
@@ -32,6 +38,16 @@ void f( bool x )
         LWT_THROW( 5 );
     }
 }
+
+#if defined(__GNUC__)
+# pragma GCC diagnostic ignored "-Waddress"
+#endif
+
+#if defined(__clang__) && defined(__has_warning)
+# if __has_warning( "-Wstring-plus-int" )
+#  pragma clang diagnostic ignored "-Wstring-plus-int"
+# endif
+#endif
 
 int main()
 {
@@ -91,6 +107,10 @@ int main()
 
     BOOST_TEST_THROWS( f(true), X );
     BOOST_TEST_THROWS( f(false), int );
+
+    // BOOST_TEST_NO_THROW
+
+    BOOST_TEST_NO_THROW(++y);
 
     return boost::report_errors();
 }

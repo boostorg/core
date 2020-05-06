@@ -39,6 +39,7 @@ criteria for inclusion is that the utility component be:
 [endsect]
 
 [include addressof.qbk]
+[include allocator_access.qbk]
 [include alloc_construct.qbk]
 [include checked_delete.qbk]
 [include default_allocator.qbk]
