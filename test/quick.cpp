@@ -12,7 +12,6 @@
 #include <boost/core/addressof.hpp>
 #include <boost/core/checked_delete.hpp>
 #include <boost/core/demangle.hpp>
-#include <boost/detail/iterator.hpp>
 #include <boost/core/enable_if.hpp>
 #include <boost/core/explicit_operator_bool.hpp>
 #include <boost/get_pointer.hpp>
