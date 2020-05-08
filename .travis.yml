@@ -275,7 +275,7 @@ matrix:
 
     - os: linux
       compiler: clang++-10
-      env: TOOLSET=clang COMPILER=clang++-10 CXXSTD=03,11,14,17,20
+      env: TOOLSET=clang COMPILER=clang++-10 CXXSTD=03,11,14,17,2a
       addons:
         apt:
           packages:
