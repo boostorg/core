@@ -460,7 +460,7 @@ inline typename detail::alloc_if<!detail::alloc_has_max_size<A>::value,
     typename allocator_size_type<A>::type>::type
 allocator_max_size(const A&)
 {
-    return std::numeric_limits<typename allocator_size_type<A>::type>::max() /
+    return (std::numeric_limits<typename allocator_size_type<A>::type>::max)() /
         sizeof(typename A::value_type);
 }
 
