@@ -90,7 +90,7 @@ public:
     empty_value() = default;
 
     template<class... Args>
-    explicit empty_value(empty_init_t, Args&&... args);
+    empty_value(empty_init_t, Args&&... args);
 
     const T& get() const noexcept;
 
