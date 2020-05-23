@@ -11,10 +11,6 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/config.hpp>
 #include <new>
 
-#if defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 60000
-#define BOOST_CORE_NO_CXX11_ALLOCATOR
-#endif
-
 namespace boost {
 
 #if defined(BOOST_NO_EXCEPTIONS)
@@ -112,7 +108,8 @@ struct default_allocator {
     }
 #endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR) || defined(BOOST_CORE_NO_CXX11_ALLOCATOR)
+#if (defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 60000) || \
+    defined(BOOST_NO_CXX11_ALLOCATOR)
     template<class U, class V>
     void construct(U* p, const V& v) {
         ::new(p) U(v);
