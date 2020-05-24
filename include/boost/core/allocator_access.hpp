@@ -295,105 +295,141 @@ allocator_deallocate(A& a, typename allocator_pointer<A>::type p,
 
 namespace detail {
 
-#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
-template<class...>
-struct alloc_types { };
-#else
-template<class>
-struct alloc_types { };
-#endif
-
-template<class, class, class, class = void>
+template<class, class, class = void>
 struct alloc_has_construct {
     BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
 #if defined(BOOST_CORE_ALLOCATOR_DETECTION)
-#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
-template<class A, class T, class... U>
-struct alloc_has_construct<A, T, alloc_types<U...>, typename
-    alloc_void<decltype(alloc_declval<A&>().construct(alloc_declval<T*>(),
-        alloc_declval<U>()...))>::type> {
-    BOOST_STATIC_CONSTEXPR bool value = true;
-};
-#else
-template<class A, class T, class U>
-struct alloc_has_construct<A, T, alloc_types<U>, typename
-    alloc_void<decltype(alloc_declval<A&>().construct(alloc_declval<T*>(),
-        alloc_declval<U>()))>::type> {
+template<class A, class T>
+struct alloc_has_construct<A, T,
+    typename alloc_void<decltype(alloc_declval<A&>()
+        .construct(alloc_declval<T*>()))>::type> {
     BOOST_STATIC_CONSTEXPR bool value = true;
 };
 #endif
+
+} /* detail */
+
+template<class A, class T>
+inline typename detail::alloc_if<detail::alloc_has_construct<A,
+    T>::value>::type
+allocator_construct(A& a, T* p)
+{
+    a.construct(p);
+}
+
+template<class A, class T>
+inline typename detail::alloc_if<!detail::alloc_has_construct<A,
+    T>::value>::type
+allocator_construct(A&, T* p)
+{
+    ::new((void*)p) T();
+}
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && \
+    !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+namespace detail {
+
+template<class, class, class, class...>
+struct alloc_has_construct_args {
+    BOOST_STATIC_CONSTEXPR bool value = false;
+};
+
+#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+template<class A, class T, class... Args>
+struct alloc_has_construct_args<typename
+    alloc_void<decltype(alloc_declval<A&>().construct(alloc_declval<T*>(),
+        alloc_declval<Args&&>()...))>::type, A, T, Args...> {
+    BOOST_STATIC_CONSTEXPR bool value = true;
+};
+#endif
+
+} /* detail */
+
+template<class A, class T, class V, class... Args>
+inline typename detail::alloc_if<detail::alloc_has_construct_args<void, A, T,
+    V, Args...>::value>::type
+allocator_construct(A& a, T* p, V&& v, Args&&... args)
+{
+    a.construct(p, std::forward<V>(v), std::forward<Args>(args)...);
+}
+
+template<class A, class T, class V, class... Args>
+inline typename detail::alloc_if<!detail::alloc_has_construct_args<void, A, T,
+    V, Args...>::value>::type
+allocator_construct(A&, T* p, V&& v, Args&&... args)
+{
+    ::new((void*)p) T(std::forward<V>(v), std::forward<Args>(args)...);
+}
+#else
+namespace detail {
+
+template<class, class, class, class = void>
+struct alloc_has_construct_arg {
+    BOOST_STATIC_CONSTEXPR bool value = false;
+};
+
+#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+template<class A, class T, class V>
+struct alloc_has_construct_arg<A, T, V, typename
+    alloc_void<decltype(alloc_declval<A&>().construct(alloc_declval<T*>(),
+        alloc_declval<V>()))>::type> {
+    BOOST_STATIC_CONSTEXPR bool value = true;
+};
 #endif
 
 } /* detail */
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
-template<class A, class T, class... Args>
-inline typename detail::alloc_if<detail::alloc_has_construct<A, T,
-    detail::alloc_types<Args...> >::value>::type
-allocator_construct(A& a, T*p, Args&&... args)
-{
-    a.construct(p, std::forward<Args>(args)...);
-}
-
-template<class A, class T, class... Args>
-inline typename detail::alloc_if<!detail::alloc_has_construct<A, T,
-    detail::alloc_types<Args...> >::value>::type
-allocator_construct(A&, T* p, Args&&... args)
-{
-    ::new(static_cast<void*>(p)) T(std::forward<Args>(args)...);
-}
-#else
 template<class A, class T, class V>
-inline typename detail::alloc_if<detail::alloc_has_construct<A, T,
-    detail::alloc_types<V> >::value>::type
-allocator_construct(A& a, T*p, V&& v)
+inline typename detail::alloc_if<detail::alloc_has_construct_arg<A, T,
+    V&&>::value>::type
+allocator_construct(A& a, T* p, V&& v)
 {
     a.construct(p, std::forward<V>(v));
 }
 
 template<class A, class T, class V>
-inline typename detail::alloc_if<!detail::alloc_has_construct<A, T,
-    detail::alloc_types<V> >::value>::type
+inline typename detail::alloc_if<!detail::alloc_has_construct_arg<A, T,
+    V&&>::value>::type
 allocator_construct(A&, T* p, V&& v)
 {
-    ::new(static_cast<void*>(p)) T(std::forward<V>(v));
+    ::new((void*)p) T(std::forward<V>(v));
 }
-#endif
 #else
 template<class A, class T, class V>
-inline typename detail::alloc_if<detail::alloc_has_construct<A, T,
-    detail::alloc_types<V> >::value>::type
-allocator_construct(A& a, T*p, const V& v)
+inline typename detail::alloc_if<detail::alloc_has_construct_arg<A, T,
+    const V&>::value>::type
+allocator_construct(A& a, T* p, const V& v)
 {
     a.construct(p, v);
 }
 
 template<class A, class T, class V>
-inline typename detail::alloc_if<!detail::alloc_has_construct<A, T,
-    detail::alloc_types<V> >::value>::type
+inline typename detail::alloc_if<!detail::alloc_has_construct_arg<A, T,
+    const V&>::value>::type
 allocator_construct(A&, T* p, const V& v)
 {
-    ::new(static_cast<void*>(p)) T(v);
+    ::new((void*)p) T(v);
 }
 
 template<class A, class T, class V>
-inline typename detail::alloc_if<detail::alloc_has_construct<A, T,
-    detail::alloc_types<V> >::value>::type
-allocator_construct(A& a, T*p, V& v)
+inline typename detail::alloc_if<detail::alloc_has_construct_arg<A, T,
+    V&>::value>::type
+allocator_construct(A& a, T* p, V& v)
 {
     a.construct(p, v);
 }
 
 template<class A, class T, class V>
-inline typename detail::alloc_if<!detail::alloc_has_construct<A, T,
-    detail::alloc_types<V> >::value>::type
+inline typename detail::alloc_if<!detail::alloc_has_construct_arg<A, T,
+    V&>::value>::type
 allocator_construct(A&, T* p, V& v)
 {
-    ::new(static_cast<void*>(p)) T(v);
+    ::new((void*)p) T(v);
 }
+#endif
 #endif
 
 namespace detail {
@@ -416,7 +452,7 @@ struct alloc_has_destroy<A, T, typename
 
 template<class A, class T>
 inline typename detail::alloc_if<detail::alloc_has_destroy<A, T>::value>::type
-allocator_destroy(A& a, T*p)
+allocator_destroy(A& a, T* p)
 {
     a.destroy(p);
 }
@@ -460,8 +496,8 @@ inline typename detail::alloc_if<!detail::alloc_has_max_size<A>::value,
     typename allocator_size_type<A>::type>::type
 allocator_max_size(const A&)
 {
-    return (std::numeric_limits<typename allocator_size_type<A>::type>::max)() /
-        sizeof(typename A::value_type);
+    return (std::numeric_limits<typename
+        allocator_size_type<A>::type>::max)() / sizeof(typename A::value_type);
 }
 
 namespace detail {
