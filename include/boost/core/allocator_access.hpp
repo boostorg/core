@@ -21,7 +21,8 @@ Distributed under the Boost Software License, Version 1.0.
 #include <utility>
 #endif
 
-#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR) || \
+    defined(BOOST_MSVC) && BOOST_MSVC == 1800
 #define BOOST_CORE_ALLOCATOR_DETECTION
 #endif
 
@@ -263,18 +264,44 @@ template<class T>
 T alloc_declval() BOOST_NOEXCEPT;
 #endif
 
-template<class, class = void>
+#if defined(BOOST_MSVC) && BOOST_MSVC == 1800
+template<class>
+struct alloc_yes {
+    BOOST_STATIC_CONSTEXPR bool value = true;
+};
+
+struct alloc_no {
+    BOOST_STATIC_CONSTEXPR bool value = false;
+};
+#endif
+
+template<class, class, class, class = void>
 struct alloc_has_allocate {
     BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
-template<class A>
-struct alloc_has_allocate<A,
-    decltype(alloc_declval<A&>().allocate(alloc_declval<typename
-        boost::allocator_size_type<A>::type>(), alloc_declval<typename
-            boost::allocator_const_void_pointer<A>::type>()), void())> {
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR)
+template<class A, class N, class H>
+struct alloc_has_allocate<A, N, H,
+    decltype(alloc_declval<A&>().allocate(alloc_declval<N>(),
+        alloc_declval<H>()), void())> {
     BOOST_STATIC_CONSTEXPR bool value = true;
+};
+#elif defined(BOOST_MSVC) && BOOST_MSVC == 1800
+template<class A, class N, class H>
+struct alloc_has_allocate<A, N, H, void> {
+private:
+    template<class U>
+    static auto call(int, U& a) ->
+        alloc_yes<decltype(a.allocate(alloc_declval<N>(),
+            alloc_declval<H>()))>;
+
+    template<class U>
+    static alloc_no call(long, U&);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = decltype(call(0,
+        alloc_declval<A&>()))::value;
 };
 #endif
 
@@ -282,8 +309,9 @@ struct alloc_has_allocate<A,
 
 template<class A>
 inline typename detail::alloc_if<detail::alloc_enable<A>::value &&
-    detail::alloc_has_allocate<A>::value,
-        typename allocator_pointer<A>::type>::type
+    detail::alloc_has_allocate<A, typename allocator_size_type<A>::type,
+        typename allocator_const_void_pointer<A>::type>::value,
+            typename allocator_pointer<A>::type>::type
 allocator_allocate(A& a, typename allocator_size_type<A>::type n,
     typename allocator_const_void_pointer<A>::type h)
 {
@@ -292,8 +320,9 @@ allocator_allocate(A& a, typename allocator_size_type<A>::type n,
 
 template<class A>
 inline typename detail::alloc_if<!detail::alloc_enable<A>::value ||
-    !detail::alloc_has_allocate<A>::value,
-        typename allocator_pointer<A>::type>::type
+    !detail::alloc_has_allocate<A, typename allocator_size_type<A>::type,
+        typename allocator_const_void_pointer<A>::type>::value,
+            typename allocator_pointer<A>::type>::type
 allocator_allocate(A& a, typename allocator_size_type<A>::type n,
     typename allocator_const_void_pointer<A>::type)
 {
@@ -315,11 +344,26 @@ struct alloc_has_construct {
     BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR)
 template<class A, class T>
 struct alloc_has_construct<A, T,
     decltype(alloc_declval<A&>().construct(alloc_declval<T*>()), void())> {
     BOOST_STATIC_CONSTEXPR bool value = true;
+};
+#elif defined(BOOST_MSVC) && BOOST_MSVC == 1800
+template<class A, class T>
+struct alloc_has_construct<A, T, void> {
+private:
+    template<class U>
+    static auto call(int, U& a) ->
+        alloc_yes<decltype(a.construct(alloc_declval<T*>()))>;
+
+    template<class U>
+    static alloc_no call(long, U&);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = decltype(call(0,
+        alloc_declval<A&>()))::value;
 };
 #endif
 
@@ -350,12 +394,28 @@ struct alloc_has_construct_args {
     BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR)
 template<class A, class T, class... Args>
 struct alloc_has_construct_args<decltype(alloc_declval<A
     &>().construct(alloc_declval<T*>(), alloc_declval<Args&&>()...), void()),
         A, T, Args...> {
     BOOST_STATIC_CONSTEXPR bool value = true;
+};
+#elif defined(BOOST_MSVC) && BOOST_MSVC == 1800
+template<class A, class T, class... Args>
+struct alloc_has_construct_args<void, A, T, Args...> {
+private:
+    template<class U>
+    static auto call(int, U& a) ->
+        alloc_yes<decltype(a.construct(alloc_declval<T*>(),
+            alloc_declval<Args&&>()...))>;
+
+    template<class U>
+    static alloc_no call(long, U&);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = decltype(call(0,
+        alloc_declval<A&>()))::value;
 };
 #endif
 
@@ -384,12 +444,28 @@ struct alloc_has_construct_arg {
     BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR)
 template<class A, class T, class V>
 struct alloc_has_construct_arg<A, T, V,
     decltype(alloc_declval<A&>().construct(alloc_declval<T*>(),
         alloc_declval<V>()), void())> {
     BOOST_STATIC_CONSTEXPR bool value = true;
+};
+#elif defined(BOOST_MSVC) && BOOST_MSVC == 1800
+template<class A, class T, class V>
+struct alloc_has_construct_arg<A, T, V, void> {
+private:
+    template<class U>
+    static auto call(int, U& a) ->
+        alloc_yes<decltype(a.construct(alloc_declval<T*>(),
+            alloc_declval<V>()))>;
+
+    template<class U>
+    static alloc_no call(long, U&);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = decltype(call(0,
+        alloc_declval<A&>()))::value;
 };
 #endif
 
@@ -453,11 +529,26 @@ struct alloc_has_destroy {
     BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR)
 template<class A, class T>
 struct alloc_has_destroy<A, T,
     decltype(alloc_declval<A&>().destroy(alloc_declval<T*>()), void())> {
     BOOST_STATIC_CONSTEXPR bool value = true;
+};
+#elif defined(BOOST_MSVC) && BOOST_MSVC == 1800
+template<class A, class T>
+struct alloc_has_destroy<A, T, void> {
+private:
+    template<class U>
+    static auto call(int, U& a) ->
+        alloc_yes<decltype(a.destroy(alloc_declval<T*>()))>;
+
+    template<class U>
+    static alloc_no call(long, U&);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = decltype(call(0,
+        alloc_declval<A&>()))::value;
 };
 #endif
 
@@ -487,11 +578,25 @@ struct alloc_has_max_size {
     BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR)
 template<class A>
 struct alloc_has_max_size<A,
     decltype(alloc_declval<const A&>().max_size(), void())> {
     BOOST_STATIC_CONSTEXPR bool value = true;
+};
+#elif defined(BOOST_MSVC) && BOOST_MSVC == 1800
+template<class A>
+struct alloc_has_max_size<A, void> {
+private:
+    template<class U>
+    static auto call(int, const U& a) -> alloc_yes<decltype(a.max_size())>;
+
+    template<class U>
+    static alloc_no call(long, const U&);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = decltype(call(0,
+        alloc_declval<const A&>()))::value;
 };
 #endif
 
@@ -523,12 +628,27 @@ struct alloc_has_soccc {
     BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_SFINAE_EXPR)
 template<class A>
 struct alloc_has_soccc<A,
     decltype(alloc_declval<const A&>().select_on_container_copy_construction(),
         void())> {
     BOOST_STATIC_CONSTEXPR bool value = true;
+};
+#elif defined(BOOST_MSVC) && BOOST_MSVC == 1800
+template<class A>
+struct alloc_has_soccc<A, void> {
+private:
+    template<class U>
+    static auto call(int, const U& a) ->
+        alloc_yes<decltype(a.select_on_container_copy_construction())>;
+
+    template<class U>
+    static alloc_no call(long, const U&);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = decltype(call(0,
+        alloc_declval<const A&>()))::value;
 };
 #endif
 
