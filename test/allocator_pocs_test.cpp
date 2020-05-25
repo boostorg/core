@@ -9,19 +9,26 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 
-struct A1 { };
-
-struct A2 {
-    struct propagate_on_container_swap {
-        BOOST_STATIC_CONSTEXPR bool value = true;
-    };
+template<class T>
+struct A1 {
+    typedef T value_type;
 };
+
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class T>
+struct A2 {
+    typedef T value_type;
+    typedef std::true_type propagate_on_container_swap;
+};
+#endif
 
 int main()
 {
     BOOST_TEST_TRAIT_FALSE((boost::
-        allocator_propagate_on_container_swap<A1>::type));
+        allocator_propagate_on_container_swap<A1<int> >::type));
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
     BOOST_TEST_TRAIT_TRUE((boost::
-        allocator_propagate_on_container_swap<A2>::type));
+        allocator_propagate_on_container_swap<A2<int> >::type));
+#endif
     return boost::report_errors();
 }

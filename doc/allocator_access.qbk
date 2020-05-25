@@ -21,9 +21,8 @@ templates to simplify allocator use. It provides the same functionality as the
 C++ standard library `std::allocator_traits` but with individual templates for
 each allocator feature.
 
-This implementation supports C++03 and above. These facilities also simplify
-existing libraries by avoiding having to check for `BOOST_NO_CXX11_ALLOCATOR`
-and conditionally use `std::allocator_traits`.
+These facilities also simplify existing libraries by avoiding having to check
+for `BOOST_NO_CXX11_ALLOCATOR` and conditionally use `std::allocator_traits`.
 
 [endsect]
 
@@ -142,14 +141,14 @@ allocator_pointer_t<A> allocator_allocate(A& a, allocator_size_type_t<A> n);
 
 template<class A>
 allocator_pointer_t<A> allocator_allocate(A& a, allocator_size_type_t<A> n,
-    allocator_const_void_pointer_t<A> hint);
+    allocator_const_void_pointer_t<A> h);
 
 template<class A>
 void allocator_deallocate(A& a, allocator_pointer_t<A> p,
     allocator_size_type_t<A> n);
 
 template<class A, class T, class... Args>
-void allocator_construct(A& a, T*p, Args&&... args);
+void allocator_construct(A& a, T* p, Args&&... args);
 
 template<class A, class T>
 void allocator_destroy(A& a, T* p);

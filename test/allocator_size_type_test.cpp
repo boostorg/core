@@ -9,26 +9,26 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 
-#if !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS)
+template<class T>
 struct A1 {
-    typedef long difference_type;
+    typedef T value_type;
+    typedef int size_type;
 };
-#else
-struct A1 {
-    typedef unsigned long size_type;
+
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class T>
+struct A2 {
+    typedef T value_type;
 };
 #endif
 
-struct A2 {
-    typedef long difference_type;
-    typedef unsigned short size_type;
-};
-
 int main()
 {
-    BOOST_TEST_TRAIT_TRUE((boost::core::is_same<unsigned long,
-        boost::allocator_size_type<A1>::type>));
-    BOOST_TEST_TRAIT_TRUE((boost::core::is_same<unsigned short,
-        boost::allocator_size_type<A2>::type>));
+    BOOST_TEST_TRAIT_TRUE((boost::core::is_same<int,
+        boost::allocator_size_type<A1<char> >::type>));
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+    BOOST_TEST_TRAIT_TRUE((boost::core::is_same<std::size_t,
+        boost::allocator_size_type<A2<int> >::type>));
+#endif
     return boost::report_errors();
 }

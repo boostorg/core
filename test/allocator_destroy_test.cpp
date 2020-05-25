@@ -6,20 +6,16 @@ Distributed under the Boost Software License, Version 1.0.
 (http://www.boost.org/LICENSE_1_0.txt)
 */
 #include <boost/core/allocator_access.hpp>
-#include <boost/core/default_allocator.hpp>
 #include <boost/core/lightweight_test.hpp>
 
 struct S {
     static int count;
-
     S() {
         ++count;
     }
-
     S(const S&) {
         ++count;
     }
-
     ~S() {
         --count;
     }
@@ -27,35 +23,39 @@ struct S {
 
 int S::count = 0;
 
-struct A1 { };
+template<class T>
+struct A1 {
+    typedef T value_type;
+    A1() { }
+};
 
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class T>
 struct A2 {
-    void destroy(S*) {
-        ++S::count;
+    typedef T value_type;
+    A2() { }
+    template<class U>
+    void destroy(U* p) {
+        *p = U();
     }
 };
 #endif
 
 int main()
 {
-    boost::default_allocator<S> d;
     {
-        S* p = d.allocate(1);
-        new(p) S;
-        A1 a;
-        boost::allocator_destroy(a, p);
+        A1<int> a;
+        S s;
+        boost::allocator_destroy(a, &s);
         BOOST_TEST_EQ(S::count, 0);
-        d.deallocate(p, 1);
+        ::new((void*)&s) S();
     }
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
     {
-        S* p = d.allocate(1);
-        new(p) S;
-        A2 a;
-        boost::allocator_destroy(a, p);
-        BOOST_TEST_EQ(S::count, 2);
-        d.deallocate(p, 1);
+        A1<int> a;
+        int i = 5;
+        boost::allocator_destroy(a, &i);
+        BOOST_TEST_EQ(i, 0);
     }
 #endif
     return boost::report_errors();

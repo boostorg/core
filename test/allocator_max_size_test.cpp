@@ -7,29 +7,33 @@ Distributed under the Boost Software License, Version 1.0.
 */
 #include <boost/core/allocator_access.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <limits>
 
+template<class T>
 struct A1 {
-    typedef long value_type;
+    typedef T value_type;
     typedef short size_type;
-};
-
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
-struct A2 {
-    typedef long value_type;
-    typedef short size_type;
-
-    size_type max_size() const {
+    A1() { }
+    short max_size() const {
         return 1;
     }
+};
+
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class T>
+struct A2 {
+    typedef T value_type;
+    typedef short size_type;
+    A2() { }
 };
 #endif
 
 int main()
 {
-    BOOST_TEST_EQ(boost::allocator_max_size(A1()),
-        std::numeric_limits<A1::size_type>::max() / sizeof(A1::value_type));
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
-    BOOST_TEST_EQ(boost::allocator_max_size(A2()), 1);
+    BOOST_TEST_EQ(boost::allocator_max_size(A1<int>()), 1);
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+    BOOST_TEST_LE(boost::allocator_max_size(A2<int>()),
+        (std::numeric_limits<short>::max)());
 #endif
     return boost::report_errors();
 }

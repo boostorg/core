@@ -8,53 +8,51 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/core/allocator_access.hpp>
 #include <boost/core/lightweight_test.hpp>
 
+template<class T>
 struct A1 {
-    typedef int* pointer;
-    typedef int size_type;
-
+    typedef T value_type;
+    typedef std::size_t size_type;
+    typedef T* pointer;
+    typedef const T* const_pointer;
+    template<class U>
+    struct rebind {
+        typedef A1<U> other;
+    };
     A1()
         : value() { }
-
-    pointer allocate(size_type n) {
+    T* allocate(std::size_t n, const void*) {
         value = n;
-        return &value;
+        return 0;
     }
-
-    size_type value;
+    std::size_t value;
 };
 
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class T>
 struct A2 {
-    typedef int* pointer;
-    typedef int size_type;
-
+    typedef T value_type;
     A2()
         : value() { }
-
-    pointer allocate(size_type n) {
+    T* allocate(std::size_t n) {
         value = n;
-        return &value;
+        return 0;
     }
-
-    pointer allocate(size_type n, const void*) {
-        value = n + 1;
-        return &value;
-    }
-
-    size_type value;
+    std::size_t value;
 };
 #endif
 
 int main()
 {
     {
-        A1 a;
-        BOOST_TEST_EQ(*boost::allocator_allocate(a, 1, 0), 1);
+        A1<int> a;
+        BOOST_TEST_NOT(boost::allocator_allocate(a, 5, 0));
+        BOOST_TEST_EQ(a.value, 5);
     }
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
     {
-        A2 a;
-        BOOST_TEST_EQ(*boost::allocator_allocate(a, 1, 0), 2);
+        A2<int> a;
+        BOOST_TEST_NOT(boost::allocator_allocate(a, 5, 0));
+        BOOST_TEST_EQ(a.value, 5);
     }
 #endif
     return boost::report_errors();

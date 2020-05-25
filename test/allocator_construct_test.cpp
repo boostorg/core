@@ -6,43 +6,40 @@ Distributed under the Boost Software License, Version 1.0.
 (http://www.boost.org/LICENSE_1_0.txt)
 */
 #include <boost/core/allocator_access.hpp>
-#include <boost/core/default_allocator.hpp>
 #include <boost/core/lightweight_test.hpp>
 
-struct S {
-    S(int v)
-        : value(v) { }
-
-    int value;
+template<class T>
+struct A1 {
+    typedef T value_type;
+    A1() { }
 };
 
-struct A1 { };
-
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class T>
 struct A2 {
-    void construct(S* p, int v) {
-        new(p) S(v + 1);
+    typedef T value_type;
+    A2() { }
+    template<class U, class V>
+    void construct(U* p, const V& v) {
+        ::new((void*)p) U(v + 1);
     }
 };
 #endif
 
 int main()
 {
-    boost::default_allocator<S> d;
     {
-        S* p = d.allocate(1);
-        A1 a;
-        boost::allocator_construct(a, p, 1);
-        BOOST_TEST_EQ(p->value, 1);
-        d.deallocate(p, 1);
+        A1<int> a;
+        int i = 0;
+        boost::allocator_construct(a, &i, 5);
+        BOOST_TEST_EQ(i, 5);
     }
-#if defined(BOOST_CORE_ALLOCATOR_DETECTION)
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
     {
-        S* p = d.allocate(1);
-        A2 a;
-        boost::allocator_construct(a, p, 1);
-        BOOST_TEST_EQ(p->value, 2);
-        d.deallocate(p, 1);
+        A1<int> a;
+        int i = 0;
+        boost::allocator_construct(a, &i, 5);
+        BOOST_TEST_EQ(i, 6);
     }
 #endif
     return boost::report_errors();

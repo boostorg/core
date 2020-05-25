@@ -9,20 +9,26 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 
+template<class T>
 struct A1 {
-    typedef char* pointer;
+    typedef T value_type;
+    typedef short difference_type;
 };
 
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class T>
 struct A2 {
-    typedef char* pointer;
-    typedef int difference_type;
+    typedef T value_type;
 };
+#endif
 
 int main()
 {
+    BOOST_TEST_TRAIT_TRUE((boost::core::is_same<short,
+        boost::allocator_difference_type<A1<char> >::type>));
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
     BOOST_TEST_TRAIT_TRUE((boost::core::is_same<std::ptrdiff_t,
-        boost::allocator_difference_type<A1>::type>));
-    BOOST_TEST_TRAIT_TRUE((boost::core::is_same<int,
-        boost::allocator_difference_type<A2>::type>));
+        boost::allocator_difference_type<A2<int> >::type>));
+#endif
     return boost::report_errors();
 }
