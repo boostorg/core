@@ -222,7 +222,7 @@ void allocator_construct(A& a, T*p, Args&&... args);`]
 [[`template<class A, class T> void allocator_destroy(A& a, T* p);`]
 [Calls `a.destroy(p)` if valid, otherwise calls `p->~T()`.]]
 [[`template<class A> allocator_size_type_t<A> allocator_max_size(const A& a);`]
-[Returns `a.max_size()` if valid, otehrwise returns
+[Returns `a.max_size()` if valid, otherwise returns
 `std::numeric_limits<allocator_size_type_t<A> >::max() /
 sizeof(A::value_type)`.]]
 [[`template<class A> A allocator_select_on_container_copy_construction(const
