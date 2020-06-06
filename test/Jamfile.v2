@@ -79,8 +79,6 @@ run lightweight_test_test.cpp : : :
   <exception-handling>off $(pedantic-errors) : lightweight_test_test_no_except ;
 run lightweight_test_test2.cpp
   : : : $(pedantic-errors) ;
-run lightweight_test_with_test.cpp
-  : : : $(pedantic-errors) ;
 run lightweight_test_all_with_test.cpp
   : : : $(pedantic-errors) ;
 run lightweight_test_lt_le_test.cpp
@@ -123,6 +121,10 @@ run-fail lightweight_test_ge_fail.cpp ;
 
 run lightweight_test_bool.cpp
   : : : $(pedantic-errors) ;
+
+run lightweight_test_with_test.cpp
+  : : : $(pedantic-errors) ;
+run-fail lightweight_test_with_fail.cpp ;
 
 run is_same_test.cpp ;
 
