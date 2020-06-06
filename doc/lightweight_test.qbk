@@ -43,6 +43,7 @@ When using `lightweight_test.hpp`, *do not forget* to
 #define BOOST_TEST_GE(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_CSTR_EQ(expr1, expr2) /*unspecified*/
 #define BOOST_TEST_CSTR_NE(expr1, expr2) /*unspecified*/
+#define BOOST_TEST_WITH(expr1, expr2, pred) /*unspecified*/
 #define BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2) /* unspecified */
 #define BOOST_TEST_ALL_WITH(begin1, end1, begin2, end2, predicate) /* unspecified */
 #define BOOST_TEST_THROWS(expr, excep) /*unspecified*/
@@ -172,6 +173,17 @@ BOOST_TEST_CSTR_NE(expr1, expr2)
 ``
 
 Specialization of `BOOST_TEST_NE` which interprets `expr1` and `expr2` as pointers to null-terminated byte strings (C strings). If `std::strcmp(expr1, expr2) == 0`, increase the error count and output a message containing both expressions.
+
+[endsect]
+
+[section BOOST_TEST_WITH]
+
+``
+BOOST_TEST_WITH(expr1, expr2, pred)
+``
+
+If `pred(expr1, expr2)` is not true increases the error count and outputs a
+message containing both expressions.
 
 [endsect]
 
