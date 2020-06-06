@@ -173,42 +173,84 @@ template<class T> inline const void* test_output_impl(T volatile* v) { return co
 inline const void* test_output_impl(std::nullptr_t) { return nullptr; }
 #endif
 
-struct lw_test_eq {
+template <typename BinaryPredicate>
+struct lw_name_traits
+{
+    static const char* op() { return "<+>"; }
+};
+
+struct lw_test_eq
+{
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t == u; }
+};
+
+template <>
+struct lw_name_traits<lw_test_eq>
+{
     static const char* op() { return "=="; }
 };
-
-struct lw_test_ne {
+    
+struct lw_test_ne
+{
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t != u; }
+};
+
+template <>
+struct lw_name_traits<lw_test_ne>
+{
     static const char* op() { return "!="; }
 };
-
-struct lw_test_lt {
+    
+struct lw_test_lt
+{
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t < u; }
+};
+
+template <>
+struct lw_name_traits<lw_test_lt>
+{
     static const char* op() { return "<"; }
 };
-
-struct lw_test_le {
+    
+struct lw_test_le
+{
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t <= u; }
+};
+
+template <>
+struct lw_name_traits<lw_test_le>
+{
     static const char* op() { return "<="; }
 };
-
-struct lw_test_gt {
+    
+struct lw_test_gt
+{
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t > u; }
+};
+
+template <>
+struct lw_name_traits<lw_test_gt>
+{
     static const char* op() { return ">"; }
 };
-
-struct lw_test_ge {
+    
+struct lw_test_ge
+{
     template <typename T, typename U>
     bool operator()(const T& t, const U& u) const { return t >= u; }
-    static const char* op() { return ">="; }
 };
 
+template <>
+struct lw_name_traits<lw_test_ge>
+{
+    static const char* op() { return ">="; }
+};
+    
 template<class BinaryPredicate, class T, class U>
 inline bool test_with_impl(BinaryPredicate pred, char const * expr1, char const * expr2,
                            char const * file, int line, char const * function,
@@ -222,8 +264,8 @@ inline bool test_with_impl(BinaryPredicate pred, char const * expr1, char const 
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " " << pred.op() << " " << expr2
-            << "' ('" << test_output_impl(t) << "' " << pred.op() << " '" << test_output_impl(u)
+            << file << "(" << line << "): test '" << expr1 << " " << lw_name_traits<decltype(pred)>::op() << " " << expr2
+            << "' ('" << test_output_impl(t) << "' " << lw_name_traits<decltype(pred)>::op() << " '" << test_output_impl(u)
             << "') failed in function '" << function << "'" << std::endl;
         ++test_results().errors();
         return false;
@@ -447,6 +489,8 @@ inline int report_errors()
 #define BOOST_TEST_NOT(expr) BOOST_TEST(!(expr))
 
 #define BOOST_ERROR(msg) ( ::boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
+
+#define BOOST_TEST_WITH(expr1,expr2,predicate) ( ::boost::detail::test_with_impl(predicate, #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 
 #define BOOST_TEST_EQ(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_eq(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
 #define BOOST_TEST_NE(expr1,expr2) ( ::boost::detail::test_with_impl(::boost::detail::lw_test_ne(), #expr1, #expr2, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, expr1, expr2) )
