@@ -211,39 +211,39 @@ struct lw_test_ge
     bool operator()(const T& t, const U& u) const { return t >= u; }
 };
 
-// lw_predicate_name
+// lwt_predicate_name
 
-template<class T> char const * lw_predicate_name( T const& )
+template<class T> char const * lwt_predicate_name( T const& )
 {
     return "~=";
 }
 
-inline char const * lw_predicate_name( lw_test_eq const& )
+inline char const * lwt_predicate_name( lw_test_eq const& )
 {
     return "==";
 }
 
-inline char const * lw_predicate_name( lw_test_ne const& )
+inline char const * lwt_predicate_name( lw_test_ne const& )
 {
     return "!=";
 }
 
-inline char const * lw_predicate_name( lw_test_lt const& )
+inline char const * lwt_predicate_name( lw_test_lt const& )
 {
     return "<";
 }
 
-inline char const * lw_predicate_name( lw_test_le const& )
+inline char const * lwt_predicate_name( lw_test_le const& )
 {
     return "<=";
 }
 
-inline char const * lw_predicate_name( lw_test_gt const& )
+inline char const * lwt_predicate_name( lw_test_gt const& )
 {
     return ">";
 }
 
-inline char const * lw_predicate_name( lw_test_ge const& )
+inline char const * lwt_predicate_name( lw_test_ge const& )
 {
     return ">=";
 }
@@ -263,8 +263,8 @@ inline bool test_with_impl(BinaryPredicate pred, char const * expr1, char const 
     else
     {
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
-            << file << "(" << line << "): test '" << expr1 << " " << lw_predicate_name(pred) << " " << expr2
-            << "' ('" << test_output_impl(t) << "' " << lw_predicate_name(pred) << " '" << test_output_impl(u)
+            << file << "(" << line << "): test '" << expr1 << " " << lwt_predicate_name(pred) << " " << expr2
+            << "' ('" << test_output_impl(t) << "' " << lwt_predicate_name(pred) << " '" << test_output_impl(u)
             << "') failed in function '" << function << "'" << std::endl;
         ++test_results().errors();
         return false;
