@@ -13,17 +13,17 @@ template <typename T>
 struct with_tolerance
 {
     with_tolerance( T tolerance ): tolerance( tolerance )
-	{
-	}
+    {
+    }
 
-	bool operator()( T lhs, T rhs ) const
+    bool operator()( T lhs, T rhs ) const
     {
         return std::abs( lhs - rhs ) <= tolerance;
     }
 
 private:
 
-	T tolerance;
+    T tolerance;
 };
 
 void test_tolerance_predicate()
