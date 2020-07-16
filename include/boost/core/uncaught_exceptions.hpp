@@ -46,7 +46,11 @@
 #if defined(BOOST_CORE_HAS_CXXABI_H)
 // MinGW GCC 4.4 seem to not work the same way the newer GCC versions do. As a result, __cxa_get_globals based implementation will always return 0.
 // Just disable it for now and fall back to std::uncaught_exception().
-#if !(defined(__MINGW32__) && (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 405))
+// On AIX, xlclang++ does have cxxabi.h but doesn't have __cxa_get_globals (https://github.com/boostorg/core/issues/78).
+#if !( \
+        (defined(__MINGW32__) && (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 405)) || \
+        defined(__ibmxl__) \
+    )
 #include <cxxabi.h>
 #include <cstring>
 #define BOOST_CORE_HAS_CXA_GET_GLOBALS
@@ -76,7 +80,7 @@ extern "C" __cxa_eh_globals* __cxa_get_globals() BOOST_NOEXCEPT_OR_NOTHROW __att
 #endif
 } // namespace __cxxabiv1
 #endif
-#endif // !(defined(__MINGW32__) && (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) < 405))
+#endif
 #endif // defined(BOOST_CORE_HAS_CXXABI_H)
 
 #if defined(_MSC_VER) && _MSC_VER >= 1400
