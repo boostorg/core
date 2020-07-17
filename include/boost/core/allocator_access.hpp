@@ -137,6 +137,11 @@ template<class A>
 struct allocator_difference_type {
     typedef typename A::difference_type type;
 };
+#elif defined(BOOST_MSVC)
+template<class A>
+struct allocator_difference_type {
+    typedef typename std::allocator_traits<A>::difference_type type;
+};
 #else
 template<class A, class = void>
 struct allocator_difference_type {
@@ -155,6 +160,11 @@ struct allocator_difference_type<A,
 template<class A>
 struct allocator_size_type {
     typedef typename A::size_type type;
+};
+#elif defined(BOOST_MSVC)
+template<class A>
+struct allocator_size_type {
+    typedef typename std::allocator_traits<A>::size_type type;
 };
 #else
 template<class A, class = void>
