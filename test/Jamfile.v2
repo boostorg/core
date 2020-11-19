@@ -35,7 +35,10 @@ compile-fail ref_rv_fail4.cpp ;
 compile-fail ref_rv_fail5.cpp ;
 compile-fail ref_implicit_fail.cpp ;
 compile-fail ref_implicit_fail2.cpp ;
+compile-fail ref_implicit_fail3.cpp ;
+compile-fail ref_implicit_fail4.cpp ;
 run ref_cv_test.cpp ;
+run ref_conversion_test.cpp ;
 
 run eif_constructors.cpp ;
 run eif_dummy_arg_disambiguation.cpp ;
