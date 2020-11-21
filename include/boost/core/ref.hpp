@@ -110,6 +110,13 @@ public:
 
     template<class Y> friend class reference_wrapper;
 
+    /**
+     Constructs a `reference_wrapper` object that stores the
+     reference stored in the compatible `reference_wrapper` `r`.
+
+     @remark Only enabled when `Y*` is convertible to `T*`.
+     @remark Does not throw.
+    */
     template<class Y> reference_wrapper( reference_wrapper<Y> r,
         typename enable_if_c<boost::detail::ref_convertible<Y, T>::value,
             boost::detail::ref_empty>::type = boost::detail::ref_empty() ): t_( r.t_ )
