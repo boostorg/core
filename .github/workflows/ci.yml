@@ -1,4 +1,4 @@
-name: POSIX
+name: CI
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ env:
   UBSAN_OPTIONS: print_stacktrace=1
 
 jobs:
-  CI:
+  posix:
     strategy:
       fail-fast: false
       matrix:
