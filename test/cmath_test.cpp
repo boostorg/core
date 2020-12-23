@@ -16,6 +16,8 @@ template<class T> void test_positive_normal( T x )
     BOOST_TEST( !boost::core::isnan( x ) );
     BOOST_TEST( boost::core::isnormal( x ) );
 
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_normal );
+
     BOOST_TEST( !boost::core::signbit( x ) );
 
     BOOST_TEST_EQ( boost::core::copysign( T(+2), x ), T(+2) );
@@ -28,6 +30,8 @@ template<class T> void test_negative_normal( T x )
     BOOST_TEST( !boost::core::isinf( x ) );
     BOOST_TEST( !boost::core::isnan( x ) );
     BOOST_TEST( boost::core::isnormal( x ) );
+
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_normal );
 
     BOOST_TEST( boost::core::signbit( x ) );
 
@@ -42,6 +46,8 @@ template<class T> void test_positive_zero( T x )
     BOOST_TEST( !boost::core::isnan( x ) );
     BOOST_TEST( !boost::core::isnormal( x ) );
 
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_zero );
+
     BOOST_TEST( !boost::core::signbit( x ) );
 
     BOOST_TEST_EQ( boost::core::copysign( T(+2), x ), T(+2) );
@@ -54,6 +60,8 @@ template<class T> void test_negative_zero( T x )
     BOOST_TEST( !boost::core::isinf( x ) );
     BOOST_TEST( !boost::core::isnan( x ) );
     BOOST_TEST( !boost::core::isnormal( x ) );
+
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_zero );
 
     BOOST_TEST( boost::core::signbit( x ) );
 
@@ -68,6 +76,8 @@ template<class T> void test_positive_infinity( T x )
     BOOST_TEST( !boost::core::isnan( x ) );
     BOOST_TEST( !boost::core::isnormal( x ) );
 
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_infinite );
+
     BOOST_TEST( !boost::core::signbit( x ) );
 
     BOOST_TEST_EQ( boost::core::copysign( T(+2), x ), T(+2) );
@@ -80,6 +90,8 @@ template<class T> void test_negative_infinity( T x )
     BOOST_TEST( boost::core::isinf( x ) );
     BOOST_TEST( !boost::core::isnan( x ) );
     BOOST_TEST( !boost::core::isnormal( x ) );
+
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_infinite );
 
     BOOST_TEST( boost::core::signbit( x ) );
 
@@ -94,6 +106,8 @@ template<class T> void test_positive_nan( T x )
     BOOST_TEST( boost::core::isnan( x ) );
     BOOST_TEST( !boost::core::isnormal( x ) );
 
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_nan );
+
     BOOST_TEST( !boost::core::signbit( x ) );
 
     BOOST_TEST_EQ( boost::core::copysign( T(+2), x ), T(+2) );
@@ -106,6 +120,8 @@ template<class T> void test_negative_nan( T x )
     BOOST_TEST( !boost::core::isinf( x ) );
     BOOST_TEST( boost::core::isnan( x ) );
     BOOST_TEST( !boost::core::isnormal( x ) );
+
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_nan );
 
     BOOST_TEST( boost::core::signbit( x ) );
 
@@ -120,6 +136,8 @@ template<class T> void test_positive_subnormal( T x )
     BOOST_TEST( !boost::core::isnan( x ) );
     BOOST_TEST( !boost::core::isnormal( x ) );
 
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_subnormal );
+
     BOOST_TEST( !boost::core::signbit( x ) );
 
     BOOST_TEST_EQ( boost::core::copysign( T(+2), x ), T(+2) );
@@ -132,6 +150,8 @@ template<class T> void test_negative_subnormal( T x )
     BOOST_TEST( !boost::core::isinf( x ) );
     BOOST_TEST( !boost::core::isnan( x ) );
     BOOST_TEST( !boost::core::isnormal( x ) );
+
+    BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_subnormal );
 
     BOOST_TEST( boost::core::signbit( x ) );
 
