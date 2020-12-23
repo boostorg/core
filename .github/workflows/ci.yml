@@ -120,8 +120,13 @@ jobs:
 
       - name: Setup Boost
         run: |
+          echo GITHUB_BASE_REF: $GITHUB_BASE_REF
+          echo GITHUB_REF: $GITHUB_REF
           REF=${GITHUB_BASE_REF:-$GITHUB_REF}
+          REF=${REF#refs/heads/}
+          echo REF: $REF
           BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          echo BOOST_BRANCH: $BOOST_BRANCH
           cd ..
           git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
           cd boost-root
@@ -167,9 +172,12 @@ jobs:
       - name: Setup Boost
         shell: cmd
         run: |
+          echo GITHUB_BASE_REF: %GITHUB_BASE_REF%
+          echo GITHUB_REF: %GITHUB_REF%
           if "%GITHUB_BASE_REF%" == "" set GITHUB_BASE_REF=%GITHUB_REF%
           set BOOST_BRANCH=develop
-          if "%GITHUB_BASE_REF%" == "master" set BOOST_BRANCH=master
+          for /f %%i in ("%GITHUB_BASE_REF%") do if "%%~nxi" == "master" set BOOST_BRANCH=master
+          echo BOOST_BRANCH: %BOOST_BRANCH%
           cd ..
           git clone -b %BOOST_BRANCH% --depth 1 https://github.com/boostorg/boost.git boost-root
           cd boost-root
