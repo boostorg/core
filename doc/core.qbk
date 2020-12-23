@@ -42,6 +42,7 @@ criteria for inclusion is that the utility component be:
 [include allocator_access.qbk]
 [include alloc_construct.qbk]
 [include checked_delete.qbk]
+[include cmath.qbk]
 [include default_allocator.qbk]
 [include demangle.qbk]
 [include empty_value.qbk]
