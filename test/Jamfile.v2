@@ -220,5 +220,7 @@ run uncaught_exceptions_np.cpp
 run no_exceptions_support_test.cpp ;
 run no_exceptions_support_test.cpp : : : <exception-handling>off : no_exceptions_support_test_nx ;
 
+run cmath_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
