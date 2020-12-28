@@ -198,12 +198,70 @@ BOOST_CONSTEXPR T bit_width( T x ) BOOST_NOEXCEPT
 }
 
 template<class T>
-BOOST_CONSTEXPR T bit_ceil( T x ) BOOST_NOEXCEPT;
-
-template<class T>
 BOOST_CONSTEXPR T bit_floor( T x ) BOOST_NOEXCEPT
 {
     return x == 0? 0: T(1) << ( boost::core::bit_width( x ) - 1 );
+}
+
+namespace detail
+{
+
+BOOST_CXX14_CONSTEXPR inline boost::uint32_t bit_ceil_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    if( x == 0 )
+    {
+        return 0;
+    }
+
+    --x;
+
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+
+    ++x;
+
+    return x;
+}
+
+BOOST_CXX14_CONSTEXPR inline boost::uint64_t bit_ceil_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    if( x == 0 )
+    {
+        return 0;
+    }
+
+    --x;
+
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    x |= x >> 32;
+
+    ++x;
+
+    return x;
+}
+
+} // namespace detail
+
+template<class T>
+BOOST_CXX14_CONSTEXPR T bit_ceil( T x ) BOOST_NOEXCEPT
+{
+    BOOST_STATIC_ASSERT( sizeof(T) <= sizeof(boost::uint64_t) );
+
+    if( sizeof(T) <= sizeof(boost::uint32_t) )
+    {
+        return static_cast<T>( boost::core::detail::bit_ceil_impl( static_cast<boost::uint32_t>( x ) ) );
+    }
+    else
+    {
+        return static_cast<T>( boost::core::detail::bit_ceil_impl( static_cast<boost::uint64_t>( x ) ) );
+    }
 }
 
 // endian

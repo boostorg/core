@@ -229,6 +229,7 @@ run bit_countl_test.cpp ;
 run bit_width_test.cpp ;
 run has_single_bit_test.cpp ;
 run bit_floor_test.cpp ;
+run bit_ceil_test.cpp ;
 
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
