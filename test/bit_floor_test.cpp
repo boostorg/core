@@ -21,8 +21,8 @@ template<class T> void test_bit_floor( T x )
     else
     {
         BOOST_TEST( boost::core::has_single_bit( y ) );
-        BOOST_TEST_LE( y, x );
-        BOOST_TEST_GT( y, x >> 1 );
+        BOOST_TEST_LE( +y, +x );
+        BOOST_TEST_GT( +y, x >> 1 );
     }
 }
 
