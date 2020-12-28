@@ -190,6 +190,46 @@ BOOST_CONSTEXPR int countl_one( T x ) BOOST_NOEXCEPT
 
 // countr
 
+#if defined(__GNUC__) || defined(__clang__)
+
+namespace detail
+{
+
+BOOST_CONSTEXPR inline int countr_impl( unsigned char x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_ctz( x ): std::numeric_limits<unsigned char>::digits;
+}
+
+BOOST_CONSTEXPR inline int countr_impl( unsigned short x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_ctz( x ): std::numeric_limits<unsigned short>::digits;
+}
+
+BOOST_CONSTEXPR inline int countr_impl( unsigned int x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_ctz( x ): std::numeric_limits<unsigned int>::digits;
+}
+
+BOOST_CONSTEXPR inline int countr_impl( unsigned long x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_ctzl( x ): std::numeric_limits<unsigned long>::digits;
+}
+
+BOOST_CONSTEXPR inline int countr_impl( unsigned long long x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_ctzll( x ): std::numeric_limits<unsigned long long>::digits;
+}
+
+} // namespace detail
+
+template<class T>
+BOOST_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countr_impl( x );
+}
+
+#else // defined(__GNUC__) || defined(__clang__)
+
 namespace detail
 {
 
@@ -240,6 +280,8 @@ int countr_zero( T x ) BOOST_NOEXCEPT
         return boost::core::detail::countr_impl( static_cast<boost::uint64_t>( x ) );
     }
 }
+
+#endif // defined(__GNUC__) || defined(__clang__)
 
 template<class T>
 BOOST_CONSTEXPR int countr_one( T x ) BOOST_NOEXCEPT
