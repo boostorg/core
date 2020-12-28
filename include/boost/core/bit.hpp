@@ -21,8 +21,6 @@
 #include <limits>
 #include <cstring>
 
-#define BOOST_CORE_BIT_CONSTEXPR
-
 namespace boost
 {
 namespace core
@@ -40,7 +38,47 @@ To bit_cast( From const & from ) BOOST_NOEXCEPT
     return to;
 }
 
-// counting
+// countl
+
+#if defined(__GNUC__) || defined(__clang__)
+
+namespace detail
+{
+
+BOOST_CONSTEXPR inline int countl_impl( unsigned char x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_clz( x ) - ( std::numeric_limits<unsigned int>::digits - std::numeric_limits<unsigned char>::digits ): std::numeric_limits<unsigned char>::digits;
+}
+
+BOOST_CONSTEXPR inline int countl_impl( unsigned short x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_clz( x ) - ( std::numeric_limits<unsigned int>::digits - std::numeric_limits<unsigned short>::digits ): std::numeric_limits<unsigned short>::digits;
+}
+
+BOOST_CONSTEXPR inline int countl_impl( unsigned int x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_clz( x ): std::numeric_limits<unsigned int>::digits;
+}
+
+BOOST_CONSTEXPR inline int countl_impl( unsigned long x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_clzl( x ): std::numeric_limits<unsigned long>::digits;
+}
+
+BOOST_CONSTEXPR inline int countl_impl( unsigned long long x ) BOOST_NOEXCEPT
+{
+    return x? __builtin_clzll( x ): std::numeric_limits<unsigned long long>::digits;
+}
+
+} // namespace detail
+
+template<class T>
+BOOST_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countl_impl( x );
+}
+
+#else // defined(__GNUC__) || defined(__clang__)
 
 namespace detail
 {
@@ -78,7 +116,7 @@ inline int countl_impl( boost::uint16_t x ) BOOST_NOEXCEPT
 } // namespace detail
 
 template<class T>
-BOOST_CORE_BIT_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
+int countl_zero( T x ) BOOST_NOEXCEPT
 {
     BOOST_STATIC_ASSERT( sizeof(T) == sizeof(boost::uint8_t) || sizeof(T) == sizeof(boost::uint16_t) || sizeof(T) == sizeof(boost::uint32_t) || sizeof(T) == sizeof(boost::uint64_t) );
 
@@ -100,11 +138,15 @@ BOOST_CORE_BIT_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
     }
 }
 
+#endif // defined(__GNUC__) || defined(__clang__)
+
 template<class T>
-BOOST_CORE_BIT_CONSTEXPR int countl_one( T x ) BOOST_NOEXCEPT
+BOOST_CONSTEXPR int countl_one( T x ) BOOST_NOEXCEPT
 {
     return boost::core::countl_zero( static_cast<T>( ~x ) );
 }
+
+// countr
 
 namespace detail
 {
@@ -135,7 +177,7 @@ inline int countr_impl( boost::uint16_t x ) BOOST_NOEXCEPT
 } // namespace detail
 
 template<class T>
-BOOST_CORE_BIT_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
+int countr_zero( T x ) BOOST_NOEXCEPT
 {
     BOOST_STATIC_ASSERT( sizeof(T) == sizeof(boost::uint8_t) || sizeof(T) == sizeof(boost::uint16_t) || sizeof(T) == sizeof(boost::uint32_t) || sizeof(T) == sizeof(boost::uint64_t) );
 
@@ -158,10 +200,12 @@ BOOST_CORE_BIT_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
 }
 
 template<class T>
-BOOST_CORE_BIT_CONSTEXPR int countr_one( T x ) BOOST_NOEXCEPT
+BOOST_CONSTEXPR int countr_one( T x ) BOOST_NOEXCEPT
 {
     return boost::core::countr_zero( static_cast<T>( ~x ) );
 }
+
+// popcount
 
 namespace detail
 {
@@ -187,7 +231,7 @@ BOOST_CXX14_CONSTEXPR inline int popcount_impl( boost::uint64_t x ) BOOST_NOEXCE
 } // namespace detail
 
 template<class T>
-BOOST_CORE_BIT_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
+BOOST_CXX14_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
 {
     BOOST_STATIC_ASSERT( sizeof(T) <= sizeof(boost::uint64_t) );
 
