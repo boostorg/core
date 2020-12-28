@@ -21,6 +21,14 @@
 #include <limits>
 #include <cstring>
 
+#if defined(_MSC_VER)
+# include <intrin.h>
+# pragma intrinsic(_BitScanReverse)
+# if defined(_M_X64)
+#  pragma intrinsic(_BitScanReverse64)
+# endif
+#endif // defined(_MSC_VER)
+
 namespace boost
 {
 namespace core
@@ -85,6 +93,21 @@ namespace detail
 
 inline int countl_impl( boost::uint32_t x ) BOOST_NOEXCEPT
 {
+#if defined(_MSC_VER)
+
+    unsigned long r;
+
+    if( _BitScanReverse( &r, x ) )
+    {
+        return 31 - static_cast<int>( r );
+    }
+    else
+    {
+        return 32;
+    }
+
+#else
+
     static unsigned char const mod37[ 37 ] = { 32, 31, 6, 30, 9, 5, 0, 29, 16, 8, 2, 4, 21, 0, 19, 28, 25, 15, 0, 7, 10, 1, 17, 3, 22, 20, 26, 0, 11, 18, 23, 27, 12, 24, 13, 14, 0 };
 
     x |= x >> 1;
@@ -94,13 +117,32 @@ inline int countl_impl( boost::uint32_t x ) BOOST_NOEXCEPT
     x |= x >> 16;
 
     return mod37[ x % 37 ];
+
+#endif
 }
 
 inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
 {
+#if defined(_MSC_VER) && defined(_M_X64)
+
+    unsigned long r;
+
+    if( _BitScanReverse64( &r, x ) )
+    {
+        return 63 - static_cast<int>( r );
+    }
+    else
+    {
+        return 64;
+    }
+
+#else
+
     return static_cast<boost::uint32_t>( x >> 32 ) != 0?
         boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x >> 32 ) ):
         boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) + 32;
+
+#endif
 }
 
 inline int countl_impl( boost::uint8_t x ) BOOST_NOEXCEPT
