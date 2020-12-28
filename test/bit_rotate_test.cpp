@@ -134,6 +134,12 @@ int main()
         }
 
         {
+            unsigned short x = 0;
+            BOOST_TEST_EQ( boost::core::rotl( x, i ), x );
+            BOOST_TEST_EQ( boost::core::rotr( x, i ), x );
+        }
+
+        {
             unsigned int x = 0;
             BOOST_TEST_EQ( boost::core::rotl( x, i ), x );
             BOOST_TEST_EQ( boost::core::rotr( x, i ), x );
@@ -159,6 +165,7 @@ int main()
         boost::uint64_t x = rng();
 
         test_rotate( static_cast<unsigned char>( x ) );
+        test_rotate( static_cast<unsigned short>( x ) );
         test_rotate( static_cast<unsigned int>( x ) );
         test_rotate( static_cast<unsigned long>( x ) );
         test_rotate( static_cast<unsigned long long>( x ) );
