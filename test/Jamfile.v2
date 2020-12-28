@@ -222,5 +222,8 @@ run no_exceptions_support_test.cpp : : : <exception-handling>off : no_exceptions
 
 run cmath_test.cpp ;
 
+run bit_cast_test.cpp ;
+run bit_rotate_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
