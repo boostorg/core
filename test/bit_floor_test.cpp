@@ -38,7 +38,7 @@ int main()
 
     boost::detail::splitmix64 rng;
 
-    for( int i = 0; i < 1/*000*/; ++i )
+    for( int i = 0; i < 1000; ++i )
     {
         boost::uint64_t x = rng();
 
