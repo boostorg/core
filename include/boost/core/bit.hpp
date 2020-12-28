@@ -100,7 +100,6 @@ BOOST_CORE_BIT_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
     }
 }
 
-
 template<class T>
 BOOST_CORE_BIT_CONSTEXPR int countl_one( T x ) BOOST_NOEXCEPT
 {
@@ -164,8 +163,43 @@ BOOST_CORE_BIT_CONSTEXPR int countr_one( T x ) BOOST_NOEXCEPT
     return boost::core::countr_zero( static_cast<T>( ~x ) );
 }
 
+namespace detail
+{
+
+BOOST_CXX14_CONSTEXPR inline int popcount_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    x = x - ( ( x >> 1 ) & 0x55555555 );
+    x = ( x & 0x33333333 ) + ( ( x >> 2 ) & 0x33333333 );
+    x = ( x + ( x >> 4 ) ) & 0x0F0F0F0F;
+
+    return static_cast<unsigned>( ( x * 0x01010101 ) >> 24 );
+}
+
+BOOST_CXX14_CONSTEXPR inline int popcount_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    x = x - ( ( x >> 1 ) & 0x5555555555555555 );
+    x = ( x & 0x3333333333333333 ) + ( ( x >> 2 ) & 0x3333333333333333 );
+    x = ( x + ( x >> 4 ) ) & 0x0F0F0F0F0F0F0F0F;
+
+    return static_cast<unsigned>( ( x * 0x0101010101010101 ) >> 56 );
+}
+
+} // namespace detail
+
 template<class T>
-BOOST_CORE_BIT_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT;
+BOOST_CORE_BIT_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
+{
+    BOOST_STATIC_ASSERT( sizeof(T) <= sizeof(boost::uint64_t) );
+
+    if( sizeof(T) <= sizeof(boost::uint32_t) )
+    {
+        return boost::core::detail::popcount_impl( static_cast<boost::uint32_t>( x ) );
+    }
+    else
+    {
+        return boost::core::detail::popcount_impl( static_cast<boost::uint64_t>( x ) );
+    }
+}
 
 // rotating
 

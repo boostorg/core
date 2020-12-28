@@ -12,7 +12,7 @@
 
 template<class T> void test_single_bit( T x )
 {
-    // BOOST_TEST_EQ( boost::core::has_single_bit( x ), boost::core::popcount( x ) == 1 );
+    BOOST_TEST_EQ( boost::core::has_single_bit( x ), boost::core::popcount( x ) == 1 );
 }
 
 int main()
