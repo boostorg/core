@@ -45,20 +45,66 @@ To bit_cast( From const & from ) BOOST_NOEXCEPT
 namespace detail
 {
 
-BOOST_CXX14_CONSTEXPR int countl_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+inline int countl_impl( boost::uint32_t x ) BOOST_NOEXCEPT
 {
-    return 0;
+    static unsigned char const mod37[ 37 ] = { 32, 31, 6, 30, 9, 5, 0, 29, 16, 8, 2, 4, 21, 0, 19, 28, 25, 15, 0, 7, 10, 1, 17, 3, 22, 20, 26, 0, 11, 18, 23, 27, 12, 24, 13, 14, 0 };
+
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+
+    return mod37[ x % 37 ];
+}
+
+inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    return static_cast<boost::uint32_t>( x >> 32 ) != 0?
+        boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x >> 32 ) ):
+        boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) + 32;
+}
+
+inline int countl_impl( boost::uint8_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) - 24;
+}
+
+inline int countl_impl( boost::uint16_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) - 16;
 }
 
 } // namespace detail
 
 template<class T>
-BOOST_CORE_BIT_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT;
+BOOST_CORE_BIT_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
+{
+    BOOST_STATIC_ASSERT( sizeof(T) == sizeof(boost::uint8_t) || sizeof(T) == sizeof(boost::uint16_t) || sizeof(T) == sizeof(boost::uint32_t) || sizeof(T) == sizeof(boost::uint64_t) );
+
+    if( sizeof(T) == sizeof(boost::uint8_t) )
+    {
+        return boost::core::detail::countl_impl( static_cast<boost::uint8_t>( x ) );
+    }
+    else if( sizeof(T) == sizeof(boost::uint16_t) )
+    {
+        return boost::core::detail::countl_impl( static_cast<boost::uint16_t>( x ) );
+    }
+    else if( sizeof(T) == sizeof(boost::uint32_t) )
+    {
+        return boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) );
+    }
+    else
+    {
+        return boost::core::detail::countl_impl( static_cast<boost::uint64_t>( x ) );
+    }
+}
+
 
 template<class T>
 BOOST_CORE_BIT_CONSTEXPR int countl_one( T x ) BOOST_NOEXCEPT
 {
-    return boost::core::countl_zero( ~x );
+    return boost::core::countl_zero( static_cast<T>( ~x ) );
 }
 
 namespace detail
@@ -66,7 +112,7 @@ namespace detail
 
 inline int countr_impl( boost::uint32_t x ) BOOST_NOEXCEPT
 {
-    static unsigned char const mod37[] = { 32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13, 4, 7, 17, 0, 25, 22, 31, 15, 29, 10, 12, 6, 0, 21, 14, 9, 5, 20, 8, 19, 18 };
+    static unsigned char const mod37[ 37 ] = { 32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13, 4, 7, 17, 0, 25, 22, 31, 15, 29, 10, 12, 6, 0, 21, 14, 9, 5, 20, 8, 19, 18 };
     return mod37[ ( -(boost::int32_t)x & x ) % 37 ];
 }
 
@@ -115,7 +161,7 @@ BOOST_CORE_BIT_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
 template<class T>
 BOOST_CORE_BIT_CONSTEXPR int countr_one( T x ) BOOST_NOEXCEPT
 {
-    return boost::core::countr_zero( ~x );
+    return boost::core::countr_zero( static_cast<T>( ~x ) );
 }
 
 template<class T>

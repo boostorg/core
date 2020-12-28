@@ -225,6 +225,7 @@ run cmath_test.cpp ;
 run bit_cast_test.cpp ;
 run bit_rotate_test.cpp ;
 run bit_countr_test.cpp ;
+run bit_countl_test.cpp ;
 
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
