@@ -327,6 +327,46 @@ BOOST_CONSTEXPR int countr_one( T x ) BOOST_NOEXCEPT
 
 // popcount
 
+#if defined(__GNUC__) || defined(__clang__)
+
+namespace detail
+{
+
+BOOST_CONSTEXPR inline int popcount_impl( unsigned char x ) BOOST_NOEXCEPT
+{
+    return __builtin_popcount( x );
+}
+
+BOOST_CONSTEXPR inline int popcount_impl( unsigned short x ) BOOST_NOEXCEPT
+{
+    return __builtin_popcount( x );
+}
+
+BOOST_CONSTEXPR inline int popcount_impl( unsigned int x ) BOOST_NOEXCEPT
+{
+    return __builtin_popcount( x );
+}
+
+BOOST_CONSTEXPR inline int popcount_impl( unsigned long x ) BOOST_NOEXCEPT
+{
+    return __builtin_popcountl( x );
+}
+
+BOOST_CONSTEXPR inline int popcount_impl( unsigned long long x ) BOOST_NOEXCEPT
+{
+    return __builtin_popcountll( x );
+}
+
+} // namespace detail
+
+template<class T>
+BOOST_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::popcount_impl( x );
+}
+
+#else // defined(__GNUC__) || defined(__clang__)
+
 namespace detail
 {
 
@@ -364,6 +404,8 @@ BOOST_CXX14_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
         return boost::core::detail::popcount_impl( static_cast<boost::uint64_t>( x ) );
     }
 }
+
+#endif // defined(__GNUC__) || defined(__clang__)
 
 // rotating
 
