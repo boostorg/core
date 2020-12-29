@@ -506,13 +506,43 @@ BOOST_CXX14_CONSTEXPR T bit_ceil( T x ) BOOST_NOEXCEPT
 
 // endian
 
+#if defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+
+# define BOOST_CORE_BIT_NATIVE_INITIALIZER =little
+
+#elif defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+
+# define BOOST_CORE_BIT_NATIVE_INITIALIZER =big
+
+#elif defined(__BYTE_ORDER__) && defined(__ORDER_PDP_ENDIAN__) && __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+
+# define BOOST_CORE_BIT_NATIVE_INITIALIZER
+
+#elif defined(__LITTLE_ENDIAN__)
+
+# define BOOST_CORE_BIT_NATIVE_INITIALIZER =little
+
+#elif defined(__BIG_ENDIAN__)
+
+# define BOOST_CORE_BIT_NATIVE_INITIALIZER =big
+
+#elif defined(_MSC_VER) || defined(__i386__) || defined(__x86_64__)
+
+# define BOOST_CORE_BIT_NATIVE_INITIALIZER =little
+
+#else
+
+# define BOOST_CORE_BIT_NATIVE_INITIALIZER
+
+#endif
+
 #if !defined(BOOST_NO_CXX11_SCOPED_ENUMS)
 
 enum class endian
 {
-    little,
     big,
-    // native = /* see description */
+    little,
+    native BOOST_CORE_BIT_NATIVE_INITIALIZER
 };
 
 typedef endian endian_type;
@@ -524,9 +554,9 @@ namespace endian
 
 enum type
 {
-    little,
     big,
-    // native = /* see description */
+    little,
+    native BOOST_CORE_BIT_NATIVE_INITIALIZER
 };
 
 } // namespace endian
@@ -534,6 +564,8 @@ enum type
 typedef endian::type endian_type;
 
 #endif
+
+#undef BOOST_CORE_BIT_NATIVE_INITIALIZER
 
 } // namespace core
 } // namespace boost
