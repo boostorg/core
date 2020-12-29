@@ -23,8 +23,10 @@
 
 #if defined(_MSC_VER)
 # include <intrin.h>
+# pragma intrinsic(_BitScanForward)
 # pragma intrinsic(_BitScanReverse)
 # if defined(_M_X64)
+#  pragma intrinsic(_BitScanForward64)
 #  pragma intrinsic(_BitScanReverse64)
 # endif
 #endif // defined(_MSC_VER)
@@ -235,15 +237,49 @@ namespace detail
 
 inline int countr_impl( boost::uint32_t x ) BOOST_NOEXCEPT
 {
+#if defined(_MSC_VER)
+
+    unsigned long r;
+
+    if( _BitScanForward( &r, x ) )
+    {
+        return static_cast<int>( r );
+    }
+    else
+    {
+        return 32;
+    }
+
+#else
+
     static unsigned char const mod37[ 37 ] = { 32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13, 4, 7, 17, 0, 25, 22, 31, 15, 29, 10, 12, 6, 0, 21, 14, 9, 5, 20, 8, 19, 18 };
     return mod37[ ( -(boost::int32_t)x & x ) % 37 ];
+
+#endif
 }
 
 inline int countr_impl( boost::uint64_t x ) BOOST_NOEXCEPT
 {
+#if defined(_MSC_VER) && defined(_M_X64)
+
+    unsigned long r;
+
+    if( _BitScanForward64( &r, x ) )
+    {
+        return static_cast<int>( r );
+    }
+    else
+    {
+        return 64;
+    }
+
+#else
+
     return static_cast<boost::uint32_t>( x ) != 0?
         boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) ):
         boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x >> 32 ) ) + 32;
+
+#endif
 }
 
 inline int countr_impl( boost::uint8_t x ) BOOST_NOEXCEPT
