@@ -329,35 +329,43 @@ BOOST_CONSTEXPR int countr_one( T x ) BOOST_NOEXCEPT
 
 #if defined(__GNUC__) || defined(__clang__)
 
+#if defined(__clang__) && __clang_major__ * 100 + __clang_minor__ < 304
+# define BOOST_CORE_POPCOUNT_CONSTEXPR
+#else
+# define BOOST_CORE_POPCOUNT_CONSTEXPR BOOST_CONSTEXPR
+#endif
+
 namespace detail
 {
 
-BOOST_CONSTEXPR inline int popcount_impl( unsigned char x ) BOOST_NOEXCEPT
+BOOST_CORE_POPCOUNT_CONSTEXPR inline int popcount_impl( unsigned char x ) BOOST_NOEXCEPT
 {
     return __builtin_popcount( x );
 }
 
-BOOST_CONSTEXPR inline int popcount_impl( unsigned short x ) BOOST_NOEXCEPT
+BOOST_CORE_POPCOUNT_CONSTEXPR inline int popcount_impl( unsigned short x ) BOOST_NOEXCEPT
 {
     return __builtin_popcount( x );
 }
 
-BOOST_CONSTEXPR inline int popcount_impl( unsigned int x ) BOOST_NOEXCEPT
+BOOST_CORE_POPCOUNT_CONSTEXPR inline int popcount_impl( unsigned int x ) BOOST_NOEXCEPT
 {
     return __builtin_popcount( x );
 }
 
-BOOST_CONSTEXPR inline int popcount_impl( unsigned long x ) BOOST_NOEXCEPT
+BOOST_CORE_POPCOUNT_CONSTEXPR inline int popcount_impl( unsigned long x ) BOOST_NOEXCEPT
 {
     return __builtin_popcountl( x );
 }
 
-BOOST_CONSTEXPR inline int popcount_impl( unsigned long long x ) BOOST_NOEXCEPT
+BOOST_CORE_POPCOUNT_CONSTEXPR inline int popcount_impl( unsigned long long x ) BOOST_NOEXCEPT
 {
     return __builtin_popcountll( x );
 }
 
 } // namespace detail
+
+#undef BOOST_CORE_POPCOUNT_CONSTEXPR
 
 template<class T>
 BOOST_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
