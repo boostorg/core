@@ -143,7 +143,7 @@ matrix:
     - os: osx
       osx_image: xcode11.3
       compiler: clang++
-      env: UBSAN=1 TOOLSET=clang COMPILER=clang++ CXXSTD=03,11,14,1z ADDRMD=32,64 UBSAN_OPTIONS=print_stacktrace=1
+      env: UBSAN=1 TOOLSET=clang COMPILER=clang++ CXXSTD=03,11,14,1z UBSAN_OPTIONS=print_stacktrace=1
 
     - os: linux
       env: CMAKE_TEST=1
@@ -192,7 +192,7 @@ install:
   - git submodule init tools/build
   - git submodule init tools/boost_install
   - git submodule init tools/cmake
-  - git submodule update --jobs 4
+  - git submodule update
   - cp -r $TRAVIS_BUILD_DIR/* libs/core
   - ./bootstrap.sh
   - ./b2 headers
