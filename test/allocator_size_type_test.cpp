@@ -27,7 +27,8 @@ int main()
     BOOST_TEST_TRAIT_TRUE((boost::core::is_same<int,
         boost::allocator_size_type<A1<char> >::type>));
 #if !defined(BOOST_NO_CXX11_ALLOCATOR)
-    BOOST_TEST_TRAIT_TRUE((boost::core::is_same<std::size_t,
+    BOOST_TEST_TRAIT_TRUE((boost::core::is_same<
+        std::make_unsigned<std::ptrdiff_t>::type,
         boost::allocator_size_type<A2<int> >::type>));
 #endif
     return boost::report_errors();
