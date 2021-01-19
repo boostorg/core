@@ -173,6 +173,21 @@ template<class T> inline const void* test_output_impl(T volatile* v) { return co
 inline const void* test_output_impl(std::nullptr_t) { return nullptr; }
 #endif
 
+// print chars as numeric
+
+inline int test_output_impl( signed char const& v ) { return v; }
+inline unsigned test_output_impl( unsigned char const& v ) { return v; }
+
+inline unsigned long test_output_impl( wchar_t const& v ) { return v; }
+
+#if !defined( BOOST_NO_CXX11_CHAR16_T )
+inline unsigned long test_output_impl( char16_t const& v ) { return v; }
+#endif
+
+#if !defined( BOOST_NO_CXX11_CHAR32_T )
+inline unsigned long test_output_impl( char32_t const& v ) { return v; }
+#endif
+
 // predicates
 
 struct lw_test_eq
