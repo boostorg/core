@@ -17,13 +17,13 @@ int main()
     BOOST_TEST_EQ( L'A', L'A' );
     BOOST_TEST_EQ( (wchar_t)1, (wchar_t)1 );
 
-#if !defined(BOOST_NO_CXX11_CHAR16)
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
 
     BOOST_TEST_EQ( (char16_t)1, (char16_t)1 );
 
 #endif
 
-#if !defined(BOOST_NO_CXX11_CHAR32)
+#if !defined(BOOST_NO_CXX11_CHAR32_T)
 
     BOOST_TEST_EQ( (char32_t)1, (char32_t)1 );
 
