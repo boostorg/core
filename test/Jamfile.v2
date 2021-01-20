@@ -119,6 +119,7 @@ run-fail lightweight_test_fail11.cpp : ;
 run-fail lightweight_test_fail12.cpp ;
 run-fail lightweight_test_fail13.cpp ;
 run-fail lightweight_test_fail14.cpp ;
+run-fail lightweight_test_fail15.cpp ;
 run-fail lightweight_test_lt_fail.cpp ;
 run-fail lightweight_test_le_fail.cpp ;
 run-fail lightweight_test_gt_fail.cpp ;
