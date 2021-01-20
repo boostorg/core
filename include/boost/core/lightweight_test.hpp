@@ -27,9 +27,12 @@
 #include <exception>
 #include <iostream>
 #include <iterator>
+#include <string>
 #include <cstdlib>
 #include <cstring>
 #include <cstddef>
+#include <cctype>
+#include <cstdio>
 
 #if defined(_MSC_VER) && defined(_CPPLIB_VER) && defined(_DEBUG)
 # include <crtdbg.h>
@@ -186,6 +189,30 @@ inline unsigned long test_output_impl( char16_t const& v ) { return v; }
 
 #if !defined( BOOST_NO_CXX11_CHAR32_T )
 inline unsigned long test_output_impl( char32_t const& v ) { return v; }
+#endif
+
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
+
+inline std::string test_output_impl( char const& v )
+{
+    if( std::isprint( static_cast<unsigned char>( v ) ) )
+    {
+        return std::string( 1, v );
+    }
+    else
+    {
+        char buffer[ 8 ];
+        std::sprintf( buffer, "\\x%02X", static_cast<unsigned char>( v ) );
+
+        return buffer;
+    }
+}
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
 #endif
 
 // predicates
