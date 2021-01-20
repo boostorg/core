@@ -12,7 +12,7 @@ int main()
     BOOST_TEST_EQ( 'A', 'A' );
     BOOST_TEST_EQ( (char)1, (char)1 );
     BOOST_TEST_EQ( (unsigned char)1, (unsigned char)1 );
-    BOOST_TEST_EQ( (signed char)1, (signed char)1 );
+    BOOST_TEST_EQ( (signed char)-1, (signed char)-1 );
 
     BOOST_TEST_EQ( L'A', L'A' );
     BOOST_TEST_EQ( (wchar_t)1, (wchar_t)1 );

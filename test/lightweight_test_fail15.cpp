@@ -12,7 +12,7 @@ int main()
     BOOST_TEST_NE( 'A', 'A' );
     BOOST_TEST_NE( (char)1, (char)1 );
     BOOST_TEST_NE( (unsigned char)1, (unsigned char)1 );
-    BOOST_TEST_NE( (signed char)1, (signed char)1 );
+    BOOST_TEST_NE( (signed char)-1, (signed char)-1 );
 
     BOOST_TEST_NE( L'A', L'A' );
     BOOST_TEST_NE( (wchar_t)1, (wchar_t)1 );
