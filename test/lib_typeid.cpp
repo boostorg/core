@@ -15,3 +15,12 @@ EXPORT boost::core::typeinfo const & get_typeid_int()
 {
     return BOOST_CORE_TYPEID( int );
 }
+
+struct BOOST_SYMBOL_VISIBLE X
+{
+};
+
+EXPORT boost::core::typeinfo const & get_typeid_X()
+{
+    return BOOST_CORE_TYPEID( X );
+}

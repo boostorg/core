@@ -215,6 +215,12 @@ run test_lib_typeid.cpp lib_typeid : : : <link>static : test_lib_typeid_static ;
 run test_lib_typeid.cpp lib_typeid : : : <link>shared <rtti>off : test_lib_typeid_shared_no_rtti ;
 run test_lib_typeid.cpp lib_typeid : : : <link>static <rtti>off : test_lib_typeid_static_no_rtti ;
 
+run test_lib_typeid2.cpp lib_typeid : : : <link>shared : test_lib_typeid2_shared ;
+run test_lib_typeid2.cpp lib_typeid : : : <link>static : test_lib_typeid2_static ;
+
+run test_lib_typeid2.cpp lib_typeid : : : <link>shared <rtti>off : test_lib_typeid2_shared_no_rtti ;
+run test_lib_typeid2.cpp lib_typeid : : : <link>static <rtti>off : test_lib_typeid2_static_no_rtti ;
+
 run uncaught_exceptions.cpp
   : : : <exception-handling>on ;
 run uncaught_exceptions_np.cpp
