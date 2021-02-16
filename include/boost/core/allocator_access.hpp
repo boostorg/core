@@ -1,5 +1,5 @@
 /*
-Copyright 2020 Glen Joseph Fernandes
+Copyright 2020-2021 Glen Joseph Fernandes
 (glenjofe@gmail.com)
 
 Distributed under the Boost Software License, Version 1.0.
@@ -22,11 +22,9 @@ Distributed under the Boost Software License, Version 1.0.
 #if defined(_LIBCPP_SUPPRESS_DEPRECATED_PUSH)
 _LIBCPP_SUPPRESS_DEPRECATED_PUSH
 #endif
-
 #if defined(_STL_DISABLE_DEPRECATED_WARNING)
 _STL_DISABLE_DEPRECATED_WARNING
 #endif
-
 #if defined(_MSC_VER)
 #pragma warning(push)
 #pragma warning(disable:4996)
@@ -593,11 +591,9 @@ using allocator_rebind_t = typename allocator_rebind<A, T>::type;
 #if defined(_LIBCPP_SUPPRESS_DEPRECATED_POP)
 _LIBCPP_SUPPRESS_DEPRECATED_POP
 #endif
-
 #if defined(_STL_RESTORE_DEPRECATED_WARNING)
 _STL_RESTORE_DEPRECATED_WARNING
 #endif
-
 #if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
