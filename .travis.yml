@@ -149,7 +149,7 @@ matrix:
       env: CMAKE_TEST=1
       script:
         - mkdir __build__ && cd __build__
-        - cmake -DBOOST_ENABLE_CMAKE=1 -DBoost_VERBOSE=1 -DBOOST_INCLUDE_LIBRARIES=core ..
+        - cmake -DBOOST_ENABLE_CMAKE=1 -DBUILD_TESTING=ON -DBoost_VERBOSE=1 -DBOOST_INCLUDE_LIBRARIES=core ..
         - ctest --output-on-failure -R boost_core
 
     - os: linux
