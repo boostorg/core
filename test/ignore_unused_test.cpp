@@ -15,23 +15,23 @@ BOOST_CXX14_CONSTEXPR int test_fun(int a)
 int main()
 {
     {
-        int a;
+        int a = 0;
         boost::ignore_unused(a);
     }
     {
-        int a, b;
+        int a = 0, b = 0;
         boost::ignore_unused(a, b);
     }
     {
-        int a, b, c;
+        int a = 0, b = 0, c = 0;
         boost::ignore_unused(a, b, c);
     }
     {
-        int a, b, c, d;
+        int a = 0, b = 0, c = 0, d = 0;
         boost::ignore_unused(a, b, c, d);
     }
     {
-        int a, b, c, d, e;
+        int a = 0, b = 0, c = 0, d = 0, e = 0;
         boost::ignore_unused(a, b, c, d, e);
     }
 
