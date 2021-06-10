@@ -11,11 +11,21 @@
 
 namespace boost {
 
-#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+template <typename... Ts>
+BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void ignore_unused(Ts&& ...)
+{}
+
+#else
 
 template <typename... Ts>
 BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void ignore_unused(Ts const& ...)
 {}
+
+#endif
 
 template <typename... Ts>
 BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void ignore_unused()
