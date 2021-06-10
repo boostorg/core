@@ -96,7 +96,9 @@ run lightweight_test_test4.cpp
   : : : $(pedantic-errors) ;
 run lightweight_test_test5.cpp
   : : : $(pedantic-errors)
-    <toolset>gcc-4.4.7:<cxxflags>-Wno-sign-compare ;
+    <toolset>gcc-4.4.7:<cxxflags>-Wno-sign-compare
+    <toolset>gcc-4.4:<cxxflags>-Wno-sign-compare
+  ;
 run lightweight_test_test6.cpp
   : : : $(pedantic-errors) ;
 
