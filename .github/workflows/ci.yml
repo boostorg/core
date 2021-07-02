@@ -102,8 +102,8 @@ jobs:
             compiler: clang++-8
             cxxstd: "03,11,14,17,2a"
             os: ubuntu-18.04
-            purge: gcc-10 g++-10 libstdc++-10-dev
             install: clang-8
+            gcc_toolchain: 9
           - toolset: clang
             compiler: clang++-9
             cxxstd: "03,11,14,17,2a"
@@ -130,15 +130,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Purge packages
-        if: matrix.purge
-        run: sudo apt-get purge ${{matrix.purge}}
-
       - name: Install packages
         if: matrix.install
         run: |
           sudo apt-get update
           sudo apt-get install ${{matrix.install}}
+
+      - name: Setup GCC Toolchain
+        if: matrix.gcc_toolchain
+        run: |
+          GCC_TOOLCHAIN_ROOT="$HOME/gcc-toolchain"
+          echo "GCC_TOOLCHAIN_ROOT=\"$GCC_TOOLCHAIN_ROOT\"" >> $GITHUB_ENV
+          MULTIARCH_TRIPLET="$(dpkg-architecture -qDEB_HOST_MULTIARCH)"
+          mkdir -p "$GCC_TOOLCHAIN_ROOT"
+          ln -s /usr/include "$GCC_TOOLCHAIN_ROOT/include"
+          ln -s /usr/bin "$GCC_TOOLCHAIN_ROOT/bin"
+          mkdir -p "$GCC_TOOLCHAIN_ROOT/lib/gcc/$MULTIARCH_TRIPLET"
+          ln -s "/usr/lib/gcc/$MULTIARCH_TRIPLET/${{matrix.gcc_toolchain}}" "$GCC_TOOLCHAIN_ROOT/lib/gcc/$MULTIARCH_TRIPLET/${{matrix.gcc_toolchain}}"
 
       - name: Setup Boost
         run: |
@@ -165,7 +173,12 @@ jobs:
       - name: Create user-config.jam
         if: matrix.compiler
         run: |
-          echo "using ${{matrix.toolset}} : : ${{matrix.compiler}} ;" > ~/user-config.jam
+          echo -n "using ${{matrix.toolset}} : : ${{matrix.compiler}}" > ~/user-config.jam
+          if [ -n "$GCC_TOOLCHAIN_ROOT" ]
+          then
+            echo -n " : <compileflags>\"--gcc-toolchain=$GCC_TOOLCHAIN_ROOT\" <linkflags>\"--gcc-toolchain=$GCC_TOOLCHAIN_ROOT\"" >> ~/user-config.jam
+          fi
+          echo " ;" >> ~/user-config.jam
 
       - name: Run tests
         run: |
