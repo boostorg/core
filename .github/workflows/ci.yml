@@ -183,8 +183,9 @@ jobs:
 
       - name: Run tests
         run: |
+          BUILD_JOBS=$((nproc || sysctl -n hw.ncpu) 2> /dev/null)
           cd ../boost-root
-          ./b2 -j3 libs/$LIBRARY/test toolset=${{matrix.toolset}} cxxstd=${{matrix.cxxstd}} variant=debug,release
+          ./b2 -j $BUILD_JOBS libs/$LIBRARY/test toolset=${{matrix.toolset}} cxxstd=${{matrix.cxxstd}} variant=debug,release
 
   windows:
     strategy:
@@ -212,6 +213,7 @@ jobs:
       - name: Setup Boost
         shell: cmd
         run: |
+          set GIT_FETCH_JOBS=8
           echo GITHUB_REPOSITORY: %GITHUB_REPOSITORY%
           for /f %%i in ("%GITHUB_REPOSITORY%") do set LIBRARY=%%~nxi
           echo LIBRARY: %LIBRARY%
@@ -227,7 +229,7 @@ jobs:
           cd boost-root
           xcopy /s /e /q %GITHUB_WORKSPACE% libs\%LIBRARY%\
           git submodule update --init tools/boostdep
-          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" %LIBRARY%
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs %GIT_FETCH_JOBS%" %LIBRARY%
           cmd /c bootstrap
           b2 -d0 headers
 
@@ -235,4 +237,4 @@ jobs:
         shell: cmd
         run: |
           cd ../boost-root
-          b2 -j3 libs/%LIBRARY%/test toolset=${{matrix.toolset}} cxxstd=${{matrix.cxxstd}} address-model=${{matrix.addrmd}} variant=debug,release
+          b2 -j %NUMBER_OF_PROCESSORS% libs/%LIBRARY%/test toolset=${{matrix.toolset}} cxxstd=${{matrix.cxxstd}} address-model=${{matrix.addrmd}} variant=debug,release
