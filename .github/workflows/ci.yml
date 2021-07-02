@@ -102,6 +102,7 @@ jobs:
             compiler: clang++-8
             cxxstd: "03,11,14,17,2a"
             os: ubuntu-18.04
+            purge: gcc-10 g++-10 libstdc++-10-dev
             install: clang-8
           - toolset: clang
             compiler: clang++-9
@@ -129,9 +130,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Purge packages
+        if: matrix.purge
+        run: sudo apt-get purge ${{matrix.purge}}
+
       - name: Install packages
         if: matrix.install
-        run: sudo apt install ${{matrix.install}}
+        run: |
+          sudo apt-get update
+          sudo apt-get install ${{matrix.install}}
 
       - name: Setup Boost
         run: |
