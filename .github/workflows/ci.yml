@@ -150,6 +150,7 @@ jobs:
 
       - name: Setup Boost
         run: |
+          GIT_FETCH_JOBS=8
           echo GITHUB_REPOSITORY: $GITHUB_REPOSITORY
           LIBRARY=${GITHUB_REPOSITORY#*/}
           echo LIBRARY: $LIBRARY
@@ -166,7 +167,7 @@ jobs:
           cd boost-root
           cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
           git submodule update --init tools/boostdep
-          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs $GIT_FETCH_JOBS" $LIBRARY
           ./bootstrap.sh
           ./b2 -d0 headers
 
