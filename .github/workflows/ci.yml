@@ -9,7 +9,7 @@ on:
       - feature/**
 
 concurrency:
-  group: ${{github.head_ref}}
+  group: ${{format("{0}:{1}", github.repository, github.ref)}}
   cancel-in-progress: true
 
 env:
