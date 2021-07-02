@@ -8,7 +8,12 @@ on:
       - develop
       - feature/**
 
+concurrency:
+  group: ${{github.head_ref}}
+  cancel-in-progress: true
+
 env:
+  GIT_FETCH_JOBS: 8
   UBSAN_OPTIONS: print_stacktrace=1
 
 jobs:
@@ -150,7 +155,6 @@ jobs:
 
       - name: Setup Boost
         run: |
-          GIT_FETCH_JOBS=8
           echo GITHUB_REPOSITORY: $GITHUB_REPOSITORY
           LIBRARY=${GITHUB_REPOSITORY#*/}
           echo LIBRARY: $LIBRARY
@@ -213,7 +217,6 @@ jobs:
       - name: Setup Boost
         shell: cmd
         run: |
-          set GIT_FETCH_JOBS=8
           echo GITHUB_REPOSITORY: %GITHUB_REPOSITORY%
           for /f %%i in ("%GITHUB_REPOSITORY%") do set LIBRARY=%%~nxi
           echo LIBRARY: %LIBRARY%
