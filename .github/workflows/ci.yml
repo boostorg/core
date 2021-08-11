@@ -24,22 +24,27 @@ jobs:
         include:
           - toolset: gcc-4.7
             cxxstd: "03,11"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: g++-4.7
           - toolset: gcc-4.8
             cxxstd: "03,11"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: g++-4.8
           - toolset: gcc-4.9
             cxxstd: "03,11"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: g++-4.9
           - toolset: gcc-5
             cxxstd: "03,11,14,1z"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
           - toolset: gcc-6
             cxxstd: "03,11,14,1z"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: g++-6
           - toolset: gcc-7
             cxxstd: "03,11,14,17"
@@ -61,37 +66,44 @@ jobs:
           - toolset: clang
             compiler: clang++-3.5
             cxxstd: "03,11"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: clang-3.5
           - toolset: clang
             compiler: clang++-3.6
             cxxstd: "03,11,14"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: clang-3.6
           - toolset: clang
             compiler: clang++-3.7
             cxxstd: "03,11,14"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: clang-3.7
           - toolset: clang
             compiler: clang++-3.8
             cxxstd: "03,11,14"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: clang-3.8
           - toolset: clang
             compiler: clang++-3.9
             cxxstd: "03,11,14"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: clang-3.9
           - toolset: clang
             compiler: clang++-4.0
             cxxstd: "03,11,14"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: clang-4.0
           - toolset: clang
             compiler: clang++-5.0
             cxxstd: "03,11,14,1z"
-            os: ubuntu-16.04
+            os: ubuntu-20.04
+            container: ubuntu:16.04
             install: clang-5.0
           - toolset: clang
             compiler: clang++-6.0
@@ -130,16 +142,31 @@ jobs:
             cxxstd: "03,11,14,17,2a"
             os: macos-10.15
 
-    runs-on: ${{matrix.os}}
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
 
     steps:
+      - name: Check if running in container
+        if: matrix.container != ''
+        run: echo "GHA_CONTAINER=${{ matrix.container }}" >> $GITHUB_ENV
+      - name: If running in container, upgrade packages
+        if: matrix.container != ''
+        run: |
+            apt-get -o Acquire::Retries=3 update && DEBIAN_FRONTEND=noninteractive apt-get -y install tzdata && apt-get -o Acquire::Retries=3 install -y sudo software-properties-common wget curl apt-transport-https make apt-file sudo unzip libssl-dev build-essential autotools-dev autoconf automake g++ libc++-helpers python ruby cpio gcc-multilib g++-multilib pkgconf python3 ccache libpython-dev
+            sudo apt-add-repository ppa:git-core/ppa
+            sudo apt-get -o Acquire::Retries=3 update && apt-get -o Acquire::Retries=3 -y install git
+            python_version=$(python3 -c 'import sys; print("{0.major}.{0.minor}".format(sys.version_info))')
+            sudo wget https://bootstrap.pypa.io/pip/$python_version/get-pip.py
+            sudo python3 get-pip.py
+            sudo /usr/local/bin/pip install cmake
       - uses: actions/checkout@v2
 
       - name: Install packages
         if: matrix.install
         run: |
+          for i in {1..3}; do sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test" && break || sleep 2; done
           sudo apt-get update
-          sudo apt-get install ${{matrix.install}}
+          sudo apt-get install -y ${{matrix.install}}
 
       - name: Setup GCC Toolchain
         if: matrix.gcc_toolchain
@@ -188,7 +215,7 @@ jobs:
 
       - name: Run tests
         run: |
-          BUILD_JOBS=$((nproc || sysctl -n hw.ncpu) 2> /dev/null)
+          BUILD_JOBS=$( (nproc || sysctl -n hw.ncpu) 2> /dev/null )
           cd ../boost-root
           ./b2 -j $BUILD_JOBS libs/$LIBRARY/test toolset=${{matrix.toolset}} cxxstd=${{matrix.cxxstd}} variant=debug,release
 
