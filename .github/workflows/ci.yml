@@ -37,6 +37,7 @@ jobs:
           - toolset: gcc-5
             cxxstd: "03,11,14,1z"
             os: ubuntu-18.04
+            install: g++-5
           - toolset: gcc-6
             cxxstd: "03,11,14,1z"
             os: ubuntu-18.04
