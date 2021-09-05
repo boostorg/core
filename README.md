@@ -8,12 +8,12 @@ The criteria for inclusion is that the utility component be:
 * used by other Boost libraries, and
 * not dependent on any other Boost modules except Core itself, Config, Assert, Static Assert, or Predef.
 
-### CI Status
+### Build Status
 
-Branch   | Travis | Appveyor
----------|--------|---------
-Develop  | [![Build Status](https://travis-ci.org/boostorg/core.svg?branch=develop)](https://travis-ci.org/boostorg/core) | [![Build Status](https://ci.appveyor.com/api/projects/status/github/boostorg/core?branch=develop&svg=true)](https://ci.appveyor.com/project/pdimov/core)
-Master   | [![Build Status](https://travis-ci.org/boostorg/core.svg?branch=master)](https://travis-ci.org/boostorg/core) | [![Build Status](https://ci.appveyor.com/api/projects/status/github/boostorg/core?branch=master&svg=true)](https://ci.appveyor.com/project/pdimov/core)
+Branch   | GitHub Actions | AppVeyor | Test Matrix | Dependencies |
+---------|----------------|--------- | ----------- | ------------ |
+Develop  | [![GitHub Actions](https://github.com/boostorg/core/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/boostorg/filesystem/actions?query=branch%3Adevelop) | [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/boostorg/core?branch=develop&svg=true)](https://ci.appveyor.com/project/pdimov/core) | [![Tests](https://img.shields.io/badge/matrix-develop-brightgreen.svg)](http://www.boost.org/development/tests/develop/developer/core.html) | [![Dependencies](https://img.shields.io/badge/deps-develop-brightgreen.svg)](https://pdimov.github.io/boostdep-report/develop/core.html)
+Master   | [![GitHub Actions](https://github.com/boostorg/core/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/boostorg/filesystem/actions?query=branch%3Amaster) | [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/boostorg/core?branch=master&svg=true)](https://ci.appveyor.com/project/pdimov/core) | [![Tests](https://img.shields.io/badge/matrix-master-brightgreen.svg)](http://www.boost.org/development/tests/master/developer/core.html) | [![Dependencies](https://img.shields.io/badge/deps-master-brightgreen.svg)](https://pdimov.github.io/boostdep-report/master/core.html)
 
 ### Directories
 
