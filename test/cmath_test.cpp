@@ -6,6 +6,8 @@
 
 #include <boost/core/cmath.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
 #include <limits>
 #include <cfloat>
 
@@ -63,10 +65,18 @@ template<class T> void test_negative_zero( T x )
 
     BOOST_TEST_EQ( boost::core::fpclassify( x ), boost::core::fp_zero );
 
+#if defined(BOOST_CORE_USE_GENERIC_CMATH) && BOOST_WORKAROUND(BOOST_GCC, < 40700)
+
+    // g++ 4.4, 4.6 fail these tests with optimizations on
+
+#else
+
     BOOST_TEST( boost::core::signbit( x ) );
 
     BOOST_TEST_EQ( boost::core::copysign( T(+2), x ), T(-2) );
     BOOST_TEST_EQ( boost::core::copysign( T(-2), x ), T(-2) );
+
+#endif
 }
 
 template<class T> void test_positive_infinity( T x )
