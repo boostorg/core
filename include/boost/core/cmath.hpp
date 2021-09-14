@@ -12,13 +12,13 @@
 // Floating point classification and sign manipulation functions
 // Extracted from https://github.com/boostorg/lexical_cast/pull/37
 //
-// Copyright 2020 Peter Dimov
+// Copyright 2020, 2021 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <cmath>
 
-#if defined(BOOST_CORE_USE_GENERIC_CMATH)
+#if defined(BOOST_CORE_USE_GENERIC_CMATH) || (!defined(_MSC_VER) && !defined(FP_SUBNORMAL))
 
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
