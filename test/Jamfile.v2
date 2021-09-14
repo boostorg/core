@@ -232,6 +232,7 @@ run no_exceptions_support_test.cpp ;
 run no_exceptions_support_test.cpp : : : <exception-handling>off : no_exceptions_support_test_nx ;
 
 run cmath_test.cpp ;
+run cmath_test.cpp : : : <define>BOOST_CORE_USE_GENERIC_CMATH : cmath_test_generic ;
 
 run bit_cast_test.cpp ;
 run bit_rotate_test.cpp ;
