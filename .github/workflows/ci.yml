@@ -354,10 +354,6 @@ jobs:
             mkdir -p libs/$LIBRARY
             cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
             git submodule update --init tools/boostdep
-            if [ -n "${{matrix.extra_tests}}" ]
-            then
-                DEPINST_ARGS+=("--include" "example")
-            fi
             DEPINST_ARGS+=("$LIBRARY")
             python tools/boostdep/depinst/depinst.py "${DEPINST_ARGS[@]}"
             if [ -z "${{matrix.cmake_tests}}" ]
