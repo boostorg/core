@@ -345,6 +345,7 @@ jobs:
             echo "CMAKE_BUILD_PARALLEL_LEVEL=$BUILD_JOBS" >> $GITHUB_ENV
             DEPINST_ARGS=()
             GIT_VERSION="$(git --version | sed -e 's/git version //')"
+            GIT_HAS_JOBS=1
             if [ -f "/etc/debian_version" ]
             then
                 if $(dpkg --compare-versions "$GIT_VERSION" lt 2.8.0)
