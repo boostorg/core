@@ -69,6 +69,8 @@ template<class T> struct tn_is_reference<T&&>
 
 #endif
 
+#if !defined(BOOST_NO_TYPEID)
+
 // typeid_name
 
 template<class T> std::string typeid_name()
@@ -106,25 +108,6 @@ template<class T> std::string typeid_name()
     return r;
 }
 
-// tn_to_string
-
-#if defined(BOOST_MSVC)
-# pragma warning( push )
-# pragma warning( disable: 4996 )
-#endif
-
-inline std::string tn_to_string( unsigned long n )
-{
-    char buffer[ 32 ];
-    std::sprintf( buffer, "%lu", n );
-
-    return buffer;
-}
-
-#if defined(BOOST_MSVC)
-# pragma warning( pop )
-#endif
-
 // template names
 
 template<class T> std::string class_template_name()
@@ -147,6 +130,54 @@ template<class T> std::string map_template_name()
 {
     return class_template_name<T>();
 }
+
+#else // #if !defined(BOOST_NO_TYPEID)
+
+template<class T> std::string typeid_name()
+{
+    return "_Tp";
+}
+
+template<class T> std::string class_template_name()
+{
+    return "_Tm";
+}
+
+template<class T> std::string sequence_template_name()
+{
+    return "_Sq";
+}
+
+template<class T> std::string set_template_name()
+{
+    return "_St";
+}
+
+template<class T> std::string map_template_name()
+{
+    return "_Mp";
+}
+
+#endif
+
+// tn_to_string
+
+#if defined(BOOST_MSVC)
+# pragma warning( push )
+# pragma warning( disable: 4996 )
+#endif
+
+inline std::string tn_to_string( unsigned long n )
+{
+    char buffer[ 32 ];
+    std::sprintf( buffer, "%lu", n );
+
+    return buffer;
+}
+
+#if defined(BOOST_MSVC)
+# pragma warning( pop )
+#endif
 
 // tn_add_each
 
