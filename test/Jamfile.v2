@@ -245,5 +245,7 @@ run bit_ceil_test.cpp ;
 run bit_popcount_test.cpp ;
 run bit_endian_test.cpp ;
 
+run type_name_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
