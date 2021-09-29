@@ -131,7 +131,7 @@ template<class... T> std::string tn_add_each()
 {
     std::string st;
 
-    using A = int[ sizeof...(T) + 1 ];
+    typedef int A[ sizeof...(T) + 1 ];
     (void)A{ 0, tn_add_each_impl<T>( st )... };
 
     return st;
