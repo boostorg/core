@@ -57,6 +57,20 @@ template<class T> std::string typeid_name()
 
 #endif
 
+    // libc++ inline namespace
+
+    if( r.substr( 0, 10 ) == "std::__1::" )
+    {
+        r = "std::" + r.substr( 10 );
+    }
+
+    // libstdc++ inline namespace
+
+    if( r.substr( 0, 14 ) == "std::__cxx11::" )
+    {
+        r = "std::" + r.substr( 14 );
+    }
+
     return r;
 }
 
