@@ -348,7 +348,7 @@ inline std::string type_name( tn_identity<std::u32string> )
 
 #if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
 
-inline std::string type_name( tn_identity<std::u8string> )
+inline std::string type_name( tn_identity<std::basic_string<char8_t>> )
 {
     return "std::u8string";
 }
