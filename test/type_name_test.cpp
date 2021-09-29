@@ -42,10 +42,19 @@ template<class T1, class T2> struct X
 {
 };
 
-enum E
+enum E1
 {
     e1
 };
+
+#if !defined(BOOST_NO_CXX11_SCOPED_ENUMS)
+
+enum class E2
+{
+    e2
+};
+
+#endif
 
 int main()
 {
@@ -54,7 +63,13 @@ int main()
     TEST(A);
     TEST(B);
 
-    TEST(E);
+    TEST(E1);
+
+#if !defined(BOOST_NO_CXX11_SCOPED_ENUMS)
+
+    TEST(E2);
+
+#endif
 
     TEST(A const);
     TEST(A volatile);
