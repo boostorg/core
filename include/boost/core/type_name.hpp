@@ -89,6 +89,11 @@ template<class T> std::string typeid_name()
         r = r.substr( 7 );
     }
 
+    if( r.substr( 0, 5 ) == "enum " )
+    {
+        r = r.substr( 5 );
+    }
+
 #endif
 
     // libc++ inline namespace

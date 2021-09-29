@@ -42,12 +42,19 @@ template<class T1, class T2> struct X
 {
 };
 
+enum E
+{
+    e1
+};
+
 int main()
 {
     TEST(int);
 
     TEST(A);
     TEST(B);
+
+    TEST(E);
 
     TEST(A const);
     TEST(A volatile);
