@@ -22,6 +22,10 @@
 # include <unordered_map>
 #endif
 
+#if !defined(BOOST_NO_CXX11_HDR_ARRAY)
+# include <array>
+#endif
+
 //
 
 #define TEST(...) BOOST_TEST_EQ((boost::core::type_name<__VA_ARGS__>()), std::string(#__VA_ARGS__))
@@ -149,5 +153,11 @@ int main()
 
 #endif
 
+#if !defined(BOOST_NO_CXX11_HDR_ARRAY)
+
+    TEST(std::array<std::string, 7>);
+    TEST(std::array<std::wstring const*, 0> const&);
+
+#endif
     return boost::report_errors();
 }

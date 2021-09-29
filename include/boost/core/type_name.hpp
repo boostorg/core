@@ -131,6 +131,11 @@ template<class T> std::string map_template_name()
     return class_template_name<T>();
 }
 
+template<class T> std::string array_template_name()
+{
+    return class_template_name<T>();
+}
+
 #else // #if !defined(BOOST_NO_TYPEID)
 
 template<class T> std::string typeid_name()
@@ -158,6 +163,11 @@ template<class T> std::string map_template_name()
     return "_Mp";
 }
 
+template<class T> std::string array_template_name()
+{
+    return "_Ar";
+}
+
 #endif
 
 // tn_to_string
@@ -167,10 +177,10 @@ template<class T> std::string map_template_name()
 # pragma warning( disable: 4996 )
 #endif
 
-inline std::string tn_to_string( unsigned long n )
+inline std::string tn_to_string( std::size_t n )
 {
     char buffer[ 32 ];
-    std::sprintf( buffer, "%lu", n );
+    std::sprintf( buffer, "%lu", static_cast< unsigned long >( n ) );
 
     return buffer;
 }
@@ -351,7 +361,7 @@ template<class T, std::size_t N> std::pair<std::string, std::string> array_prefi
 {
     std::pair<std::string, std::string> r = array_prefix_suffix( tn_identity<T>() );
 
-    r.second = '[' + tn_to_string( static_cast<unsigned long>( N ) ) + ']' + r.second;
+    r.second = '[' + tn_to_string( N ) + ']' + r.second;
 
     return r;
 }
@@ -529,6 +539,14 @@ template<template<class T, class U, class H, class Eq, class A> class L, class T
 }
 
 #endif
+
+// array
+
+template<template<class T, std::size_t N> class L, class T, std::size_t N> std::string type_name( tn_identity< L<T, N> > )
+{
+    std::string tn = array_template_name< L<T, N> >();
+    return tn + '<' + type_name( tn_identity<T>() ) + ", " + tn_to_string( N ) + '>';
+}
 
 } // namespace detail
 
