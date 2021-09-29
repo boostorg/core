@@ -37,6 +37,38 @@ template<class T> struct tn_identity
     typedef T type;
 };
 
+// tn_enable_if
+
+template<bool C, class T> struct tn_enable_if
+{
+};
+
+template<class T> struct tn_enable_if<true, T>
+{
+    typedef T type;
+};
+
+// tn_is_reference
+
+template<class T> struct tn_is_reference
+{
+    static const bool value = false;
+};
+
+template<class T> struct tn_is_reference<T&>
+{
+    static const bool value = true;
+};
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+template<class T> struct tn_is_reference<T&&>
+{
+    static const bool value = true;
+};
+
+#endif
+
 // typeid_name
 
 template<class T> std::string typeid_name()
@@ -148,6 +180,8 @@ template<class T> std::string type_name( tn_identity<T> )
 
 // cv
 
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
+
 template<class T> std::string type_name( tn_identity<T const> )
 {
     return type_name( tn_identity<T>() ) + " const";
@@ -163,12 +197,50 @@ template<class T> std::string type_name( tn_identity<T const volatile> )
     return type_name( tn_identity<T>() ) + " const volatile";
 }
 
+#else
+
+template<class T>
+typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
+type_name( tn_identity<T const> )
+{
+    return type_name( tn_identity<T>() ) + " const";
+}
+
+template<class T>
+typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
+type_name( tn_identity<T volatile> )
+{
+    return type_name( tn_identity<T>() ) + " volatile";
+}
+
+template<class T>
+typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
+type_name( tn_identity<T const volatile> )
+{
+    return type_name( tn_identity<T>() ) + " const volatile";
+}
+
+#endif
+
 // refs
+
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
 
 template<class T> std::string type_name( tn_identity<T&> )
 {
     return type_name( tn_identity<T>() ) + "&";
 }
+
+#else
+
+template<class T>
+typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
+type_name( tn_identity<T&> )
+{
+    return type_name( tn_identity<T>() ) + "&";
+}
+
+#endif
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 
@@ -365,6 +437,20 @@ template<template<class...> class L, class... T> std::string type_name( tn_ident
     std::string st = tn_add_each<T...>();
 
     return tn + '<' + st + '>';
+}
+
+#else
+
+template<template<class T1> class L, class T1> std::string type_name( tn_identity< L<T1> > )
+{
+    std::string tn = class_template_name< L<T1> >();
+    return tn + '<' + type_name( tn_identity<T1>() ) + '>';
+}
+
+template<template<class T1, class T2> class L, class T1, class T2> std::string type_name( tn_identity< L<T1, T2> > )
+{
+    std::string tn = class_template_name< L<T1, T2> >();
+    return tn + '<' + type_name( tn_identity<T1>() ) + ", " + type_name( tn_identity<T2>() ) + '>';
 }
 
 #endif
