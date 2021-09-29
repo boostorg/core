@@ -65,5 +65,6 @@ criteria for inclusion is that the utility component be:
 [include scoped_enum.qbk]
 [include swap.qbk]
 [include typeinfo.qbk]
+[include type_name.qbk]
 [include uncaught_exceptions.qbk]
 [include use_default.qbk]
