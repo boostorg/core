@@ -25,7 +25,7 @@ differences and extra template parameters of the standard library
 container types.
 
 For example, `type_name< std::map<std::string, int> >()` returns
-`std::map<std::string, int>` and not
+`"std::map<std::string, int>"` and not
 
 ```
   std::map<std::__cxx11::basic_string<char, std::char_traits<char>,
