@@ -110,6 +110,17 @@ template<class T> std::string typeid_name()
         r = "std::" + r.substr( 14 );
     }
 
+#if defined(BOOST_MSVC) && BOOST_MSVC == 1600
+
+    // msvc-10.0 puts TR1 things in std::tr1
+
+    if( r.substr( 0, 10 ) == "std::tr1::" )
+    {
+        r = "std::" + r.substr( 10 );
+    }
+
+#endif
+
     return r;
 }
 
