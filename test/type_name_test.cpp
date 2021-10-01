@@ -193,7 +193,7 @@ int main()
 
 #endif
 
-    TEST(std::basic_ostream<char>);
+    TEST(std::ostream);
     TEST(std::basic_ostream<wchar_t>);
 
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)

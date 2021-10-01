@@ -21,6 +21,7 @@
 #include <utility>
 #include <cstdio>
 #include <cstddef>
+#include <iosfwd>
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
@@ -499,6 +500,12 @@ template<template<class Ch, class Tr> class L, class Ch> std::string type_name( 
 {
     std::string tn = sequence_template_name< L<Ch, std::char_traits<Ch> > >();
     return tn + '<' + type_name( tn_identity<Ch>() ) + '>';
+}
+
+// needed for libstdc++
+inline std::string type_name( tn_identity<std::ostream> )
+{
+    return "std::ostream";
 }
 
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
