@@ -13,6 +13,7 @@
 #include <map>
 #include <utility>
 #include <cstddef>
+#include <iosfwd>
 
 #if !defined(BOOST_NO_CXX11_HDR_UNORDERED_SET)
 # include <unordered_set>
@@ -24,6 +25,10 @@
 
 #if !defined(BOOST_NO_CXX11_HDR_ARRAY)
 # include <array>
+#endif
+
+#if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
+# include <string_view>
 #endif
 
 //
@@ -55,6 +60,10 @@ enum class E2
 };
 
 #endif
+
+struct Ch
+{
+};
 
 int main()
 {
@@ -121,6 +130,8 @@ int main()
     TEST(std::pair<A, B>);
     TEST(std::pair<A const*, B*> volatile&);
 
+    TEST(std::basic_string<Ch>);
+
     TEST(std::string);
     TEST(std::wstring);
 
@@ -181,5 +192,31 @@ int main()
     TEST(std::array<std::wstring const*, 0> const&);
 
 #endif
+
+    TEST(std::basic_ostream<char>);
+    TEST(std::basic_ostream<wchar_t>);
+
+#if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
+
+    TEST(std::basic_string_view<Ch>);
+
+    TEST(std::string_view);
+    TEST(std::wstring_view);
+
+#if BOOST_CXX_VERSION >= 201100L
+
+    TEST(std::u16string_view);
+    TEST(std::u32string_view);
+
+#endif
+
+#if BOOST_CXX_VERSION >= 202000L
+
+    TEST(std::u8string_view);
+
+#endif
+
+#endif
+
     return boost::report_errors();
 }

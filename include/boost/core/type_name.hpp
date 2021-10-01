@@ -21,6 +21,9 @@
 #include <utility>
 #include <cstdio>
 #include <cstddef>
+#if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
+# include <string_view>
+#endif
 
 namespace boost
 {
@@ -447,6 +450,12 @@ inline std::string type_name( tn_identity<std::nullptr_t> )
 
 // strings
 
+template<template<class Ch, class Tr, class A> class L, class Ch> std::string type_name( tn_identity< L<Ch, std::char_traits<Ch>, std::allocator<Ch> > > )
+{
+    std::string tn = sequence_template_name< L<Ch, std::char_traits<Ch>, std::allocator<Ch> > >();
+    return tn + '<' + type_name( tn_identity<Ch>() ) + '>';
+}
+
 inline std::string type_name( tn_identity<std::string> )
 {
     return "std::string";
@@ -481,6 +490,55 @@ inline std::string type_name( tn_identity<std::basic_string<char8_t>> )
 {
     return "std::u8string";
 }
+
+#endif
+
+// string views (et al)
+
+template<template<class Ch, class Tr> class L, class Ch> std::string type_name( tn_identity< L<Ch, std::char_traits<Ch> > > )
+{
+    std::string tn = sequence_template_name< L<Ch, std::char_traits<Ch> > >();
+    return tn + '<' + type_name( tn_identity<Ch>() ) + '>';
+}
+
+#if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
+
+inline std::string type_name( tn_identity<std::string_view> )
+{
+    return "std::string_view";
+}
+
+inline std::string type_name( tn_identity<std::wstring_view> )
+{
+    return "std::wstring_view";
+}
+
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+
+inline std::string type_name( tn_identity<std::u16string_view> )
+{
+    return "std::u16string_view";
+}
+
+#endif
+
+#if !defined(BOOST_NO_CXX11_CHAR32_T)
+
+inline std::string type_name( tn_identity<std::u32string_view> )
+{
+    return "std::u32string_view";
+}
+
+#endif
+
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+
+inline std::string type_name( tn_identity<std::basic_string_view<char8_t>> )
+{
+    return "std::u8string_view";
+}
+
+#endif
 
 #endif
 
