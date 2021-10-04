@@ -13,7 +13,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#include <boost/core/enable_if.hpp>
+#include <boost/core/is_same.hpp>
 #include <boost/assert.hpp>
+#include <boost/assert/source_location.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/config.hpp>
 #include <string>
@@ -75,7 +78,8 @@ public:
     {
     }
 
-    BOOST_CXX14_CONSTEXPR basic_string_view( Ch const* begin, Ch const* end ) BOOST_NOEXCEPT: p_( begin ), n_( end - begin )
+    template<class End> BOOST_CXX14_CONSTEXPR basic_string_view( Ch const* begin, End end,
+        typename boost::enable_if<is_same<End, Ch const*> >::type* = 0 ) BOOST_NOEXCEPT: p_( begin ), n_( end - begin )
     {
         BOOST_ASSERT( end - begin >= 0 );
     }
@@ -160,13 +164,13 @@ public:
 
     // element access
 
-    BOOST_CONSTEXPR const_reference operator[]( size_type pos ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR const_reference operator[]( size_type pos ) const BOOST_NOEXCEPT
     {
         BOOST_ASSERT( pos < size() );
         return p_[ pos ];
     }
 
-    BOOST_CONSTEXPR const_reference at( size_type pos ) const
+    BOOST_CXX14_CONSTEXPR const_reference at( size_type pos ) const
     {
         if( pos >= size() )
         {
@@ -176,13 +180,13 @@ public:
         return p_[ pos ];
     }
 
-    BOOST_CONSTEXPR const_reference front() const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR const_reference front() const BOOST_NOEXCEPT
     {
         BOOST_ASSERT( !empty() );
         return p_[ 0 ];
     }
 
-    BOOST_CONSTEXPR const_reference back() const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR const_reference back() const BOOST_NOEXCEPT
     {
         BOOST_ASSERT( !empty() );
         return p_[ n_ - 1 ];
@@ -516,7 +520,7 @@ public:
         }
 
         for( std::size_t i = pos; i > 0; --i )
-		{
+        {
             if( p_[ i - 1 ] != c ) return i - 1;
         }
 
