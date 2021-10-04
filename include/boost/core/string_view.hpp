@@ -222,7 +222,7 @@ public:
 
     // string operations
 
-    BOOST_CONSTEXPR size_type copy( Ch* s, size_type n, size_type pos = 0 ) const
+    BOOST_CXX14_CONSTEXPR size_type copy( Ch* s, size_type n, size_type pos = 0 ) const
     {
         if( pos > size() )
         {
@@ -236,7 +236,7 @@ public:
         return rlen;
     }
 
-    BOOST_CONSTEXPR basic_string_view substr( size_type pos = 0, size_type n = npos ) const
+    BOOST_CXX14_CONSTEXPR basic_string_view substr( size_type pos = 0, size_type n = npos ) const
     {
         if( pos > size() )
         {
@@ -250,7 +250,7 @@ public:
 
     // compare
 
-    BOOST_CONSTEXPR int compare( basic_string_view str ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR int compare( basic_string_view str ) const BOOST_NOEXCEPT
     {
         std::size_t rlen = std::min( size(), str.size() );
 
@@ -329,7 +329,7 @@ public:
         return find( str.data(), pos, str.size() );
     }
 
-    BOOST_CONSTEXPR size_type find( Ch c, size_type pos = 0 ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find( Ch c, size_type pos = 0 ) const BOOST_NOEXCEPT
     {
         if( pos >= size() ) return npos;
 
@@ -338,7 +338,7 @@ public:
         return r? r - data(): npos;
     }
 
-    BOOST_CONSTEXPR size_type find( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
     {
         if( pos + n > size() ) return npos;
         if( n == 0 ) return pos;
@@ -373,7 +373,7 @@ public:
         return rfind( str.data(), pos, str.size() );
     }
 
-    BOOST_CONSTEXPR size_type rfind( Ch c, size_type pos = npos ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type rfind( Ch c, size_type pos = npos ) const BOOST_NOEXCEPT
     {
         if( pos > size() )
         {
@@ -384,7 +384,7 @@ public:
         return r == rend()? npos: size() - 1 - ( r - rbegin() );
     }
 
-    BOOST_CONSTEXPR size_type rfind( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type rfind( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
     {
         if( n > size() ) return npos;
 
@@ -416,7 +416,7 @@ public:
 
     // find_first_of
 
-    BOOST_CONSTEXPR size_type find_first_of( basic_string_view str, size_type pos = 0 ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_first_of( basic_string_view str, size_type pos = 0 ) const BOOST_NOEXCEPT
     {
         for( std::size_t i = pos; i < n_; ++i )
         {
@@ -443,7 +443,7 @@ public:
 
     // find_last_of
 
-    BOOST_CONSTEXPR size_type find_last_of( basic_string_view str, size_type pos = npos ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_last_of( basic_string_view str, size_type pos = npos ) const BOOST_NOEXCEPT
     {
         if( pos > size() )
         {
@@ -475,7 +475,7 @@ public:
 
     // find_first_not_of
 
-    BOOST_CONSTEXPR size_type find_first_not_of( basic_string_view str, size_type pos = 0 ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_first_not_of( basic_string_view str, size_type pos = 0 ) const BOOST_NOEXCEPT
     {
         for( std::size_t i = pos; i < n_; ++i )
         {
@@ -485,7 +485,7 @@ public:
         return npos;
     }
 
-    BOOST_CONSTEXPR size_type find_first_not_of( Ch c, size_type pos = 0 ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_first_not_of( Ch c, size_type pos = 0 ) const BOOST_NOEXCEPT
     {
         for( std::size_t i = pos; i < n_; ++i )
         {
@@ -507,7 +507,7 @@ public:
 
     // find_last_not_of
 
-    BOOST_CONSTEXPR size_type find_last_not_of( basic_string_view str, size_type pos = npos ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_last_not_of( basic_string_view str, size_type pos = npos ) const BOOST_NOEXCEPT
     {
         if( pos > size() )
         {
@@ -522,7 +522,7 @@ public:
         return npos;
     }
 
-    BOOST_CONSTEXPR size_type find_last_not_of( Ch c, size_type pos = npos ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_last_not_of( Ch c, size_type pos = npos ) const BOOST_NOEXCEPT
     {
         if( pos > size() )
         {
