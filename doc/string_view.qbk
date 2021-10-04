@@ -120,7 +120,8 @@ public:
     constexpr bool starts_with( Ch const* x ) const;
 
     constexpr bool ends_with( basic_string_view x ) const noexcept;
-    constexpr bool ends_with( Ch x ) const noexcept;    constexpr bool ends_with( Ch const* x ) const;
+    constexpr bool ends_with( Ch x ) const noexcept;
+    constexpr bool ends_with( Ch const* x ) const;
 
     // searching
 
@@ -152,7 +153,8 @@ public:
     constexpr size_type find_last_not_of( basic_string_view s, size_type pos = npos ) const noexcept;
     constexpr size_type find_last_not_of( Ch c, size_type pos = npos ) const noexcept;
     constexpr size_type find_last_not_of( Ch const* s, size_type pos, size_type n ) const;
-    constexpr size_type find_last_not_of( Ch const* s, size_type pos = npos ) const;};
+    constexpr size_type find_last_not_of( Ch const* s, size_type pos = npos ) const;
+};
 
 typedef basic_string_view<char> string_view;
 typedef basic_string_view<wchar_t> wstring_view;
