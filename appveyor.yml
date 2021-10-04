@@ -27,15 +27,13 @@ environment:
       ADDRMD: 32,64
       CXXSTD: 14,17
 
-    # clang-win 32 bit fails to link with "unable to load mspdbcore.dll (error code: 126)"
-
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      TOOLSET: clang-win
-      ADDRMD: 64
-      CXXSTD: 14,17
-
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       TOOLSET: msvc-14.2
+      ADDRMD: 32,64
+      CXXSTD: 14,17,latest
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      TOOLSET: clang-win
       ADDRMD: 32,64
       CXXSTD: 14,17,latest
 
@@ -90,4 +88,4 @@ test_script:
   - PATH=%ADDPATH%%PATH%
   - if not "%CXXSTD%" == "" set CXXSTD=cxxstd=%CXXSTD%
   - if not "%ADDRMD%" == "" set ADDRMD=address-model=%ADDRMD%
-  - b2 -j %NUMBER_OF_PROCESSORS% libs/core/test toolset=%TOOLSET% %CXXSTD% %ADDRMD% variant=debug,release
+  - b2 -j %NUMBER_OF_PROCESSORS% libs/core/test toolset=%TOOLSET% %CXXSTD% %ADDRMD% variant=debug,release embed-manifest-via=linker
