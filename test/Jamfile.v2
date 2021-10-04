@@ -249,6 +249,7 @@ run type_name_test.cpp ;
 
 run sv_types_test.cpp ;
 run sv_construct_test.cpp ;
+run sv_element_access_test.cpp ;
 
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
