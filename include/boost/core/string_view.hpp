@@ -566,7 +566,7 @@ public:
 };
 
 #if defined(BOOST_NO_CXX17_INLINE_VARIABLES)
-template<class Ch> std::size_t const basic_string_view<Ch>::npos;
+template<class Ch> BOOST_CONSTEXPR_OR_CONST std::size_t basic_string_view<Ch>::npos;
 #endif
 
 typedef basic_string_view<char> string_view;
