@@ -270,11 +270,13 @@ public:
 
     BOOST_CONSTEXPR int compare( size_type pos1, size_type n1, basic_string_view str, size_type pos2, size_type n2 ) const
     {
-        return substr( pos1, n1 ).compare( str.substr( pos2, n2 ) );    }
+        return substr( pos1, n1 ).compare( str.substr( pos2, n2 ) );
+    }
 
     BOOST_CONSTEXPR int compare( Ch const* s ) const BOOST_NOEXCEPT
     {
-        return compare( basic_string_view( s ) );    }
+        return compare( basic_string_view( s ) );
+    }
 
     BOOST_CONSTEXPR int compare( size_type pos1, size_type n1, Ch const* s ) const
     {
@@ -283,7 +285,8 @@ public:
 
     BOOST_CONSTEXPR int compare( size_type pos1, size_type n1, Ch const* s, size_type n2 ) const
     {
-        return substr( pos1, n1 ).compare( basic_string_view( s, n2 ) );    }
+        return substr( pos1, n1 ).compare( basic_string_view( s, n2 ) );
+    }
 
     // starts_with
 
@@ -294,7 +297,8 @@ public:
 
     BOOST_CONSTEXPR bool starts_with( Ch x ) const BOOST_NOEXCEPT
     {
-        return !empty() && front() == x;    }
+        return !empty() && front() == x;
+    }
 
     BOOST_CONSTEXPR bool starts_with( Ch const* x ) const
     {
@@ -305,9 +309,15 @@ public:
 
     BOOST_CONSTEXPR bool ends_with( basic_string_view x ) const BOOST_NOEXCEPT
     {
-        return size() >= x.size() && compare( size() - x.size(), npos, x ) == 0;    }
+        return size() >= x.size() && compare( size() - x.size(), npos, x ) == 0;
+    }
 
-    BOOST_CONSTEXPR bool ends_with( Ch x ) const BOOST_NOEXCEPT    {        return !empty() && back() == x;    }    BOOST_CONSTEXPR bool ends_with( Ch const* x ) const
+    BOOST_CONSTEXPR bool ends_with( Ch x ) const BOOST_NOEXCEPT
+    {
+        return !empty() && back() == x;
+    }
+
+    BOOST_CONSTEXPR bool ends_with( Ch const* x ) const
     {
         return ends_with( basic_string_view( x ) );
     }
@@ -529,8 +539,17 @@ public:
 
     BOOST_CONSTEXPR size_type find_last_not_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
     {
-        return find_last_not_of( basic_string_view( s, n ), pos );    }
-    BOOST_CONSTEXPR size_type find_last_not_of( Ch const* s, size_type pos = npos ) const BOOST_NOEXCEPT    {        return find_last_not_of( basic_string_view( s ), pos );    }    // contains    BOOST_CONSTEXPR bool contains( basic_string_view sv ) const BOOST_NOEXCEPT
+        return find_last_not_of( basic_string_view( s, n ), pos );
+    }
+
+    BOOST_CONSTEXPR size_type find_last_not_of( Ch const* s, size_type pos = npos ) const BOOST_NOEXCEPT
+    {
+        return find_last_not_of( basic_string_view( s ), pos );
+    }
+
+    // contains
+
+    BOOST_CONSTEXPR bool contains( basic_string_view sv ) const BOOST_NOEXCEPT
     {
         return find( sv ) != npos;
     }
