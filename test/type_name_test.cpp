@@ -192,6 +192,28 @@ int main()
     TEST(B(&)[1][2][3]);
     TEST(B const volatile(***)[1][2][3]);
 
+    TEST(int A::*);
+    TEST(int const B::*);
+
+    TEST(void(A::*)());
+    TEST(void(A::*)() const);
+    TEST(void(A::*)() volatile);
+    TEST(void(A::*)() const volatile);
+
+#if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
+
+    TEST(void(A::*)() &);
+    TEST(void(A::*)() const &&);
+
+#endif
+
+#if defined( __cpp_noexcept_function_type ) || defined( _NOEXCEPT_TYPES_SUPPORTED )
+
+    TEST(void(A::*)() volatile & noexcept);
+    TEST(void(A::*)() const volatile && noexcept);
+
+#endif
+
 #if !defined(BOOST_NO_CXX11_NULLPTR)
 
     TEST(std::nullptr_t);

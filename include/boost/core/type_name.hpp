@@ -350,7 +350,18 @@ template<class R, class... A> std::string function_type_name( tn_identity<R(A...
 
     if( !suffix.empty() )
     {
-        r += '(' + suffix + ')';
+        r += '(';
+
+        if( suffix.front() == ' ' )
+        {
+            r += suffix.substr( 1 );
+        }
+        else
+        {
+            r += suffix;
+        }
+
+        r += ')';
     }
 
     r += '(' + tn_add_each<A...>() + ')';
@@ -578,6 +589,13 @@ template<class T, std::size_t N> std::string type_name( tn_identity<T volatile[N
 template<class T, std::size_t N> std::string type_name( tn_identity<T const volatile[N]>, std::string const& suffix )
 {
     return array_type_name( tn_identity<T const volatile[N]>(), suffix );
+}
+
+// pointers to members
+
+template<class R, class T> std::string type_name( tn_identity<R T::*>, std::string const& suffix )
+{
+    return type_name( tn_identity<R>(), ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
 }
 
 // nullptr_t
