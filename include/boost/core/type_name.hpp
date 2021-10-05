@@ -267,6 +267,27 @@ template<class T> std::string type_name( tn_identity<T>, std::string const& suff
     return typeid_name<T>() + suffix;
 }
 
+// integrals
+
+inline std::string type_name( tn_identity<unsigned>, std::string const& suffix )
+{
+    return "unsigned" + suffix;
+}
+
+#if defined(_MSC_VER)
+
+inline std::string type_name( tn_identity<long long>, std::string const& suffix )
+{
+    return "long long" + suffix;
+}
+
+inline std::string type_name( tn_identity<unsigned long long>, std::string const& suffix )
+{
+    return "unsigned long long" + suffix;
+}
+
+#endif
+
 // cv
 
 #if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900

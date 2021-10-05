@@ -67,7 +67,42 @@ struct Ch
 
 int main()
 {
+    TEST(signed char);
+    TEST(unsigned char);
+    TEST(short);
+    TEST(unsigned short);
     TEST(int);
+    TEST(unsigned);
+    TEST(long);
+    TEST(unsigned long);
+    TEST(long long);
+    TEST(unsigned long long);
+
+    TEST(char);
+    TEST(wchar_t);
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+    TEST(char16_t);
+#endif
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+    TEST(char32_t);
+#endif
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+    TEST(char8_t);
+#endif
+#if defined(__cpp_lib_byte) && __cpp_lib_byte >= 201603L
+    TEST(std::byte);
+#endif
+
+    TEST(bool);
+
+    TEST(float);
+    TEST(double);
+    TEST(long double);
+
+    TEST(void);
+    TEST(void const);
+    TEST(void volatile);
+    TEST(void const volatile);
 
     TEST(A);
     TEST(B);
@@ -93,11 +128,6 @@ int main()
     TEST(B const&&);
 
 #endif
-
-    TEST(void);
-    TEST(void const);
-    TEST(void volatile);
-    TEST(void const volatile);
 
     TEST(A*);
     TEST(B const* volatile*);
