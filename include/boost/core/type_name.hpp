@@ -246,7 +246,7 @@ template<class T> int tn_add_each_impl( std::string& st )
     if( !st.empty() ) st += ", ";
     st += type_name( tn_identity<T>(), "" );
     return 0;
-};
+}
 
 template<class... T> std::string tn_add_each()
 {
@@ -256,7 +256,7 @@ template<class... T> std::string tn_add_each()
     (void)A{ 0, tn_add_each_impl<T>( st )... };
 
     return st;
-};
+}
 
 #endif
 
