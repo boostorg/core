@@ -373,7 +373,7 @@ template<class R, class... A> std::string function_type_name( tn_identity<R(A...
     {
         r += '(';
 
-        if( suffix.front() == ' ' )
+        if( suffix[ 0 ] == ' ' )
         {
             r += suffix.substr( 1 );
         }
