@@ -288,6 +288,15 @@ inline std::string type_name( tn_identity<unsigned long long>, std::string const
 
 #endif
 
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+
+inline std::string type_name( tn_identity<char8_t>, std::string const& suffix )
+{
+    return "char8_t" + suffix;
+}
+
+#endif
+
 // cv
 
 #if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
