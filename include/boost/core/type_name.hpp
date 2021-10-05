@@ -332,6 +332,22 @@ template<class T> std::string type_name( tn_identity<T*> )
 
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
+// function references
+
+template<class R, class... A> std::string type_name( tn_identity<R(&)(A...)> )
+{
+    return type_name( tn_identity<R>() ) + "(&)(" + tn_add_each<A...>() + ')';
+}
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+template<class R, class... A> std::string type_name( tn_identity<R(&&)(A...)> )
+{
+    return type_name( tn_identity<R>() ) + "(&&)(" + tn_add_each<A...>() + ')';
+}
+
+#endif
+
 // function pointers
 
 template<class R, class... A> std::string type_name( tn_identity<R(*)(A...)> )
