@@ -344,7 +344,7 @@ template<class T> std::string type_name( tn_identity<T&&>, std::string const& su
 
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...)>, std::string const& suffix )
+template<class R, class... A> std::string function_type_name( tn_identity<R(A...)>, std::string const& trailer, std::string const& suffix )
 {
     std::string r = type_name( tn_identity<R>(), "" );
 
@@ -354,11 +354,140 @@ template<class R, class... A> std::string type_name( tn_identity<R(A...)>, std::
     }
 
     r += '(' + tn_add_each<A...>() + ')';
+    r += trailer;
 
     return r;
 }
 
+template<class R, class... A> std::string type_name( tn_identity<R(A...)>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), "", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " volatile", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const volatile", suffix );
+}
+
+#if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) &>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " &", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const &>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const &", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile &>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " volatile &", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile &>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const volatile &", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) &&>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " &&", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const &&>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const &&", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile &&>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " volatile &&", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile &&>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const volatile &&", suffix );
+}
+
 #endif
+
+#if defined( __cpp_noexcept_function_type ) || defined( _NOEXCEPT_TYPES_SUPPORTED )
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " volatile noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const volatile noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) & noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " & noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const & noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const & noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile & noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " volatile & noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile & noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const volatile & noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) && noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " && noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const && noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const && noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile && noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " volatile && noexcept", suffix );
+}
+
+template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile && noexcept>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const volatile && noexcept", suffix );
+}
+
+#endif
+
+#endif // #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
 // pointers
 

@@ -124,6 +124,44 @@ int main()
     TEST(void(&&)());
 
 #endif
+
+    TEST(void() const);
+    TEST(void() volatile);
+    TEST(void() const volatile);
+
+#if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
+
+    TEST(void() &);
+    TEST(void() const &);
+    TEST(void() volatile &);
+    TEST(void() const volatile &);
+
+    TEST(void() &&);
+    TEST(void() const &&);
+    TEST(void() volatile &&);
+    TEST(void() const volatile &&);
+
+#endif
+
+#if defined( __cpp_noexcept_function_type ) || defined( _NOEXCEPT_TYPES_SUPPORTED )
+
+    TEST(void() noexcept);
+    TEST(void() const noexcept);
+    TEST(void() volatile noexcept);
+    TEST(void() const volatile noexcept);
+
+    TEST(void() & noexcept);
+    TEST(void() const & noexcept);
+    TEST(void() volatile & noexcept);
+    TEST(void() const volatile & noexcept);
+
+    TEST(void() && noexcept);
+    TEST(void() const && noexcept);
+    TEST(void() volatile && noexcept);
+    TEST(void() const volatile && noexcept);
+
+#endif
+
 #endif
 
     TEST(A[]);
