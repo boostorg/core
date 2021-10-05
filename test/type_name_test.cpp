@@ -203,7 +203,7 @@ int main()
     TEST(A volatile[]);
     TEST(A const volatile[]);
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1500
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1700
     TEST(A(&)[]);
 #endif
     TEST(A const(***)[]);
@@ -219,7 +219,7 @@ int main()
     TEST(A[][2][3]);
     TEST(A const[][2][3]);
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1500
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1700
     TEST(A(&)[][2][3]);
 #endif
     TEST(A const(***)[][2][3]);
