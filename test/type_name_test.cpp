@@ -67,7 +67,42 @@ struct Ch
 
 int main()
 {
+    TEST(signed char);
+    TEST(unsigned char);
+    TEST(short);
+    TEST(unsigned short);
     TEST(int);
+    TEST(unsigned);
+    TEST(long);
+    TEST(unsigned long);
+    TEST(long long);
+    TEST(unsigned long long);
+
+    TEST(char);
+    TEST(wchar_t);
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+    TEST(char16_t);
+#endif
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+    TEST(char32_t);
+#endif
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+    TEST(char8_t);
+#endif
+#if defined(__cpp_lib_byte) && __cpp_lib_byte >= 201603L
+    TEST(std::byte);
+#endif
+
+    TEST(bool);
+
+    TEST(float);
+    TEST(double);
+    TEST(long double);
+
+    TEST(void);
+    TEST(void const);
+    TEST(void volatile);
+    TEST(void const volatile);
 
     TEST(A);
     TEST(B);
@@ -94,11 +129,6 @@ int main()
 
 #endif
 
-    TEST(void);
-    TEST(void const);
-    TEST(void volatile);
-    TEST(void const volatile);
-
     TEST(A*);
     TEST(B const* volatile*);
 
@@ -111,6 +141,12 @@ int main()
     TEST(int(float, A, B*));
 
     TEST(void(*)());
+    TEST(void(**)());
+    TEST(void(***)());
+
+    TEST(void(* const* const*)());
+    TEST(void(* const* const&)());
+
     TEST(void(&)());
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
@@ -118,23 +154,107 @@ int main()
     TEST(void(&&)());
 
 #endif
+
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
+
+    TEST(void() const);
+    TEST(void() volatile);
+    TEST(void() const volatile);
+
 #endif
+
+#if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
+
+    TEST(void() &);
+    TEST(void() const &);
+    TEST(void() volatile &);
+    TEST(void() const volatile &);
+
+    TEST(void() &&);
+    TEST(void() const &&);
+    TEST(void() volatile &&);
+    TEST(void() const volatile &&);
+
+#endif
+
+#if defined( __cpp_noexcept_function_type ) || defined( _NOEXCEPT_TYPES_SUPPORTED )
+
+    TEST(void() noexcept);
+    TEST(void() const noexcept);
+    TEST(void() volatile noexcept);
+    TEST(void() const volatile noexcept);
+
+    TEST(void() & noexcept);
+    TEST(void() const & noexcept);
+    TEST(void() volatile & noexcept);
+    TEST(void() const volatile & noexcept);
+
+    TEST(void() && noexcept);
+    TEST(void() const && noexcept);
+    TEST(void() volatile && noexcept);
+    TEST(void() const volatile && noexcept);
+
+#endif
+
+#endif // #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
     TEST(A[]);
     TEST(A const[]);
     TEST(A volatile[]);
     TEST(A const volatile[]);
 
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1500
+    TEST(A(&)[]);
+#endif
+    TEST(A const(***)[]);
+
     TEST(B[1]);
     TEST(B const[1]);
     TEST(B volatile[1]);
     TEST(B const volatile[1]);
 
+    TEST(B(&)[1]);
+    TEST(B const(***)[1]);
+
     TEST(A[][2][3]);
     TEST(A const[][2][3]);
 
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1500
+    TEST(A(&)[][2][3]);
+#endif
+    TEST(A const(***)[][2][3]);
+
     TEST(B[1][2][3]);
     TEST(B const volatile[1][2][3]);
+
+    TEST(B(&)[1][2][3]);
+    TEST(B const volatile(***)[1][2][3]);
+
+    TEST(int A::*);
+    TEST(int const B::*);
+
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+    TEST(void(A::*)());
+    TEST(void(A::*)() const);
+    TEST(void(A::*)() volatile);
+    TEST(void(A::*)() const volatile);
+
+#endif
+
+#if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
+
+    TEST(void(A::*)() &);
+    TEST(void(A::*)() const &&);
+
+#endif
+
+#if defined( __cpp_noexcept_function_type ) || defined( _NOEXCEPT_TYPES_SUPPORTED )
+
+    TEST(void(A::*)() volatile & noexcept);
+    TEST(void(A::*)() const volatile && noexcept);
+
+#endif
 
 #if !defined(BOOST_NO_CXX11_NULLPTR)
 
