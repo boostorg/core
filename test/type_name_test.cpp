@@ -111,6 +111,12 @@ int main()
     TEST(int(float, A, B*));
 
     TEST(void(*)());
+    TEST(void(**)());
+    TEST(void(***)());
+
+    TEST(void(* const* const*)());
+    TEST(void(* const* const&)());
+
     TEST(void(&)());
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
@@ -125,16 +131,28 @@ int main()
     TEST(A volatile[]);
     TEST(A const volatile[]);
 
+    TEST(A(&)[]);
+    TEST(A const(***)[]);
+
     TEST(B[1]);
     TEST(B const[1]);
     TEST(B volatile[1]);
     TEST(B const volatile[1]);
 
+    TEST(B(&)[1]);
+    TEST(B const(***)[1]);
+
     TEST(A[][2][3]);
     TEST(A const[][2][3]);
 
+    TEST(A(&)[][2][3]);
+    TEST(A const(***)[][2][3]);
+
     TEST(B[1][2][3]);
     TEST(B const volatile[1][2][3]);
+
+    TEST(B(&)[1][2][3]);
+    TEST(B const volatile(***)[1][2][3]);
 
 #if !defined(BOOST_NO_CXX11_NULLPTR)
 
