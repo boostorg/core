@@ -14,6 +14,7 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/core/demangle.hpp>
+#include <boost/core/is_same.hpp>
 #include <boost/config.hpp>
 #include <string>
 #include <functional>
@@ -72,6 +73,24 @@ template<class T> struct tn_is_reference<T&&>
 };
 
 #endif
+
+// tn_remove_const
+
+template<class T> struct tn_remove_const
+{
+    typedef T type;
+};
+
+template<class T> struct tn_remove_const<T const>
+{
+    typedef T type;
+};
+
+// tn_is_function (also catches references but that's OK)
+
+template<class T, class U = typename tn_remove_const<T>::type> struct tn_is_function: core::is_same<U, U const>
+{
+};
 
 #if !defined(BOOST_NO_TYPEID)
 
@@ -261,21 +280,21 @@ template<class T> std::string type_name( tn_identity<T const volatile> )
 #else
 
 template<class T>
-typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
+typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
 type_name( tn_identity<T const> )
 {
     return type_name( tn_identity<T>() ) + " const";
 }
 
 template<class T>
-typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
+typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
 type_name( tn_identity<T volatile> )
 {
     return type_name( tn_identity<T>() ) + " volatile";
 }
 
 template<class T>
-typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
+typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
 type_name( tn_identity<T const volatile> )
 {
     return type_name( tn_identity<T>() ) + " const volatile";
@@ -331,6 +350,22 @@ template<class T> std::string type_name( tn_identity<T*> )
 }
 
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+// function references
+
+template<class R, class... A> std::string type_name( tn_identity<R(&)(A...)> )
+{
+    return type_name( tn_identity<R>() ) + "(&)(" + tn_add_each<A...>() + ')';
+}
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+template<class R, class... A> std::string type_name( tn_identity<R(&&)(A...)> )
+{
+    return type_name( tn_identity<R>() ) + "(&&)(" + tn_add_each<A...>() + ')';
+}
+
+#endif
 
 // function pointers
 

@@ -105,6 +105,21 @@ int main()
     TEST(void*);
     TEST(void const* volatile*);
 
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+    TEST(void());
+    TEST(int(float, A, B*));
+
+    TEST(void(*)());
+    TEST(void(&)());
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+    TEST(void(&&)());
+
+#endif
+#endif
+
     TEST(A[]);
     TEST(A const[]);
     TEST(A volatile[]);
