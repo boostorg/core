@@ -88,9 +88,18 @@ template<class T> struct tn_remove_const<T const>
 
 // tn_is_function (also catches references but that's OK)
 
+#if defined(BOOST_MSVC)
+# pragma warning(push)
+# pragma warning(disable: 4180 4181)
+#endif
+
 template<class T, class U = typename tn_remove_const<T>::type> struct tn_is_function: core::is_same<U, U const>
 {
 };
+
+#if defined(BOOST_MSVC)
+# pragma warning(pop)
+#endif
 
 #if !defined(BOOST_NO_TYPEID)
 
