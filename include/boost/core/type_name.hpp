@@ -632,7 +632,12 @@ template<class R, class T> std::string type_name( tn_identity<R T::*>, std::stri
     return type_name( tn_identity<R>(), ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
 }
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1900 && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1900 && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*)(A...)>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), "", ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
+}
 
 template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*)(A...) const>, std::string const& suffix )
 {
