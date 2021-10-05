@@ -155,9 +155,13 @@ int main()
 
 #endif
 
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
+
     TEST(void() const);
     TEST(void() volatile);
     TEST(void() const volatile);
+
+#endif
 
 #if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
 
@@ -192,14 +196,16 @@ int main()
 
 #endif
 
-#endif
+#endif // #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
     TEST(A[]);
     TEST(A const[]);
     TEST(A volatile[]);
     TEST(A const volatile[]);
 
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1500
     TEST(A(&)[]);
+#endif
     TEST(A const(***)[]);
 
     TEST(B[1]);
@@ -213,7 +219,9 @@ int main()
     TEST(A[][2][3]);
     TEST(A const[][2][3]);
 
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1500
     TEST(A(&)[][2][3]);
+#endif
     TEST(A const(***)[][2][3]);
 
     TEST(B[1][2][3]);
@@ -225,10 +233,14 @@ int main()
     TEST(int A::*);
     TEST(int const B::*);
 
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
     TEST(void(A::*)());
     TEST(void(A::*)() const);
     TEST(void(A::*)() volatile);
     TEST(void(A::*)() const volatile);
+
+#endif
 
 #if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
 

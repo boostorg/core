@@ -396,6 +396,8 @@ template<class R, class... A> std::string type_name( tn_identity<R(A...)>, std::
     return function_type_name( tn_identity<R(A...)>(), "", suffix );
 }
 
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
+
 template<class R, class... A> std::string type_name( tn_identity<R(A...) const>, std::string const& suffix )
 {
     return function_type_name( tn_identity<R(A...)>(), " const", suffix );
@@ -410,6 +412,8 @@ template<class R, class... A> std::string type_name( tn_identity<R(A...) const v
 {
     return function_type_name( tn_identity<R(A...)>(), " const volatile", suffix );
 }
+
+#endif
 
 #if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
 
@@ -618,6 +622,25 @@ template<class R, class T> std::string type_name( tn_identity<R T::*>, std::stri
 {
     return type_name( tn_identity<R>(), ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
 }
+
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1900 && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*)(A...) const>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const", ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
+}
+
+template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*)(A...) volatile>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " volatile", ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
+}
+
+template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*)(A...) const volatile>, std::string const& suffix )
+{
+    return function_type_name( tn_identity<R(A...)>(), " const volatile", ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
+}
+
+#endif
 
 // nullptr_t
 
