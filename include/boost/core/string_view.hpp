@@ -351,7 +351,7 @@ public:
             p = traits_type::find( p, last - p, s[0] );
 
             if( p == 0 ) break;
-            if( last - p < n ) break;
+            if( static_cast<size_type>( last - p ) < n ) break;
 
             if( traits_type::compare( p, s, n ) == 0 ) return p - data();
 
