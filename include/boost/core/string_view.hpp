@@ -573,12 +573,12 @@ public:
 
     // relational operators
 
-    BOOST_CONSTEXPR friend bool operator==( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
         return sv1.compare( sv2 ) == 0;
     }
 
-    BOOST_CONSTEXPR friend bool operator!=( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
         return sv1.compare( sv2 ) != 0;
     }
