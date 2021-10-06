@@ -254,6 +254,7 @@ run sv_modifiers_test.cpp ;
 run sv_copy_test.cpp ;
 run sv_substr_test.cpp ;
 run sv_compare_test.cpp ;
+run sv_starts_with_test.cpp ;
 
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;

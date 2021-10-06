@@ -563,6 +563,18 @@ public:
     {
         return find( s ) != npos;
     }
+
+    // relational operators
+
+    BOOST_CONSTEXPR friend bool operator==( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) == 0;
+    }
+
+    BOOST_CONSTEXPR friend bool operator!=( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) != 0;
+    }
 };
 
 #if defined(BOOST_NO_CXX17_INLINE_VARIABLES)
