@@ -29,11 +29,11 @@ int main()
         BOOST_TEST_EQ( sv.cbegin(), sv.data() );
         BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
 
-        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.begin() ) );
-        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
 
-        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cbegin() ) );
-        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
 
         BOOST_TEST_EQ( sv.length(), sv.size() );
         BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );
@@ -55,11 +55,11 @@ int main()
         BOOST_TEST_EQ( sv.cbegin(), sv.data() );
         BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
 
-        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.begin() ) );
-        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
 
-        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cbegin() ) );
-        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
 
         BOOST_TEST_EQ( sv.length(), sv.size() );
         BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );
@@ -87,11 +87,11 @@ int main()
         BOOST_TEST_EQ( sv.cbegin(), sv.data() );
         BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
 
-        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.begin() ) );
-        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
 
-        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cbegin() ) );
-        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
 
         BOOST_TEST_EQ( sv.length(), sv.size() );
         BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );
@@ -119,11 +119,11 @@ int main()
         BOOST_TEST_EQ( sv.cbegin(), sv.data() );
         BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
 
-        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.begin() ) );
-        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
 
-        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cbegin() ) );
-        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
 
         BOOST_TEST_EQ( sv.length(), sv.size() );
         BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );
@@ -151,11 +151,11 @@ int main()
         BOOST_TEST_EQ( sv.cbegin(), sv.data() );
         BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
 
-        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.begin() ) );
-        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
 
-        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cbegin() ) );
-        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
 
         BOOST_TEST_EQ( sv.length(), sv.size() );
         BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );
@@ -183,11 +183,11 @@ int main()
         BOOST_TEST_EQ( sv.cbegin(), sv.data() );
         BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
 
-        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.begin() ) );
-        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
 
-        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cbegin() ) );
-        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
 
         BOOST_TEST_EQ( sv.length(), sv.size() );
         BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );
@@ -215,11 +215,11 @@ int main()
         BOOST_TEST_EQ( sv.cbegin(), sv.data() );
         BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
 
-        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.begin() ) );
-        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
 
-        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cbegin() ) );
-        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
 
         BOOST_TEST_EQ( sv.length(), sv.size() );
         BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );
@@ -247,11 +247,11 @@ int main()
         BOOST_TEST_EQ( sv.cbegin(), sv.data() );
         BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
 
-        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.begin() ) );
-        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
 
-        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cbegin() ) );
-        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
 
         BOOST_TEST_EQ( sv.length(), sv.size() );
         BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );
@@ -281,11 +281,11 @@ int main()
         BOOST_TEST_EQ( sv.cbegin(), sv.data() );
         BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
 
-        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.begin() ) );
-        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
 
-        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cbegin() ) );
-        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
 
         BOOST_TEST_EQ( sv.length(), sv.size() );
         BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );

@@ -122,22 +122,22 @@ public:
 
     BOOST_CONSTEXPR const_reverse_iterator rbegin() const BOOST_NOEXCEPT
     {
-        return const_reverse_iterator( begin() );
+        return const_reverse_iterator( end() );
     }
 
     BOOST_CONSTEXPR const_reverse_iterator rend() const BOOST_NOEXCEPT
     {
-        return const_reverse_iterator( end() );
+        return const_reverse_iterator( begin() );
     }
 
     BOOST_CONSTEXPR const_reverse_iterator crbegin() const BOOST_NOEXCEPT
     {
-        return const_reverse_iterator( begin() );
+        return const_reverse_iterator( end() );
     }
 
     BOOST_CONSTEXPR const_reverse_iterator crend() const BOOST_NOEXCEPT
     {
-        return const_reverse_iterator( end() );
+        return const_reverse_iterator( begin() );
     }
 
     // capacity
