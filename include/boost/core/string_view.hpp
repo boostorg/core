@@ -375,13 +375,20 @@ public:
 
     BOOST_CXX14_CONSTEXPR size_type rfind( Ch c, size_type pos = npos ) const BOOST_NOEXCEPT
     {
-        if( pos > size() )
+        size_type n = size();
+
+        if( n == 0 )
         {
-            pos = size();
+            return npos;
         }
 
-        const_reverse_iterator r = std::find( rbegin() + pos, rend(), c );
-        return r == rend()? npos: size() - 1 - ( r - rbegin() );
+        if( pos > n - 1 )
+        {
+            pos = n - 1;
+        }
+
+        const_reverse_iterator r = std::find( rbegin() + n - 1 - pos, rend(), c );
+        return r == rend()? npos: n - 1 - ( r - rbegin() );
     }
 
     BOOST_CXX14_CONSTEXPR size_type rfind( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
