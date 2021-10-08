@@ -563,7 +563,7 @@ public:
 
     BOOST_CONSTEXPR bool contains( Ch c ) const BOOST_NOEXCEPT
     {
-        return traits_type::find( data(), size(), c ) == 0;
+        return traits_type::find( data(), size(), c ) != 0;
     }
 
     BOOST_CONSTEXPR bool contains( Ch const* s ) const BOOST_NOEXCEPT
