@@ -4,6 +4,7 @@
 
 #include <boost/core/string_view.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <algorithm>
 #include <cstddef>
 
 int main()
@@ -378,6 +379,31 @@ int main()
         BOOST_TEST_EQ( sv.find_first_of( L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 10 ), 11 );
         BOOST_TEST_EQ( sv.find_first_of( L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 11 ), 11 );
         BOOST_TEST_EQ( sv.find_first_of( L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 12 ), npos );
+    }
+
+    {
+        char str[ 256 ];
+
+        for( int i = 0; i < 256; ++i )
+        {
+            str[ i ] = static_cast< unsigned char >( i );
+        }
+
+        boost::core::string_view sv( str, 256 );
+
+        for( int i = 0; i < 256; ++i )
+        {
+            std::string needle( 12, static_cast< unsigned char >( i ) );
+            BOOST_TEST_EQ( sv.find_first_of( needle ), i );
+        }
+
+        std::reverse( str, str + 256 );
+
+        for( int i = 0; i < 256; ++i )
+        {
+            std::string needle( 12, static_cast< unsigned char >( i ) );
+            BOOST_TEST_EQ( sv.find_first_of( needle ), 255 - i );
+        }
     }
 
 #if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
