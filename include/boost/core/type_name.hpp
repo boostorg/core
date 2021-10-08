@@ -31,7 +31,6 @@ namespace boost
 {
 namespace core
 {
-
 namespace detail
 {
 
@@ -41,65 +40,6 @@ template<class T> struct tn_identity
 {
     typedef T type;
 };
-
-// tn_enable_if
-
-template<bool C, class T> struct tn_enable_if
-{
-};
-
-template<class T> struct tn_enable_if<true, T>
-{
-    typedef T type;
-};
-
-// tn_is_reference
-
-template<class T> struct tn_is_reference
-{
-    static const bool value = false;
-};
-
-template<class T> struct tn_is_reference<T&>
-{
-    static const bool value = true;
-};
-
-#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-
-template<class T> struct tn_is_reference<T&&>
-{
-    static const bool value = true;
-};
-
-#endif
-
-// tn_remove_const
-
-template<class T> struct tn_remove_const
-{
-    typedef T type;
-};
-
-template<class T> struct tn_remove_const<T const>
-{
-    typedef T type;
-};
-
-// tn_is_function (also catches references but that's OK)
-
-#if defined(BOOST_MSVC)
-# pragma warning(push)
-# pragma warning(disable: 4180 4181)
-#endif
-
-template<class T, class U = typename tn_remove_const<T>::type> struct tn_is_function: core::is_same<U, U const>
-{
-};
-
-#if defined(BOOST_MSVC)
-# pragma warning(pop)
-#endif
 
 #if !defined(BOOST_NO_TYPEID)
 
@@ -299,8 +239,6 @@ template<> struct tn_holder<char8_t>
 
 // cv
 
-#if 1 // !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
-
 template<class T> struct tn_holder<T const>
 {
     static std::string type_name( std::string const& suffix )
@@ -325,34 +263,7 @@ template<class T> struct tn_holder<T const volatile>
     }
 };
 
-#else
-
-template<class T>
-typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
-type_name( tn_identity<T const>, std::string const& suffix )
-{
-    return detail::type_name( tn_identity<T>(), " const" + suffix );
-}
-
-template<class T>
-typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
-type_name( tn_identity<T volatile>, std::string const& suffix )
-{
-    return detail::type_name( tn_identity<T>(), " volatile" + suffix );
-}
-
-template<class T>
-typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
-type_name( tn_identity<T const volatile>, std::string const& suffix )
-{
-    return detail::type_name( tn_identity<T>(), " const volatile" + suffix );
-}
-
-#endif
-
 // refs
-
-#if 1 // !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
 
 template<class T> struct tn_holder<T&>
 {
@@ -361,17 +272,6 @@ template<class T> struct tn_holder<T&>
         return tn_holder<T>::type_name( "&" + suffix );
     }
 };
-
-#else
-
-template<class T>
-typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
-type_name( tn_identity<T&>, std::string const& suffix )
-{
-    return detail::type_name( tn_identity<T>(), "&" + suffix );
-}
-
-#endif
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 
