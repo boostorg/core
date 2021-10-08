@@ -27,6 +27,10 @@
 # include <array>
 #endif
 
+#if !defined(BOOST_NO_CXX11_HDR_TUPLE)
+# include <tuple>
+#endif
+
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
@@ -265,6 +269,9 @@ int main()
     TEST(std::pair<A, B>);
     TEST(std::pair<A const*, B*> volatile&);
 
+    TEST(std::pair<void, void>);
+    TEST(std::pair<std::pair<void, void>, void>);
+
     TEST(std::basic_string<Ch>);
 
     TEST(std::string);
@@ -285,6 +292,8 @@ int main()
 
     TEST(X<A, B>);
     TEST(X<A const&, B&> volatile&);
+
+    TEST(X<std::pair<void, void>, void>);
 
     TEST(std::vector<int>);
     TEST(std::vector<A>);
@@ -325,6 +334,23 @@ int main()
 
     TEST(std::array<std::string, 7>);
     TEST(std::array<std::wstring const*, 0> const&);
+
+#endif
+
+#if !defined(BOOST_NO_CXX11_HDR_TUPLE)
+
+    TEST(std::tuple<>);
+    TEST(std::tuple<int>);
+    TEST(std::tuple<int, float>);
+    TEST(std::tuple<int, float, std::string>);
+
+    TEST(std::tuple<void>);
+    TEST(std::tuple<void, void>);
+    TEST(std::tuple<void, void, void>);
+
+    TEST(std::tuple<std::tuple<void, void>, void>);
+
+    TEST(X<std::tuple<void>, void>);
 
 #endif
 

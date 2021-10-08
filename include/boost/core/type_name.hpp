@@ -160,28 +160,28 @@ template<class T> std::string typeid_name()
 
 template<class T> std::string class_template_name()
 {
-    std::string r = typeid_name<T>();
+    std::string r = typeid_name<T*>();
     return r.substr( 0, r.find( '<' ) );
 }
 
 template<class T> std::string sequence_template_name()
 {
-    return class_template_name<T>();
+    return detail::class_template_name<T>();
 }
 
 template<class T> std::string set_template_name()
 {
-    return class_template_name<T>();
+    return detail::class_template_name<T>();
 }
 
 template<class T> std::string map_template_name()
 {
-    return class_template_name<T>();
+    return detail::class_template_name<T>();
 }
 
 template<class T> std::string array_template_name()
 {
-    return class_template_name<T>();
+    return detail::class_template_name<T>();
 }
 
 #else // #if !defined(BOOST_NO_TYPEID)
@@ -237,14 +237,156 @@ inline std::string tn_to_string( std::size_t n )
 # pragma warning( pop )
 #endif
 
-// tn_add_each
+// tn_holder
+
+template<class T> struct tn_holder
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return typeid_name<T>() + suffix;
+    }
+};
+
+// integrals
+
+template<> struct tn_holder<unsigned>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "unsigned" + suffix;
+    }
+};
+
+#if defined(_MSC_VER)
+
+template<> struct tn_holder<long long>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "long long" + suffix;
+    }
+};
+
+template<> struct tn_holder<unsigned long long>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "unsigned long long" + suffix;
+    }
+};
+
+#endif
+
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+
+template<> struct tn_holder<char8_t>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "char8_t" + suffix;
+    }
+};
+
+#endif
+
+// cv
+
+#if 1 // !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
+
+template<class T> struct tn_holder<T const>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return tn_holder<T>::type_name( " const" + suffix );
+    }
+};
+
+template<class T> struct tn_holder<T volatile>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return tn_holder<T>::type_name( " volatile" + suffix );
+    }
+};
+
+template<class T> struct tn_holder<T const volatile>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return tn_holder<T>::type_name( " const volatile" + suffix );
+    }
+};
+
+#else
+
+template<class T>
+typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
+type_name( tn_identity<T const>, std::string const& suffix )
+{
+    return detail::type_name( tn_identity<T>(), " const" + suffix );
+}
+
+template<class T>
+typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
+type_name( tn_identity<T volatile>, std::string const& suffix )
+{
+    return detail::type_name( tn_identity<T>(), " volatile" + suffix );
+}
+
+template<class T>
+typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
+type_name( tn_identity<T const volatile>, std::string const& suffix )
+{
+    return detail::type_name( tn_identity<T>(), " const volatile" + suffix );
+}
+
+#endif
+
+// refs
+
+#if 1 // !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
+
+template<class T> struct tn_holder<T&>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return tn_holder<T>::type_name( "&" + suffix );
+    }
+};
+
+#else
+
+template<class T>
+typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
+type_name( tn_identity<T&>, std::string const& suffix )
+{
+    return detail::type_name( tn_identity<T>(), "&" + suffix );
+}
+
+#endif
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+template<class T> struct tn_holder<T&&>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return tn_holder<T>::type_name( "&&" + suffix );
+    }
+};
+
+#endif
+
+// function types
 
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+// tn_add_each
 
 template<class T> int tn_add_each_impl( std::string& st )
 {
     if( !st.empty() ) st += ", ";
-    st += type_name( tn_identity<T>(), "" );
+    st += tn_holder<T>::type_name( "" );
     return 0;
 }
 
@@ -258,125 +400,9 @@ template<class... T> std::string tn_add_each()
     return st;
 }
 
-#endif
-
-// primary
-
-template<class T> std::string type_name( tn_identity<T>, std::string const& suffix )
-{
-    return typeid_name<T>() + suffix;
-}
-
-// integrals
-
-inline std::string type_name( tn_identity<unsigned>, std::string const& suffix )
-{
-    return "unsigned" + suffix;
-}
-
-#if defined(_MSC_VER)
-
-inline std::string type_name( tn_identity<long long>, std::string const& suffix )
-{
-    return "long long" + suffix;
-}
-
-inline std::string type_name( tn_identity<unsigned long long>, std::string const& suffix )
-{
-    return "unsigned long long" + suffix;
-}
-
-#endif
-
-#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
-
-inline std::string type_name( tn_identity<char8_t>, std::string const& suffix )
-{
-    return "char8_t" + suffix;
-}
-
-#endif
-
-// cv
-
-#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
-
-template<class T> std::string type_name( tn_identity<T const>, std::string const& suffix )
-{
-    return type_name( tn_identity<T>(), " const" + suffix );
-}
-
-template<class T> std::string type_name( tn_identity<T volatile>, std::string const& suffix )
-{
-    return type_name( tn_identity<T>(), " volatile" + suffix );
-}
-
-template<class T> std::string type_name( tn_identity<T const volatile>, std::string const& suffix )
-{
-    return type_name( tn_identity<T>(), " const volatile" + suffix );
-}
-
-#else
-
-template<class T>
-typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
-type_name( tn_identity<T const>, std::string const& suffix )
-{
-    return type_name( tn_identity<T>(), " const" + suffix );
-}
-
-template<class T>
-typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
-type_name( tn_identity<T volatile>, std::string const& suffix )
-{
-    return type_name( tn_identity<T>(), " volatile" + suffix );
-}
-
-template<class T>
-typename tn_enable_if<!tn_is_function<T>::value, std::string>::type
-type_name( tn_identity<T const volatile>, std::string const& suffix )
-{
-    return type_name( tn_identity<T>(), " const volatile" + suffix );
-}
-
-#endif
-
-// refs
-
-#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
-
-template<class T> std::string type_name( tn_identity<T&>, std::string const& suffix )
-{
-    return type_name( tn_identity<T>(), "&" + suffix );
-}
-
-#else
-
-template<class T>
-typename tn_enable_if<!tn_is_reference<T>::value, std::string>::type
-type_name( tn_identity<T&>, std::string const& suffix )
-{
-    return type_name( tn_identity<T>(), "&" + suffix );
-}
-
-#endif
-
-#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-
-template<class T> std::string type_name( tn_identity<T&&>, std::string const& suffix )
-{
-    return type_name( tn_identity<T>(), "&&" + suffix );
-}
-
-#endif
-
-// function types
-
-#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
-
 template<class R, class... A> std::string function_type_name( tn_identity<R(A...)>, std::string const& trailer, std::string const& suffix )
 {
-    std::string r = type_name( tn_identity<R>(), "" );
+    std::string r = tn_holder<R>::type_name( "" );
 
     if( !suffix.empty() )
     {
@@ -400,135 +426,207 @@ template<class R, class... A> std::string function_type_name( tn_identity<R(A...
     return r;
 }
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...)>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...)>
 {
-    return function_type_name( tn_identity<R(A...)>(), "", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), "", suffix );
+    }
+};
 
 #if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) volatile>
 {
-    return function_type_name( tn_identity<R(A...)>(), " volatile", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " volatile", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const volatile>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const volatile", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const volatile", suffix );
+    }
+};
 
 #endif
 
 #if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) &>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) &>
 {
-    return function_type_name( tn_identity<R(A...)>(), " &", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " &", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const &>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const &>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const &", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const &", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile &>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) volatile &>
 {
-    return function_type_name( tn_identity<R(A...)>(), " volatile &", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " volatile &", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile &>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const volatile &>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const volatile &", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const volatile &", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) &&>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) &&>
 {
-    return function_type_name( tn_identity<R(A...)>(), " &&", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " &&", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const &&>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const &&>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const &&", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const &&", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile &&>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) volatile &&>
 {
-    return function_type_name( tn_identity<R(A...)>(), " volatile &&", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " volatile &&", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile &&>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const volatile &&>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const volatile &&", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const volatile &&", suffix );
+    }
+};
 
 #endif
 
 #if defined( __cpp_noexcept_function_type ) || defined( _NOEXCEPT_TYPES_SUPPORTED )
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) volatile noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " volatile noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " volatile noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const volatile noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const volatile noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const volatile noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) & noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) & noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " & noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " & noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const & noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const & noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const & noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const & noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile & noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) volatile & noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " volatile & noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " volatile & noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile & noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const volatile & noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const volatile & noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const volatile & noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) && noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) && noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " && noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " && noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const && noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const && noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const && noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const && noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) volatile && noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) volatile && noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " volatile && noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " volatile && noexcept", suffix );
+    }
+};
 
-template<class R, class... A> std::string type_name( tn_identity<R(A...) const volatile && noexcept>, std::string const& suffix )
+template<class R, class... A> struct tn_holder<R(A...) const volatile && noexcept>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const volatile && noexcept", suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const volatile && noexcept", suffix );
+    }
+};
 
 #endif
 
@@ -536,21 +634,24 @@ template<class R, class... A> std::string type_name( tn_identity<R(A...) const v
 
 // pointers
 
-template<class T> std::string type_name( tn_identity<T*>, std::string const& suffix )
+template<class T> struct tn_holder<T*>
 {
-    return type_name( tn_identity<T>(), "*" + suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return tn_holder<T>::type_name( "*" + suffix );
+    }
+};
 
 // arrays
 
 template<class T> std::pair<std::string, std::string> array_prefix_suffix( tn_identity<T> )
 {
-    return std::pair<std::string, std::string>( type_name( tn_identity<T>(), "" ), "" );
+    return std::pair<std::string, std::string>( tn_holder<T>::type_name( "" ), "" );
 }
 
 template<class T, std::size_t N> std::pair<std::string, std::string> array_prefix_suffix( tn_identity<T[N]> )
 {
-    std::pair<std::string, std::string> r = array_prefix_suffix( tn_identity<T>() );
+    std::pair<std::string, std::string> r = detail::array_prefix_suffix( tn_identity<T>() );
 
     r.second = '[' + tn_to_string( N ) + ']' + r.second;
 
@@ -559,7 +660,7 @@ template<class T, std::size_t N> std::pair<std::string, std::string> array_prefi
 
 template<class T> std::string array_type_name( tn_identity<T[]>, std::string const& suffix )
 {
-    std::pair<std::string, std::string> r = array_prefix_suffix( tn_identity<T>() );
+    std::pair<std::string, std::string> r = detail::array_prefix_suffix( tn_identity<T>() );
 
     if( suffix.empty() )
     {
@@ -571,29 +672,41 @@ template<class T> std::string array_type_name( tn_identity<T[]>, std::string con
     }
 }
 
-template<class T> std::string type_name( tn_identity<T[]>, std::string const& suffix )
+template<class T> struct tn_holder<T[]>
 {
-    return array_type_name( tn_identity<T[]>(), suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::array_type_name( tn_identity<T[]>(), suffix );
+    }
+};
 
-template<class T> std::string type_name( tn_identity<T const[]>, std::string const& suffix )
+template<class T> struct tn_holder<T const[]>
 {
-    return array_type_name( tn_identity<T const[]>(), suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::array_type_name( tn_identity<T const[]>(), suffix );
+    }
+};
 
-template<class T> std::string type_name( tn_identity<T volatile[]>, std::string const& suffix )
+template<class T> struct tn_holder<T volatile[]>
 {
-    return array_type_name( tn_identity<T volatile[]>(), suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::array_type_name( tn_identity<T volatile[]>(), suffix );
+    }
+};
 
-template<class T> std::string type_name( tn_identity<T const volatile[]>, std::string const& suffix )
+template<class T> struct tn_holder<T const volatile[]>
 {
-    return array_type_name( tn_identity<T const volatile[]>(), suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::array_type_name( tn_identity<T const volatile[]>(), suffix );
+    }
+};
 
 template<class T, std::size_t N> std::string array_type_name( tn_identity<T[N]>, std::string const& suffix )
 {
-    std::pair<std::string, std::string> r = array_prefix_suffix( tn_identity<T[N]>() );
+    std::pair<std::string, std::string> r = detail::array_prefix_suffix( tn_identity<T[N]>() );
 
     if( suffix.empty() )
     {
@@ -605,54 +718,81 @@ template<class T, std::size_t N> std::string array_type_name( tn_identity<T[N]>,
     }
 }
 
-template<class T, std::size_t N> std::string type_name( tn_identity<T[N]>, std::string const& suffix )
+template<class T, std::size_t N> struct tn_holder<T[N]>
 {
-    return array_type_name( tn_identity<T[N]>(), suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::array_type_name( tn_identity<T[N]>(), suffix );
+    }
+};
 
-template<class T, std::size_t N> std::string type_name( tn_identity<T const[N]>, std::string const& suffix )
+template<class T, std::size_t N> struct tn_holder<T const[N]>
 {
-    return array_type_name( tn_identity<T const[N]>(), suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::array_type_name( tn_identity<T const[N]>(), suffix );
+    }
+};
 
-template<class T, std::size_t N> std::string type_name( tn_identity<T volatile[N]>, std::string const& suffix )
+template<class T, std::size_t N> struct tn_holder<T volatile[N]>
 {
-    return array_type_name( tn_identity<T volatile[N]>(), suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::array_type_name( tn_identity<T volatile[N]>(), suffix );
+    }
+};
 
-template<class T, std::size_t N> std::string type_name( tn_identity<T const volatile[N]>, std::string const& suffix )
+template<class T, std::size_t N> struct tn_holder<T const volatile[N]>
 {
-    return array_type_name( tn_identity<T const volatile[N]>(), suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::array_type_name( tn_identity<T const volatile[N]>(), suffix );
+    }
+};
 
 // pointers to members
 
-template<class R, class T> std::string type_name( tn_identity<R T::*>, std::string const& suffix )
+template<class R, class T> struct tn_holder<R T::*>
 {
-    return type_name( tn_identity<R>(), ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return tn_holder<R>::type_name( ' ' + tn_holder<T>::type_name( "" ) + "::*" + suffix );
+    }
+};
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1900 && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
-template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*)(A...)>, std::string const& suffix )
+template<class R, class T, class... A> struct tn_holder<R(T::*)(A...)>
 {
-    return function_type_name( tn_identity<R(A...)>(), "", ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), "", ' ' + tn_holder<T>::type_name( "" ) + "::*" + suffix );
+    }
+};
 
-template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*)(A...) const>, std::string const& suffix )
+template<class R, class T, class... A> struct tn_holder<R(T::*)(A...) const>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const", ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const", ' ' + tn_holder<T>::type_name( "" ) + "::*" + suffix );
+    }
+};
 
-template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*)(A...) volatile>, std::string const& suffix )
+template<class R, class T, class... A> struct tn_holder<R(T::*)(A...) volatile>
 {
-    return function_type_name( tn_identity<R(A...)>(), " volatile", ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " volatile", ' ' + tn_holder<T>::type_name( "" ) + "::*" + suffix );
+    }
+};
 
-template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*)(A...) const volatile>, std::string const& suffix )
+template<class R, class T, class... A> struct tn_holder<R(T::*)(A...) const volatile>
 {
-    return function_type_name( tn_identity<R(A...)>(), " const volatile", ' ' + type_name( tn_identity<T>(), "" ) + "::*" + suffix );
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return detail::function_type_name( tn_identity<R(A...)>(), " const volatile", ' ' + tn_holder<T>::type_name( "" ) + "::*" + suffix );
+    }
+};
 
 #endif
 
@@ -660,108 +800,150 @@ template<class R, class T, class... A> std::string type_name( tn_identity<R(T::*
 
 #if !defined(BOOST_NO_CXX11_NULLPTR)
 
-inline std::string type_name( tn_identity<std::nullptr_t>, std::string const& suffix )
+template<> struct tn_holder<std::nullptr_t>
 {
-    return "std::nullptr_t" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::nullptr_t" + suffix;
+    }
+};
 
 #endif
 
 // strings
 
-template<template<class Ch, class Tr, class A> class L, class Ch> std::string type_name( tn_identity< L<Ch, std::char_traits<Ch>, std::allocator<Ch> > >, std::string const& suffix )
+template<template<class Ch, class Tr, class A> class L, class Ch> struct tn_holder< L<Ch, std::char_traits<Ch>, std::allocator<Ch> > >
 {
-    std::string tn = sequence_template_name< L<Ch, std::char_traits<Ch>, std::allocator<Ch> > >();
-    return tn + '<' + type_name( tn_identity<Ch>(), "" ) + '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = sequence_template_name< L<Ch, std::char_traits<Ch>, std::allocator<Ch> > >();
+        return tn + '<' + tn_holder<Ch>::type_name( "" ) + '>' + suffix;
+    }
+};
 
-inline std::string type_name( tn_identity<std::string>, std::string const& suffix )
+template<> struct tn_holder<std::string>
 {
-    return "std::string" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::string" + suffix;
+    }
+};
 
-inline std::string type_name( tn_identity<std::wstring>, std::string const& suffix )
+template<> struct tn_holder<std::wstring>
 {
-    return "std::wstring" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::wstring" + suffix;
+    }
+};
 
 #if !defined(BOOST_NO_CXX11_CHAR16_T)
 
-inline std::string type_name( tn_identity<std::u16string>, std::string const& suffix )
+template<> struct tn_holder<std::u16string>
 {
-    return "std::u16string" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::u16string" + suffix;
+    }
+};
 
 #endif
 
 #if !defined(BOOST_NO_CXX11_CHAR32_T)
 
-inline std::string type_name( tn_identity<std::u32string>, std::string const& suffix )
+template<> struct tn_holder<std::u32string>
 {
-    return "std::u32string" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::u32string" + suffix;
+    }
+};
 
 #endif
 
 #if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
 
-inline std::string type_name( tn_identity<std::basic_string<char8_t>>, std::string const& suffix )
+template<> struct tn_holder< std::basic_string<char8_t> >
 {
-    return "std::u8string" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::u8string" + suffix;
+    }
+};
 
 #endif
 
 // string views (et al)
 
-template<template<class Ch, class Tr> class L, class Ch> std::string type_name( tn_identity< L<Ch, std::char_traits<Ch> > >, std::string const& suffix )
+template<template<class Ch, class Tr> class L, class Ch> struct tn_holder< L<Ch, std::char_traits<Ch> > >
 {
-    std::string tn = sequence_template_name< L<Ch, std::char_traits<Ch> > >();
-    return tn + '<' + type_name( tn_identity<Ch>(), "" ) + '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = sequence_template_name< L<Ch, std::char_traits<Ch> > >();
+        return tn + '<' + tn_holder<Ch>::type_name( "" ) + '>' + suffix;
+    }
+};
 
 // needed for libstdc++
-inline std::string type_name( tn_identity<std::ostream>, std::string const& suffix )
+template<> struct tn_holder<std::ostream>
 {
-    return "std::ostream" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::ostream" + suffix;
+    }
+};
 
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 
-inline std::string type_name( tn_identity<std::string_view>, std::string const& suffix )
+template<> struct tn_holder<std::string_view>
 {
-    return "std::string_view" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::string_view" + suffix;
+    }
+};
 
-inline std::string type_name( tn_identity<std::wstring_view>, std::string const& suffix )
+template<> struct tn_holder<std::wstring_view>
 {
-    return "std::wstring_view" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::wstring_view" + suffix;
+    }
+};
 
 #if !defined(BOOST_NO_CXX11_CHAR16_T)
 
-inline std::string type_name( tn_identity<std::u16string_view>, std::string const& suffix )
+template<> struct tn_holder<std::u16string_view>
 {
-    return "std::u16string_view" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::u16string_view" + suffix;
+    }
+};
 
 #endif
 
 #if !defined(BOOST_NO_CXX11_CHAR32_T)
 
-inline std::string type_name( tn_identity<std::u32string_view>, std::string const& suffix )
+template<> struct tn_holder<std::u32string_view>
 {
-    return "std::u32string_view" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::u32string_view" + suffix;
+    }
+};
 
 #endif
 
 #if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
 
-inline std::string type_name( tn_identity<std::basic_string_view<char8_t>>, std::string const& suffix )
+template<> struct tn_holder< std::basic_string_view<char8_t> >
 {
-    return "std::u8string_view" + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::u8string_view" + suffix;
+    }
+};
 
 #endif
 
@@ -771,87 +953,114 @@ inline std::string type_name( tn_identity<std::basic_string_view<char8_t>>, std:
 
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
-template<template<class...> class L, class... T> std::string type_name( tn_identity< L<T...> >, std::string const& suffix )
+template<template<class...> class L, class... T> struct tn_holder< L<T...> >
 {
-    std::string tn = class_template_name< L<T...> >();
-    std::string st = tn_add_each<T...>();
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = detail::class_template_name< L<T...> >();
+        std::string st = tn_add_each<T...>();
 
-    return tn + '<' + st + '>' + suffix;
-}
+        return tn + '<' + st + '>' + suffix;
+    }
+};
 
 #else
 
-template<template<class T1> class L, class T1> std::string type_name( tn_identity< L<T1> >, std::string const& suffix )
+template<template<class T1> class L, class T1> struct tn_holder< L<T1> >
 {
-    std::string tn = class_template_name< L<T1> >();
-    return tn + '<' + type_name( tn_identity<T1>(), "" ) + '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = detail::class_template_name< L<T1> >();
+        return tn + '<' + tn_holder<T1>::type_name( "" ) + '>' + suffix;
+    }
+};
 
-template<template<class T1, class T2> class L, class T1, class T2> std::string type_name( tn_identity< L<T1, T2> >, std::string const& suffix )
+template<template<class T1, class T2> class L, class T1, class T2> struct tn_holder< L<T1, T2> >
 {
-    std::string tn = class_template_name< L<T1, T2> >();
-    return tn + '<' + type_name( tn_identity<T1>(), "" ) + ", " + type_name( tn_identity<T2>(), "" ) + '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = detail::class_template_name< L<T1, T2> >();
+        return tn + '<' + tn_holder<T1>::type_name( "" ) + ", " + tn_holder<T2>::type_name( "" ) + '>' + suffix;
+    }
+};
 
 #endif
 
 // sequence containers
 
-template<template<class T, class A> class L, class T> std::string type_name( tn_identity< L<T, std::allocator<T> > >, std::string const& suffix )
+template<template<class T, class A> class L, class T> struct tn_holder< L<T, std::allocator<T> > >
 {
-    std::string tn = sequence_template_name< L<T, std::allocator<T> > >();
-    return tn + '<' + type_name( tn_identity<T>(), "" ) + '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = detail::sequence_template_name< L<T, std::allocator<T> > >();
+        return tn + '<' + tn_holder<T>::type_name( "" ) + '>' + suffix;
+    }
+};
 
 // set
 
-template<template<class T, class Pr, class A> class L, class T> std::string type_name( tn_identity< L<T, std::less<T>, std::allocator<T> > >, std::string const& suffix )
+template<template<class T, class Pr, class A> class L, class T> struct tn_holder< L<T, std::less<T>, std::allocator<T> > >
 {
-    std::string tn = set_template_name< L<T, std::less<T>, std::allocator<T> > >();
-    return tn + '<' + type_name( tn_identity<T>(), "" ) + '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = detail::set_template_name< L<T, std::less<T>, std::allocator<T> > >();
+        return tn + '<' + tn_holder<T>::type_name( "" ) + '>' + suffix;
+    }
+};
 
 // map
 
-template<template<class T, class U, class Pr, class A> class L, class T, class U> std::string type_name( tn_identity< L<T, U, std::less<T>, std::allocator<std::pair<T const, U> > > >, std::string const& suffix )
+template<template<class T, class U, class Pr, class A> class L, class T, class U> struct tn_holder< L<T, U, std::less<T>, std::allocator<std::pair<T const, U> > > >
 {
-    std::string tn = map_template_name< L<T, U, std::less<T>, std::allocator<std::pair<T const, U> > > >();
-    return tn + '<' + type_name( tn_identity<T>(), "" ) + ", " + type_name( tn_identity<U>(), "" ) +  '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = detail::map_template_name< L<T, U, std::less<T>, std::allocator<std::pair<T const, U> > > >();
+        return tn + '<' + tn_holder<T>::type_name( "" ) + ", " + tn_holder<U>::type_name( "" ) +  '>' + suffix;
+    }
+};
 
 #if !defined(BOOST_NO_CXX11_HDR_FUNCTIONAL)
 
 // unordered_set
 
-template<template<class T, class H, class Eq, class A> class L, class T> std::string type_name( tn_identity< L<T, std::hash<T>, std::equal_to<T>, std::allocator<T> > >, std::string const& suffix )
+template<template<class T, class H, class Eq, class A> class L, class T> struct tn_holder< L<T, std::hash<T>, std::equal_to<T>, std::allocator<T> > >
 {
-    std::string tn = set_template_name< L<T, std::hash<T>, std::equal_to<T>, std::allocator<T> > >();
-    return tn + '<' + type_name( tn_identity<T>(), "" ) + '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = detail::set_template_name< L<T, std::hash<T>, std::equal_to<T>, std::allocator<T> > >();
+        return tn + '<' + tn_holder<T>::type_name( "" ) + '>' + suffix;
+    }
+};
 
 // unordered_map
 
-template<template<class T, class U, class H, class Eq, class A> class L, class T, class U> std::string type_name( tn_identity< L<T, U, std::hash<T>, std::equal_to<T>, std::allocator<std::pair<T const, U> > > >, std::string const& suffix )
+template<template<class T, class U, class H, class Eq, class A> class L, class T, class U> struct tn_holder< L<T, U, std::hash<T>, std::equal_to<T>, std::allocator<std::pair<T const, U> > > >
 {
-    std::string tn = map_template_name< L<T, U, std::hash<T>, std::equal_to<T>, std::allocator<std::pair<T const, U> > > >();
-    return tn + '<' + type_name( tn_identity<T>(), "" ) + ", " + type_name( tn_identity<U>(), "" ) +  '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = detail::map_template_name< L<T, U, std::hash<T>, std::equal_to<T>, std::allocator<std::pair<T const, U> > > >();
+        return tn + '<' + tn_holder<T>::type_name( "" ) + ", " + tn_holder<U>::type_name( "" ) +  '>' + suffix;
+    }
+};
 
 #endif
 
 // array
 
-template<template<class T, std::size_t N> class L, class T, std::size_t N> std::string type_name( tn_identity< L<T, N> >, std::string const& suffix )
+template<template<class T, std::size_t N> class L, class T, std::size_t N> struct tn_holder< L<T, N> >
 {
-    std::string tn = array_template_name< L<T, N> >();
-    return tn + '<' + type_name( tn_identity<T>(), "" ) + ", " + tn_to_string( N ) + '>' + suffix;
-}
+    static std::string type_name( std::string const& suffix )
+    {
+        std::string tn = detail::array_template_name< L<T, N> >();
+        return tn + '<' + tn_holder<T>::type_name( "" ) + ", " + tn_to_string( N ) + '>' + suffix;
+    }
+};
 
 } // namespace detail
 
 template<class T> std::string type_name()
 {
-    return core::detail::type_name( core::detail::tn_identity<T>(), "" );
+    return core::detail::tn_holder<T>::type_name( "" );
 }
 
 } // namespace core
