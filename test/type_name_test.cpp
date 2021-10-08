@@ -337,7 +337,7 @@ int main()
 
 #endif
 
-#if !defined(BOOST_NO_CXX11_HDR_TUPLE)
+#if !defined(BOOST_NO_CXX11_HDR_TUPLE) && ( !defined(BOOST_MSVC) || BOOST_MSVC >= 1700 )
 
     TEST(std::tuple<>);
     TEST(std::tuple<int>);
