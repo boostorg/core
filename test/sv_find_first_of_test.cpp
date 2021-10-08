@@ -380,5 +380,83 @@ int main()
         BOOST_TEST_EQ( sv.find_first_of( L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 12 ), npos );
     }
 
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+
+    {
+        boost::core::u8string_view sv( u8"123123" );
+
+        BOOST_TEST_EQ( sv.find_first_of( u8"" ), npos );
+        BOOST_TEST_EQ( sv.find_first_of( u8"", 1 ), npos );
+        BOOST_TEST_EQ( sv.find_first_of( u8"", 6 ), npos );
+        BOOST_TEST_EQ( sv.find_first_of( u8"", 7 ), npos );
+
+        BOOST_TEST_EQ( sv.find_first_of( u8"1" ), 0 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"1", 1 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"1", 2 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"1", 3 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"1", 4 ), npos );
+        BOOST_TEST_EQ( sv.find_first_of( u8"1", 5 ), npos );
+        BOOST_TEST_EQ( sv.find_first_of( u8"1", 6 ), npos );
+        BOOST_TEST_EQ( sv.find_first_of( u8"1", 7 ), npos );
+
+        BOOST_TEST_EQ( sv.find_first_of( u8"23" ), 1 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"23", 1 ), 1 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"23", 2 ), 2 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"23", 3 ), 4 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"23", 4 ), 4 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"23", 5 ), 5 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"23", 6 ), npos );
+        BOOST_TEST_EQ( sv.find_first_of( u8"23", 7 ), npos );
+
+        BOOST_TEST_EQ( sv.find_first_of( u8"123", 0 ), 0 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"123", 1 ), 1 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"123", 2 ), 2 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"123", 3 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"123", 4 ), 4 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"123", 5 ), 5 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"123", 6 ), npos );
+        BOOST_TEST_EQ( sv.find_first_of( u8"123", 7 ), npos );
+    }
+
+    {
+        boost::core::u8string_view sv( u8"abc1abc2abc3" );
+
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789" ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 0 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 1 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 2 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 3 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 4 ), 7 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 5 ), 7 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 6 ), 7 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 7 ), 7 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 8 ), 11 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 9 ), 11 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 10 ), 11 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 11 ), 11 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"0123456789", 12 ), npos );
+    }
+
+    {
+        boost::core::u8string_view sv( u8"123a123B123c" );
+
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 0 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 1 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 2 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 3 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 4 ), 7 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 5 ), 7 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 6 ), 7 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 7 ), 7 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 8 ), 11 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 9 ), 11 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 10 ), 11 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 11 ), 11 );
+        BOOST_TEST_EQ( sv.find_first_of( u8"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 12 ), npos );
+    }
+
+#endif
+
     return boost::report_errors();
 }
