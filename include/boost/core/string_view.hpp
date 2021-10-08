@@ -513,15 +513,22 @@ public:
 
     BOOST_CXX14_CONSTEXPR size_type find_last_of( basic_string_view str, size_type pos = npos ) const BOOST_NOEXCEPT
     {
-        if( pos > size() )
+        if( size() == 0 )
         {
-            pos = size();
+            return npos;
         }
 
-        for( std::size_t i = pos; i > 0; --i )
+        if( pos > size() - 1 )
         {
-            if( str.contains( p_[ i - 1 ] ) ) return i - 1;
+            pos = size() - 1;
         }
+
+        do
+        {
+            if( str.contains( p_[ pos ] ) ) return pos;
+            --pos;
+        }
+        while( pos != npos );
 
         return npos;
     }
