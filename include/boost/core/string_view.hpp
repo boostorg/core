@@ -25,6 +25,7 @@
 #include <stdexcept>
 #include <cstddef>
 #include <cstring>
+#include <climits>
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
@@ -33,6 +34,89 @@ namespace boost
 {
 namespace core
 {
+namespace detail
+{
+
+template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_first_of( Ch const* p_, std::size_t n_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
+{
+    if( n >= 16 )
+    {
+        for( std::size_t i = pos; i < n_; ++i )
+        {
+            Ch ch = p_[ i ];
+            if( std::char_traits<Ch>::find( s, n, ch ) != 0 ) return i;
+        }
+    }
+    else
+    {
+        for( std::size_t i = pos; i < n_; ++i )
+        {
+            Ch ch = p_[ i ];
+
+            for( std::size_t j = 0; j < n; ++j )
+            {
+                if( s[ j ] == ch ) return i;
+            }
+        }
+    }
+
+    return static_cast<std::size_t>( -1 );
+}
+
+#if CHAR_BIT == 8
+
+BOOST_CXX14_CONSTEXPR std::size_t find_first_of( char const* p_, std::size_t n_, char const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
+{
+    unsigned char table[ 256 ] = {};
+
+    unsigned char r = 0;
+    boost::uint64_t mask = 0;
+
+    for( std::size_t j = 0; j < n; ++j )
+    {
+        unsigned char ch = s[ j ];
+
+        table[ ch ] = 1;
+
+        r |= ch;
+
+        mask |= boost::uint64_t( 1 ) << ( ch & 0x3F );
+    }
+
+    if( ( r & 0xC0 ) == 0 )
+    {
+        for( std::size_t i = pos; i < n_; ++i )
+        {
+            unsigned char ch = p_[ i ];
+            if( mask & ( boost::uint64_t( 1 ) << ch ) ) return i;
+        }
+
+        return static_cast<std::size_t>( -1 );
+    }
+    else
+    {
+        for( std::size_t i = pos; i < n_; ++i )
+        {
+            unsigned char ch = p_[ i ];
+            if( table[ ch ] ) return i;
+        }
+
+        return static_cast<std::size_t>( -1 );
+    }
+}
+
+#endif
+
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+
+std::size_t find_first_of( char8_t const* p_, std::size_t n_, char8_t const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
+{
+    return detail::find_first_of( reinterpret_cast< char const* >( p_ ), n_, reinterpret_cast< char const* >( s ), pos, n );
+}
+
+#endif
+
+} // namespace detail
 
 template<class Ch> class basic_string_view
 {
@@ -425,12 +509,7 @@ public:
 
     BOOST_CXX14_CONSTEXPR size_type find_first_of( basic_string_view str, size_type pos = 0 ) const BOOST_NOEXCEPT
     {
-        for( std::size_t i = pos; i < n_; ++i )
-        {
-            if( str.contains( p_[ i ] ) ) return i;
-        }
-
-        return npos;
+        return find_first_of( str.data(), pos, str.size() );
     }
 
     BOOST_CONSTEXPR size_type find_first_of( Ch c, size_type pos = 0 ) const BOOST_NOEXCEPT
@@ -438,14 +517,17 @@ public:
         return find( c, pos );
     }
 
-    BOOST_CONSTEXPR size_type find_first_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_first_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
     {
-        return find_first_of( basic_string_view( s, n ), pos );
+        if( n == 0 || pos >= size() ) return npos;
+        if( n == 1 ) return find( s[0], pos );
+
+        return detail::find_first_of( data(), size(), s, pos, n );
     }
 
-    BOOST_CONSTEXPR size_type find_first_of( Ch const* s, size_type pos = 0 ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_first_of( Ch const* s, size_type pos = 0 ) const BOOST_NOEXCEPT
     {
-        return find_first_of( basic_string_view( s ), pos );
+        return find_first_of( s, pos, traits_type::length( s ) );
     }
 
     // find_last_of
