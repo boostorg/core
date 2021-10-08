@@ -160,7 +160,15 @@ template<class T> std::string typeid_name()
 
 template<class T> std::string class_template_name()
 {
+#if defined(BOOST_GCC)
+
+    std::string r = typeid_name<T()>();
+
+#else
+
     std::string r = typeid_name<T*>();
+
+#endif
     return r.substr( 0, r.find( '<' ) );
 }
 
