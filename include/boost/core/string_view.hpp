@@ -69,40 +69,19 @@ BOOST_CXX14_CONSTEXPR std::size_t find_first_of( char const* p_, std::size_t n_,
 {
     unsigned char table[ 256 ] = {};
 
-    unsigned char r = 0;
-    boost::uint64_t mask = 0;
-
     for( std::size_t j = 0; j < n; ++j )
     {
         unsigned char ch = s[ j ];
-
         table[ ch ] = 1;
-
-        r |= ch;
-
-        mask |= boost::uint64_t( 1 ) << ( ch & 0x3F );
     }
 
-    if( ( r & 0xC0 ) == 0 )
+    for( std::size_t i = pos; i < n_; ++i )
     {
-        for( std::size_t i = pos; i < n_; ++i )
-        {
-            unsigned char ch = p_[ i ];
-            if( mask & ( boost::uint64_t( 1 ) << ch ) ) return i;
-        }
-
-        return static_cast<std::size_t>( -1 );
+        unsigned char ch = p_[ i ];
+        if( table[ ch ] ) return i;
     }
-    else
-    {
-        for( std::size_t i = pos; i < n_; ++i )
-        {
-            unsigned char ch = p_[ i ];
-            if( table[ ch ] ) return i;
-        }
 
-        return static_cast<std::size_t>( -1 );
-    }
+    return static_cast<std::size_t>( -1 );
 }
 
 #endif
