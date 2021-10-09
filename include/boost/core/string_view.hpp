@@ -383,22 +383,10 @@ public:
 
     // conversions
 
-#if !defined(BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS)
-
-    template<class Ch2, class En = typename boost::enable_if<is_same<Ch2, Ch> >::type>
-    operator std::basic_string<Ch2>() const
+    template<class A> operator std::basic_string<Ch, std::char_traits<Ch>, A>() const
     {
-        return std::basic_string<Ch>( data(), size() );
+        return std::basic_string<Ch, std::char_traits<Ch>, A>( data(), size() );
     }
-
-#else
-
-    operator std::basic_string<Ch>() const
-    {
-        return std::basic_string<Ch>( data(), size() );
-    }
-
-#endif
 
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 
