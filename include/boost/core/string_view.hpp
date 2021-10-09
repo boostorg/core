@@ -1136,6 +1136,8 @@ public:
 #endif
 };
 
+// stream inserter
+
 template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str )
 {
     Ch const* p = str.data();
@@ -1169,6 +1171,8 @@ template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& o
 #if defined(BOOST_NO_CXX17_INLINE_VARIABLES)
 template<class Ch> BOOST_CONSTEXPR_OR_CONST std::size_t basic_string_view<Ch>::npos;
 #endif
+
+// typedef names
 
 typedef basic_string_view<char> string_view;
 typedef basic_string_view<wchar_t> wstring_view;
