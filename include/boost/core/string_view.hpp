@@ -97,7 +97,7 @@ std::size_t find_first_of( char8_t const* p_, std::size_t n_, char8_t const* s, 
 
 template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_last_of( Ch const* p_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
 {
-    constexpr std::size_t npos = static_cast< std::size_t >( -1 );
+    std::size_t const npos = static_cast< std::size_t >( -1 );
 
     std::size_t i = pos;
 
@@ -144,7 +144,7 @@ BOOST_CXX14_CONSTEXPR std::size_t find_last_of( char const* p_, char const* s, s
         table[ ch ] = 1;
     }
 
-    constexpr std::size_t npos = static_cast< std::size_t >( -1 );
+    std::size_t const npos = static_cast< std::size_t >( -1 );
 
     std::size_t i = pos;
 
@@ -171,6 +171,79 @@ std::size_t find_last_of( char8_t const* p_, char8_t const* s, std::size_t pos, 
 }
 
 #endif
+
+template<class Ch> struct sv_to_uchar
+{
+    typedef Ch type;
+};
+
+template<> struct sv_to_uchar<char>
+{
+    typedef unsigned char type;
+};
+
+template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_first_not_of( Ch const* p_, std::size_t n_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
+{
+    typedef typename sv_to_uchar<Ch>::type UCh;
+
+    unsigned char table[ 256 ] = {};
+
+    bool use_table = true;
+
+    for( std::size_t j = 0; j < n; ++j )
+    {
+        UCh ch = s[ j ];
+
+        if( ch >= 0 && ch < 256 )
+        {
+            table[ ch ] = 1;
+        }
+        else
+        {
+            use_table = false;
+            break;
+        }
+    }
+
+    if( use_table )
+    {
+        for( std::size_t i = pos; i < n_; ++i )
+        {
+            UCh ch = p_[ i ];
+            if( !( ch >= 0 && ch < 256 && table[ ch ] ) ) return i;
+        }
+    }
+    else if( n >= 16 )
+    {
+        for( std::size_t i = pos; i < n_; ++i )
+        {
+            Ch ch = p_[ i ];
+            if( std::char_traits<Ch>::find( s, n, ch ) == 0 ) return i;
+        }
+    }
+    else
+    {
+        for( std::size_t i = pos; i < n_; ++i )
+        {
+            Ch ch = p_[ i ];
+
+            bool r = false;
+
+            for( std::size_t j = 0; j < n; ++j )
+            {
+                if( s[ j ] == ch )
+                {
+                    r = true;
+                    break;
+                }
+            }
+
+            if( !r ) return i;
+        }
+    }
+
+    return static_cast<std::size_t>( -1 );
+}
 
 } // namespace detail
 
@@ -604,7 +677,7 @@ public:
         return rfind( c, pos );
     }
 
-    BOOST_CONSTEXPR size_type find_last_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_last_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
     {
         if( n == 1 )
         {
@@ -626,7 +699,7 @@ public:
         return detail::find_last_of( data(), s, pos, n );
     }
 
-    BOOST_CONSTEXPR size_type find_last_of( Ch const* s, size_type pos = npos ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_last_of( Ch const* s, size_type pos = npos ) const BOOST_NOEXCEPT
     {
         return find_last_of( s, pos, traits_type::length( s ) );
     }
@@ -635,12 +708,7 @@ public:
 
     BOOST_CXX14_CONSTEXPR size_type find_first_not_of( basic_string_view str, size_type pos = 0 ) const BOOST_NOEXCEPT
     {
-        for( std::size_t i = pos; i < n_; ++i )
-        {
-            if( !str.contains( p_[ i ] ) ) return i;
-        }
-
-        return npos;
+        return find_first_not_of( str.data(), pos, str.size() );
     }
 
     BOOST_CXX14_CONSTEXPR size_type find_first_not_of( Ch c, size_type pos = 0 ) const BOOST_NOEXCEPT
@@ -653,14 +721,17 @@ public:
         return npos;
     }
 
-    BOOST_CONSTEXPR size_type find_first_not_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_first_not_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
     {
-        return find_first_not_of( basic_string_view( s, n ), pos );
+        if( pos >= size() ) return npos;
+        if( n == 1 ) return find_first_not_of( s[0], pos );
+
+        return detail::find_first_not_of( data(), size(), s, pos, n );
     }
 
-    BOOST_CONSTEXPR size_type find_first_not_of( Ch const* s, size_type pos = 0 ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_first_not_of( Ch const* s, size_type pos = 0 ) const BOOST_NOEXCEPT
     {
-        return find_first_not_of( basic_string_view( s ), pos );
+        return find_first_not_of( s, pos, traits_type::length( s ) );
     }
 
     // find_last_not_of
@@ -726,7 +797,7 @@ public:
         return find( sv ) != npos;
     }
 
-    BOOST_CONSTEXPR bool contains( Ch c ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR bool contains( Ch c ) const BOOST_NOEXCEPT
     {
         Ch const* p = data();
         size_type n = size();
