@@ -381,6 +381,35 @@ public:
 
     // BOOST_CONSTEXPR basic_string_view& operator=( basic_string_view const& ) BOOST_NOEXCEPT & = default;
 
+    // conversions
+
+#if !defined(BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS)
+
+    template<class Ch2, class En = typename boost::enable_if<is_same<Ch2, Ch> >::type>
+    operator std::basic_string<Ch2>() const
+    {
+        return std::basic_string<Ch>( data(), size() );
+    }
+
+#else
+
+    operator std::basic_string<Ch>() const
+    {
+        return std::basic_string<Ch>( data(), size() );
+    }
+
+#endif
+
+#if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
+
+    template<class Ch2, class En = typename boost::enable_if<is_same<Ch2, Ch> >::type>
+    operator std::basic_string_view<Ch2>() const BOOST_NOEXCEPT
+    {
+        return std::basic_string_view<Ch>( data(), size() );
+    }
+
+#endif
+
     // iterator support
 
     BOOST_CONSTEXPR const_iterator begin() const BOOST_NOEXCEPT
@@ -925,6 +954,198 @@ public:
     {
         return sv1.compare( sv2 ) >= 0;
     }
+
+#if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
+
+    // "sufficient number of additional overloads"
+
+    // against std::string_view
+
+    BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, std::basic_string_view<Ch> sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) == 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator==( std::basic_string_view<Ch> sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) == 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, std::basic_string_view<Ch> sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) != 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator!=( std::basic_string_view<Ch> sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) != 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, std::basic_string_view<Ch> sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) < 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<( std::basic_string_view<Ch> sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) < 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<=( basic_string_view sv1, std::basic_string_view<Ch> sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) <= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<=( std::basic_string_view<Ch> sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) <= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>( basic_string_view sv1, std::basic_string_view<Ch> sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) > 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>( std::basic_string_view<Ch> sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) > 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>=( basic_string_view sv1, std::basic_string_view<Ch> sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) >= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>=( std::basic_string_view<Ch> sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) >= 0;
+    }
+
+    // against Ch const*
+
+    BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, Ch const* sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) == 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator==( Ch const* sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) == 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, Ch const* sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) != 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator!=( Ch const* sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) != 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, Ch const* sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) < 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<( Ch const* sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) > 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<=( basic_string_view sv1, Ch const* sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) <= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<=( Ch const* sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) >= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>( basic_string_view sv1, Ch const* sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) > 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>( Ch const* sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) < 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>=( basic_string_view sv1, Ch const* sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) >= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>=( Ch const* sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) <= 0;
+    }
+
+    // against std::string
+
+    BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) == 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator==( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) == 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) != 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator!=( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) != 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) < 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) > 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<=( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) <= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<=( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) >= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) > 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) < 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>=( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) >= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>=( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv2.compare( sv1 ) <= 0;
+    }
+
+#endif
 };
 
 template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str )
