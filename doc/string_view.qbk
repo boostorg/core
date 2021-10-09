@@ -110,9 +110,9 @@ public:
 
     // compare
 
-    constexpr int compare( basic_string_view s ) const noexcept;
-    constexpr int compare( size_type pos1, size_type n1, basic_string_view s ) const;
-    constexpr int compare( size_type pos1, size_type n1, basic_string_view s, size_type pos2, size_type n2 ) const;
+    constexpr int compare( basic_string_view str ) const noexcept;
+    constexpr int compare( size_type pos1, size_type n1, basic_string_view str ) const;
+    constexpr int compare( size_type pos1, size_type n1, basic_string_view str, size_type pos2, size_type n2 ) const;
     constexpr int compare( Ch const* s ) const;
     constexpr int compare( size_type pos1, size_type n1, Ch const* s ) const;
     constexpr int compare( size_type pos1, size_type n1, Ch const* s, size_type n2 ) const;
@@ -131,42 +131,42 @@ public:
 
     // find
 
-    constexpr size_type find( basic_string_view s, size_type pos = 0 ) const noexcept;
+    constexpr size_type find( basic_string_view str, size_type pos = 0 ) const noexcept;
     constexpr size_type find( Ch c, size_type pos = 0 ) const noexcept;
     constexpr size_type find( Ch const* s, size_type pos, size_type n ) const;
     constexpr size_type find( Ch const* s, size_type pos = 0 ) const noexcept;
 
     // rfind
 
-    constexpr size_type rfind( basic_string_view s, size_type pos = npos ) const noexcept;
+    constexpr size_type rfind( basic_string_view str, size_type pos = npos ) const noexcept;
     constexpr size_type rfind( Ch c, size_type pos = npos ) const noexcept;
     constexpr size_type rfind( Ch const* s, size_type pos, size_type n ) const noexcept;
     constexpr size_type rfind( Ch const* s, size_type pos = npos ) const noexcept;
 
     // find_first_of
 
-    constexpr size_type find_first_of( basic_string_view s, size_type pos = 0 ) const noexcept;
+    constexpr size_type find_first_of( basic_string_view str, size_type pos = 0 ) const noexcept;
     constexpr size_type find_first_of( Ch c, size_type pos = 0 ) const noexcept;
     constexpr size_type find_first_of( Ch const* s, size_type pos, size_type n ) const noexcept;
     constexpr size_type find_first_of( Ch const* s, size_type pos = 0 ) const noexcept;
 
     // find_last_of
 
-    constexpr size_type find_last_of( basic_string_view s, size_type pos = npos ) const noexcept;
+    constexpr size_type find_last_of( basic_string_view str, size_type pos = npos ) const noexcept;
     constexpr size_type find_last_of( Ch c, size_type pos = npos ) const noexcept;
     constexpr size_type find_last_of( Ch const* s, size_type pos, size_type n ) const noexcept;
     constexpr size_type find_last_of( Ch const* s, size_type pos = npos ) const noexcept;
 
     // find_first_not_of
 
-    constexpr size_type find_first_not_of( basic_string_view s, size_type pos = 0 ) const noexcept;
+    constexpr size_type find_first_not_of( basic_string_view str, size_type pos = 0 ) const noexcept;
     constexpr size_type find_first_not_of( Ch c, size_type pos = 0 ) const noexcept;
     constexpr size_type find_first_not_of( Ch const* s, size_type pos, size_type n ) const noexcept;
     constexpr size_type find_first_not_of( Ch const* s, size_type pos = 0 ) const noexcept;
 
     // find_last_not_of
 
-    constexpr size_type find_last_not_of( basic_string_view s, size_type pos = npos ) const noexcept;
+    constexpr size_type find_last_not_of( basic_string_view str, size_type pos = npos ) const noexcept;
     constexpr size_type find_last_not_of( Ch c, size_type pos = npos ) const noexcept;
     constexpr size_type find_last_not_of( Ch const* s, size_type pos, size_type n ) const noexcept;
     constexpr size_type find_last_not_of( Ch const* s, size_type pos = npos ) const noexcept;
@@ -399,6 +399,10 @@ typedef basic_string_view<char8_t> u8string_view;
 [section copy]
 
 [section `constexpr size_type copy( Ch* s, size_type n, size_type pos = 0 ) const;`]
+
+* *Effects:* copies to `s` the contents of `substr( pos, n )`.
+* *Throws:* `std::out_of_range` when `pos >= size()`.
+
 [endsect]
 
 [endsect]
@@ -406,25 +410,33 @@ typedef basic_string_view<char8_t> u8string_view;
 [section substr]
 
 [section `constexpr basic_string_view substr( size_type pos = 0, size_type n = npos ) const;`]
+
+* *Returns:* A `basic_string_view` object `r` such that `r.data() == data() + pos` and `r.size() == std::min( size() - pos, n )`.
+* *Throws:* `std::out_of_range` when `pos >= size()`.
+
 [endsect]
 
 [endsect]
 
 [section compare]
 
-[section `constexpr int compare( basic_string_view s ) const noexcept;`]
+[section `constexpr int compare( basic_string_view str ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:*
+  * if `traits_type::compare( data(), str.data(), std::min( size(), str.size() ) )` is not zero, returns it. Otherwise,
+  * if `size() < str.size()`, returns a negative number. Otherwise,
+  * if `size() > str.size()`, returns a positive number. Otherwise,
+  * returns 0.
 
 [endsect]
 
-[section `constexpr int compare( size_type pos1, size_type n1, basic_string_view s ) const;`]
+[section `constexpr int compare( size_type pos1, size_type n1, basic_string_view str ) const;`]
 
 * *Returns:* `substr( pos1, n1 ).compare( str )`.
 
 [endsect]
 
-[section `constexpr int compare( size_type pos1, size_type n1, basic_string_view s, size_type pos2, size_type n2 ) const;`]
+[section `constexpr int compare( size_type pos1, size_type n1, basic_string_view str, size_type pos2, size_type n2 ) const;`]
 
 * *Returns:* `substr( pos1, n1 ).compare( str.substr( pos2, n2 ) )`.
 
@@ -454,13 +466,13 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section `constexpr bool starts_with( basic_string_view x ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* `substr( 0, x.size() ) == x`.
 
 [endsect]
 
 [section `constexpr bool starts_with( Ch x ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* `starts_with( basic_string_view( &x, 1 ) )`.
 
 [endsect]
 
@@ -476,13 +488,13 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section `constexpr bool ends_with( basic_string_view x ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* `size() >= x.size() && substr( size() - x.size(), x.size() ) == x`.
 
 [endsect]
 
 [section `constexpr bool ends_with( Ch x ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* `ends_with( basic_string_view( &x, 1 ) )`.
 
 [endsect]
 
@@ -500,9 +512,9 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section find]
 
-[section `constexpr size_type find( basic_string_view s, size_type pos = 0 ) const noexcept;`]
+[section `constexpr size_type find( basic_string_view str, size_type pos = 0 ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* The lowest position `i` such that `i >= pos` and `substr( i, str.size() ) == str`, or `npos` if such a position doesn't exist.
 
 [endsect]
 
@@ -528,9 +540,9 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section rfind]
 
-[section `constexpr size_type rfind( basic_string_view s, size_type pos = npos ) const noexcept;`]
+[section `constexpr size_type rfind( basic_string_view str, size_type pos = npos ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* The highest position `i` such that `i <= pos` and `substr( i, str.size() ) == str`, or `npos` if such a position doesn't exist.
 
 [endsect]
 
@@ -556,9 +568,9 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section find_first_of]
 
-[section `constexpr size_type find_first_of( basic_string_view s, size_type pos = 0 ) const noexcept;`]
+[section `constexpr size_type find_first_of( basic_string_view str, size_type pos = 0 ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* The lowest position `i` such that `i >= pos` and the character at position `i` is equal to one of the characters in `str`, or `npos` if such a position doesn't exist.
 
 [endsect]
 
@@ -584,9 +596,9 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section find_last_of]
 
-[section `constexpr size_type find_last_of( basic_string_view s, size_type pos = npos ) const noexcept;`]
+[section `constexpr size_type find_last_of( basic_string_view str, size_type pos = npos ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* The highest position `i` such that `i <= pos` and the character at position `i` is equal to one of the characters in `str`, or `npos` if such a position doesn't exist.
 
 [endsect]
 
@@ -612,9 +624,9 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section find_first_not_of]
 
-[section `constexpr size_type find_first_not_of( basic_string_view s, size_type pos = 0 ) const noexcept;`]
+[section `constexpr size_type find_first_not_of( basic_string_view str, size_type pos = 0 ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* The lowest position `i` such that `i >= pos` and the character at position `i` is not equal to one of the characters in `str`, or `npos` if such a position doesn't exist.
 
 [endsect]
 
@@ -640,9 +652,9 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section find_last_not_of]
 
-[section `constexpr size_type find_last_not_of( basic_string_view s, size_type pos = npos ) const noexcept;`]
+[section `constexpr size_type find_last_not_of( basic_string_view str, size_type pos = npos ) const noexcept;`]
 
-* *Returns:* `...`.
+* *Returns:* The highest position `i` such that `i <= pos` and the character at position `i` is not equal to one of the characters in `str`, or `npos` if such a position doesn't exist.
 
 [endsect]
 
@@ -733,6 +745,9 @@ typedef basic_string_view<char8_t> u8string_view;
 [section Stream Inserter]
 
 [section `template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str );`]
+
+* *Effects:* equivalent to `os << x`, where `x` is a pointer to a null-terminated character sequence with the same contents as `*this`.
+
 [endsect]
 
 [endsect]
