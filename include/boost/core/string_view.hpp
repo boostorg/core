@@ -95,6 +95,83 @@ std::size_t find_first_of( char8_t const* p_, std::size_t n_, char8_t const* s, 
 
 #endif
 
+template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_last_of( Ch const* p_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
+{
+    constexpr std::size_t npos = static_cast< std::size_t >( -1 );
+
+    std::size_t i = pos;
+
+    if( n >= 16 )
+    {
+        do
+        {
+            Ch ch = p_[ i ];
+
+            if( std::char_traits<Ch>::find( s, n, ch ) != 0 ) return i;
+
+            --i;
+        }
+        while( i != npos );
+    }
+    else
+    {
+        do
+        {
+            Ch ch = p_[ i ];
+
+            for( std::size_t j = 0; j < n; ++j )
+            {
+                if( s[ j ] == ch ) return i;
+            }
+
+            --i;
+        }
+        while( i != npos );
+    }
+
+    return npos;
+}
+
+#if CHAR_BIT == 8
+
+BOOST_CXX14_CONSTEXPR std::size_t find_last_of( char const* p_, char const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
+{
+    unsigned char table[ 256 ] = {};
+
+    for( std::size_t j = 0; j < n; ++j )
+    {
+        unsigned char ch = s[ j ];
+        table[ ch ] = 1;
+    }
+
+    constexpr std::size_t npos = static_cast< std::size_t >( -1 );
+
+    std::size_t i = pos;
+
+    do
+    {
+        unsigned char ch = p_[ i ];
+
+        if( table[ ch ] ) return i;
+
+        --i;
+    }
+    while( i != npos );
+
+    return npos;
+}
+
+#endif
+
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+
+std::size_t find_last_of( char8_t const* p_, char8_t const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
+{
+    return detail::find_last_of( reinterpret_cast< char const* >( p_ ), reinterpret_cast< char const* >( s ), pos, n );
+}
+
+#endif
+
 } // namespace detail
 
 template<class Ch> class basic_string_view
@@ -450,8 +527,14 @@ public:
             pos = n - 1;
         }
 
-        const_reverse_iterator r = std::find( rbegin() + n - 1 - pos, rend(), c );
-        return r == rend()? npos: n - 1 - ( r - rbegin() );
+        do
+        {
+            if( p_[ pos ] == c ) return pos;
+            --pos;
+        }
+        while( pos != npos );
+
+        return npos;
     }
 
     BOOST_CXX14_CONSTEXPR size_type rfind( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
@@ -513,24 +596,7 @@ public:
 
     BOOST_CXX14_CONSTEXPR size_type find_last_of( basic_string_view str, size_type pos = npos ) const BOOST_NOEXCEPT
     {
-        if( size() == 0 )
-        {
-            return npos;
-        }
-
-        if( pos > size() - 1 )
-        {
-            pos = size() - 1;
-        }
-
-        do
-        {
-            if( str.contains( p_[ pos ] ) ) return pos;
-            --pos;
-        }
-        while( pos != npos );
-
-        return npos;
+        return find_last_of( str.data(), pos, str.size() );
     }
 
     BOOST_CONSTEXPR size_type find_last_of( Ch c, size_type pos = npos ) const BOOST_NOEXCEPT
@@ -540,12 +606,29 @@ public:
 
     BOOST_CONSTEXPR size_type find_last_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
     {
-        return find_last_of( basic_string_view( s, n ), pos );
+        if( n == 1 )
+        {
+            return rfind( s[0], pos );
+        }
+
+        size_type m = size();
+
+        if( m == 0 )
+        {
+            return npos;
+        }
+
+        if( pos > m - 1 )
+        {
+            pos = m - 1;
+        }
+
+        return detail::find_last_of( data(), s, pos, n );
     }
 
     BOOST_CONSTEXPR size_type find_last_of( Ch const* s, size_type pos = npos ) const BOOST_NOEXCEPT
     {
-        return find_last_of( basic_string_view( s ), pos );
+        return find_last_of( s, pos, traits_type::length( s ) );
     }
 
     // find_first_not_of
@@ -645,7 +728,22 @@ public:
 
     BOOST_CONSTEXPR bool contains( Ch c ) const BOOST_NOEXCEPT
     {
-        return traits_type::find( data(), size(), c ) != 0;
+        Ch const* p = data();
+        size_type n = size();
+
+        if( n >= 16 )
+        {
+            return traits_type::find( p, n, c ) != 0;
+        }
+        else
+        {
+            for( size_type i = 0; i < n; ++i )
+            {
+                if( p[ i ] == c ) return true;
+            }
+
+            return false;
+        }
     }
 
     BOOST_CONSTEXPR bool contains( Ch const* s ) const BOOST_NOEXCEPT
