@@ -1153,32 +1153,25 @@ template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& o
     Ch const* p = str.data();
     std::size_t n = str.size();
 
-    if( n == 0 )
+    std::size_t m = os.width();
+
+    if( n >= m )
     {
+        os.write( p, n );
+    }
+    else if( ( os.flags() & std::ios_base::adjustfield ) == std::ios_base::left )
+    {
+        os.write( p, n );
+
+        os.width( m - n );
         os << "";
     }
     else
     {
-        std::size_t m = os.width();
+        os.width( m - n );
+        os << "";
 
-        if( n >= m )
-        {
-            os.write( p, n );
-        }
-        else if( ( os.flags() & std::ios_base::adjustfield ) == std::ios_base::left )
-        {
-            os.write( p, n - 1 );
-
-            os.width( m - n + 1 );
-            os << p[ n-1 ];
-        }
-        else
-        {
-            os.width( m - n + 1 );
-            os << p[0];
-
-            os.write( p + 1, n - 1 );
-        }
+        os.write( p, n );
     }
 
     os.width( 0 );
