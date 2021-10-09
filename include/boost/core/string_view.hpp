@@ -235,6 +235,84 @@ template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_first_not_of( Ch const
     return static_cast<std::size_t>( -1 );
 }
 
+template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_last_not_of( Ch const* p_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
+{
+    typedef typename sv_to_uchar<Ch>::type UCh;
+
+    unsigned char table[ 256 ] = {};
+
+    bool use_table = true;
+
+    for( std::size_t j = 0; j < n; ++j )
+    {
+        UCh ch = s[ j ];
+
+        if( ch >= 0 && ch < 256 )
+        {
+            table[ ch ] = 1;
+        }
+        else
+        {
+            use_table = false;
+            break;
+        }
+    }
+
+    std::size_t const npos = static_cast< std::size_t >( -1 );
+
+    std::size_t i = pos;
+
+    if( use_table )
+    {
+        do
+        {
+            UCh ch = p_[ i ];
+
+            if( !( ch >= 0 && ch < 256 && table[ ch ] ) ) return i;
+
+            --i;
+        }
+        while( i != npos );
+    }
+    else if( n >= 16 )
+    {
+        do
+        {
+            Ch ch = p_[ i ];
+
+            if( std::char_traits<Ch>::find( s, n, ch ) == 0 ) return i;
+
+            --i;
+        }
+        while( i != npos );
+    }
+    else
+    {
+        do
+        {
+            Ch ch = p_[ i ];
+
+            bool r = false;
+
+            for( std::size_t j = 0; j < n; ++j )
+            {
+                if( s[ j ] == ch )
+                {
+                    r = true;
+                    break;
+                }
+            }
+
+            if( !r ) return i;
+
+            --i;
+        }
+        while( i != npos );
+    }
+
+    return npos;
+}
+
 } // namespace detail
 
 template<class Ch> class basic_string_view
@@ -728,36 +806,21 @@ public:
 
     BOOST_CXX14_CONSTEXPR size_type find_last_not_of( basic_string_view str, size_type pos = npos ) const BOOST_NOEXCEPT
     {
-        if( size() == 0 )
-        {
-            return npos;
-        }
-
-        if( pos > size() - 1 )
-        {
-            pos = size() - 1;
-        }
-
-        do
-        {
-            if( !str.contains( p_[ pos ] ) ) return pos;
-            --pos;
-        }
-        while( pos != npos );
-
-        return npos;
+        return find_last_not_of( str.data(), pos, str.size() );
     }
 
     BOOST_CXX14_CONSTEXPR size_type find_last_not_of( Ch c, size_type pos = npos ) const BOOST_NOEXCEPT
     {
-        if( size() == 0 )
+        size_type m = size();
+
+        if( m == 0 )
         {
             return npos;
         }
 
-        if( pos > size() - 1 )
+        if( pos > m - 1 )
         {
-            pos = size() - 1;
+            pos = m - 1;
         }
 
         do
@@ -770,14 +833,31 @@ public:
         return npos;
     }
 
-    BOOST_CONSTEXPR size_type find_last_not_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_last_not_of( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
     {
-        return find_last_not_of( basic_string_view( s, n ), pos );
+        if( n == 1 )
+        {
+            return find_last_not_of( s[0], pos );
+        }
+
+        size_type m = size();
+
+        if( m == 0 )
+        {
+            return npos;
+        }
+
+        if( pos > m - 1 )
+        {
+            pos = m - 1;
+        }
+
+        return detail::find_last_not_of( data(), s, pos, n );
     }
 
-    BOOST_CONSTEXPR size_type find_last_not_of( Ch const* s, size_type pos = npos ) const BOOST_NOEXCEPT
+    BOOST_CXX14_CONSTEXPR size_type find_last_not_of( Ch const* s, size_type pos = npos ) const BOOST_NOEXCEPT
     {
-        return find_last_not_of( basic_string_view( s ), pos );
+        return find_last_not_of( s, pos, traits_type::length( s ) );
     }
 
     // contains
