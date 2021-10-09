@@ -8,6 +8,9 @@
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
+#if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
+# include <memory_resource>
+#endif
 
 #define TEST_LT(x, y) \
     BOOST_TEST_LT(x, y); \
@@ -85,6 +88,19 @@ int main()
         TEST_LT( std::string_view( "123" ), sv4 );
         TEST_LT( std::string_view( "123" ), sv5 );
         TEST_LT( std::string_view( "1234" ), sv4 );
+
+#endif
+
+#if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
+
+        using pmr_string = std::basic_string<char, std::char_traits<char>, std::pmr::polymorphic_allocator<char>>;
+
+        TEST_LT( pmr_string( "" ), sv1 );
+        TEST_LT( pmr_string( "12" ), sv2 );
+        TEST_LT( pmr_string( "122" ), sv3 );
+        TEST_LT( pmr_string( "123" ), sv4 );
+        TEST_LT( pmr_string( "123" ), sv5 );
+        TEST_LT( pmr_string( "1234" ), sv4 );
 
 #endif
     }
