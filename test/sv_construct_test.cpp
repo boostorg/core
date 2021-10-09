@@ -301,5 +301,41 @@ int main()
 
 #endif
 
+#if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
+
+    {
+        std::pmr::string str = "123";
+
+        boost::core::string_view sv( str );
+
+        BOOST_TEST_EQ( sv.data(), str.data() );
+        BOOST_TEST_EQ( sv.size(), str.size() );
+
+        BOOST_TEST_EQ( sv.begin(), sv.data() );
+        BOOST_TEST_EQ( sv.end(), sv.data() + sv.size() );
+
+        BOOST_TEST_EQ( sv.cbegin(), sv.data() );
+        BOOST_TEST_EQ( sv.cend(), sv.data() + sv.size() );
+
+        BOOST_TEST( sv.rbegin() == ::make_reverse_iterator( sv.end() ) );
+        BOOST_TEST( sv.rend() == ::make_reverse_iterator( sv.begin() ) );
+
+        BOOST_TEST( sv.crbegin() == ::make_reverse_iterator( sv.cend() ) );
+        BOOST_TEST( sv.crend() == ::make_reverse_iterator( sv.cbegin() ) );
+
+        BOOST_TEST_EQ( sv.length(), sv.size() );
+        BOOST_TEST_EQ( sv.empty(), sv.size() == 0 );
+
+        BOOST_TEST_EQ( sv.max_size(), boost::core::string_view::npos );
+
+        if( !sv.empty() )
+        {
+            BOOST_TEST_EQ( &sv.front(), sv.data() );
+            BOOST_TEST_EQ( &sv.back(), sv.data() + sv.size() - 1 );
+        }
+    }
+
+#endif
+
     return boost::report_errors();
 }
