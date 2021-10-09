@@ -374,6 +374,46 @@ int main()
     }
 
     {
+        boost::core::wstring_view sv( L"\x101\x102\x103\x101\x102\x103" );
+
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 0, 0 ), 0 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 1, 0 ), 1 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 2, 0 ), 2 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 3, 0 ), 3 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 4, 0 ), 4 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 5, 0 ), 5 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 6, 0 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 7, 0 ), npos );
+
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 0, 1 ), 1 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 1, 1 ), 1 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 2, 1 ), 2 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 3, 1 ), 4 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 4, 1 ), 4 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 5, 1 ), 5 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 6, 1 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 7, 1 ), npos );
+
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 0, 2 ), 2 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 1, 2 ), 2 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 2, 2 ), 2 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 3, 2 ), 5 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 4, 2 ), 5 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 5, 2 ), 5 );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 6, 2 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 7, 2 ), npos );
+
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 0, 3 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 1, 3 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 2, 3 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 3, 3 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 4, 3 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 5, 3 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 6, 3 ), npos );
+        BOOST_TEST_EQ( sv.find_first_not_of( L"\x101\x102\x103", 7, 3 ), npos );
+    }
+
+    {
         boost::core::string_view sv( "123a123B123c" );
 
         BOOST_TEST_EQ( sv.find_first_not_of( "0123456789" ), 3 );
