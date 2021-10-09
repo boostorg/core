@@ -915,12 +915,12 @@ public:
 
     BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) == 0;
+        return sv1.size() == sv2.size() && traits_type::compare( sv1.data(), sv2.data(), sv1.size() ) == 0;
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) != 0;
+        return !( sv1 == sv2 );
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
@@ -951,22 +951,22 @@ public:
 
     BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, std::basic_string_view<Ch> sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) == 0;
+        return sv1.size() == sv2.size() && traits_type::compare( sv1.data(), sv2.data(), sv1.size() ) == 0;
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator==( std::basic_string_view<Ch> sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) == 0;
+        return sv1.size() == sv2.size() && traits_type::compare( sv1.data(), sv2.data(), sv1.size() ) == 0;
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, std::basic_string_view<Ch> sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) != 0;
+        return !( sv1 == sv2 );
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator!=( std::basic_string_view<Ch> sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) != 0;
+        return !( sv1 == sv2 );
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, std::basic_string_view<Ch> sv2 ) BOOST_NOEXCEPT
@@ -1013,22 +1013,22 @@ public:
 
     BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, Ch const* sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) == 0;
+        return sv1 == basic_string_view( sv2 );
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator==( Ch const* sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
-        return sv2.compare( sv1 ) == 0;
+        return basic_string_view( sv1 ) == sv2;
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, Ch const* sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) != 0;
+        return !( sv1 == sv2 );
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator!=( Ch const* sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
-        return sv2.compare( sv1 ) != 0;
+        return !( sv1 == sv2 );
     }
 
     BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, Ch const* sv2 ) BOOST_NOEXCEPT
@@ -1075,22 +1075,22 @@ public:
 
     template<class A> BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, std::basic_string<Ch, std::char_traits<Ch>, A> const& sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) == 0;
+        return sv1.size() == sv2.size() && traits_type::compare( sv1.data(), sv2.data(), sv1.size() ) == 0;
     }
 
     template<class A> BOOST_CXX14_CONSTEXPR friend bool operator==( std::basic_string<Ch, std::char_traits<Ch>, A> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
-        return sv2.compare( sv1 ) == 0;
+        return sv1.size() == sv2.size() && traits_type::compare( sv1.data(), sv2.data(), sv1.size() ) == 0;
     }
 
     template<class A> BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, std::basic_string<Ch, std::char_traits<Ch>, A> const& sv2 ) BOOST_NOEXCEPT
     {
-        return sv1.compare( sv2 ) != 0;
+        return !( sv1 == sv2 );
     }
 
     template<class A> BOOST_CXX14_CONSTEXPR friend bool operator!=( std::basic_string<Ch, std::char_traits<Ch>, A> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
-        return sv2.compare( sv1 ) != 0;
+        return !( sv1 == sv2 );
     }
 
     template<class A> BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, std::basic_string<Ch, std::char_traits<Ch>, A> const& sv2 ) BOOST_NOEXCEPT
