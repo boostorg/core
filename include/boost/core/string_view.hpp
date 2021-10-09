@@ -37,9 +37,48 @@ namespace core
 namespace detail
 {
 
+template<class Ch> struct sv_to_uchar
+{
+    typedef Ch type;
+};
+
+template<> struct sv_to_uchar<char>
+{
+    typedef unsigned char type;
+};
+
 template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_first_of( Ch const* p_, std::size_t n_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
 {
-    if( n >= 16 )
+    typedef typename sv_to_uchar<Ch>::type UCh;
+
+    unsigned char table[ 256 ] = {};
+
+    bool use_table = true;
+
+    for( std::size_t j = 0; j < n; ++j )
+    {
+        UCh ch = s[ j ];
+
+        if( ch >= 0 && ch < 256 )
+        {
+            table[ ch ] = 1;
+        }
+        else
+        {
+            use_table = false;
+            break;
+        }
+    }
+
+    if( use_table )
+    {
+        for( std::size_t i = pos; i < n_; ++i )
+        {
+            UCh ch = p_[ i ];
+            if( ch >= 0 && ch < 256 && table[ ch ] ) return i;
+        }
+    }
+    else if( n >= 16 )
     {
         for( std::size_t i = pos; i < n_; ++i )
         {
@@ -62,38 +101,6 @@ template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_first_of( Ch const* p_
 
     return static_cast<std::size_t>( -1 );
 }
-
-#if CHAR_BIT == 8
-
-BOOST_CXX14_CONSTEXPR std::size_t find_first_of( char const* p_, std::size_t n_, char const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
-{
-    unsigned char table[ 256 ] = {};
-
-    for( std::size_t j = 0; j < n; ++j )
-    {
-        unsigned char ch = s[ j ];
-        table[ ch ] = 1;
-    }
-
-    for( std::size_t i = pos; i < n_; ++i )
-    {
-        unsigned char ch = p_[ i ];
-        if( table[ ch ] ) return i;
-    }
-
-    return static_cast<std::size_t>( -1 );
-}
-
-#endif
-
-#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
-
-std::size_t find_first_of( char8_t const* p_, std::size_t n_, char8_t const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
-{
-    return detail::find_first_of( reinterpret_cast< char const* >( p_ ), n_, reinterpret_cast< char const* >( s ), pos, n );
-}
-
-#endif
 
 template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_last_of( Ch const* p_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
 {
@@ -171,16 +178,6 @@ std::size_t find_last_of( char8_t const* p_, char8_t const* s, std::size_t pos, 
 }
 
 #endif
-
-template<class Ch> struct sv_to_uchar
-{
-    typedef Ch type;
-};
-
-template<> struct sv_to_uchar<char>
-{
-    typedef unsigned char type;
-};
 
 template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_first_not_of( Ch const* p_, std::size_t n_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
 {
