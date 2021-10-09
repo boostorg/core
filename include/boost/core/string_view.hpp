@@ -27,6 +27,7 @@
 #include <cstring>
 #include <climits>
 #include <iosfwd>
+#include <ios>
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
