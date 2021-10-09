@@ -23,8 +23,6 @@
 
 int main()
 {
-    std::size_t const npos = boost::core::string_view::npos;
-
     {
         boost::core::string_view sv0( "" );
         boost::core::string_view sv1( "12" );

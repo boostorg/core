@@ -24,8 +24,6 @@
 
 int main()
 {
-    std::size_t const npos = boost::core::string_view::npos;
-
     {
         boost::core::string_view sv1( "" );
         boost::core::string_view sv2( "" );
