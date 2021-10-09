@@ -8,6 +8,9 @@
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
+#if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
+# include <memory_resource>
+#endif
 
 #define TEST_EQ(x, y) \
     BOOST_TEST_EQ(x, y); \
@@ -84,6 +87,24 @@ int main()
 
         BOOST_TEST_NE( sv3, std::string_view( "122" ) );
         BOOST_TEST_NE( std::string_view( "122" ), sv3 );
+
+#endif
+
+#if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
+
+        using pmr_string = std::basic_string<char, std::char_traits<char>, std::pmr::polymorphic_allocator<char>>;
+
+        BOOST_TEST_EQ( sv1, pmr_string( "" ) );
+        BOOST_TEST_EQ( pmr_string( "" ), sv1 );
+
+        BOOST_TEST_NE( sv1, pmr_string( "1" ) );
+        BOOST_TEST_NE( pmr_string( "1" ), sv1 );
+
+        BOOST_TEST_EQ( sv3, pmr_string( "123" ) );
+        BOOST_TEST_EQ( pmr_string( "123" ), sv3 );
+
+        BOOST_TEST_NE( sv3, pmr_string( "122" ) );
+        BOOST_TEST_NE( pmr_string( "122" ), sv3 );
 
 #endif
     }

@@ -1073,62 +1073,62 @@ public:
 
     // against std::string
 
-    BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator==( basic_string_view sv1, std::basic_string<Ch, std::char_traits<Ch>, A> const& sv2 ) BOOST_NOEXCEPT
     {
         return sv1.compare( sv2 ) == 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator==( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator==( std::basic_string<Ch, std::char_traits<Ch>, A> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
         return sv2.compare( sv1 ) == 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator!=( basic_string_view sv1, std::basic_string<Ch, std::char_traits<Ch>, A> const& sv2 ) BOOST_NOEXCEPT
     {
         return sv1.compare( sv2 ) != 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator!=( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator!=( std::basic_string<Ch, std::char_traits<Ch>, A> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
         return sv2.compare( sv1 ) != 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, std::basic_string<Ch, std::char_traits<Ch>, A> const& sv2 ) BOOST_NOEXCEPT
     {
         return sv1.compare( sv2 ) < 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator<( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator<( std::basic_string<Ch, std::char_traits<Ch>, A> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
         return sv2.compare( sv1 ) > 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator<=( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator<=( basic_string_view sv1, std::basic_string<Ch, std::char_traits<Ch>, A> const& sv2 ) BOOST_NOEXCEPT
     {
         return sv1.compare( sv2 ) <= 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator<=( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator<=( std::basic_string<Ch, std::char_traits<Ch>, A> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
         return sv2.compare( sv1 ) >= 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator>( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator>( basic_string_view sv1, std::basic_string<Ch, std::char_traits<Ch>, A> const& sv2 ) BOOST_NOEXCEPT
     {
         return sv1.compare( sv2 ) > 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator>( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator>( std::basic_string<Ch, std::char_traits<Ch>, A> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
         return sv2.compare( sv1 ) < 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator>=( basic_string_view sv1, std::basic_string<Ch> const& sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator>=( basic_string_view sv1, std::basic_string<Ch, std::char_traits<Ch>, A> const& sv2 ) BOOST_NOEXCEPT
     {
         return sv1.compare( sv2 ) >= 0;
     }
 
-    BOOST_CXX14_CONSTEXPR friend bool operator>=( std::basic_string<Ch> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    template<class A> BOOST_CXX14_CONSTEXPR friend bool operator>=( std::basic_string<Ch, std::char_traits<Ch>, A> const& sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
     {
         return sv2.compare( sv1 ) <= 0;
     }
