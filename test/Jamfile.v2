@@ -266,6 +266,7 @@ run sv_find_last_not_of_test.cpp ;
 run sv_contains_test.cpp ;
 run sv_eq_test.cpp ;
 run sv_lt_test.cpp ;
+run sv_stream_insert_test.cpp ;
 
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
