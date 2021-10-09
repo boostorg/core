@@ -324,6 +324,46 @@ int main()
     }
 
     {
+        boost::core::wstring_view sv( L"\x101\x102\x103\x101\x102\x103" );
+
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 0, 0 ), npos );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 1, 0 ), npos );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 2, 0 ), npos );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 3, 0 ), npos );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 4, 0 ), npos );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 5, 0 ), npos );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 6, 0 ), npos );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 7, 0 ), npos );
+
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 0, 1 ), 0 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 1, 1 ), 0 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 2, 1 ), 0 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 3, 1 ), 3 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 4, 1 ), 3 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 5, 1 ), 3 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 6, 1 ), 3 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 7, 1 ), 3 );
+
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 0, 2 ), 0 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 1, 2 ), 1 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 2, 2 ), 1 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 3, 2 ), 3 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 4, 2 ), 4 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 5, 2 ), 4 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 6, 2 ), 4 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 7, 2 ), 4 );
+
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 0, 3 ), 0 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 1, 3 ), 1 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 2, 3 ), 2 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 3, 3 ), 3 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 4, 3 ), 4 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 5, 3 ), 5 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 6, 3 ), 5 );
+        BOOST_TEST_EQ( sv.find_last_of( L"\x101\x102\x103", 7, 3 ), 5 );
+    }
+
+    {
         boost::core::string_view sv( "abc1abc2abc3" );
 
         BOOST_TEST_EQ( sv.find_last_of( "0123456789", 0 ), npos );
