@@ -9,8 +9,18 @@
 # include <string_view>
 #endif
 
-#define TEST_EQ(x, y) BOOST_TEST_EQ(x, y); BOOST_TEST_NOT((x) != (y))
-#define TEST_NE(x, y) BOOST_TEST_NE(x, y); BOOST_TEST_NOT((x) == (y))
+#define TEST_EQ(x, y) \
+    BOOST_TEST_EQ(x, y); \
+    BOOST_TEST_NOT((x) != (y)); \
+    BOOST_TEST_LE(x, y); \
+    BOOST_TEST_GE(x, y); \
+    BOOST_TEST_NOT((x) < (y)); \
+    BOOST_TEST_NOT((x) > (y))
+
+#define TEST_NE(x, y) \
+    BOOST_TEST_NE(x, y); \
+    BOOST_TEST_NOT((x) == (y)); \
+    BOOST_TEST((x) < (y) || (x) > (y));
 
 int main()
 {

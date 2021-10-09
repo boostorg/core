@@ -904,6 +904,26 @@ public:
     {
         return sv1.compare( sv2 ) != 0;
     }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) < 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator<=( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) <= 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) > 0;
+    }
+
+    BOOST_CXX14_CONSTEXPR friend bool operator>=( basic_string_view sv1, basic_string_view sv2 ) BOOST_NOEXCEPT
+    {
+        return sv1.compare( sv2 ) >= 0;
+    }
 };
 
 template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str )
