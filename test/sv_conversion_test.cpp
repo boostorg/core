@@ -8,6 +8,9 @@
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
+#if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
+# include <memory_resource>
+#endif
 
 boost::core::string_view f( boost::core::string_view const& str )
 {
@@ -37,8 +40,10 @@ int main()
 #if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
 
     {
-        std::pmr::string s1( "123" );
-        std::pmr::string s2 = f( s1 );
+        using pmr_string = std::basic_string<char, std::char_traits<char>, std::pmr::polymorphic_allocator<char>>;
+
+        pmr_string s1( "123" );
+        pmr_string s2 = f( s1 );
 
         BOOST_TEST_EQ( s1, s2 );
     }

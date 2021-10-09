@@ -9,6 +9,9 @@
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
+#if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
+# include <memory_resource>
+#endif
 
 template<class It> std::reverse_iterator<It> make_reverse_iterator( It it )
 {
@@ -304,7 +307,9 @@ int main()
 #if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
 
     {
-        std::pmr::string str = "123";
+        using pmr_string = std::basic_string<char, std::char_traits<char>, std::pmr::polymorphic_allocator<char>>;
+
+        pmr_string str = "123";
 
         boost::core::string_view sv( str );
 
