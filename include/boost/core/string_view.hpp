@@ -104,11 +104,44 @@ template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_first_of( Ch const* p_
 
 template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_last_of( Ch const* p_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
 {
+    typedef typename sv_to_uchar<Ch>::type UCh;
+
+    unsigned char table[ 256 ] = {};
+
+    bool use_table = true;
+
+    for( std::size_t j = 0; j < n; ++j )
+    {
+        UCh ch = s[ j ];
+
+        if( ch >= 0 && ch < 256 )
+        {
+            table[ ch ] = 1;
+        }
+        else
+        {
+            use_table = false;
+            break;
+        }
+    }
+
     std::size_t const npos = static_cast< std::size_t >( -1 );
 
     std::size_t i = pos;
 
-    if( n >= 16 )
+    if( use_table )
+    {
+        do
+        {
+            UCh ch = p_[ i ];
+
+            if( ch >= 0 && ch < 256 && table[ ch ] ) return i;
+
+            --i;
+        }
+        while( i != npos );
+    }
+    else if( n >= 16 )
     {
         do
         {
@@ -138,46 +171,6 @@ template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_last_of( Ch const* p_,
 
     return npos;
 }
-
-#if CHAR_BIT == 8
-
-BOOST_CXX14_CONSTEXPR std::size_t find_last_of( char const* p_, char const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
-{
-    unsigned char table[ 256 ] = {};
-
-    for( std::size_t j = 0; j < n; ++j )
-    {
-        unsigned char ch = s[ j ];
-        table[ ch ] = 1;
-    }
-
-    std::size_t const npos = static_cast< std::size_t >( -1 );
-
-    std::size_t i = pos;
-
-    do
-    {
-        unsigned char ch = p_[ i ];
-
-        if( table[ ch ] ) return i;
-
-        --i;
-    }
-    while( i != npos );
-
-    return npos;
-}
-
-#endif
-
-#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
-
-std::size_t find_last_of( char8_t const* p_, char8_t const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
-{
-    return detail::find_last_of( reinterpret_cast< char const* >( p_ ), reinterpret_cast< char const* >( s ), pos, n );
-}
-
-#endif
 
 template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_first_not_of( Ch const* p_, std::size_t n_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
 {
