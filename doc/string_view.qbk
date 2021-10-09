@@ -133,7 +133,7 @@ public:
 
     constexpr size_type find( basic_string_view str, size_type pos = 0 ) const noexcept;
     constexpr size_type find( Ch c, size_type pos = 0 ) const noexcept;
-    constexpr size_type find( Ch const* s, size_type pos, size_type n ) const;
+    constexpr size_type find( Ch const* s, size_type pos, size_type n ) const noexcept;
     constexpr size_type find( Ch const* s, size_type pos = 0 ) const noexcept;
 
     // rfind
@@ -291,13 +291,13 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section `constexpr const_reverse_iterator rbegin() const noexcept;`]
 
-* *Returns:* `std::make_reverse_iterator( end() )`.
+* *Returns:* `const_reverse_iterator( end() )`.
 
 [endsect]
 
 [section `constexpr const_reverse_iterator rend() const noexcept;`]
 
-* *Returns:* `std::make_reverse_iterator( begin() )`.
+* *Returns:* `const_reverse_iterator( begin() )`.
 
 [endsect]
 
@@ -384,12 +384,23 @@ typedef basic_string_view<char8_t> u8string_view;
 [section Modifiers]
 
 [section `constexpr void remove_prefix( size_type n ) noexcept;`]
+
+* *Requires:* `n <= size()`.
+* *Effects:* advances `data()` by `n` and decreases `size()` by `n`.
+
 [endsect]
 
 [section `constexpr void remove_suffix( size_type n ) noexcept;`]
+
+* *Requires:* `n <= size()`.
+* *Effects:* decreases `size()` by `n`.
+
 [endsect]
 
 [section `constexpr void swap( basic_string_view& s ) noexcept;`]
+
+* *Effects:* exchanges the contents of `*this` and `s`.
+
 [endsect]
 
 [endsect]
@@ -411,7 +422,7 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section `constexpr basic_string_view substr( size_type pos = 0, size_type n = npos ) const;`]
 
-* *Returns:* A `basic_string_view` object `r` such that `r.data() == data() + pos` and `r.size() == std::min( size() - pos, n )`.
+* *Returns:* `basic_string_view( data() + pos, std::min( size() - pos, n ) )`.
 * *Throws:* `std::out_of_range` when `pos >= size()`.
 
 [endsect]
