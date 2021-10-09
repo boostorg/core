@@ -600,7 +600,7 @@ public:
         return !empty() && front() == x;
     }
 
-    BOOST_CONSTEXPR bool starts_with( Ch const* x ) const
+    BOOST_CONSTEXPR bool starts_with( Ch const* x ) const BOOST_NOEXCEPT
     {
         return starts_with( basic_string_view( x ) );
     }
@@ -617,7 +617,7 @@ public:
         return !empty() && back() == x;
     }
 
-    BOOST_CONSTEXPR bool ends_with( Ch const* x ) const
+    BOOST_CONSTEXPR bool ends_with( Ch const* x ) const BOOST_NOEXCEPT
     {
         return ends_with( basic_string_view( x ) );
     }

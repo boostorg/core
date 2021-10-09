@@ -32,11 +32,6 @@ namespace core
 
 template<class Ch> class basic_string_view
 {
-private:
-
-    Ch const* data_;
-    std::size_t size_;
-
 public:
 
     // types
@@ -126,55 +121,55 @@ public:
 
     constexpr bool starts_with( basic_string_view x ) const noexcept;
     constexpr bool starts_with( Ch x ) const noexcept;
-    constexpr bool starts_with( Ch const* x ) const;
+    constexpr bool starts_with( Ch const* x ) const noexcept;
 
     // ends_with
 
     constexpr bool ends_with( basic_string_view x ) const noexcept;
     constexpr bool ends_with( Ch x ) const noexcept;
-    constexpr bool ends_with( Ch const* x ) const;
+    constexpr bool ends_with( Ch const* x ) const noexcept;
 
     // find
 
     constexpr size_type find( basic_string_view s, size_type pos = 0 ) const noexcept;
     constexpr size_type find( Ch c, size_type pos = 0 ) const noexcept;
     constexpr size_type find( Ch const* s, size_type pos, size_type n ) const;
-    constexpr size_type find( Ch const* s, size_type pos = 0 ) const;
+    constexpr size_type find( Ch const* s, size_type pos = 0 ) const noexcept;
 
     // rfind
 
     constexpr size_type rfind( basic_string_view s, size_type pos = npos ) const noexcept;
     constexpr size_type rfind( Ch c, size_type pos = npos ) const noexcept;
-    constexpr size_type rfind( Ch const* s, size_type pos, size_type n ) const;
-    constexpr size_type rfind( Ch const* s, size_type pos = npos ) const;
+    constexpr size_type rfind( Ch const* s, size_type pos, size_type n ) const noexcept;
+    constexpr size_type rfind( Ch const* s, size_type pos = npos ) const noexcept;
 
     // find_first_of
 
     constexpr size_type find_first_of( basic_string_view s, size_type pos = 0 ) const noexcept;
     constexpr size_type find_first_of( Ch c, size_type pos = 0 ) const noexcept;
-    constexpr size_type find_first_of( Ch const* s, size_type pos, size_type n ) const;
-    constexpr size_type find_first_of( Ch const* s, size_type pos = 0 ) const;
+    constexpr size_type find_first_of( Ch const* s, size_type pos, size_type n ) const noexcept;
+    constexpr size_type find_first_of( Ch const* s, size_type pos = 0 ) const noexcept;
 
     // find_last_of
 
     constexpr size_type find_last_of( basic_string_view s, size_type pos = npos ) const noexcept;
     constexpr size_type find_last_of( Ch c, size_type pos = npos ) const noexcept;
-    constexpr size_type find_last_of( Ch const* s, size_type pos, size_type n ) const;
-    constexpr size_type find_last_of( Ch const* s, size_type pos = npos ) const;
+    constexpr size_type find_last_of( Ch const* s, size_type pos, size_type n ) const noexcept;
+    constexpr size_type find_last_of( Ch const* s, size_type pos = npos ) const noexcept;
 
     // find_first_not_of
 
     constexpr size_type find_first_not_of( basic_string_view s, size_type pos = 0 ) const noexcept;
     constexpr size_type find_first_not_of( Ch c, size_type pos = 0 ) const noexcept;
-    constexpr size_type find_first_not_of( Ch const* s, size_type pos, size_type n ) const;
-    constexpr size_type find_first_not_of( Ch const* s, size_type pos = 0 ) const;
+    constexpr size_type find_first_not_of( Ch const* s, size_type pos, size_type n ) const noexcept;
+    constexpr size_type find_first_not_of( Ch const* s, size_type pos = 0 ) const noexcept;
 
     // find_last_not_of
 
     constexpr size_type find_last_not_of( basic_string_view s, size_type pos = npos ) const noexcept;
     constexpr size_type find_last_not_of( Ch c, size_type pos = npos ) const noexcept;
-    constexpr size_type find_last_not_of( Ch const* s, size_type pos, size_type n ) const;
-    constexpr size_type find_last_not_of( Ch const* s, size_type pos = npos ) const;
+    constexpr size_type find_last_not_of( Ch const* s, size_type pos, size_type n ) const noexcept;
+    constexpr size_type find_last_not_of( Ch const* s, size_type pos = npos ) const noexcept;
 
     // contains
 
@@ -194,7 +189,7 @@ public:
 
 // stream inserter
 
-template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str )
+template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str );
 
 // typedef names
 
@@ -212,59 +207,291 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section Construction]
 
-[section constexpr basic_string_view() noexcept;]
+[section `constexpr basic_string_view() noexcept;`]
 
-* *Ensures:* `data() == 0`, `size() == 0`.
+* *Ensures:* `data() == 0`; `size() == 0`.
 
 [endsect]
 
-[section constexpr basic_string_view( Ch const* str ) noexcept;]
+[section `constexpr basic_string_view( Ch const* str ) noexcept;`]
+
+* *Ensures:* `data() == str`; `size() == traits_type::length( str )`.
+
 [endsect]
 
-[section constexpr basic_string_view( Ch const* str, size_type len ) noexcept;]
+[section `constexpr basic_string_view( Ch const* str, size_type len ) noexcept;`]
+
+* *Ensures:* `data() == str`; `size() == len`.
+
 [endsect]
 
-[section constexpr basic_string_view( Ch const* begin, Ch const* end ) noexcept;]
+[section `constexpr basic_string_view( Ch const* begin, Ch const* end ) noexcept;`]
+
+* *Requires:* `end >= begin`.
+* *Ensures:* `data() == begin`; `size() == end - begin`.
+
 [endsect]
 
-[section template<class A> basic_string_view( std::basic_string<Ch, std::char_traits<Ch>, A> const& str ) noexcept;]
+[section `template<class A> basic_string_view( std::basic_string<Ch, std::char_traits<Ch>, A> const& str ) noexcept;`]
+
+* *Ensures:* `data() == str.data()`; `size() == str.size()`.
+
 [endsect]
 
-[section basic_string_view( std::basic_string_view<Ch, std::char_traits<Ch>> const& str ) noexcept;]
+[section `basic_string_view( std::basic_string_view<Ch, std::char_traits<Ch>> const& str ) noexcept;`]
+
+* *Ensures:* `data() == str.data()`; `size() == str.size()`.
+
 [endsect]
 
 [endsect]
 
 [section Conversions]
+
+[section `template<class A> operator std::basic_string<Ch, std::char_traits<Ch>, A>() const;`]
+
+* *Returns:* `std::basic_string<Ch, std::char_traits<Ch>, A>( data(), size() )`.
+
+[endsect]
+
+[section `template<class Ch2> operator std::basic_string_view<Ch2>() const noexcept;`]
+
+* *Constraints:* `Ch2` is the same type as `Ch`.
+* *Returns:* `std::basic_string_view<Ch2>( data(), size() )`.
+
+[endsect]
+
 [endsect]
 
 [section Iterator Support]
+
+[section `constexpr const_iterator begin() const noexcept;`]
+
+* *Returns:* `data()`.
+
+[endsect]
+
+[section `constexpr const_iterator end() const noexcept;`]
+
+* *Returns:* `data() + size()`.
+
+[endsect]
+
+[section `constexpr const_iterator cbegin() const noexcept;`]
+
+* *Returns:* `begin()`.
+
+[endsect]
+
+[section `constexpr const_iterator cend() const noexcept;`]
+
+* *Returns:* `end()`.
+
+[endsect]
+
+[section `constexpr const_reverse_iterator rbegin() const noexcept;`]
+
+* *Returns:* `std::make_reverse_iterator( end() )`.
+
+[endsect]
+
+[section `constexpr const_reverse_iterator rend() const noexcept;`]
+
+* *Returns:* `std::make_reverse_iterator( begin() )`.
+
+[endsect]
+
+[section `constexpr const_reverse_iterator crbegin() const noexcept;`]
+
+* *Returns:* `rbegin()`.
+
+[endsect]
+
+[section `constexpr const_reverse_iterator crend() const noexcept;`]
+
+* *Returns:* `rend()`.
+
+[endsect]
+
 [endsect]
 
 [section Capacity]
+
+[section `constexpr size_type size() const noexcept;`]
+
+* *Returns:* the length of the referenced character sequence.
+
+[endsect]
+
+[section `constexpr size_type length() const noexcept;`]
+
+* *Returns:* `size()`.
+
+[endsect]
+
+[section `constexpr size_type max_size() const noexcept;`]
+
+* *Returns:* `std::numeric_limits<size_type>::max() / sizeof(Ch)`.
+
+[endsect]
+
+[section `constexpr bool empty() const noexcept;`]
+
+* *Returns:* `size() == 0`.
+
+[endsect]
+
 [endsect]
 
 [section Element Access]
+
+[section `constexpr const_reference operator[]( size_type pos ) const noexcept;`]
+
+* *Requires:* `pos < size()`.
+* *Returns:* `data()[ pos ]`.
+
+[endsect]
+
+[section `constexpr const_reference at( size_type pos ) const;`]
+
+* *Returns:* `data()[ pos ]`.
+* *Throws:* `std::out_of_range` when `pos >= size()`.
+
+[endsect]
+
+[section `constexpr const_reference front() const noexcept;`]
+
+* *Requires:* `!empty()`.
+* *Returns:* `data()[ 0 ]`.
+
+[endsect]
+
+[section `constexpr const_reference back() const noexcept;`]
+
+* *Requires:* `!empty()`.
+* *Returns:* `data()[ size() - 1 ]`.
+
+[endsect]
+
+[section `constexpr const_pointer data() const noexcept;`]
+
+* *Returns:* a pointer to the beginning of the referenced character sequence.
+
+[endsect]
+
 [endsect]
 
 [section Modifiers]
+
+[section `constexpr void remove_prefix( size_type n ) noexcept;`]
+[endsect]
+
+[section `constexpr void remove_suffix( size_type n ) noexcept;`]
+[endsect]
+
+[section `constexpr void swap( basic_string_view& s ) noexcept;`]
+[endsect]
+
 [endsect]
 
 [section String Operations]
 
 [section copy]
+
+[section `constexpr size_type copy( Ch* s, size_type n, size_type pos = 0 ) const;`]
+[endsect]
+
 [endsect]
 
 [section substr]
+
+[section `constexpr basic_string_view substr( size_type pos = 0, size_type n = npos ) const;`]
+[endsect]
+
 [endsect]
 
 [section compare]
+
+[section `constexpr int compare( basic_string_view s ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr int compare( size_type pos1, size_type n1, basic_string_view s ) const;`]
+
+* *Returns:* `substr( pos1, n1 ).compare( str )`.
+
+[endsect]
+
+[section `constexpr int compare( size_type pos1, size_type n1, basic_string_view s, size_type pos2, size_type n2 ) const;`]
+
+* *Returns:* `substr( pos1, n1 ).compare( str.substr( pos2, n2 ) )`.
+
+[endsect]
+
+[section `constexpr int compare( Ch const* s ) const noexcept;`]
+
+* *Returns:* `compare( basic_string_view( s ) )`.
+
+[endsect]
+
+[section `constexpr int compare( size_type pos1, size_type n1, Ch const* s ) const;`]
+
+* *Returns:* `substr( pos1, n1 ).compare( basic_string_view( s ) )`.
+
+[endsect]
+
+[section `constexpr int compare( size_type pos1, size_type n1, Ch const* s, size_type n2 ) const;`]
+
+* *Returns:* `substr( pos1, n1 ).compare( basic_string_view( s, n2 ) )`.
+
+[endsect]
+
 [endsect]
 
 [section starts_with]
+
+[section `constexpr bool starts_with( basic_string_view x ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr bool starts_with( Ch x ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr bool starts_with( Ch const* x ) const noexcept;`]
+
+* *Returns:* `starts_with( basic_string_view( x ) )`.
+
+[endsect]
+
 [endsect]
 
 [section ends_with]
+
+[section `constexpr bool ends_with( basic_string_view x ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr bool ends_with( Ch x ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr bool ends_with( Ch const* x ) const noexcept;`]
+
+* *Returns:* `ends_with( basic_string_view( x ) )`.
+
+[endsect]
+
 [endsect]
 
 [endsect]
@@ -272,32 +499,242 @@ typedef basic_string_view<char8_t> u8string_view;
 [section Searching]
 
 [section find]
+
+[section `constexpr size_type find( basic_string_view s, size_type pos = 0 ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr size_type find( Ch c, size_type pos = 0 ) const noexcept;`]
+
+* *Returns:* `find( basic_string_view( &c, 1 ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find( Ch const* s, size_type pos, size_type n ) const noexcept;`]
+
+* *Returns:* `find( basic_string_view( s, n ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find( Ch const* s, size_type pos = 0 ) const noexcept;`]
+
+* *Returns:* `find( basic_string_view( s ), pos )`.
+
+[endsect]
+
 [endsect]
 
 [section rfind]
+
+[section `constexpr size_type rfind( basic_string_view s, size_type pos = npos ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr size_type rfind( Ch c, size_type pos = npos ) const noexcept;`]
+
+* *Returns:* `rfind( basic_string_view( &c, 1 ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type rfind( Ch const* s, size_type pos, size_type n ) const noexcept;`]
+
+* *Returns:* `rfind( basic_string_view( s, n ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type rfind( Ch const* s, size_type pos = npos ) const noexcept;`]
+
+* *Returns:* `rfind( basic_string_view( s ), pos )`.
+
+[endsect]
+
 [endsect]
 
 [section find_first_of]
+
+[section `constexpr size_type find_first_of( basic_string_view s, size_type pos = 0 ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr size_type find_first_of( Ch c, size_type pos = 0 ) const noexcept;`]
+
+* *Returns:* `find_first_of( basic_string_view( &c, 1 ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find_first_of( Ch const* s, size_type pos, size_type n ) const noexcept;`]
+
+* *Returns:* `find_first_of( basic_string_view( s, n ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find_first_of( Ch const* s, size_type pos = 0 ) const noexcept;`]
+
+* *Returns:* `find_first_of( basic_string_view( s ), pos )`.
+
+[endsect]
+
 [endsect]
 
 [section find_last_of]
+
+[section `constexpr size_type find_last_of( basic_string_view s, size_type pos = npos ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr size_type find_last_of( Ch c, size_type pos = npos ) const noexcept;`]
+
+* *Returns:* `find_last_of( basic_string_view( &c, 1 ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find_last_of( Ch const* s, size_type pos, size_type n ) const noexcept;`]
+
+* *Returns:* `find_last_of( basic_string_view( s, n ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find_last_of( Ch const* s, size_type pos = npos ) const noexcept;`]
+
+* *Returns:* `find_last_of( basic_string_view( s ), pos )`.
+
+[endsect]
+
 [endsect]
 
 [section find_first_not_of]
+
+[section `constexpr size_type find_first_not_of( basic_string_view s, size_type pos = 0 ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr size_type find_first_not_of( Ch c, size_type pos = 0 ) const noexcept;`]
+
+* *Returns:* `find_first_not_of( basic_string_view( &c, 1 ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find_first_not_of( Ch const* s, size_type pos, size_type n ) const noexcept;`]
+
+* *Returns:* `find_first_not_of( basic_string_view( s, n ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find_first_not_of( Ch const* s, size_type pos = 0 ) const noexcept;`]
+
+* *Returns:* `find_first_not_of( basic_string_view( s ), pos )`.
+
+[endsect]
+
 [endsect]
 
 [section find_last_not_of]
+
+[section `constexpr size_type find_last_not_of( basic_string_view s, size_type pos = npos ) const noexcept;`]
+
+* *Returns:* `...`.
+
+[endsect]
+
+[section `constexpr size_type find_last_not_of( Ch c, size_type pos = npos ) const noexcept;`]
+
+* *Returns:* `find_last_not_of( basic_string_view( &c, 1 ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find_last_not_of( Ch const* s, size_type pos, size_type n ) const noexcept;`]
+
+* *Returns:* `find_last_not_of( basic_string_view( s, n ), pos )`.
+
+[endsect]
+
+[section `constexpr size_type find_last_not_of( Ch const* s, size_type pos = npos ) const noexcept;`]
+
+* *Returns:* `find_last_not_of( basic_string_view( s ), pos )`.
+
+[endsect]
+
 [endsect]
 
 [section contains]
+
+[section `constexpr bool contains( basic_string_view sv ) const noexcept;`]
+
+* *Returns:* `find( sv ) != npos`.
+
+[endsect]
+
+[section `constexpr bool contains( Ch c ) const noexcept;`]
+
+* *Returns:* `find( c ) != npos`.
+
+[endsect]
+
+[section `constexpr bool contains( Ch const* s ) const noexcept;`]
+
+* *Returns:* `find( s ) != npos`.
+
+[endsect]
+
 [endsect]
 
 [endsect]
 
 [section Relational Operators]
+
+[section `constexpr friend bool operator==( basic_string_view sv1, basic_string_view sv2 ) noexcept;`]
+
+* *Returns:* `sv1.compare( sv2 ) == 0`.
+
+[endsect]
+
+[section `constexpr friend bool operator!=( basic_string_view sv1, basic_string_view sv2 ) noexcept;`]
+
+* *Returns:* `sv1.compare( sv2 ) != 0`.
+
+[endsect]
+
+[section `constexpr friend bool operator<( basic_string_view sv1, basic_string_view sv2 ) noexcept;`]
+
+* *Returns:* `sv1.compare( sv2 ) < 0`.
+
+[endsect]
+
+[section `constexpr friend bool operator<=( basic_string_view sv1, basic_string_view sv2 ) noexcept;`]
+
+* *Returns:* `sv1.compare( sv2 ) <= 0`.
+
+[endsect]
+
+[section `constexpr friend bool operator>( basic_string_view sv1, basic_string_view sv2 ) noexcept;`]
+
+* *Returns:* `sv1.compare( sv2 ) > 0`.
+
+[endsect]
+
+[section `constexpr friend bool operator>=( basic_string_view sv1, basic_string_view sv2 ) noexcept;`]
+
+* *Returns:* `sv1.compare( sv2 ) >= 0`.
+
+[endsect]
+
 [endsect]
 
 [section Stream Inserter]
+
+[section `template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str );`]
+[endsect]
+
 [endsect]
 
 [endsect]
