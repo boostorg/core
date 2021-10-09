@@ -261,6 +261,7 @@ run sv_find_test.cpp ;
 run sv_rfind_test.cpp ;
 run sv_find_first_of_test.cpp ;
 run sv_find_last_of_test.cpp ;
+run sv_find_first_not_of_test.cpp ;
 run sv_contains_test.cpp ;
 
 use-project /boost/core/swap : ./swap ;
