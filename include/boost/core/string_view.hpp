@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cstring>
 #include <climits>
+#include <iosfwd>
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
@@ -904,6 +905,12 @@ public:
         return sv1.compare( sv2 ) != 0;
     }
 };
+
+template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str )
+{
+    os.write( str.data(), str.size() );
+    return os;
+}
 
 #if defined(BOOST_NO_CXX17_INLINE_VARIABLES)
 template<class Ch> BOOST_CONSTEXPR_OR_CONST std::size_t basic_string_view<Ch>::npos;
