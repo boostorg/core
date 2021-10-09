@@ -34,5 +34,16 @@ int main()
 
 #endif
 
+#if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
+
+    {
+        std::pmr::string s1( "123" );
+        std::pmr::string s2 = f( s1 );
+
+        BOOST_TEST_EQ( s1, s2 );
+    }
+
+#endif
+
     return boost::report_errors();
 }
