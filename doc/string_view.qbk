@@ -757,7 +757,7 @@ typedef basic_string_view<char8_t> u8string_view;
 
 [section `template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str );`]
 
-* *Effects:* equivalent to `os << x`, where `x` is a pointer to a null-terminated character sequence with the same contents as `*this`.
+* *Effects:* equivalent to `os << x`, where `x` is a pointer to a null-terminated character sequence with the same contents as `str`.
 
 [endsect]
 
