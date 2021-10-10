@@ -640,20 +640,21 @@ public:
 
     BOOST_CXX14_CONSTEXPR size_type find( Ch const* s, size_type pos, size_type n ) const BOOST_NOEXCEPT
     {
+        if( n == 1 ) return find( s[0], pos );
+
         if( pos + n > size() ) return npos;
         if( n == 0 ) return pos;
 
         Ch const* p = data() + pos;
-        Ch const* last = data() + size();
+        Ch const* last = data() + size() - n + 1;
 
         for( ;; )
         {
             p = traits_type::find( p, last - p, s[0] );
 
             if( p == 0 ) break;
-            if( static_cast<size_type>( last - p ) < n ) break;
 
-            if( traits_type::compare( p, s, n ) == 0 ) return p - data();
+            if( traits_type::compare( p + 1, s + 1, n - 1 ) == 0 ) return p - data();
 
             ++p;
         }
