@@ -592,7 +592,7 @@ public:
 
     BOOST_CONSTEXPR bool starts_with( basic_string_view x ) const BOOST_NOEXCEPT
     {
-        return substr( 0, x.size() ) == x;
+        return size() >= x.size() && traits_type::compare( data(), x.data(), x.size() ) == 0;
     }
 
     BOOST_CONSTEXPR bool starts_with( Ch x ) const BOOST_NOEXCEPT
@@ -609,7 +609,7 @@ public:
 
     BOOST_CONSTEXPR bool ends_with( basic_string_view x ) const BOOST_NOEXCEPT
     {
-        return size() >= x.size() && compare( size() - x.size(), npos, x ) == 0;
+        return size() >= x.size() && traits_type::compare( data() + size() - x.size(), x.data(), x.size() ) == 0;
     }
 
     BOOST_CONSTEXPR bool ends_with( Ch x ) const BOOST_NOEXCEPT
