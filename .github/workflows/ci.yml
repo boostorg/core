@@ -16,7 +16,7 @@ on:
 
 concurrency:
   group: ${{format('{0}:{1}', github.repository, github.ref)}}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   GIT_FETCH_JOBS: 8
