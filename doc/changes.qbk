@@ -38,6 +38,7 @@
 * Implemented the allocator access utilities which provide a replacement for `allocator_traits`
   with individual traits and functions for each facility. They support the C++11 allocator model
   when possible and provide a fallback for C++98 compatibility.
+* Added `BOOST_TEST_WITH` to Lightweight Test.
 
 [endsect]
 
