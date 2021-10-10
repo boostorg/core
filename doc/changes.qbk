@@ -10,7 +10,10 @@
 
 * Added a generic implementation to `boost/core/cmath.hpp`, enabled when `BOOST_CORE_USE_GENERIC_CMATH`
   is defined or when the platform does not provide the necessary facilities in `<cmath>`.
-* Added `boost::core::type_name`.
+* Added `boost::core::type_name`, a utility function that returns the name of a type as a string.
+* Added `boost::core::string_view`, a portable implementation of C++17's `std::string_view` that differs
+  from `boost::string_view` by supporting implicit conversions from and to `std::string_view`, when that
+  is available.
 
 [endsect]
 
@@ -22,11 +25,11 @@
 
 [section Changes in 1.76.0]
 
-* Add implicit conversion between compatible reference wrappers.
-* Add `boost/core/cmath.hpp`, a portable implementation of the floating point classification functions from `<cmath>`.
-* Add `boost/core/bit.hpp`, a portable implementation of the C++20 standard header `<bit>`.
-* Fix `BOOST_TEST_EQ`, `BOOST_TEST_NE` for character types under C++20.
-* Revise allocator access utilities (now support VS2013, and no workarounds use `allocator_traits`.)
+* Added implicit conversion between compatible reference wrappers.
+* Added `boost/core/cmath.hpp`, a portable implementation of the floating point classification functions from `<cmath>`.
+* Added `boost/core/bit.hpp`, a portable implementation of the C++20 standard header `<bit>`.
+* Fixed `BOOST_TEST_EQ`, `BOOST_TEST_NE` for character types under C++20.
+* Revised allocator access utilities (now support VS2013, and no workarounds use `allocator_traits`.)
 
 [endsect]
 
