@@ -8,6 +8,7 @@
 
 import modules ;
 import testing ;
+import ../../config/checks/config : requires ;
 
 # quick test (for CI)
 run quick.cpp ;
@@ -268,6 +269,13 @@ run sv_eq_test.cpp ;
 run sv_lt_test.cpp ;
 run sv_stream_insert_test.cpp ;
 run sv_conversion_test.cpp ;
+
+run span_test.cpp : : : [ requires cxx11_constexpr cxx11_decltype ] ;
+run span_types_test.cpp : : : [ requires cxx11_constexpr cxx11_decltype ] ;
+run span_constructible_test.cpp : : : [ requires cxx11_constexpr cxx11_decltype ] ;
+run span_deduction_guide_test.cpp : : : [ requires cpp_deduction_guides ] ;
+run as_bytes_test.cpp : : : [ requires cpp_lib_byte ] ;
+run as_writable_bytes_test.cpp : : : [ requires cpp_lib_byte ] ;
 
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
