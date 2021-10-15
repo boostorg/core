@@ -14,6 +14,7 @@
 * Added `boost::core::string_view`, a portable implementation of C++17's `std::string_view` that differs
   from `boost::string_view` by supporting implicit conversions from and to `std::string_view`, when that
   is available.
+* Added `boost::span`, a C++11 implementation of C++20's `std::span`.
 
 [endsect]
 
