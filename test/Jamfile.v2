@@ -41,14 +41,14 @@ compile-fail ref_implicit_fail4.cpp ;
 run ref_cv_test.cpp ;
 run ref_conversion_test.cpp ;
 
-run eif_constructors.cpp ;
-run eif_dummy_arg_disambiguation.cpp ;
-run eif_lazy.cpp ;
-run eif_lazy_test.cpp ;
-run eif_member_templates.cpp ;
-run eif_namespace_disambiguation.cpp ;
-run eif_no_disambiguation.cpp ;
-run eif_partial_specializations.cpp ;
+run eif_constructors.cpp : ;
+run eif_dummy_arg_disambiguation.cpp : ;
+run eif_lazy.cpp : ;
+run eif_lazy_test.cpp : ;
+run eif_member_templates.cpp : ;
+run eif_namespace_disambiguation.cpp : ;
+run eif_no_disambiguation.cpp : ;
+run eif_partial_specializations.cpp : ;
 
 compile-fail noncopyable_compile_fail.cpp ;
 
@@ -229,7 +229,7 @@ run uncaught_exceptions.cpp
 run uncaught_exceptions_np.cpp
   : : : <exception-handling>on ;
 
-run no_exceptions_support_test.cpp ;
+run no_exceptions_support_test.cpp : ;
 run no_exceptions_support_test.cpp : : : <exception-handling>off : no_exceptions_support_test_nx ;
 
 run cmath_test.cpp ;
