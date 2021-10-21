@@ -395,8 +395,7 @@ as_writable_bytes(span<T, E> s) noexcept;`]
 [[Constraints][`is_const_v<T>` is `false`.]]
 [[Effects]
 [Equivalent to: `return R{reinterpret_cast<byte*>(s.data()), s.size_bytes()};`
-where `R` is the return type.]]
-[[Returns][`false`.]]]]]]
+where `R` is the return type.]]]]]]
 
 [endsect]
 
