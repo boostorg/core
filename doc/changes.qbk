@@ -11,9 +11,6 @@
 * Added a generic implementation to `boost/core/cmath.hpp`, enabled when `BOOST_CORE_USE_GENERIC_CMATH`
   is defined or when the platform does not provide the necessary facilities in `<cmath>`.
 * Added `boost::core::type_name`, a utility function that returns the name of a type as a string.
-* Added `boost::core::string_view`, a portable implementation of C++17's `std::string_view` that differs
-  from `boost::string_view` by supporting implicit conversions from and to `std::string_view`, when that
-  is available.
 * Added `boost::span`, a C++11 implementation of C++20's `std::span`.
 
 [endsect]
