@@ -5,6 +5,7 @@ Copyright 2019 Glen Joseph Fernandes
 Distributed under the Boost Software License, Version 1.0.
 (http://www.boost.org/LICENSE_1_0.txt)
 */
+#ifdef __cpp_deduction_guides
 #include <boost/core/span.hpp>
 #include <boost/core/lightweight_test.hpp>
 
@@ -107,3 +108,9 @@ int main()
     test_span_static();
     return boost::report_errors();
 }
+#else
+int main()
+{
+    return 0;
+}
+#endif

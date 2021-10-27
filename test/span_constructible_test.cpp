@@ -5,6 +5,8 @@ Copyright 2019 Glen Joseph Fernandes
 Distributed under the Boost Software License, Version 1.0.
 (http://www.boost.org/LICENSE_1_0.txt)
 */
+#include <boost/config.hpp>
+#if !defined(BOOST_NO_CXX11_CONSTEXPR) && !defined(BOOST_NO_CXX11_DECLTYPE)
 #include <boost/core/span.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 
@@ -190,3 +192,9 @@ int main()
     test_assign();
     return boost::report_errors();
 }
+#else
+int main()
+{
+    return 0;
+}
+#endif
