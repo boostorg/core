@@ -209,6 +209,62 @@ template<class T> struct tn_holder
 
 // integrals
 
+template<> struct tn_holder<bool>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "bool" + suffix;
+    }
+};
+
+template<> struct tn_holder<char>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "char" + suffix;
+    }
+};
+
+template<> struct tn_holder<signed char>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "signed char" + suffix;
+    }
+};
+
+template<> struct tn_holder<unsigned char>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "unsigned char" + suffix;
+    }
+};
+
+template<> struct tn_holder<short>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "short" + suffix;
+    }
+};
+
+template<> struct tn_holder<unsigned short>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "unsigned short" + suffix;
+    }
+};
+
+template<> struct tn_holder<int>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "int" + suffix;
+    }
+};
+
 template<> struct tn_holder<unsigned>
 {
     static std::string type_name( std::string const& suffix )
@@ -217,7 +273,21 @@ template<> struct tn_holder<unsigned>
     }
 };
 
-#if defined(_MSC_VER)
+template<> struct tn_holder<long>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "long" + suffix;
+    }
+};
+
+template<> struct tn_holder<unsigned long>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "unsigned long" + suffix;
+    }
+};
 
 template<> struct tn_holder<long long>
 {
@@ -235,6 +305,36 @@ template<> struct tn_holder<unsigned long long>
     }
 };
 
+template<> struct tn_holder<wchar_t>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "wchar_t" + suffix;
+    }
+};
+
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+
+template<> struct tn_holder<char16_t>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "char16_t" + suffix;
+    }
+};
+
+#endif
+
+#if !defined(BOOST_NO_CXX11_CHAR32_T)
+
+template<> struct tn_holder<char32_t>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "char32_t" + suffix;
+    }
+};
+
 #endif
 
 #if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
@@ -248,6 +348,44 @@ template<> struct tn_holder<char8_t>
 };
 
 #endif
+
+#if defined(__cpp_lib_byte) && __cpp_lib_byte >= 201603L
+
+template<> struct tn_holder<std::byte>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::byte" + suffix;
+    }
+};
+
+#endif
+
+// floating point
+
+template<> struct tn_holder<float>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "float" + suffix;
+    }
+};
+
+template<> struct tn_holder<double>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "double" + suffix;
+    }
+};
+
+template<> struct tn_holder<long double>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "long double" + suffix;
+    }
+};
 
 // cv
 
