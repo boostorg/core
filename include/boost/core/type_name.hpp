@@ -289,7 +289,7 @@ template<> struct tn_holder<unsigned long>
     }
 };
 
-template<> struct tn_holder<long long>
+template<> struct tn_holder<boost::long_long_type>
 {
     static std::string type_name( std::string const& suffix )
     {
@@ -297,7 +297,7 @@ template<> struct tn_holder<long long>
     }
 };
 
-template<> struct tn_holder<unsigned long long>
+template<> struct tn_holder<boost::ulong_long_type>
 {
     static std::string type_name( std::string const& suffix )
     {
