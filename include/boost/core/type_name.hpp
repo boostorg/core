@@ -22,6 +22,7 @@
 #include <utility>
 #include <cstdio>
 #include <cstddef>
+#include <cstring>
 #include <iosfwd>
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
@@ -41,59 +42,70 @@ template<class T> struct tn_identity
     typedef T type;
 };
 
+// tn_remove_prefix
+
+inline bool tn_remove_prefix( std::string& str, char const* prefix )
+{
+    std::size_t n = std::strlen( prefix );
+
+    if( str.substr( 0, n ) == prefix )
+    {
+        str = str.substr( n );
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 #if !defined(BOOST_NO_TYPEID)
 
 // typeid_name
 
-template<class T> std::string typeid_name()
+inline std::string fix_typeid_name( char const* n )
 {
-    std::string r = boost::core::demangle( typeid(T).name() );
+    std::string r = boost::core::demangle( n );
 
 #if defined(_MSC_VER)
 
-    if( r.substr( 0, 6 ) == "class " )
-    {
-        r = r.substr( 6 );
-    }
-
-    if( r.substr( 0, 7 ) == "struct " )
-    {
-        r = r.substr( 7 );
-    }
-
-    if( r.substr( 0, 5 ) == "enum " )
-    {
-        r = r.substr( 5 );
-    }
+    tn_remove_prefix( r, "class " );
+    tn_remove_prefix( r, "struct " );
+    tn_remove_prefix( r, "enum " );
 
 #endif
 
     // libc++ inline namespace
 
-    if( r.substr( 0, 10 ) == "std::__1::" )
+    if( tn_remove_prefix( r, "std::__1::" ) )
     {
-        r = "std::" + r.substr( 10 );
+        r = "std::" + r;
     }
 
     // libstdc++ inline namespace
 
-    if( r.substr( 0, 14 ) == "std::__cxx11::" )
+    if( tn_remove_prefix( r, "std::__cxx11::" ) )
     {
-        r = "std::" + r.substr( 14 );
+        r = "std::" + r;
     }
 
 #if defined(BOOST_MSVC) && BOOST_MSVC == 1600
 
     // msvc-10.0 puts TR1 things in std::tr1
 
-    if( r.substr( 0, 10 ) == "std::tr1::" )
+    if( tn_remove_prefix( r, "std::tr1::" ) )
     {
-        r = "std::" + r.substr( 10 );
+        r = "std::" + r;
     }
 
 #endif
 
     return r;
+}
+
+template<class T> std::string typeid_name()
+{
+    return fix_typeid_name( typeid(T).name() );
 }
 
 // template names
