@@ -387,6 +387,30 @@ template<> struct tn_holder<long double>
     }
 };
 
+// void
+
+template<> struct tn_holder<void>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "void" + suffix;
+    }
+};
+
+// nullptr_t
+
+#if !defined(BOOST_NO_CXX11_NULLPTR)
+
+template<> struct tn_holder<std::nullptr_t>
+{
+    static std::string type_name( std::string const& suffix )
+    {
+        return "std::nullptr_t" + suffix;
+    }
+};
+
+#endif
+
 // cv
 
 template<class T> struct tn_holder<T const>
@@ -849,20 +873,6 @@ template<class R, class T, class... A> struct tn_holder<R(T::*)(A...) const vola
     static std::string type_name( std::string const& suffix )
     {
         return detail::function_type_name( tn_identity<R(A...)>(), " const volatile", ' ' + tn_holder<T>::type_name( "" ) + "::*" + suffix );
-    }
-};
-
-#endif
-
-// nullptr_t
-
-#if !defined(BOOST_NO_CXX11_NULLPTR)
-
-template<> struct tn_holder<std::nullptr_t>
-{
-    static std::string type_name( std::string const& suffix )
-    {
-        return "std::nullptr_t" + suffix;
     }
 };
 
