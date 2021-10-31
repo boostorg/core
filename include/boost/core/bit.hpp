@@ -31,6 +31,12 @@
 # endif
 #endif // defined(_MSC_VER)
 
+#if defined(BOOST_MSVC)
+# pragma warning(push, 3)
+// conditional expression is constant
+# pragma warning(disable: 4127)
+#endif // defined(BOOST_MSVC)
+
 namespace boost
 {
 namespace core
@@ -577,5 +583,9 @@ typedef endian::type endian_type;
 
 } // namespace core
 } // namespace boost
+
+#if defined(BOOST_MSVC)
+# pragma warning(pop)
+#endif // defined(BOOST_MSVC)
 
 #endif  // #ifndef BOOST_CORE_BIT_HPP_INCLUDED
