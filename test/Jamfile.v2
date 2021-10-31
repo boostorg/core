@@ -16,6 +16,11 @@ project : requirements
   <toolset>clang:<warnings-as-errors>on
   <toolset>gcc:<warnings-as-errors>on ;
 
+local warning-as-errors-off =
+    "-<toolset>msvc:<warnings-as-errors>on"
+    "-<toolset>gcc:<warnings-as-errors>on"
+    "-<toolset>clang:<warnings-as-errors>on" ;
+
 # quick test (for CI)
 run quick.cpp ;
 
@@ -25,25 +30,37 @@ run addressof_test2.cpp ;
 run addressof_np_test.cpp ;
 run addressof_fn_test.cpp ;
 compile addressof_constexpr_test.cpp ;
-compile-fail addressof_fail_rvalue.cpp ;
+compile-fail addressof_fail_rvalue.cpp
+  : $(warning-as-errors-off) ;
 
 run checked_delete_test.cpp ;
-compile-fail checked_delete_fail.cpp ;
-compile-fail checked_delete_fail2.cpp ;
+compile-fail checked_delete_fail.cpp
+  : $(warning-as-errors-off) ;
+compile-fail checked_delete_fail2.cpp
+  : $(warning-as-errors-off) ;
 
 compile ref_ct_test.cpp ;
 run ref_test.cpp ;
 run ref_ref_test.cpp ;
 run ref_fn_test.cpp ;
-compile-fail ref_rv_fail1.cpp ;
-compile-fail ref_rv_fail2.cpp ;
-compile-fail ref_rv_fail3.cpp ;
-compile-fail ref_rv_fail4.cpp ;
-compile-fail ref_rv_fail5.cpp ;
-compile-fail ref_implicit_fail.cpp ;
-compile-fail ref_implicit_fail2.cpp ;
-compile-fail ref_implicit_fail3.cpp ;
-compile-fail ref_implicit_fail4.cpp ;
+compile-fail ref_rv_fail1.cpp
+  : $(warning-as-errors-off) ;
+compile-fail ref_rv_fail2.cpp
+  : $(warning-as-errors-off) ;
+compile-fail ref_rv_fail3.cpp
+  : $(warning-as-errors-off) ;
+compile-fail ref_rv_fail4.cpp
+  : $(warning-as-errors-off) ;
+compile-fail ref_rv_fail5.cpp
+  : $(warning-as-errors-off) ;
+compile-fail ref_implicit_fail.cpp
+  : $(warning-as-errors-off) ;
+compile-fail ref_implicit_fail2.cpp
+  : $(warning-as-errors-off) ;
+compile-fail ref_implicit_fail3.cpp
+  : $(warning-as-errors-off) ;
+compile-fail ref_implicit_fail4.cpp
+  : $(warning-as-errors-off) ;
 run ref_cv_test.cpp ;
 run ref_conversion_test.cpp ;
 
@@ -56,20 +73,21 @@ run eif_namespace_disambiguation.cpp : ;
 run eif_no_disambiguation.cpp : ;
 run eif_partial_specializations.cpp : ;
 
-compile-fail noncopyable_compile_fail.cpp ;
+compile-fail noncopyable_compile_fail.cpp
+  : $(warning-as-errors-off) ;
 
 run explicit_operator_bool.cpp ;
 run explicit_operator_bool_noexcept.cpp ;
-compile-fail explicit_operator_bool_compile_fail_conv_int.cpp ;
-compile-fail explicit_operator_bool_compile_fail_conv_pvoid.cpp ;
-compile-fail explicit_operator_bool_compile_fail_delete.cpp ;
-compile-fail explicit_operator_bool_compile_fail_shift.cpp ;
+compile-fail explicit_operator_bool_compile_fail_conv_int.cpp
+  : $(warning-as-errors-off) ;
+compile-fail explicit_operator_bool_compile_fail_conv_pvoid.cpp
+  : $(warning-as-errors-off) ;
+compile-fail explicit_operator_bool_compile_fail_delete.cpp
+  : $(warning-as-errors-off) ;
+compile-fail explicit_operator_bool_compile_fail_shift.cpp
+  : $(warning-as-errors-off) ;
 
-compile ignore_unused_test.cpp
-  : <warnings>extra
-    <toolset>gcc:<warnings-as-errors>on
-    <toolset>clang:<warnings-as-errors>on
-    <toolset>msvc:<warnings-as-errors>on ;
+compile ignore_unused_test.cpp ;
 
 run sp_typeinfo_test.cpp ;
 run sp_typeinfo_test.cpp : : : <rtti>off : sp_typeinfo_test_no_rtti ;
@@ -158,8 +176,10 @@ run demangled_name_test.cpp
 run demangled_name_test.cpp  : : : <rtti>off <test-info>always_show_run_output : demangled_name_test_no_rtti ;
 
 run scoped_enum.cpp ;
-compile-fail scoped_enum_compile_fail_conv_from_int.cpp ;
-compile-fail scoped_enum_compile_fail_conv_to_int.cpp ;
+compile-fail scoped_enum_compile_fail_conv_from_int.cpp
+  : $(warning-as-errors-off) ;
+compile-fail scoped_enum_compile_fail_conv_to_int.cpp
+  : $(warning-as-errors-off) ;
 
 run underlying_type.cpp ;
 
