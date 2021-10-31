@@ -34,7 +34,7 @@ struct V
     {
     }
 
-    template< class T > void operator()( T const & t )
+    template< class T > void operator()( T const & /*t*/ )
     {
     }
 
