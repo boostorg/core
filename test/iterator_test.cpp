@@ -8,6 +8,10 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 #include <boost/iterator.hpp>
 #include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
