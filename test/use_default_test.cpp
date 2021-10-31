@@ -11,5 +11,5 @@ Distributed under the Boost Software License, Version 1.0.
 template<class, class = boost::use_default>
 struct type { };
 
-template class type<int>;
-template class type<void, boost::use_default>;
+template struct type<int>;
+template struct type<void, boost::use_default>;
