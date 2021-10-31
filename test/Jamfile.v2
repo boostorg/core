@@ -9,6 +9,13 @@
 import modules ;
 import testing ;
 
+project : requirements
+
+  <warnings>extra
+  <toolset>msvc:<warnings-as-errors>on
+  <toolset>clang:<warnings-as-errors>on
+  <toolset>gcc:<warnings-as-errors>on ;
+
 # quick test (for CI)
 run quick.cpp ;
 
