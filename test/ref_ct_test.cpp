@@ -22,9 +22,15 @@ void ref_test(boost::reference_wrapper<U>)
 }
 
 template< typename T >
+void assignable_test_(T x1, T x2)
+{
+    x1 = x2;
+}
+
+template< typename T >
 void assignable_test(T x)
 {
-    x = x;
+    assignable_test_( x, x );
 }
 
 template< bool R, typename T >
