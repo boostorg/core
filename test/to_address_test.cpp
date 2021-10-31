@@ -124,7 +124,7 @@ struct pointer_traits<P6<T> > {
 namespace std {
 template<class T>
 struct pointer_traits<P6<T> > {
-    static T* to_address(const P6<T>& p) BOOST_NOEXCEPT {
+    static T* to_address(const P6<T>& /*p*/) BOOST_NOEXCEPT {
         return 0;
     }
 };
