@@ -60,21 +60,21 @@ namespace A {
 
   template<class T>
   typename lazy_enable_if<is_int_or_double<T>, some_traits<T> >::type
-  foo(T t) { return true; }
+  foo(T /*t*/) { return true; }
 
   template<class T>
   typename lazy_enable_if_c<is_int_or_double<T>::value, some_traits<T> >::type
-  foo2(T t) { return true; }
+  foo2(T /*t*/) { return true; }
 }
 
 namespace B {
   template<class T>
   typename lazy_disable_if<is_int_or_double<T>, make_bool<T> >::type
-  foo(T t) { return false; }
+  foo(T /*t*/) { return false; }
 
   template<class T>
   typename lazy_disable_if_c<is_int_or_double<T>::value, make_bool<T> >::type
-  foo2(T t) { return false; }
+  foo2(T /*t*/) { return false; }
 }
 
 int main()
@@ -95,4 +95,3 @@ int main()
 
   return boost::report_errors();
 }
-
