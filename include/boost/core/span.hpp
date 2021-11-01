@@ -15,7 +15,7 @@ Distributed under the Boost Software License, Version 1.0.
 
 namespace boost {
 
-constexpr std::size_t dynamic_extent = -1;
+constexpr std::size_t dynamic_extent = static_cast<std::size_t>( -1 );
 
 template<class T, std::size_t E = dynamic_extent>
 class span;
