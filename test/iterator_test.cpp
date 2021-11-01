@@ -8,9 +8,7 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#if defined(__clang__)
-# pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#endif
+#define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
 
 #include <boost/iterator.hpp>
 #include <boost/core/is_same.hpp>
