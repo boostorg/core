@@ -49,7 +49,7 @@ template<> struct sv_to_uchar<char>
     typedef unsigned char type;
 };
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && __GNUC__ * 100 + __GNUC_MINOR__ >= 406
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wtype-limits"
 #endif
@@ -320,7 +320,7 @@ template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_last_not_of( Ch const*
     return npos;
 }
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && __GNUC__ * 100 + __GNUC_MINOR__ >= 406
 # pragma GCC diagnostic pop
 #endif
 
