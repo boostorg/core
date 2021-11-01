@@ -10,6 +10,7 @@
 
 #if defined(_MSC_VER)
 # pragma warning(disable: 4530) // C++ exception handler used
+# pragma warning(disable: 4577) // noexcept used without /EHsc
 #endif
 
 #include <boost/core/no_exceptions_support.hpp>
