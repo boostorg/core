@@ -17,6 +17,10 @@
 #include <algorithm> //for std::copy and std::equal
 #include <cstddef> //for std::size_t
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wunused-function"
+#endif
+
 //Provide swap function in both the namespace of swap_test_class
 //(which is the global namespace), and the std namespace.
 //It's common to provide a swap function for a class in both
