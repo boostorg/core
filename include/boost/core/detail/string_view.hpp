@@ -49,6 +49,11 @@ template<> struct sv_to_uchar<char>
     typedef unsigned char type;
 };
 
+#if defined(__GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wtype-limits"
+#endif
+
 template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_first_of( Ch const* p_, std::size_t n_, Ch const* s, std::size_t pos, std::size_t n ) BOOST_NOEXCEPT
 {
     typedef typename sv_to_uchar<Ch>::type UCh;
@@ -314,6 +319,10 @@ template<class Ch> BOOST_CXX14_CONSTEXPR std::size_t find_last_not_of( Ch const*
 
     return npos;
 }
+
+#if defined(__GNUC__)
+# pragma GCC diagnostic pop
+#endif
 
 } // namespace detail
 
