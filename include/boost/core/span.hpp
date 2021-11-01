@@ -146,8 +146,12 @@ struct span_store<T, boost::dynamic_extent> {
 
 template<class T, std::size_t E>
 struct span_bytes {
-    static constexpr std::size_t value = E == boost::dynamic_extent ?
-        boost::dynamic_extent : sizeof(T) * E;
+    static constexpr std::size_t value = sizeof(T) * E;
+};
+
+template<class T>
+struct span_bytes<T, boost::dynamic_extent> {
+    static constexpr std::size_t value = boost::dynamic_extent;
 };
 
 } /* detail */
