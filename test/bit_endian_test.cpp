@@ -9,6 +9,10 @@
 #include <boost/cstdint.hpp>
 #include <cstring>
 
+#if defined(_MSC_VER)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 int main()
 {
     boost::uint64_t v = static_cast<boost::uint64_t>( 0x0102030405060708ull );
