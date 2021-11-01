@@ -18,6 +18,10 @@
 #include <boost/core/is_same.hpp>
 #include <boost/config.hpp>
 
+#if defined(_MSC_VER)
+# pragma warning(disable: 4244) // conversion from enum_type to underlying_type
+#endif
+
 BOOST_SCOPED_ENUM_UT_DECLARE_BEGIN(emulated_enum, unsigned char)
 {
     value0,

@@ -15,6 +15,10 @@
 #include <boost/core/scoped_enum.hpp>
 #include <boost/core/lightweight_test.hpp>
 
+#if defined(_MSC_VER)
+# pragma warning(disable: 4244) // conversion from enum_type to underlying_type
+#endif
+
 BOOST_SCOPED_ENUM_DECLARE_BEGIN(namespace_enum1)
 {
     value0,
