@@ -13,6 +13,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <cstddef>
 
 using boost::enable_if;
 using boost::disable_if;
@@ -39,7 +40,7 @@ struct xstring
           disable_if<is_arithmetic<It> >::type* = 0)
     : data(end-begin) {}
   
-  int data;
+  std::ptrdiff_t data;
 };
 
 
@@ -58,4 +59,3 @@ int main()
 
   return boost::report_errors();
 }
-
