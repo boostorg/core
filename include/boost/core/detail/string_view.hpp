@@ -1151,9 +1151,9 @@ public:
 template<class Ch> std::basic_ostream<Ch>& operator<<( std::basic_ostream<Ch>& os, basic_string_view<Ch> str )
 {
     Ch const* p = str.data();
-    std::size_t n = str.size();
+    std::streamsize n = str.size();
 
-    std::size_t m = os.width();
+    std::streamsize m = os.width();
 
     if( n >= m )
     {
