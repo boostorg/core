@@ -8,6 +8,10 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
+#if defined(_MSC_VER)
+# pragma warning(disable: 4530) // C++ exception handler used
+#endif
+
 #include <boost/core/no_exceptions_support.hpp>
 #include <boost/core/quick_exit.hpp>
 #include <boost/throw_exception.hpp>
