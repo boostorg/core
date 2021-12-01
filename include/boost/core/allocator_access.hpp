@@ -236,12 +236,14 @@ struct allocator_is_always_equal {
 template<class A, class = void>
 struct allocator_is_always_equal {
     typedef typename std::is_empty<A>::type type;
+    BOOST_STATIC_CONSTEXPR type value;
 };
 
 template<class A>
 struct allocator_is_always_equal<A,
     typename detail::alloc_void<typename A::is_always_equal>::type> {
     typedef typename A::is_always_equal type;
+    BOOST_STATIC_CONSTEXPR type value;
 };
 #endif
 
