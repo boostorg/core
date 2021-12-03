@@ -6,6 +6,12 @@
 
 [section Revision History]
 
+[section Changes in 1.79.0]
+
+* Added `boost::allocator_traits`, an implementation of `std::allocator_traits`.
+
+[endsect]
+
 [section Changes in 1.78.0]
 
 * Added a generic implementation to `boost/core/cmath.hpp`, enabled when `BOOST_CORE_USE_GENERIC_CMATH`
