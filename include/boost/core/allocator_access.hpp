@@ -43,24 +43,29 @@ struct allocator_pointer {
     typedef typename A::pointer type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_pointer {
+struct alloc_ptr {
     typedef typename A::value_type* type;
 };
-
-namespace detail {
 
 template<class>
 struct alloc_void {
     typedef void type;
 };
 
+template<class A>
+struct alloc_ptr<A,
+    typename alloc_void<typename A::pointer>::type> {
+    typedef typename A::pointer type;
+};
+
 } /* detail */
 
 template<class A>
-struct allocator_pointer<A,
-    typename detail::alloc_void<typename A::pointer>::type> {
-    typedef typename A::pointer type;
+struct allocator_pointer {
+    typedef typename detail::alloc_ptr<A>::type type;
 };
 #endif
 
@@ -70,17 +75,26 @@ struct allocator_const_pointer {
     typedef typename A::const_pointer type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_const_pointer {
-    typedef typename pointer_traits<typename
-        allocator_pointer<A>::type>::template
+struct alloc_const_ptr {
+    typedef typename boost::pointer_traits<typename
+        boost::allocator_pointer<A>::type>::template
             rebind_to<const typename A::value_type>::type type;
 };
 
 template<class A>
-struct allocator_const_pointer<A,
-    typename detail::alloc_void<typename A::const_pointer>::type> {
+struct alloc_const_ptr<A,
+    typename alloc_void<typename A::const_pointer>::type> {
     typedef typename A::const_pointer type;
+};
+
+} /* detail */
+
+template<class A>
+struct allocator_const_pointer {
+    typedef typename detail::alloc_const_ptr<A>::type type;
 };
 #endif
 
@@ -90,17 +104,26 @@ struct allocator_void_pointer {
     typedef typename A::template rebind<void>::other::pointer type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_void_pointer {
-     typedef typename pointer_traits<typename
-        allocator_pointer<A>::type>::template
+struct alloc_void_ptr {
+     typedef typename boost::pointer_traits<typename
+        boost::allocator_pointer<A>::type>::template
             rebind_to<void>::type type;
 };
 
 template<class A>
-struct allocator_void_pointer<A,
-    typename detail::alloc_void<typename A::void_pointer>::type> {
+struct alloc_void_ptr<A,
+    typename alloc_void<typename A::void_pointer>::type> {
     typedef typename A::void_pointer type;
+};
+
+} /* detail */
+
+template<class A>
+struct allocator_void_pointer {
+    typedef typename detail::alloc_void_ptr<A>::type type;
 };
 #endif
 
@@ -110,18 +133,27 @@ struct allocator_const_void_pointer {
     typedef typename A::template rebind<void>::other::const_pointer type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_const_void_pointer {
-     typedef typename pointer_traits<typename
-        allocator_pointer<A>::type>::template
+struct alloc_const_void_ptr {
+     typedef typename boost::pointer_traits<typename
+        boost::allocator_pointer<A>::type>::template
             rebind_to<const void>::type type;
 };
 
 template<class A>
-struct allocator_const_void_pointer<A,
-    typename detail::alloc_void<typename A::const_void_pointer>::type> {
+struct alloc_const_void_ptr<A,
+    typename alloc_void<typename A::const_void_pointer>::type> {
     typedef typename A::const_void_pointer type;
 };
+
+} /* detail */
+
+template<class A>
+struct allocator_const_void_pointer {
+    typedef typename detail::alloc_const_void_ptr<A>::type type;
+};
 #endif
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
@@ -130,16 +162,25 @@ struct allocator_difference_type {
     typedef typename A::difference_type type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_difference_type {
-    typedef typename pointer_traits<typename
-        allocator_pointer<A>::type>::difference_type type;
+struct alloc_diff_type {
+    typedef typename boost::pointer_traits<typename
+        boost::allocator_pointer<A>::type>::difference_type type;
 };
 
 template<class A>
-struct allocator_difference_type<A,
-    typename detail::alloc_void<typename A::difference_type>::type> {
+struct alloc_diff_type<A,
+    typename alloc_void<typename A::difference_type>::type> {
     typedef typename A::difference_type type;
+};
+
+} /* detail */
+
+template<class A>
+struct allocator_difference_type {
+    typedef typename detail::alloc_diff_type<A>::type type;
 };
 #endif
 
@@ -149,16 +190,25 @@ struct allocator_size_type {
     typedef typename A::size_type type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_size_type {
+struct alloc_size_type {
     typedef typename std::make_unsigned<typename
-        allocator_difference_type<A>::type>::type type;
+        boost::allocator_difference_type<A>::type>::type type;
 };
 
 template<class A>
-struct allocator_size_type<A,
-    typename detail::alloc_void<typename A::size_type>::type> {
+struct alloc_size_type<A,
+    typename alloc_void<typename A::size_type>::type> {
     typedef typename A::size_type type;
+};
+
+} /* detail */
+
+template<class A>
+struct allocator_size_type {
+    typedef typename detail::alloc_size_type<A>::type type;
 };
 #endif
 
@@ -176,17 +226,26 @@ struct allocator_propagate_on_container_copy_assignment {
     typedef detail::alloc_false type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_propagate_on_container_copy_assignment {
+struct alloc_pocca {
     typedef std::false_type type;
 };
 
 template<class A>
-struct allocator_propagate_on_container_copy_assignment<A,
-    typename detail::alloc_void<typename
+struct alloc_pocca<A,
+    typename alloc_void<typename
         A::propagate_on_container_copy_assignment>::type> {
     typedef typename A::propagate_on_container_copy_assignment type;
 };
+
+} /* detail */
+
+template<class A, class = void>
+struct allocator_propagate_on_container_copy_assignment {
+    typedef typename detail::alloc_pocca<A>::type type;
+};
 #endif
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
@@ -195,17 +254,26 @@ struct allocator_propagate_on_container_move_assignment {
     typedef detail::alloc_false type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_propagate_on_container_move_assignment {
+struct alloc_pocma {
     typedef std::false_type type;
 };
 
 template<class A>
-struct allocator_propagate_on_container_move_assignment<A,
-    typename detail::alloc_void<typename
+struct alloc_pocma<A,
+    typename alloc_void<typename
         A::propagate_on_container_move_assignment>::type> {
     typedef typename A::propagate_on_container_move_assignment type;
 };
+
+} /* detail */
+
+template<class A>
+struct allocator_propagate_on_container_move_assignment {
+    typedef typename detail::alloc_pocma<A>::type type;
+};
 #endif
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
@@ -214,16 +282,24 @@ struct allocator_propagate_on_container_swap {
     typedef detail::alloc_false type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_propagate_on_container_swap {
+struct alloc_pocs {
     typedef std::false_type type;
 };
 
 template<class A>
-struct allocator_propagate_on_container_swap<A,
-    typename detail::alloc_void<typename
-        A::propagate_on_container_swap>::type> {
+struct alloc_pocs<A,
+    typename alloc_void<typename A::propagate_on_container_swap>::type> {
     typedef typename A::propagate_on_container_swap type;
+};
+
+} /* detail */
+
+template<class A>
+struct allocator_propagate_on_container_swap {
+    typedef typename detail::alloc_pocs<A>::type type;
 };
 #endif
 
@@ -233,15 +309,24 @@ struct allocator_is_always_equal {
     typedef detail::alloc_false type;
 };
 #else
+namespace detail {
+
 template<class A, class = void>
-struct allocator_is_always_equal {
+struct alloc_equal {
     typedef typename std::is_empty<A>::type type;
 };
 
 template<class A>
-struct allocator_is_always_equal<A,
-    typename detail::alloc_void<typename A::is_always_equal>::type> {
+struct alloc_equal<A,
+    typename alloc_void<typename A::is_always_equal>::type> {
     typedef typename A::is_always_equal type;
+};
+
+} /* detail */
+
+template<class A>
+struct allocator_is_always_equal {
+    typedef typename detail::alloc_equal<A>::type type;
 };
 #endif
 
@@ -261,17 +346,22 @@ struct alloc_to<A<U, V...>, T> {
     typedef A<T, V...> type;
 };
 
-} /* detail */
-
 template<class A, class T, class = void>
-struct allocator_rebind {
-    typedef typename detail::alloc_to<A, T>::type type;
+struct alloc_rebind {
+    typedef typename alloc_to<A, T>::type type;
 };
 
 template<class A, class T>
-struct allocator_rebind<A, T,
-    typename detail::alloc_void<typename A::template rebind<T>::other>::type> {
+struct alloc_rebind<A, T,
+    typename alloc_void<typename A::template rebind<T>::other>::type> {
     typedef typename A::template rebind<T>::other type;
+};
+
+} /* detail */
+
+template<class A, class T>
+struct allocator_rebind {
+    typedef typename detail::alloc_rebind<A, T>::type type;
 };
 #endif
 
