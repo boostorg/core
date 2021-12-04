@@ -102,14 +102,14 @@ static void construct(A& a, T* p, Args&&... args);`]
 
 [endsect]
 
+[endsect]
+
 [section Notes]
 
 # The member `rebind_alloc` is not provided for parity with C++03 where it is
 unimplementable. Instead of `allocator_traits<A>::rebind_alloc<U>` you can
 express the same with `allocator_traits<A>::rebind_traits<U>::allocator_type`
 or more simply with `allocator_rebind_t<A, T>`.
-
-[endsect]
 
 [endsect]
 
