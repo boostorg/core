@@ -551,7 +551,7 @@ allocator_destroy(A&, T* p)
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class A>
 inline typename allocator_size_type<A>::type
-allocator_max_size(const A& a)
+allocator_max_size(const A& a) BOOST_NOEXCEPT
 {
     return a.max_size();
 }
@@ -576,7 +576,7 @@ public:
 template<class A>
 inline typename std::enable_if<detail::alloc_has_max_size<A>::value,
     typename allocator_size_type<A>::type>::type
-allocator_max_size(const A& a)
+allocator_max_size(const A& a) BOOST_NOEXCEPT
 {
     return a.max_size();
 }
@@ -584,7 +584,7 @@ allocator_max_size(const A& a)
 template<class A>
 inline typename std::enable_if<!detail::alloc_has_max_size<A>::value,
     typename allocator_size_type<A>::type>::type
-allocator_max_size(const A&)
+allocator_max_size(const A&) BOOST_NOEXCEPT
 {
     return (std::numeric_limits<typename
         allocator_size_type<A>::type>::max)() / sizeof(typename A::value_type);
