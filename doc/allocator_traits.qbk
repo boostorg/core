@@ -87,14 +87,14 @@ struct allocator_traits {
 [[`static pointer allocate(A& a, size_type n, const_void_pointer h);`]
 [Equivalent to: `return boost::allocator_allocate(a, n, h);`]]
 [[`static void deallocate(A& a, pointer p, size_type n);`]
-[Equivalent to: `return boost::allocator_deallocate(a, n, h);`]]
+[Equivalent to: `boost::allocator_deallocate(a, n, h);`]]
 [[`template<class T, class... Args>
 static void construct(A& a, T* p, Args&&... args);`]
 [Equivalent to:
-`return boost::allocator_construct(a, p, std::forward<Args>(args)...);`]]
+`boost::allocator_construct(a, p, std::forward<Args>(args)...);`]]
 [[`static void destroy(A& a, T* p);`]
-[Equivalent to: `return boost::allocator_destroy(a, p);`]]
-[[`static size_type max_size(const A& a);`]
+[Equivalent to: `boost::allocator_destroy(a, p);`]]
+[[`static size_type max_size(const A& a) noexcept;`]
 [Equivalent to: `return boost::allocator_max_size(a);`]]
 [[`static A select_on_container_copy_construction(const A& a);`]
 [Equivalent to:
