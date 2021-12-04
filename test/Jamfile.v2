@@ -211,6 +211,7 @@ run default_allocator_test.cpp
         <toolset>msvc:<warnings-as-errors>on
         <toolset>gcc:<warnings-as-errors>on
         <toolset>clang:<warnings-as-errors>on ;
+run default_allocator_allocate_hint_test.cpp ;
 
 run noinit_adaptor_test.cpp ;
 run alloc_construct_test.cpp ;

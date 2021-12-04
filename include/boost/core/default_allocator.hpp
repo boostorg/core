@@ -108,6 +108,12 @@ struct default_allocator {
     }
 #endif
 
+#if defined(BOOST_NO_CXX11_ALLOCATOR)
+    T* allocate(std::size_t n, const void*) {
+        return allocate(n);
+    }
+#endif
+
 #if (defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 60000) || \
     defined(BOOST_NO_CXX11_ALLOCATOR)
     template<class U, class V>
