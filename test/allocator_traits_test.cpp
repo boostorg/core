@@ -97,14 +97,14 @@ int main()
     creator<int> a(1);
     int* p1 = boost::allocator_traits<creator<int> >::allocate(a, 1);
     if (BOOST_TEST(p1)) {
-        int* p2 = boost::allocator_traits<creator<int> >::allocate(a, 1, p1);
-        if (BOOST_TEST(p2)) {
-            boost::allocator_traits<creator<int> >::deallocate(a, p2, 1);
-        }
         boost::allocator_traits<creator<int> >::construct(a, p1, 5);
         BOOST_TEST_EQ(*p1, 5);
         boost::allocator_traits<creator<int> >::destroy(a, p1);
         boost::allocator_traits<creator<int> >::deallocate(a, p1, 1);
+    }
+    int* p2 = boost::allocator_traits<creator<int> >::allocate(a, 1, 0);
+    if (BOOST_TEST(p2)) {
+        boost::allocator_traits<creator<int> >::deallocate(a, p2, 1);
     }
     BOOST_TEST_EQ(boost::allocator_traits<creator<int> >::max_size(a),
         static_cast<std::size_t>(-1) / sizeof(int));
