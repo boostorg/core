@@ -9,14 +9,26 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_ALLOCATOR_ACCESS_HPP
 
 #include <boost/config.hpp>
-#if !defined(BOOST_NO_CXX11_ALLOCATOR)
 #include <boost/core/pointer_traits.hpp>
 #include <limits>
+#include <new>
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
 #include <type_traits>
 #endif
-#include <new>
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #include <utility>
+#endif
+
+#if defined(BOOST_GCC_VERSION) && (BOOST_GCC_VERSION >= 40300)
+#define BOOST_DETAIL_ALLOC_HAS_IS_EMTPY
+#elif defined(BOOST_INTEL) && defined(_MSC_VER) && (_MSC_VER >= 1500)
+#define BOOST_DETAIL_ALLOC_HAS_IS_EMTPY
+#elif defined(BOOST_MSVC) && (BOOST_MSVC >= 1400)
+#define BOOST_DETAIL_ALLOC_HAS_IS_EMTPY
+#elif defined(BOOST_CLANG) && !defined(__CUDACC__)
+#if __has_feature(is_empty)
+#define BOOST_DETAIL_ALLOC_HAS_IS_EMTPY
+#endif
 #endif
 
 #if defined(_LIBCPP_SUPPRESS_DEPRECATED_PUSH)
@@ -37,12 +49,6 @@ struct allocator_value_type {
     typedef typename A::value_type type;
 };
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-struct allocator_pointer {
-    typedef typename A::pointer type;
-};
-#else
 namespace detail {
 
 template<class A, class = void>
@@ -67,14 +73,7 @@ template<class A>
 struct allocator_pointer {
     typedef typename detail::alloc_ptr<A>::type type;
 };
-#endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-struct allocator_const_pointer {
-    typedef typename A::const_pointer type;
-};
-#else
 namespace detail {
 
 template<class A, class = void>
@@ -96,23 +95,34 @@ template<class A>
 struct allocator_const_pointer {
     typedef typename detail::alloc_const_ptr<A>::type type;
 };
-#endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A, class T>
-struct allocator_rebind {
-    typedef typename A::template rebind<T>::other type;
-};
-#else
 namespace detail {
 
 template<class, class>
 struct alloc_to { };
 
+#if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+template<template<class> class A, class T, class U>
+struct alloc_to<A<U>, T> {
+    typedef A<T> type;
+};
+
+template<template<class, class> class A, class T, class U, class V>
+struct alloc_to<A<U, V>, T> {
+    typedef A<T, V> type;
+};
+
+template<template<class, class, class> class A, class T, class U, class V1,
+    class V2>
+struct alloc_to<A<U, V1, V2>, T> {
+    typedef A<T, V1, V2> type;
+};
+#else
 template<template<class, class...> class A, class T, class U, class... V>
 struct alloc_to<A<U, V...>, T> {
     typedef A<T, V...> type;
 };
+#endif
 
 template<class A, class T, class = void>
 struct alloc_rebind {
@@ -131,15 +141,7 @@ template<class A, class T>
 struct allocator_rebind {
     typedef typename detail::alloc_rebind<A, T>::type type;
 };
-#endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-struct allocator_void_pointer {
-    typedef typename allocator_pointer<typename allocator_rebind<A,
-        void>::type>::type type;
-};
-#else
 namespace detail {
 
 template<class A, class = void>
@@ -161,15 +163,7 @@ template<class A>
 struct allocator_void_pointer {
     typedef typename detail::alloc_void_ptr<A>::type type;
 };
-#endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-struct allocator_const_void_pointer {
-    typedef typename allocator_const_pointer<typename allocator_rebind<A,
-        void>::type>::type type;
-};
-#else
 namespace detail {
 
 template<class A, class = void>
@@ -191,14 +185,7 @@ template<class A>
 struct allocator_const_void_pointer {
     typedef typename detail::alloc_const_void_ptr<A>::type type;
 };
-#endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-struct allocator_difference_type {
-    typedef typename A::difference_type type;
-};
-#else
 namespace detail {
 
 template<class A, class = void>
@@ -219,21 +206,21 @@ template<class A>
 struct allocator_difference_type {
     typedef typename detail::alloc_diff_type<A>::type type;
 };
-#endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-struct allocator_size_type {
-    typedef typename A::size_type type;
-};
-#else
 namespace detail {
 
+#if defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class A, class = void>
+struct alloc_size_type {
+    typedef std::size_t type;
+};
+#else
 template<class A, class = void>
 struct alloc_size_type {
     typedef typename std::make_unsigned<typename
         boost::allocator_difference_type<A>::type>::type type;
 };
+#endif
 
 template<class A>
 struct alloc_size_type<A,
@@ -247,27 +234,37 @@ template<class A>
 struct allocator_size_type {
     typedef typename detail::alloc_size_type<A>::type type;
 };
-#endif
+
+namespace detail {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
-namespace detail {
+template<bool V>
+struct alloc_bool {
+    typedef bool value_type;
+    typedef alloc_bool<V> type;
 
-struct alloc_false {
-    BOOST_STATIC_CONSTEXPR bool value = false;
+    static const bool value = V;
+
+    operator bool() const BOOST_NOEXCEPT {
+        return V;
+    }
+
+    bool operator()() const BOOST_NOEXCEPT {
+        return V;
+    }
 };
 
-} /* detail */
+template<bool V>
+const bool alloc_bool<V>::value;
 
-template<class A>
-struct allocator_propagate_on_container_copy_assignment {
-    typedef detail::alloc_false type;
-};
+typedef alloc_bool<false> alloc_false;
 #else
-namespace detail {
+typedef std::false_type alloc_false;
+#endif
 
 template<class A, class = void>
 struct alloc_pocca {
-    typedef std::false_type type;
+    typedef alloc_false type;
 };
 
 template<class A>
@@ -283,19 +280,12 @@ template<class A, class = void>
 struct allocator_propagate_on_container_copy_assignment {
     typedef typename detail::alloc_pocca<A>::type type;
 };
-#endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-struct allocator_propagate_on_container_move_assignment {
-    typedef detail::alloc_false type;
-};
-#else
 namespace detail {
 
 template<class A, class = void>
 struct alloc_pocma {
-    typedef std::false_type type;
+    typedef alloc_false type;
 };
 
 template<class A>
@@ -311,19 +301,12 @@ template<class A>
 struct allocator_propagate_on_container_move_assignment {
     typedef typename detail::alloc_pocma<A>::type type;
 };
-#endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-struct allocator_propagate_on_container_swap {
-    typedef detail::alloc_false type;
-};
-#else
 namespace detail {
 
 template<class A, class = void>
 struct alloc_pocs {
-    typedef std::false_type type;
+    typedef alloc_false type;
 };
 
 template<class A>
@@ -338,20 +321,25 @@ template<class A>
 struct allocator_propagate_on_container_swap {
     typedef typename detail::alloc_pocs<A>::type type;
 };
-#endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-struct allocator_is_always_equal {
-    typedef detail::alloc_false type;
-};
-#else
 namespace detail {
 
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class A, class = void>
 struct alloc_equal {
     typedef typename std::is_empty<A>::type type;
 };
+#elif defined(BOOST_DETAIL_ALLOC_HAS_IS_EMTPY)
+template<class A, class = void>
+struct alloc_equal {
+    typedef alloc_bool<__is_empty(A)> type;
+};
+#else
+template<class A, class = void>
+struct alloc_equal {
+    typedef alloc_false type;
+};
+#endif
 
 template<class A>
 struct alloc_equal<A,
@@ -365,7 +353,6 @@ template<class A>
 struct allocator_is_always_equal {
     typedef typename detail::alloc_equal<A>::type type;
 };
-#endif
 
 template<class A>
 inline typename allocator_pointer<A>::type
@@ -551,20 +538,46 @@ allocator_destroy(A&, T* p)
 }
 #endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-inline typename allocator_size_type<A>::type
-allocator_max_size(const A& a) BOOST_NOEXCEPT
-{
-    return a.max_size();
-}
-#else
 namespace detail {
+
+#if defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class A, typename allocator_size_type<A>::type(A::*)()>
+struct alloc_max_size {
+    char one, two;
+};
+
+template<class A, typename allocator_size_type<A>::type(A::*)() const>
+struct alloc_max_size_const {
+    char one, two;
+};
+
+template<class A, typename allocator_size_type<A>::type(*)()>
+struct alloc_max_size_static {
+    char one, two;
+};
 
 template<class A>
 class alloc_has_max_size {
     template<class O>
-    static auto check(int) -> decltype(std::declval<O&>().max_size());
+    static alloc_max_size<O, &O::max_size> check(int);
+
+    template<class O>
+    static alloc_max_size_const<O, &O::max_size> check(int);
+
+    template<class O>
+    static alloc_max_size_static<O, &O::max_size> check(int);
+
+    template<class>
+    static char check(long);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) != 1;
+};
+#else
+template<class A>
+class alloc_has_max_size {
+    template<class O>
+    static auto check(int) -> decltype(std::declval<const O&>().max_size());
 
     template<class>
     static alloc_none check(long);
@@ -573,11 +586,20 @@ public:
     BOOST_STATIC_CONSTEXPR bool value =
         !std::is_same<decltype(check<A>(0)), alloc_none>::value;
 };
+#endif
+
+template<bool, class>
+struct alloc_if { };
+
+template<class T>
+struct alloc_if<true, T> {
+    typedef T type;
+};
 
 } /* detail */
 
 template<class A>
-inline typename std::enable_if<detail::alloc_has_max_size<A>::value,
+inline typename detail::alloc_if<detail::alloc_has_max_size<A>::value,
     typename allocator_size_type<A>::type>::type
 allocator_max_size(const A& a) BOOST_NOEXCEPT
 {
@@ -585,7 +607,7 @@ allocator_max_size(const A& a) BOOST_NOEXCEPT
 }
 
 template<class A>
-inline typename std::enable_if<!detail::alloc_has_max_size<A>::value,
+inline typename detail::alloc_if<!detail::alloc_has_max_size<A>::value,
     typename allocator_size_type<A>::type>::type
 allocator_max_size(const A&) BOOST_NOEXCEPT
 {
@@ -593,23 +615,52 @@ allocator_max_size(const A&) BOOST_NOEXCEPT
         allocator_size_type<A>::type>::max)() /
             sizeof(typename allocator_value_type<A>::type);
 }
-#endif
+
+namespace detail {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A>
-inline A
-allocator_select_on_container_copy_construction(const A& a)
-{
-    return a;
-}
-#else
-namespace detail {
+template<class A, A(A::*)()>
+struct alloc_soccc {
+    char one, two;
+};
+
+template<class A, A(A::*)() const>
+struct alloc_soccc_const {
+    char one, two;
+};
+
+template<class A, A(*)()>
+struct alloc_soccc_static {
+    char one, two;
+};
 
 template<class A>
 class alloc_has_soccc {
     template<class O>
+    static alloc_soccc<O, &O::select_on_container_copy_construction>
+    check(int);
+
+    template<class O>
+    static alloc_soccc_const<O, &O::select_on_container_copy_construction>
+    check(int);
+
+    template<class O>
+    static alloc_soccc_static<O, &O::select_on_container_copy_construction>
+    check(int);
+
+    template<class>
+    static char check(long);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) != 1;
+};
+#else
+template<class A>
+class alloc_has_soccc {
+    template<class O>
     static auto check(int)
-    -> decltype(std::declval<O&>().select_on_container_copy_construction());
+    -> decltype(std::declval<const
+        O&>().select_on_container_copy_construction());
 
     template<class>
     static alloc_none check(long);
@@ -618,23 +669,23 @@ public:
     BOOST_STATIC_CONSTEXPR bool value =
         !std::is_same<decltype(check<A>(0)), alloc_none>::value;
 };
+#endif
 
 } /* detail */
 
 template<class A>
-inline typename std::enable_if<detail::alloc_has_soccc<A>::value, A>::type
+inline typename detail::alloc_if<detail::alloc_has_soccc<A>::value, A>::type
 allocator_select_on_container_copy_construction(const A& a)
 {
     return a.select_on_container_copy_construction();
 }
 
 template<class A>
-inline typename std::enable_if<!detail::alloc_has_soccc<A>::value, A>::type
+inline typename detail::alloc_if<!detail::alloc_has_soccc<A>::value, A>::type
 allocator_select_on_container_copy_construction(const A& a)
 {
     return a;
 }
-#endif
 
 #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
 template<class A>
