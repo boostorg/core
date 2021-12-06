@@ -47,7 +47,7 @@ namespace detail {
 
 template<class A, class = void>
 struct alloc_ptr {
-    typedef typename allocator_value_type<A>::type* type;
+    typedef typename boost::allocator_value_type<A>::type* type;
 };
 
 template<class>
@@ -80,8 +80,8 @@ namespace detail {
 template<class A, class = void>
 struct alloc_const_ptr {
     typedef typename boost::pointer_traits<typename
-        boost::allocator_pointer<A>::type>::template
-            rebind_to<const typename A::value_type>::type type;
+        boost::allocator_pointer<A>::type>::template rebind_to<const typename
+            boost::allocator_value_type<A>::type>::type type;
 };
 
 template<class A>
@@ -399,8 +399,9 @@ template<class A>
 class alloc_has_allocate {
     template<class O>
     static auto check(int) -> decltype(std::declval<O&>().allocate(
-        std::declval<typename allocator_size_type<A>::type>(),
-        std::declval<typename allocator_const_void_pointer<A>::type>()));
+        std::declval<typename boost::allocator_size_type<A>::type>(),
+        std::declval<typename
+            boost::allocator_const_void_pointer<A>::type>()));
 
     template<class>
     static alloc_none check(long);
