@@ -47,7 +47,7 @@ namespace detail {
 
 template<class A, class = void>
 struct alloc_ptr {
-    typedef typename A::value_type* type;
+    typedef typename allocator_value_type<A>::type* type;
 };
 
 template<class>
@@ -99,9 +99,45 @@ struct allocator_const_pointer {
 #endif
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class A, class T>
+struct allocator_rebind {
+    typedef typename A::template rebind<T>::other type;
+};
+#else
+namespace detail {
+
+template<class, class>
+struct alloc_to { };
+
+template<template<class, class...> class A, class T, class U, class... V>
+struct alloc_to<A<U, V...>, T> {
+    typedef A<T, V...> type;
+};
+
+template<class A, class T, class = void>
+struct alloc_rebind {
+    typedef typename alloc_to<A, T>::type type;
+};
+
+template<class A, class T>
+struct alloc_rebind<A, T,
+    typename alloc_void<typename A::template rebind<T>::other>::type> {
+    typedef typename A::template rebind<T>::other type;
+};
+
+} /* detail */
+
+template<class A, class T>
+struct allocator_rebind {
+    typedef typename detail::alloc_rebind<A, T>::type type;
+};
+#endif
+
+#if defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class A>
 struct allocator_void_pointer {
-    typedef typename A::template rebind<void>::other::pointer type;
+    typedef typename allocator_pointer<typename allocator_rebind<A,
+        void>::type>::type type;
 };
 #else
 namespace detail {
@@ -130,7 +166,8 @@ struct allocator_void_pointer {
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class A>
 struct allocator_const_void_pointer {
-    typedef typename A::template rebind<void>::other::const_pointer type;
+    typedef typename allocator_const_pointer<typename allocator_rebind<A,
+        void>::type>::type type;
 };
 #else
 namespace detail {
@@ -327,41 +364,6 @@ struct alloc_equal<A,
 template<class A>
 struct allocator_is_always_equal {
     typedef typename detail::alloc_equal<A>::type type;
-};
-#endif
-
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A, class T>
-struct allocator_rebind {
-    typedef typename A::template rebind<T>::other type;
-};
-#else
-namespace detail {
-
-template<class, class>
-struct alloc_to { };
-
-template<template<class, class...> class A, class T, class U, class... V>
-struct alloc_to<A<U, V...>, T> {
-    typedef A<T, V...> type;
-};
-
-template<class A, class T, class = void>
-struct alloc_rebind {
-    typedef typename alloc_to<A, T>::type type;
-};
-
-template<class A, class T>
-struct alloc_rebind<A, T,
-    typename alloc_void<typename A::template rebind<T>::other>::type> {
-    typedef typename A::template rebind<T>::other type;
-};
-
-} /* detail */
-
-template<class A, class T>
-struct allocator_rebind {
-    typedef typename detail::alloc_rebind<A, T>::type type;
 };
 #endif
 
@@ -587,7 +589,8 @@ inline typename std::enable_if<!detail::alloc_has_max_size<A>::value,
 allocator_max_size(const A&) BOOST_NOEXCEPT
 {
     return (std::numeric_limits<typename
-        allocator_size_type<A>::type>::max)() / sizeof(typename A::value_type);
+        allocator_size_type<A>::type>::max)() /
+            sizeof(typename allocator_value_type<A>::type);
 }
 #endif
 
