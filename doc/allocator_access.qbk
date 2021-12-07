@@ -168,7 +168,8 @@ A allocator_select_on_container_copy_construction(const A& a);
 [[`template<class A> struct allocator_value_type;`]
 [The member `type` is `A::value_type`.]]
 [[`template<class A> struct allocator_pointer;`]
-[The member `type` is `A::pointer` if valid, otherwise `A::value_type*`.]]
+[The member `type` is `A::pointer` if valid, otherwise
+`allocator_value_type_t<A>*`.]]
 [[`template<class A> struct allocator_const_pointer;`]
 [The member `type` is `A::const_pointer` if valid, otherwise
 `pointer_traits<allocator_pointer_t<A> >::rebind<const
@@ -224,7 +225,7 @@ void allocator_construct(A& a, T*p, Args&&... args);`]
 [[`template<class A> allocator_size_type_t<A> allocator_max_size(const A& a);`]
 [Returns `a.max_size()` if valid, otherwise returns
 `std::numeric_limits<allocator_size_type_t<A> >::max() /
-sizeof(A::value_type)`.]]
+sizeof(allocator_value_type_t<A>)`.]]
 [[`template<class A> A allocator_select_on_container_copy_construction(const
 A& a);`]
 [Returns `a.select_on_container_copy_construction()` if valid, otherwise
