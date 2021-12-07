@@ -241,7 +241,7 @@ namespace detail {
 template<bool V>
 struct alloc_bool {
     typedef bool value_type;
-    typedef alloc_bool<V> type;
+    typedef alloc_bool type;
 
     static const bool value = V;
 
