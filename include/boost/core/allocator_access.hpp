@@ -20,14 +20,14 @@ Distributed under the Boost Software License, Version 1.0.
 #endif
 
 #if defined(BOOST_GCC_VERSION) && (BOOST_GCC_VERSION >= 40300)
-#define BOOST_DETAIL_ALLOC_HAS_IS_EMTPY
+#define BOOST_DETAIL_ALLOC_HAS_IS_EMPTY
 #elif defined(BOOST_INTEL) && defined(_MSC_VER) && (_MSC_VER >= 1500)
-#define BOOST_DETAIL_ALLOC_HAS_IS_EMTPY
+#define BOOST_DETAIL_ALLOC_HAS_IS_EMPTY
 #elif defined(BOOST_MSVC) && (BOOST_MSVC >= 1400)
-#define BOOST_DETAIL_ALLOC_HAS_IS_EMTPY
+#define BOOST_DETAIL_ALLOC_HAS_IS_EMPTY
 #elif defined(BOOST_CLANG) && !defined(__CUDACC__)
 #if __has_feature(is_empty)
-#define BOOST_DETAIL_ALLOC_HAS_IS_EMTPY
+#define BOOST_DETAIL_ALLOC_HAS_IS_EMPTY
 #endif
 #endif
 
@@ -329,7 +329,7 @@ template<class A, class = void>
 struct alloc_equal {
     typedef typename std::is_empty<A>::type type;
 };
-#elif defined(BOOST_DETAIL_ALLOC_HAS_IS_EMTPY)
+#elif defined(BOOST_DETAIL_ALLOC_HAS_IS_EMPTY)
 template<class A, class = void>
 struct alloc_equal {
     typedef alloc_bool<__is_empty(A)> type;
