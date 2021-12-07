@@ -20,15 +20,21 @@ Distributed under the Boost Software License, Version 1.0.
 #endif
 
 #if defined(BOOST_GCC_VERSION) && (BOOST_GCC_VERSION >= 40300)
-#define BOOST_DETAIL_ALLOC_HAS_IS_EMPTY
+#define BOOST_DETAIL_ALLOC_EMPTY(T) __is_empty(T)
 #elif defined(BOOST_INTEL) && defined(_MSC_VER) && (_MSC_VER >= 1500)
-#define BOOST_DETAIL_ALLOC_HAS_IS_EMPTY
+#define BOOST_DETAIL_ALLOC_EMPTY(T) __is_empty(T)
 #elif defined(BOOST_MSVC) && (BOOST_MSVC >= 1400)
-#define BOOST_DETAIL_ALLOC_HAS_IS_EMPTY
+#define BOOST_DETAIL_ALLOC_EMPTY(T) __is_empty(T)
 #elif defined(BOOST_CLANG) && !defined(__CUDACC__)
 #if __has_feature(is_empty)
-#define BOOST_DETAIL_ALLOC_HAS_IS_EMPTY
+#define BOOST_DETAIL_ALLOC_EMPTY(T) __is_empty(T)
 #endif
+#elif defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x5130)
+#define BOOST_DETAIL_ALLOC_EMPTY(T) __oracle_is_empty(T)
+#elif defined(__ghs__) && (__GHS_VERSION_NUMBER >= 600)
+#define BOOST_DETAIL_ALLOC_EMPTY(T) __is_empty(T)
+#elif defined(BOOST_CODEGEARC)
+#define BOOST_DETAIL_ALLOC_EMPTY(T) __is_empty(T)
 #endif
 
 #if defined(_LIBCPP_SUPPRESS_DEPRECATED_PUSH)
@@ -329,10 +335,10 @@ template<class A, class = void>
 struct alloc_equal {
     typedef typename std::is_empty<A>::type type;
 };
-#elif defined(BOOST_DETAIL_ALLOC_HAS_IS_EMPTY)
+#elif defined(BOOST_DETAIL_ALLOC_EMPTY)
 template<class A, class = void>
 struct alloc_equal {
-    typedef alloc_bool<__is_empty(A)> type;
+    typedef alloc_bool<BOOST_DETAIL_ALLOC_EMPTY(A)> type;
 };
 #else
 template<class A, class = void>
@@ -385,9 +391,9 @@ struct alloc_none { };
 template<class A>
 class alloc_has_allocate {
     template<class O>
-    static auto check(int) -> decltype(std::declval<O&>().allocate(
-        std::declval<typename boost::allocator_size_type<A>::type>(),
-        std::declval<typename
+    static auto check(int)
+    -> decltype(std::declval<O&>().allocate(std::declval<typename
+        boost::allocator_size_type<A>::type>(), std::declval<typename
             boost::allocator_const_void_pointer<A>::type>()));
 
     template<class>
@@ -658,8 +664,7 @@ public:
 template<class A>
 class alloc_has_soccc {
     template<class O>
-    static auto check(int)
-    -> decltype(std::declval<const
+    static auto check(int) -> decltype(std::declval<const
         O&>().select_on_container_copy_construction());
 
     template<class>
