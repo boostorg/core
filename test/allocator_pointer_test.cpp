@@ -15,20 +15,16 @@ struct A1 {
     typedef int* pointer;
 };
 
-#if !defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class T>
 struct A2 {
     typedef T value_type;
 };
-#endif
 
 int main()
 {
     BOOST_TEST_TRAIT_TRUE((boost::core::is_same<int*,
         boost::allocator_pointer<A1<char> >::type>));
-#if !defined(BOOST_NO_CXX11_ALLOCATOR)
     BOOST_TEST_TRAIT_TRUE((boost::core::is_same<int*,
         boost::allocator_pointer<A2<int> >::type>));
-#endif
     return boost::report_errors();
 }

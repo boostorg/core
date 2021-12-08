@@ -15,7 +15,6 @@ struct A1 {
     int value;
 };
 
-#if !defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class T>
 struct A2 {
     typedef T value_type;
@@ -24,24 +23,25 @@ struct A2 {
 template<class T>
 struct A3 {
     typedef T value_type;
-    typedef std::false_type is_always_equal;
+    struct is_always_equal {
+        static const bool value = false;
+    };
 };
 
 template<class T>
 struct A4 {
     typedef T value_type;
-    typedef std::true_type is_always_equal;
+    struct is_always_equal {
+        static const bool value = true;
+    };
     int value;
 };
-#endif
 
 int main()
 {
     BOOST_TEST_TRAIT_FALSE((boost::allocator_is_always_equal<A1<int> >::type));
- #if !defined(BOOST_NO_CXX11_ALLOCATOR)
     BOOST_TEST_TRAIT_TRUE((boost::allocator_is_always_equal<A2<int> >::type));
     BOOST_TEST_TRAIT_FALSE((boost::allocator_is_always_equal<A3<int> >::type));
     BOOST_TEST_TRAIT_TRUE((boost::allocator_is_always_equal<A4<int> >::type));
- #endif
     return boost::report_errors();
 }

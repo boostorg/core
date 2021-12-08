@@ -16,7 +16,6 @@ struct A1 {
     int value;
 };
 
-#if !defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class T>
 struct A2 {
     typedef T value_type;
@@ -27,15 +26,12 @@ struct A2 {
     }
     int value;
 };
-#endif
 
 int main()
 {
     BOOST_TEST_EQ(1, boost::
         allocator_select_on_container_copy_construction(A1<int>(1)).value);
-#if !defined(BOOST_NO_CXX11_ALLOCATOR)
     BOOST_TEST_EQ(2, boost::
         allocator_select_on_container_copy_construction(A2<int>(1)).value);
-#endif
     return boost::report_errors();
 }
