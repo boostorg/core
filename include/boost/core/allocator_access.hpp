@@ -547,31 +547,25 @@ allocator_destroy(A&, T* p)
 namespace detail {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A, typename allocator_size_type<A>::type(A::*)()>
-struct alloc_max_size {
-    char one, two;
-};
-
-template<class A, typename allocator_size_type<A>::type(A::*)() const>
-struct alloc_max_size_const {
-    char one, two;
-};
-
-template<class A, typename allocator_size_type<A>::type(*)()>
-struct alloc_max_size_static {
-    char one, two;
+template<class T, T>
+struct alloc_no {
+    char x;
+    char y;
 };
 
 template<class A>
 class alloc_has_max_size {
     template<class O>
-    static alloc_max_size<O, &O::max_size> check(int);
+    static alloc_no<typename boost::allocator_size_type<O>::type(O::*)(),
+        &O::max_size> check(int);
 
     template<class O>
-    static alloc_max_size_const<O, &O::max_size> check(int);
+    static alloc_no<typename boost::allocator_size_type<O>::type(O::*)() const,
+        &O::max_size> check(int);
 
     template<class O>
-    static alloc_max_size_static<O, &O::max_size> check(int);
+    static alloc_no<typename boost::allocator_size_type<O>::type(*)(),
+        &O::max_size> check(int);
 
     template<class>
     static char check(long);
@@ -625,33 +619,18 @@ allocator_max_size(const A&) BOOST_NOEXCEPT
 namespace detail {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A, A(A::*)()>
-struct alloc_soccc {
-    char one, two;
-};
-
-template<class A, A(A::*)() const>
-struct alloc_soccc_const {
-    char one, two;
-};
-
-template<class A, A(*)()>
-struct alloc_soccc_static {
-    char one, two;
-};
-
 template<class A>
 class alloc_has_soccc {
     template<class O>
-    static alloc_soccc<O, &O::select_on_container_copy_construction>
+    static alloc_no<O(O::*)(), &O::select_on_container_copy_construction>
     check(int);
 
     template<class O>
-    static alloc_soccc_const<O, &O::select_on_container_copy_construction>
+    static alloc_no<O(O::*)() const, &O::select_on_container_copy_construction>
     check(int);
 
     template<class O>
-    static alloc_soccc_static<O, &O::select_on_container_copy_construction>
+    static alloc_no<O(*)(), &O::select_on_container_copy_construction>
     check(int);
 
     template<class>
