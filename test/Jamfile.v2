@@ -189,6 +189,9 @@ run pointer_traits_element_type_test.cpp ;
 run pointer_traits_difference_type_test.cpp ;
 run pointer_traits_rebind_test.cpp ;
 run pointer_traits_pointer_to_test.cpp ;
+run pointer_traits_sfinae_test.cpp ;
+run pointer_traits_rebind_sfinae_test.cpp ;
+run pointer_traits_pointer_to_sfinae_test.cpp ;
 run to_address_test.cpp ;
 
 run exchange_test.cpp ;
