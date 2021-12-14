@@ -9,6 +9,7 @@
 [section Changes in 1.79.0]
 
 * Added `boost::allocator_traits`, an implementation of `std::allocator_traits`.
+* Made `boost::pointer_traits` SFINAE friendly.
 
 [endsect]
 
