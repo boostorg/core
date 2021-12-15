@@ -106,43 +106,74 @@ struct ptr_rebind<T, U,
     typedef typename T::template rebind<U> type;
 };
 
-template<class>
-struct ptr_void {
+#if !defined(BOOST_NO_CXX11_DECLTYPE_N3276)
+template<class T, class E>
+class ptr_to_expr {
+    template<class>
+    struct result {
+        char x, y;
+    };
+
+    static E& source();
+
+    template<class O>
+    static auto check(int) -> result<decltype(O::pointer_to(source()))>;
+
+    template<class>
+    static char check(long);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<T>(0)) != 1;
+};
+
+template<class T, class E>
+struct ptr_to_expr<T*, E> {
+    BOOST_STATIC_CONSTEXPR bool value = true;
+};
+
+template<class T, class E>
+struct ptr_has_to {
+    BOOST_STATIC_CONSTEXPR bool value = ptr_to_expr<T, E>::value;
+};
+#else
+template<class, class>
+struct ptr_has_to {
+    BOOST_STATIC_CONSTEXPR bool value = true;
+};
+#endif
+
+template<class T>
+struct ptr_has_to<T, void> {
     BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-template<>
-struct ptr_void<void> {
-    BOOST_STATIC_CONSTEXPR bool value = true;
+template<class T>
+struct ptr_has_to<T, const void> {
+    BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-template<>
-struct ptr_void<const void> {
-    BOOST_STATIC_CONSTEXPR bool value = true;
+template<class T>
+struct ptr_has_to<T, volatile void> {
+    BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-template<>
-struct ptr_void<volatile void> {
-    BOOST_STATIC_CONSTEXPR bool value = true;
+template<class T>
+struct ptr_has_to<T, const volatile void> {
+    BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-template<>
-struct ptr_void<const volatile void> {
-    BOOST_STATIC_CONSTEXPR bool value = true;
-};
-
-template<class, class E, bool = ptr_void<E>::value>
+template<class T, class E, bool = ptr_has_to<T, E>::value>
 struct ptr_to { };
 
 template<class T, class E>
-struct ptr_to<T, E, false> {
+struct ptr_to<T, E, true> {
     static T pointer_to(E& v) {
         return T::pointer_to(v);
     }
 };
 
 template<class T>
-struct ptr_to<T*, T, false> {
+struct ptr_to<T*, T, true> {
     static T* pointer_to(T& v) BOOST_NOEXCEPT {
         return boost::addressof(v);
     }
