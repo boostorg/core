@@ -24,7 +24,7 @@ class has_pointer_to {
     static char check(long);
 
 public:
-    static const bool value = sizeof(check<T>(0)) != 1;
+    static const bool value = sizeof(check<T>(0)) > 1;
 };
 
 struct P1 { };

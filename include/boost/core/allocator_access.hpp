@@ -386,22 +386,24 @@ allocator_allocate(A& a, typename allocator_size_type<A>::type n,
 #else
 namespace detail {
 
-struct alloc_none { };
+template<class>
+struct alloc_no {
+    char x, y;
+};
 
 template<class A>
 class alloc_has_allocate {
     template<class O>
     static auto check(int)
-    -> decltype(std::declval<O&>().allocate(std::declval<typename
+    -> alloc_no<decltype(std::declval<O&>().allocate(std::declval<typename
         boost::allocator_size_type<A>::type>(), std::declval<typename
-            boost::allocator_const_void_pointer<A>::type>()));
+            boost::allocator_const_void_pointer<A>::type>()))>;
 
     template<class>
-    static alloc_none check(long);
+    static char check(long);
 
 public:
-    BOOST_STATIC_CONSTEXPR bool value =
-        !std::is_same<decltype(check<A>(0)), alloc_none>::value;
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
 };
 
 } /* detail */
@@ -471,15 +473,14 @@ template<class A, class T, class... Args>
 class alloc_has_construct {
     template<class O>
     static auto check(int)
-    -> decltype(std::declval<O&>().construct(std::declval<T*>(),
-        std::declval<Args&&>()...));
+    -> alloc_no<decltype(std::declval<O&>().construct(std::declval<T*>(),
+        std::declval<Args&&>()...))>;
 
     template<class>
-    static alloc_none check(long);
+    static char check(long);
 
 public:
-    BOOST_STATIC_CONSTEXPR bool value =
-        !std::is_same<decltype(check<A>(0)), alloc_none>::value;
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
 };
 
 } /* detail */
@@ -516,14 +517,13 @@ template<class A, class T>
 class alloc_has_destroy {
     template<class O>
     static auto check(int)
-    -> decltype(std::declval<O&>().destroy(std::declval<T*>()));
+    -> alloc_no<decltype(std::declval<O&>().destroy(std::declval<T*>()))>;
 
     template<class>
-    static alloc_none check(long);
+    static char check(long);
 
 public:
-    BOOST_STATIC_CONSTEXPR bool value =
-        !std::is_same<decltype(check<A>(0)), alloc_none>::value;
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
 };
 
 } /* detail */
@@ -549,8 +549,7 @@ namespace detail {
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class T, T>
 struct alloc_no {
-    char x;
-    char y;
+    char x, y;
 };
 
 template<class A>
@@ -571,20 +570,20 @@ class alloc_has_max_size {
     static char check(long);
 
 public:
-    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) != 1;
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
 };
 #else
 template<class A>
 class alloc_has_max_size {
     template<class O>
-    static auto check(int) -> decltype(std::declval<const O&>().max_size());
+    static auto check(int)
+    -> alloc_no<decltype(std::declval<const O&>().max_size())>;
 
     template<class>
-    static alloc_none check(long);
+    static char check(long);
 
 public:
-    BOOST_STATIC_CONSTEXPR bool value =
-        !std::is_same<decltype(check<A>(0)), alloc_none>::value;
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
 };
 #endif
 
@@ -637,21 +636,20 @@ class alloc_has_soccc {
     static char check(long);
 
 public:
-    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) != 1;
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
 };
 #else
 template<class A>
 class alloc_has_soccc {
     template<class O>
-    static auto check(int) -> decltype(std::declval<const
-        O&>().select_on_container_copy_construction());
+    static auto check(int) -> alloc_no<decltype(std::declval<const
+        O&>().select_on_container_copy_construction())>;
 
     template<class>
-    static alloc_none check(long);
+    static char check(long);
 
 public:
-    BOOST_STATIC_CONSTEXPR bool value =
-        !std::is_same<decltype(check<A>(0)), alloc_none>::value;
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
 };
 #endif
 

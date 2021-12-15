@@ -123,7 +123,7 @@ class ptr_to_expr {
     static char check(long);
 
 public:
-    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<T>(0)) != 1;
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<T>(0)) > 1;
 };
 
 template<class T, class E>
