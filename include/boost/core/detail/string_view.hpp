@@ -31,6 +31,10 @@
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
+#if BOOST_CXX_VERSION >= 202000L
+# include <type_traits>
+# include <version>
+#endif
 
 namespace boost
 {
@@ -1215,5 +1219,30 @@ typedef basic_string_view<char8_t> u8string_view;
 
 } // namespace core
 } // namespace boost
+
+// std::common_reference support
+// needed for iterators that have reference=string_view and value_type=std::string
+
+#if BOOST_CXX_VERSION >= 202000L && defined(__cpp_lib_concepts) && __cpp_lib_concepts >= 201907L
+
+template<class Ch, class A, template<class> class Q1, template<class> class Q2>
+struct std::basic_common_reference<
+    boost::core::basic_string_view<Ch>,
+    std::basic_string<Ch, std::char_traits<Ch>, A>,
+    Q1, Q2>
+{
+    using type = boost::core::basic_string_view<Ch>;
+};
+
+template<class Ch, class A, template<class> class Q1, template<class> class Q2>
+struct std::basic_common_reference<
+    std::basic_string<Ch, std::char_traits<Ch>, A>,
+    boost::core::basic_string_view<Ch>,
+    Q1, Q2>
+{
+    using type = boost::core::basic_string_view<Ch>;
+};
+
+#endif
 
 #endif  // #ifndef BOOST_CORE_STRING_VIEW_HPP_INCLUDED
