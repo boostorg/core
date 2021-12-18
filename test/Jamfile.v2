@@ -307,6 +307,7 @@ run sv_stream_insert_test.cpp ;
 run sv_conversion_test.cpp ;
 run sv_conversion_test2.cpp : ;
 run sv_common_reference_test.cpp ;
+compile sv_common_reference_test2.cpp ;
 
 run span_test.cpp ;
 run span_types_test.cpp ;
