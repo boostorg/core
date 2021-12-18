@@ -8,27 +8,14 @@
 #include <boost/config.hpp>
 #include <string>
 
-#if BOOST_CXX_VERSION < 202000L
+#if defined(BOOST_NO_CXX20_HDR_CONCEPTS)
 
-BOOST_PRAGMA_MESSAGE( "Skipping test because BOOST_CXX_VERSION is " BOOST_STRINGIZE(BOOST_CXX_VERSION) )
+BOOST_PRAGMA_MESSAGE( "Skipping test because BOOST_NO_CXX20_HDR_CONCEPTS is defined" )
 int main() {}
 
 #else
 
-#include <version>
-
-#if !defined(__cpp_lib_concepts)
-
-BOOST_PRAGMA_MESSAGE( "Skipping test because __cpp_lib_concepts is not defined" )
-int main() {}
-
-#elif __cpp_lib_concepts < 201907L
-
-BOOST_PRAGMA_MESSAGE( "Skipping test because __cpp_lib_concepts is " BOOST_STRINGIZE(__cpp_lib_concepts) )
-int main() {}
-
-#else
-
+#include <concepts>
 #include <type_traits>
 
 using T = std::common_reference_t< boost::core::string_view&&, std::string& >;
@@ -44,5 +31,4 @@ int main()
     return boost::report_errors();
 }
 
-#endif
 #endif
