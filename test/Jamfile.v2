@@ -305,6 +305,7 @@ run sv_eq_test.cpp ;
 run sv_lt_test.cpp ;
 run sv_stream_insert_test.cpp ;
 run sv_conversion_test.cpp ;
+run sv_conversion_test2.cpp : ;
 
 run span_test.cpp ;
 run span_types_test.cpp ;

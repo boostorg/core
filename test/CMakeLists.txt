@@ -1,4 +1,4 @@
-# Copyright 2018, 2019, 2021 Peter Dimov
+# Copyright 2018-2021 Peter Dimov
 # Distributed under the Boost Software License, Version 1.0.
 # See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt
 
@@ -22,6 +22,10 @@ boost_test(TYPE run SOURCES eif_partial_specializations.cpp)
 set(BOOST_TEST_LINK_LIBRARIES Boost::core Boost::throw_exception)
 
 boost_test(TYPE run SOURCES no_exceptions_support_test.cpp)
+
+set(BOOST_TEST_LINK_LIBRARIES Boost::core Boost::utility)
+
+boost_test(TYPE run SOURCES sv_conversion_test2.cpp)
 
 endif()
 

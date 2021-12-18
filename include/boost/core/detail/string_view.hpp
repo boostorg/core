@@ -34,6 +34,9 @@
 
 namespace boost
 {
+
+template<class Ch, class Tr> class basic_string_view;
+
 namespace core
 {
 namespace detail
@@ -388,6 +391,11 @@ public:
 
 #endif
 
+    template<class Ch2> basic_string_view( boost::basic_string_view<Ch2, std::char_traits<Ch2> > const& str,
+        typename boost::enable_if<is_same<Ch, Ch2> >::type* = 0 ) BOOST_NOEXCEPT: p_( str.data() ), n_( str.size() )
+    {
+    }
+
     // BOOST_CONSTEXPR basic_string_view& operator=( basic_string_view const& ) BOOST_NOEXCEPT & = default;
 
     // conversions
@@ -406,6 +414,12 @@ public:
     }
 
 #endif
+
+    template<class Ch2> operator boost::basic_string_view<Ch2,
+        typename boost::enable_if<boost::core::is_same<Ch2, Ch>, std::char_traits<Ch> >::type> () const BOOST_NOEXCEPT
+    {
+        return boost::basic_string_view< Ch, std::char_traits<Ch> >( data(), size() );
+    }
 
     // iterator support
 
