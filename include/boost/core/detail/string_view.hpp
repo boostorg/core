@@ -555,7 +555,7 @@ public:
             boost::throw_exception( std::out_of_range( "basic_string_view::copy" ), BOOST_CURRENT_LOCATION );
         }
 
-        std::size_t rlen = std::min( n, size() - pos );
+        std::size_t rlen = (std::min)( n, size() - pos );
 
         traits_type::copy( s, data() + pos, rlen );
 
@@ -569,7 +569,7 @@ public:
             boost::throw_exception( std::out_of_range( "basic_string_view::substr" ), BOOST_CURRENT_LOCATION );
         }
 
-        std::size_t rlen = std::min( n, size() - pos );
+        std::size_t rlen = (std::min)( n, size() - pos );
 
         return basic_string_view( data() + pos, rlen );
     }
@@ -578,7 +578,7 @@ public:
 
     BOOST_CXX14_CONSTEXPR int compare( basic_string_view str ) const BOOST_NOEXCEPT
     {
-        std::size_t rlen = std::min( size(), str.size() );
+        std::size_t rlen = (std::min)( size(), str.size() );
 
         int cmp = traits_type::compare( data(), str.data(), rlen );
 
