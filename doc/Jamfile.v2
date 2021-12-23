@@ -5,12 +5,15 @@
 # Version 1.0. (See accompanying file LICENSE_1_0.txt
 # or copy at http://boost.org/LICENSE_1_0.txt)
 
+import project ;
 import doxygen ;
 import quickbook ;
 
+path-constant INCLUDES : ../../.. ;
+
 doxygen ref_reference
   :
-    [ glob ../../../boost/core/ref.hpp ]
+    $(INCLUDES)/boost/core/ref.hpp
   :
     <doxygen:param>ENABLE_PREPROCESSING=YES
     <doxygen:param>EXPAND_ONLY_PREDEF=YES
