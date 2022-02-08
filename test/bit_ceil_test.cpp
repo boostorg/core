@@ -45,7 +45,7 @@ int main()
         test_bit_ceil( static_cast<boost::uint8_t>( 0x80 ) );
         test_bit_ceil( static_cast<boost::uint16_t>( 0x8000 ) );
         test_bit_ceil( static_cast<boost::uint32_t>( 0x80000000 ) );
-        test_bit_ceil( static_cast<boost::uint64_t>( 0x8000000000000000 ) );
+        test_bit_ceil( boost::uint64_t( 1 ) << 63 );
     }
 
     boost::detail::splitmix64 rng;
