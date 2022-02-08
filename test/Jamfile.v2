@@ -328,5 +328,8 @@ run span_deduction_guide_test.cpp ;
 run as_bytes_test.cpp ;
 run as_writable_bytes_test.cpp ;
 
+run splitmix64_test.cpp
+  : : : $(pedantic-errors) ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
