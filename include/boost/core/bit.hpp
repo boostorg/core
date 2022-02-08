@@ -82,9 +82,9 @@ BOOST_CONSTEXPR inline int countl_impl( unsigned long x ) BOOST_NOEXCEPT
     return x? __builtin_clzl( x ): std::numeric_limits<unsigned long>::digits;
 }
 
-BOOST_CONSTEXPR inline int countl_impl( unsigned long long x ) BOOST_NOEXCEPT
+BOOST_CONSTEXPR inline int countl_impl( boost::ulong_long_type x ) BOOST_NOEXCEPT
 {
-    return x? __builtin_clzll( x ): std::numeric_limits<unsigned long long>::digits;
+    return x? __builtin_clzll( x ): std::numeric_limits<boost::ulong_long_type>::digits;
 }
 
 } // namespace detail
@@ -224,9 +224,9 @@ BOOST_CONSTEXPR inline int countr_impl( unsigned long x ) BOOST_NOEXCEPT
     return x? __builtin_ctzl( x ): std::numeric_limits<unsigned long>::digits;
 }
 
-BOOST_CONSTEXPR inline int countr_impl( unsigned long long x ) BOOST_NOEXCEPT
+BOOST_CONSTEXPR inline int countr_impl( boost::ulong_long_type x ) BOOST_NOEXCEPT
 {
-    return x? __builtin_ctzll( x ): std::numeric_limits<unsigned long long>::digits;
+    return x? __builtin_ctzll( x ): std::numeric_limits<boost::ulong_long_type>::digits;
 }
 
 } // namespace detail
@@ -365,7 +365,7 @@ BOOST_CORE_POPCOUNT_CONSTEXPR inline int popcount_impl( unsigned long x ) BOOST_
     return __builtin_popcountl( x );
 }
 
-BOOST_CORE_POPCOUNT_CONSTEXPR inline int popcount_impl( unsigned long long x ) BOOST_NOEXCEPT
+BOOST_CORE_POPCOUNT_CONSTEXPR inline int popcount_impl( boost::ulong_long_type x ) BOOST_NOEXCEPT
 {
     return __builtin_popcountll( x );
 }

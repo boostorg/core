@@ -38,7 +38,7 @@ int main()
         test_bit_ceil( static_cast<unsigned short>( 0 ) );
         test_bit_ceil( static_cast<unsigned int>( 0 ) );
         test_bit_ceil( static_cast<unsigned long>( 0 ) );
-        test_bit_ceil( static_cast<unsigned long long>( 0 ) );
+        test_bit_ceil( static_cast<boost::ulong_long_type>( 0 ) );
     }
 
     {
@@ -58,7 +58,7 @@ int main()
         test_bit_ceil( static_cast<unsigned short>( x ) );
         test_bit_ceil( static_cast<unsigned int>( x ) );
         test_bit_ceil( static_cast<unsigned long>( x ) );
-        test_bit_ceil( static_cast<unsigned long long>( x ) );
+        test_bit_ceil( static_cast<boost::ulong_long_type>( x ) );
     }
 
     return boost::report_errors();

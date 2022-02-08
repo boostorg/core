@@ -152,7 +152,7 @@ int main()
         }
 
         {
-            unsigned long long x = 0;
+            boost::ulong_long_type x = 0;
             BOOST_TEST_EQ( boost::core::rotl( x, i ), x );
             BOOST_TEST_EQ( boost::core::rotr( x, i ), x );
         }
@@ -168,7 +168,7 @@ int main()
         test_rotate( static_cast<unsigned short>( x ) );
         test_rotate( static_cast<unsigned int>( x ) );
         test_rotate( static_cast<unsigned long>( x ) );
-        test_rotate( static_cast<unsigned long long>( x ) );
+        test_rotate( static_cast<boost::ulong_long_type>( x ) );
     }
 
     return boost::report_errors();
