@@ -264,19 +264,30 @@ run uncaught_exceptions_np.cpp
 run no_exceptions_support_test.cpp : ;
 run no_exceptions_support_test.cpp : : : <exception-handling>off : no_exceptions_support_test_nx ;
 
-run cmath_test.cpp ;
+run cmath_test.cpp
+  : : : $(pedantic-errors) ;
 run cmath_test.cpp : : : <define>BOOST_CORE_USE_GENERIC_CMATH <toolset>msvc-8.0:<build>no : cmath_test_generic ;
 
-run bit_cast_test.cpp ;
-run bit_rotate_test.cpp ;
-run bit_countr_test.cpp ;
-run bit_countl_test.cpp ;
-run bit_width_test.cpp ;
-run has_single_bit_test.cpp ;
-run bit_floor_test.cpp ;
-run bit_ceil_test.cpp ;
-run bit_popcount_test.cpp ;
-run bit_endian_test.cpp ;
+run bit_cast_test.cpp
+  : : : $(pedantic-errors) ;
+run bit_rotate_test.cpp
+  : : : $(pedantic-errors) ;
+run bit_countr_test.cpp
+  : : : $(pedantic-errors) ;
+run bit_countl_test.cpp
+  : : : $(pedantic-errors) ;
+run bit_width_test.cpp
+  : : : $(pedantic-errors) ;
+run has_single_bit_test.cpp
+  : : : $(pedantic-errors) ;
+run bit_floor_test.cpp
+  : : : $(pedantic-errors) ;
+run bit_ceil_test.cpp
+  : : : $(pedantic-errors) ;
+run bit_popcount_test.cpp
+  : : : $(pedantic-errors) ;
+run bit_endian_test.cpp
+  : : : $(pedantic-errors) ;
 
 run type_name_test.cpp ;
 
