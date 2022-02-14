@@ -60,7 +60,7 @@ BOOST_NORETURN void verbose_terminate_handler()
         boost::source_location loc = boost::get_throw_location( x );
 
         std::fprintf( stderr,
-            "std::terminate called after throwing an exception:\n"
+            "std::terminate called after throwing an exception:\n\n"
             "      type: %s\n"
             "    what(): %s\n"
             "  location: %s:%lu:%lu in function '%s'\n",

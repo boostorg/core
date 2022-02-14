@@ -34,7 +34,7 @@ criteria for inclusion is that the utility component be:
 * simple,
 * used by other Boost libraries, and
 * not dependent on any other Boost modules except Core
-  itself, Config, Assert, or Static Assert.
+  itself, Config, Assert, StaticAssert, or ThrowException.
 
 [endsect]
 
@@ -72,3 +72,4 @@ criteria for inclusion is that the utility component be:
 [include type_name.qbk]
 [include uncaught_exceptions.qbk]
 [include use_default.qbk]
+[include verbose_terminate_handler.qbk]
