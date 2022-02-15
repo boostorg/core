@@ -30,7 +30,7 @@ BOOST_NORETURN inline void verbose_terminate_handler()
 
 #if defined(BOOST_NO_EXCEPTIONS)
 
-    std::fputs( "std::terminate called with exceptions disabled", stderr );
+    std::fputs( "std::terminate called with exceptions disabled\n", stderr );
 
 #else
 
@@ -73,11 +73,12 @@ BOOST_NORETURN inline void verbose_terminate_handler()
     }
     catch( ... )
     {
-        std::fputs( "std::terminate called after throwing an unknown exception", stderr );
+        std::fputs( "std::terminate called after throwing an unknown exception\n", stderr );
     }
 
 #endif
 
+    std::fflush( stdout );
     std::abort();
 }
 
