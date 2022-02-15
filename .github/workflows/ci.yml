@@ -473,6 +473,10 @@ jobs:
             cxxstd: "14,17,20,latest"
             addrmd: 32,64
             os: windows-2022
+          - toolset: clang-win
+            cxxstd: "14,17,latest"
+            addrmd: 32,64
+            os: windows-2022
           - toolset: gcc
             cxxstd: "03,11,14,17,2a"
             addrmd: 64
@@ -519,7 +523,7 @@ jobs:
         shell: cmd
         run: |
             cd ../boost-root
-            b2 -j %NUMBER_OF_PROCESSORS% libs/%LIBRARY%/test toolset=${{matrix.toolset}} cxxstd=${{matrix.cxxstd}} address-model=${{matrix.addrmd}} variant=debug,release
+            b2 -j %NUMBER_OF_PROCESSORS% libs/%LIBRARY%/test toolset=${{matrix.toolset}} cxxstd=${{matrix.cxxstd}} address-model=${{matrix.addrmd}} variant=debug,release embed-manifest-via=linker
 
   posix-cmake-subdir:
     strategy:
