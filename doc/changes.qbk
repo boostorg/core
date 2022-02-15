@@ -11,6 +11,9 @@
 * Added `boost::allocator_traits`, an implementation of `std::allocator_traits`.
 * Made `boost::pointer_traits` SFINAE friendly.
 * `boost/iterator.hpp` is deprecated and will be removed in a future release. The header defines `boost::iterator` template, which is equivalent to `std::iterator` in `<iterator>` header. However, since `std::iterator` is itself deprecated in C++17, users are advised to remove `boost::iterator` or `std::iterator` use from their code.
+* Added `boost::core::verbose_terminate_handler`, a utility function intended
+  to be passed to `std::set_terminate` that prints information about the
+  uncaught exception to `stderr`.
 
 [endsect]
 
