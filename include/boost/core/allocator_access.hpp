@@ -1,5 +1,5 @@
 /*
-Copyright 2020-2021 Glen Joseph Fernandes
+Copyright 2020-2022 Glen Joseph Fernandes
 (glenjofe@gmail.com)
 
 Distributed under the Boost Software License, Version 1.0.
@@ -427,9 +427,72 @@ allocator_allocate(A& a, typename allocator_size_type<A>::type n,
 }
 #endif
 
+namespace detail {
+
+#if defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class T, T>
+struct alloc_no {
+    char x, y;
+};
+
+template<class A, class T>
+class alloc_has_construct {
+    template<class O>
+    static alloc_no<void(O::*)(T*), &O::construct>
+    check(int);
+
+    template<class O>
+    static alloc_no<void(O::*)(T*) const, &O::construct>
+    check(int);
+
+    template<class O>
+    static alloc_no<void(*)(T*), &O::construct>
+    check(int);
+
+    template<class>
+    static char check(long);
+
+public:
+    static const bool value = sizeof(check<A>(0)) > 1;
+};
+#else
+template<class A, class T, class... Args>
+class alloc_has_construct {
+    template<class O>
+    static auto check(int)
+    -> alloc_no<decltype(std::declval<O&>().construct(std::declval<T*>(),
+        std::declval<Args&&>()...))>;
+
+    template<class>
+    static char check(long);
+
+public:
+    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
+};
+#endif
+
+template<bool, class = void>
+struct alloc_if { };
+
+template<class T>
+struct alloc_if<true, T> {
+    typedef T type;
+};
+
+} /* detail */
+
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class A, class T>
-inline void
+inline typename detail::alloc_if<detail::alloc_has_construct<A,
+    T>::value>::type
+allocator_construct(A& a, T* p)
+{
+    a.construct(p);
+}
+
+template<class A, class T>
+inline typename detail::alloc_if<!detail::alloc_has_construct<A,
+    T>::value>::type
 allocator_construct(A&, T* p)
 {
     ::new((void*)p) T();
@@ -467,24 +530,6 @@ allocator_construct(A&, T* p, V& v)
 }
 #endif
 #else
-namespace detail {
-
-template<class A, class T, class... Args>
-class alloc_has_construct {
-    template<class O>
-    static auto check(int)
-    -> alloc_no<decltype(std::declval<O&>().construct(std::declval<T*>(),
-        std::declval<Args&&>()...))>;
-
-    template<class>
-    static char check(long);
-
-public:
-    BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
-};
-
-} /* detail */
-
 template<class A, class T, class... Args>
 inline typename std::enable_if<detail::alloc_has_construct<A, T,
     Args...>::value>::type
@@ -502,17 +547,30 @@ allocator_construct(A&, T* p, Args&&... args)
 }
 #endif
 
-#if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class A, class T>
-inline void
-allocator_destroy(A&, T* p)
-{
-    p->~T();
-    (void)p;
-}
-#else
 namespace detail {
 
+#if defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class A, class T>
+class alloc_has_destroy {
+    template<class O>
+    static alloc_no<void(O::*)(T*), &O::destroy>
+    check(int);
+
+    template<class O>
+    static alloc_no<void(O::*)(T*) const, &O::destroy>
+    check(int);
+
+    template<class O>
+    static alloc_no<void(*)(T*), &O::destroy>
+    check(int);
+
+    template<class>
+    static char check(long);
+
+public:
+    static const bool value = sizeof(check<A>(0)) > 1;
+};
+#else
 template<class A, class T>
 class alloc_has_destroy {
     template<class O>
@@ -525,33 +583,28 @@ class alloc_has_destroy {
 public:
     BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
 };
+#endif
 
 } /* detail */
 
 template<class A, class T>
-inline typename std::enable_if<detail::alloc_has_destroy<A, T>::value>::type
+inline typename detail::alloc_if<detail::alloc_has_destroy<A, T>::value>::type
 allocator_destroy(A& a, T* p)
 {
     a.destroy(p);
 }
 
 template<class A, class T>
-inline typename std::enable_if<!detail::alloc_has_destroy<A, T>::value>::type
+inline typename detail::alloc_if<!detail::alloc_has_destroy<A, T>::value>::type
 allocator_destroy(A&, T* p)
 {
     p->~T();
     (void)p;
 }
-#endif
 
 namespace detail {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class T, T>
-struct alloc_no {
-    char x, y;
-};
-
 template<class A>
 class alloc_has_max_size {
     template<class O>
@@ -586,14 +639,6 @@ public:
     BOOST_STATIC_CONSTEXPR bool value = sizeof(check<A>(0)) > 1;
 };
 #endif
-
-template<bool, class>
-struct alloc_if { };
-
-template<class T>
-struct alloc_if<true, T> {
-    typedef T type;
-};
 
 } /* detail */
 
