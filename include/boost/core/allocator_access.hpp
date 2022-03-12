@@ -714,6 +714,75 @@ allocator_select_on_container_copy_construction(const A& a)
     return a;
 }
 
+template<class A, class T>
+inline void
+allocator_destroy_n(A& a, T* p, std::size_t n)
+{
+    while (n > 0) {
+        boost::allocator_destroy(a, p + --n);
+    }
+}
+
+namespace detail {
+
+template<class A, class T>
+class alloc_destroyer {
+public:
+    alloc_destroyer(A& a, T* p) BOOST_NOEXCEPT
+        : a_(a), p_(p), n_(0) { }
+
+    ~alloc_destroyer() {
+        boost::allocator_destroy_n(a_, p_, n_);
+    }
+
+    std::size_t& size() BOOST_NOEXCEPT {
+        return n_;
+    }
+
+private:
+    alloc_destroyer(const alloc_destroyer&);
+    alloc_destroyer& operator=(const alloc_destroyer&);
+
+    A& a_;
+    T* p_;
+    std::size_t n_;
+};
+
+} /* detail */
+
+template<class A, class T>
+inline void
+allocator_construct_n(A& a, T* p, std::size_t n)
+{
+    detail::alloc_destroyer<A, T> d(a, p);
+    for (std::size_t& i = d.size(); i < n; ++i) {
+        boost::allocator_construct(a, p + i);
+    }
+    d.size() = 0;
+}
+
+template<class A, class T>
+inline void
+allocator_construct_n(A& a, T* p, std::size_t n, const T* l, std::size_t m)
+{
+    detail::alloc_destroyer<A, T> d(a, p);
+    for (std::size_t& i = d.size(); i < n; ++i) {
+        boost::allocator_construct(a, p + i, l[i % m]);
+    }
+    d.size() = 0;
+}
+
+template<class A, class T, class I>
+inline void
+allocator_construct_n(A& a, T* p, std::size_t n, I b)
+{
+    detail::alloc_destroyer<A, T> d(a, p);
+    for (std::size_t& i = d.size(); i < n; void(++i), void(++b)) {
+        boost::allocator_construct(a, p + i, *b);
+    }
+    d.size() = 0;
+}
+
 #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
 template<class A>
 using allocator_value_type_t = typename allocator_value_type<A>::type;
