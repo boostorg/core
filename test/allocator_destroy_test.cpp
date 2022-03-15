@@ -29,6 +29,7 @@ struct A1 {
     A1() { }
 };
 
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class T>
 struct A2 {
     typedef T value_type;
@@ -38,6 +39,7 @@ struct A2 {
         *p = U();
     }
 };
+#endif
 
 int main()
 {
@@ -48,11 +50,13 @@ int main()
         BOOST_TEST_EQ(S::count, 0);
         ::new((void*)&s) S();
     }
+#if !defined(BOOST_NO_CXX11_ALLOCATOR)
     {
         A2<int> a;
         int i = 5;
         boost::allocator_destroy(a, &i);
         BOOST_TEST_EQ(i, 0);
     }
+#endif
     return boost::report_errors();
 }

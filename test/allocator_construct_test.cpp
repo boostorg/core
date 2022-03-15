@@ -26,16 +26,6 @@ struct A2 {
 };
 #endif
 
-template<class T>
-struct A3 {
-    typedef T value_type;
-    A3() { }
-    template<class U>
-    void construct(U* p) {
-        ::new((void*)p) U(1);
-    }
-};
-
 int main()
 {
     {
@@ -52,11 +42,5 @@ int main()
         BOOST_TEST_EQ(i, 6);
     }
 #endif
-    {
-        A3<int> a;
-        int i = 0;
-        boost::allocator_construct(a, &i);
-        BOOST_TEST_EQ(i, 1);
-    }
     return boost::report_errors();
 }

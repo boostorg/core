@@ -430,30 +430,15 @@ allocator_allocate(A& a, typename allocator_size_type<A>::type n,
 namespace detail {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
-template<class T, T>
-struct alloc_no {
-    char x, y;
+template<class A, class = void>
+struct alloc_has_construct {
+    BOOST_STATIC_CONSTEXPR bool value = false;
 };
 
-template<class A, class T>
-class alloc_has_construct {
-    template<class O>
-    static alloc_no<void(O::*)(T*), &O::construct>
-    check(int);
-
-    template<class O>
-    static alloc_no<void(O::*)(T*) const, &O::construct>
-    check(int);
-
-    template<class O>
-    static alloc_no<void(*)(T*), &O::construct>
-    check(int);
-
-    template<class>
-    static char check(long);
-
-public:
-    static const bool value = sizeof(check<A>(0)) > 1;
+template<class A>
+struct alloc_has_construct<A,
+    typename alloc_void<typename A::_default_construct_destroy>::type> {
+    BOOST_STATIC_CONSTEXPR bool value = true;
 };
 #else
 template<class A, class T, class... Args>
@@ -483,16 +468,14 @@ struct alloc_if<true, T> {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class A, class T>
-inline typename detail::alloc_if<detail::alloc_has_construct<A,
-    T>::value>::type
+inline typename detail::alloc_if<detail::alloc_has_construct<A>::value>::type
 allocator_construct(A& a, T* p)
 {
     a.construct(p);
 }
 
 template<class A, class T>
-inline typename detail::alloc_if<!detail::alloc_has_construct<A,
-    T>::value>::type
+inline typename detail::alloc_if<!detail::alloc_has_construct<A>::value>::type
 allocator_construct(A&, T* p)
 {
     ::new((void*)p) T();
@@ -550,25 +533,15 @@ allocator_construct(A&, T* p, Args&&... args)
 namespace detail {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class A, class, class = void>
+struct alloc_has_destroy {
+    BOOST_STATIC_CONSTEXPR bool value = false;
+};
+
 template<class A, class T>
-class alloc_has_destroy {
-    template<class O>
-    static alloc_no<void(O::*)(T*), &O::destroy>
-    check(int);
-
-    template<class O>
-    static alloc_no<void(O::*)(T*) const, &O::destroy>
-    check(int);
-
-    template<class O>
-    static alloc_no<void(*)(T*), &O::destroy>
-    check(int);
-
-    template<class>
-    static char check(long);
-
-public:
-    static const bool value = sizeof(check<A>(0)) > 1;
+struct alloc_has_destroy<A, T,
+    typename alloc_void<typename A::_default_construct_destroy>::type> {
+    BOOST_STATIC_CONSTEXPR bool value = true;
 };
 #else
 template<class A, class T>
@@ -605,6 +578,11 @@ allocator_destroy(A&, T* p)
 namespace detail {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
+template<class T, T>
+struct alloc_no {
+    char x, y;
+};
+
 template<class A>
 class alloc_has_max_size {
     template<class O>
