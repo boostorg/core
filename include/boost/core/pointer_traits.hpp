@@ -219,7 +219,7 @@ struct pointer_traits<T*>
 
 #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
     template<class U>
-    using rebind = typename rebind_to<U>::type*;
+    using rebind = typename rebind_to<U>::type;
 #endif
 };
 
