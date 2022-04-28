@@ -38,7 +38,11 @@
 namespace boost
 {
 
+// forward declaration of boost::basic_string_view from Utility
 template<class Ch, class Tr> class basic_string_view;
+
+// forward declaration of boost::hash_range from ContainerHash
+template<class It> std::size_t hash_range( It, It );
 
 namespace core
 {
@@ -1161,6 +1165,11 @@ public:
     }
 
 #endif
+
+    inline friend std::size_t hash_value( basic_string_view const& sv )
+    {
+        return boost::hash_range( sv.begin(), sv.end() );
+    }
 };
 
 // stream inserter
