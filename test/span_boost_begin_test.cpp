@@ -29,9 +29,4 @@ void function()
     std::vector<int> y;
     boost::begin(y);
 }
-#else
-int main()
-{
-    return 0;
-}
 #endif
