@@ -99,17 +99,18 @@ jobs:
             os: ubuntu-20.04
             install:
               - g++-11
-            sources:
-              - "ppa:ubuntu-toolchain-r/test"
+          - toolset: gcc-12
+            cxxstd: "03,11,14,17,20"
+            os: ubuntu-22.04
+            install:
+              - g++-12
           - name: UBSAN
-            toolset: gcc-11
+            toolset: gcc-12
             cxxstd: "03,11,14,17,20"
             ubsan: 1
-            os: ubuntu-20.04
+            os: ubuntu-22.04
             install:
-              - g++-11
-            sources:
-              - "ppa:ubuntu-toolchain-r/test"
+              - g++-12
 
           # Linux, clang
           - toolset: clang
@@ -216,13 +217,15 @@ jobs:
           - toolset: clang
             compiler: clang++-13
             cxxstd: "03,11,14,17,20"
-            os: ubuntu-20.04
+            os: ubuntu-22.04
             install:
               - clang-13
-            sources:
-              - "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main"
-            source_keys:
-              - "https://apt.llvm.org/llvm-snapshot.gpg.key"
+          - toolset: clang
+            compiler: clang++-14
+            cxxstd: "03,11,14,17,20"
+            os: ubuntu-22.04
+            install:
+              - clang-14
           - toolset: clang
             compiler: clang++-13
             cxxstd: "03,11,14,17,20"
@@ -528,6 +531,7 @@ jobs:
         include:
           - os: ubuntu-18.04
           - os: ubuntu-20.04
+          - os: ubuntu-22.04
           - os: macos-10.15
 
     runs-on: ${{matrix.os}}
@@ -574,6 +578,7 @@ jobs:
         include:
           - os: ubuntu-18.04
           - os: ubuntu-20.04
+          - os: ubuntu-22.04
           - os: macos-10.15
 
     runs-on: ${{matrix.os}}
@@ -630,6 +635,7 @@ jobs:
         include:
           - os: ubuntu-18.04
           - os: ubuntu-20.04
+          - os: ubuntu-22.04
           - os: macos-10.15
 
     runs-on: ${{matrix.os}}
