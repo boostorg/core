@@ -203,6 +203,7 @@ compile first_scalar_constexpr_test.cpp ;
 run empty_value_test.cpp ;
 run empty_value_size_test.cpp ;
 run empty_value_final_test.cpp ;
+run empty_value_constexpr_test.cpp ;
 
 run quick_exit_test.cpp ;
 run-fail quick_exit_fail.cpp ;
