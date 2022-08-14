@@ -539,7 +539,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-18.04
           - os: ubuntu-20.04
           - os: ubuntu-22.04
           - os: macos-11
@@ -586,7 +585,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-18.04
           - os: ubuntu-20.04
           - os: ubuntu-22.04
           - os: macos-11
@@ -643,7 +641,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-18.04
           - os: ubuntu-20.04
           - os: ubuntu-22.04
           - os: macos-11
