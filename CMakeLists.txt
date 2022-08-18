@@ -19,6 +19,9 @@ target_link_libraries(boost_core
     Boost::static_assert
     Boost::throw_exception
 )
+file(GLOB_RECURSE boost_core_IDEFILES CONFIGURE_DEPENDS include/*.hpp include/*.natvis)
+source_group(TREE ${PROJECT_SOURCE_DIR}/include FILES ${boost_core_IDEFILES})
+target_sources(boost_core PRIVATE ${boost_core_IDEFILES})
 
 if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
 
