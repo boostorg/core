@@ -327,6 +327,8 @@ run sv_conversion_test2.cpp : ;
 run sv_common_reference_test.cpp ;
 compile sv_common_reference_test2.cpp ;
 compile sv_windows_h_test.cpp ;
+compile-fail sv_nullptr_fail.cpp
+  : $(warning-as-errors-off) ;
 
 run span_test.cpp ;
 run span_types_test.cpp ;
