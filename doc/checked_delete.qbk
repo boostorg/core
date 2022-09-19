@@ -124,7 +124,7 @@ template<class T> struct checked_array_deleter
 
 [endsect]
 
-[section Acknowledgments]
+[section Acknowledgements]
 
 The function templates `checked_delete` and
 `checked_array_delete` were originally part of

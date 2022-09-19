@@ -165,7 +165,7 @@ also not defined (`pointer_traits` is SFINAE-friendly).
 
 [endsect]
 
-[section Acknowledgments]
+[section Acknowledgements]
 
 Glen Fernandes implemented `pointer_traits` and `to_address` with reviews and
 guidance from Peter Dimov.
