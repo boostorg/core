@@ -565,7 +565,7 @@ jobs:
           cd ../boost-root/libs/$LIBRARY/test/cmake_subdir_test
           mkdir __build__ && cd __build__
           cmake ..
-          cmake --build .
+          cmake --build . -- -j $BUILD_JOBS
           ctest --output-on-failure --no-tests=error
 
   posix-cmake-install:
@@ -615,13 +615,13 @@ jobs:
       - name: Install
         run: |
           cd ../boost-root/__build__
-          cmake --build . --target install
+          cmake --build . --target install -- -j $BUILD_JOBS
 
       - name: Use the installed library
         run: |
           cd ../boost-root/libs/$LIBRARY/test/cmake_install_test && mkdir __build__ && cd __build__
           cmake -DCMAKE_INSTALL_PREFIX=~/.local ..
-          cmake --build .
+          cmake --build . -- -j $BUILD_JOBS
           ctest --output-on-failure --no-tests=error
 
   posix-cmake-test:
@@ -671,7 +671,7 @@ jobs:
       - name: Build tests
         run: |
           cd ../boost-root/__build__
-          cmake --build . --target tests
+          cmake --build . --target tests -- -j $BUILD_JOBS
 
       - name: Run tests
         run: |
