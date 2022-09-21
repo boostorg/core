@@ -176,7 +176,7 @@ run demangle_test.cpp
 run demangled_name_test.cpp
   : : : <test-info>always_show_run_output ;
 
-run demangled_name_test.cpp  : : : <rtti>off <test-info>always_show_run_output : demangled_name_test_no_rtti ;
+run demangled_name_test.cpp : : : <rtti>off <test-info>always_show_run_output : demangled_name_test_no_rtti ;
 
 run scoped_enum.cpp ;
 compile-fail scoped_enum_compile_fail_conv_from_int.cpp
@@ -186,8 +186,7 @@ compile-fail scoped_enum_compile_fail_conv_to_int.cpp
 
 run underlying_type.cpp ;
 
-compile fclose_deleter_test.cpp
-  : <target-os>windows:<define>_CRT_SECURE_NO_WARNINGS <target-os>windows:<define>_CRT_SECURE_NO_DEPRECATE ;
+run fclose_deleter_test.cpp : : : <target-os>windows:<define>_CRT_SECURE_NO_WARNINGS <target-os>windows:<define>_CRT_SECURE_NO_DEPRECATE ;
 
 run pointer_traits_pointer_test.cpp ;
 run pointer_traits_element_type_test.cpp ;

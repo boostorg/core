@@ -383,6 +383,7 @@ jobs:
             BUILD_JOBS=$((nproc || sysctl -n hw.ncpu) 2> /dev/null)
             echo "BUILD_JOBS=$BUILD_JOBS" >> $GITHUB_ENV
             echo "CMAKE_BUILD_PARALLEL_LEVEL=$BUILD_JOBS" >> $GITHUB_ENV
+            DEPINST_ARGS=()
             GIT_VERSION="$(git --version | sed -e 's/git version //')"
             GIT_HAS_JOBS=1
             if [ -f "/etc/debian_version" ]
@@ -409,25 +410,16 @@ jobs:
             fi
             if [ "$GIT_HAS_JOBS" -ne 0 ]
             then
-                GIT_ARGS="--jobs $GIT_FETCH_JOBS"
+                DEPINST_ARGS+=("--git_args" "--jobs $GIT_FETCH_JOBS")
             fi
             cd ..
             git clone -b "$BOOST_BRANCH" --depth 1 "https://github.com/boostorg/boost.git" "boost-root"
             cd boost-root
             mkdir -p libs/$LIBRARY
             cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
-            git submodule init tools/boost_install
-            git submodule init libs/headers
-            git submodule init tools/build
-            git submodule init tools/cmake
-            git submodule init libs/assert
-            git submodule init libs/config
-            git submodule init libs/static_assert
-            git submodule init libs/throw_exception
-            git submodule init libs/type_traits
-            git submodule init libs/utility
-            git submodule init libs/io
-            git submodule update $GIT_ARGS
+            git submodule update --init tools/boostdep
+            DEPINST_ARGS+=("$LIBRARY")
+            python tools/boostdep/depinst/depinst.py "${DEPINST_ARGS[@]}"
             ./bootstrap.sh
             ./b2 headers
             if [ -n "${{matrix.compiler}}" -o -n "$GCC_TOOLCHAIN_ROOT" ]
@@ -519,18 +511,8 @@ jobs:
             git clone -b %BOOST_BRANCH% --depth 1 https://github.com/boostorg/boost.git boost-root
             cd boost-root
             xcopy /s /e /q %GITHUB_WORKSPACE% libs\%LIBRARY%\
-            git submodule init tools/boost_install
-            git submodule init libs/headers
-            git submodule init tools/build
-            git submodule init tools/cmake
-            git submodule init libs/assert
-            git submodule init libs/config
-            git submodule init libs/static_assert
-            git submodule init libs/throw_exception
-            git submodule init libs/type_traits
-            git submodule init libs/utility
-            git submodule init libs/io
-            git submodule update --jobs %GIT_FETCH_JOBS%
+            git submodule update --init tools/boostdep
+            python tools/boostdep/depinst/depinst.py --git_args "--jobs %GIT_FETCH_JOBS%" %LIBRARY%
             cmd /c bootstrap
             b2 -d0 headers
 
@@ -569,21 +551,21 @@ jobs:
           REF=${GITHUB_BASE_REF:-$GITHUB_REF}
           REF=${REF#refs/heads/}
           echo REF: $REF
-          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          BOOST_BRANCH=develop && [ "$REF" = "master" ] && BOOST_BRANCH=master || true
           echo BOOST_BRANCH: $BOOST_BRANCH
           cd ..
           git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
           cd boost-root
           cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
           git submodule update --init tools/boostdep
-          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs $GIT_FETCH_JOBS" $LIBRARY
 
       - name: Use library with add_subdirectory
         run: |
           cd ../boost-root/libs/$LIBRARY/test/cmake_subdir_test
           mkdir __build__ && cd __build__
           cmake ..
-          cmake --build .
+          cmake --build . -- -j $BUILD_JOBS
           ctest --output-on-failure --no-tests=error
 
   posix-cmake-install:
@@ -615,14 +597,14 @@ jobs:
           REF=${GITHUB_BASE_REF:-$GITHUB_REF}
           REF=${REF#refs/heads/}
           echo REF: $REF
-          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          BOOST_BRANCH=develop && [ "$REF" = "master" ] && BOOST_BRANCH=master || true
           echo BOOST_BRANCH: $BOOST_BRANCH
           cd ..
           git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
           cd boost-root
           cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
           git submodule update --init tools/boostdep
-          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs $GIT_FETCH_JOBS" $LIBRARY
 
       - name: Configure
         run: |
@@ -633,13 +615,13 @@ jobs:
       - name: Install
         run: |
           cd ../boost-root/__build__
-          cmake --build . --target install
+          cmake --build . --target install -- -j $BUILD_JOBS
 
       - name: Use the installed library
         run: |
           cd ../boost-root/libs/$LIBRARY/test/cmake_install_test && mkdir __build__ && cd __build__
           cmake -DCMAKE_INSTALL_PREFIX=~/.local ..
-          cmake --build .
+          cmake --build . -- -j $BUILD_JOBS
           ctest --output-on-failure --no-tests=error
 
   posix-cmake-test:
@@ -671,14 +653,14 @@ jobs:
           REF=${GITHUB_BASE_REF:-$GITHUB_REF}
           REF=${REF#refs/heads/}
           echo REF: $REF
-          BOOST_BRANCH=develop && [ "$REF" == "master" ] && BOOST_BRANCH=master || true
+          BOOST_BRANCH=develop && [ "$REF" = "master" ] && BOOST_BRANCH=master || true
           echo BOOST_BRANCH: $BOOST_BRANCH
           cd ..
           git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
           cd boost-root
           cp -r $GITHUB_WORKSPACE/* libs/$LIBRARY
           git submodule update --init tools/boostdep
-          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" $LIBRARY
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs $GIT_FETCH_JOBS" $LIBRARY
 
       - name: Configure
         run: |
@@ -689,7 +671,7 @@ jobs:
       - name: Build tests
         run: |
           cd ../boost-root/__build__
-          cmake --build . --target tests
+          cmake --build . --target tests -- -j $BUILD_JOBS
 
       - name: Run tests
         run: |

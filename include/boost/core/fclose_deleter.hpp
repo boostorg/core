@@ -36,7 +36,8 @@ struct fclose_deleter
      */
     void operator() (std::FILE* p) const BOOST_NOEXCEPT
     {
-        std::fclose(p);
+        if (BOOST_LIKELY(!!p))
+            std::fclose(p);
     }
 };
 
