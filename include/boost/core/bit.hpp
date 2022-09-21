@@ -468,15 +468,15 @@ BOOST_CONSTEXPR bool has_single_bit( T x ) BOOST_NOEXCEPT
     return x != 0 && ( x & ( x - 1 ) ) == 0;
 }
 
-// bit_width should return int, https://cplusplus.github.io/LWG/issue3656
+// bit_width returns `int` now, https://cplusplus.github.io/LWG/issue3656
+// has been applied to C++20 as a DR
 
 template<class T>
-BOOST_CONSTEXPR T bit_width( T x ) BOOST_NOEXCEPT
+BOOST_CONSTEXPR int bit_width( T x ) BOOST_NOEXCEPT
 {
     BOOST_STATIC_ASSERT( std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_signed );
 
-    return static_cast<T>(
-        std::numeric_limits<T>::digits - boost::core::countl_zero( x ) );
+    return std::numeric_limits<T>::digits - boost::core::countl_zero( x );
 }
 
 template<class T>
