@@ -299,6 +299,9 @@ run bit_popcount_test.cpp
 run bit_endian_test.cpp
   : : : $(pedantic-errors) ;
 
+compile-fail bit_width_fail.cpp
+  : <warnings>off ;
+
 run type_name_test.cpp ;
 
 run sv_types_test.cpp ;
