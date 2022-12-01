@@ -6,11 +6,25 @@
 
 [section Revision History]
 
+[section Changes in 1.80.0]
+
+* `empty_value` members are now marked as `constexpr`.
+* Added `fclose_deleter`, a deleter that calls `std::fclose` on a pointer to `std::FILE`.
+* Bit manipulation utilities in `boost/core/bit.hpp` now explicitly require unsigned integers on input.
+  ([@https://github.com/boostorg/core/issues/129 #129])
+* `bit_width` now returns `int` instead of a value of the input argument type. This follows the
+  resolution of [@https://cplusplus.github.io/LWG/issue3656 LWG3656].
+
+[endsect]
+
 [section Changes in 1.79.0]
 
 * Added `boost::allocator_traits`, an implementation of `std::allocator_traits`.
 * Made `boost::pointer_traits` SFINAE friendly.
-* `boost/iterator.hpp` is deprecated and will be removed in a future release. The header defines `boost::iterator` template, which is equivalent to `std::iterator` in `<iterator>` header. However, since `std::iterator` is itself deprecated in C++17, users are advised to remove `boost::iterator` or `std::iterator` use from their code.
+* `boost/iterator.hpp` is deprecated and will be removed in a future release. The header defines the
+  `boost::iterator` template, which is equivalent to `std::iterator` in the `<iterator>` header. However,
+  since `std::iterator` is itself deprecated in C++17, users are advised to remove the use of `boost::iterator`
+  or `std::iterator` from their code.
 * Added `boost::core::verbose_terminate_handler`, a utility function intended
   to be passed to `std::set_terminate` that prints information about the
   uncaught exception to `stderr`.
