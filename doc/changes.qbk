@@ -6,11 +6,11 @@
 
 [section Revision History]
 
-[section Changes in 1.80.0]
+[section Changes in 1.81.0]
 
-* `empty_value` members are now marked as `constexpr`.
-* Added `fclose_deleter`, a deleter that calls `std::fclose` on a pointer to `std::FILE`.
-* Bit manipulation utilities in `boost/core/bit.hpp` now explicitly require unsigned integers on input.
+* [link core.empty_value `empty_value`] members are now marked as `constexpr`.
+* Added [link core.fclose_deleter `fclose_deleter`], a deleter that calls `std::fclose` on a pointer to `std::FILE`.
+* Bit manipulation utilities in [link core.bit `boost/core/bit.hpp`] now explicitly require unsigned integers on input.
   ([@https://github.com/boostorg/core/issues/129 #129])
 * `bit_width` now returns `int` instead of a value of the input argument type. This follows the
   resolution of [@https://cplusplus.github.io/LWG/issue3656 LWG3656].
