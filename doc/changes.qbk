@@ -17,6 +17,20 @@
 
 [endsect]
 
+[section Changes in 1.80.0]
+
+* In [link core.allocator_access `boost/core/allocator_access.hpp`], added detection of `construct` and `destroy`
+  members of an allocator.
+* `boost/core/alloc_construct.hpp` header is now deprecated and will be removed in a future release. Its functionality
+  was moved to [link core.allocator_access `boost/core/allocator_access.hpp`]. In particular, new methods
+  `allocator_construct_n` and `allocator_destroy_n` were added for allocating and destroying arrays.
+* Worked around MSVC bug that failed to compile [link core.span `span`] in C++17 mode when Boost.Range headers were included.
+  ([@https://github.com/boostorg/core/issues/105 #105], [@https://github.com/boostorg/core/pull/115 PR#115])
+* Added support for 128-bit integer types in [link core.type_name `type_name`].
+* In [link core.pointer_traits `pointer_traits`], pointer rebinding now supports C++03 compilers.
+
+[endsect]
+
 [section Changes in 1.79.0]
 
 * Added `boost::allocator_traits`, an implementation of `std::allocator_traits`.
