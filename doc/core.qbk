@@ -70,6 +70,7 @@ criteria for inclusion is that the utility component be:
 [include swap.qbk]
 [include typeinfo.qbk]
 [include type_name.qbk]
+[include snprintf.qbk]
 [include uncaught_exceptions.qbk]
 [include use_default.qbk]
 [include verbose_terminate_handler.qbk]
