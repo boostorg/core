@@ -1,10 +1,18 @@
 [/
   Copyright 2021 Peter Dimov
+  Copyright 2022 Andrey Semashev
   Distributed under the Boost Software License, Version 1.0.
   https://boost.org/LICENSE_1_0.txt)
 ]
 
 [section Revision History]
+
+[section Changes in 1.82.0]
+
+* Added [link core.snprintf `boost/core/snprintf.hpp`] header with portable definitions of `snprintf`, `vsnprintf` and
+  their `wchar_t` counterparts.
+
+[endsect]
 
 [section Changes in 1.81.0]
 

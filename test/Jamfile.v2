@@ -303,6 +303,8 @@ compile-fail bit_width_fail.cpp
 
 run type_name_test.cpp ;
 
+run snprintf_test.cpp ;
+
 run sv_types_test.cpp ;
 run sv_construct_test.cpp ;
 run sv_iteration_test.cpp ;
