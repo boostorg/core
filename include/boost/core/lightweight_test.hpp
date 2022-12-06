@@ -202,9 +202,8 @@ inline unsigned long test_output_impl( char32_t const& v ) { return v; }
 #pragma warning(disable: 4996)
 #endif
 
-// Use snprintf if available as some complilers (clang 14.0) issue deprecation warnings for sprintf
-#if ( defined(_MSC_VER) && _MSC_VER < 1900 ) || ( defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR) ) || \
-    ( defined(__cplusplus) && __cplusplus < 201103L)
+// Use snprintf if available as some compilers (clang 14.0) issue deprecation warnings for sprintf
+#if ( defined(_MSC_VER) && _MSC_VER < 1900 ) || ( defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR) )
 # define BOOST_CORE_SNPRINTF(buffer, format, arg) std::sprintf(buffer, format, arg)
 #else
 # define BOOST_CORE_SNPRINTF(buffer, format, arg) std::snprintf(buffer, sizeof(buffer)/sizeof(buffer[0]), format, arg)
@@ -224,6 +223,8 @@ inline std::string test_output_impl( char const& v )
         return buffer;
     }
 }
+
+#undef BOOST_CORE_SNPRINTF
 
 #if defined(_MSC_VER)
 #pragma warning(pop)
