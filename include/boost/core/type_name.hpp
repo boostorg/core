@@ -187,20 +187,20 @@ template<class T> std::string array_template_name()
 
 // Use snprintf if available as some compilers (clang 14.0) issue deprecation warnings for sprintf
 #if ( defined(_MSC_VER) && _MSC_VER < 1900 ) || ( defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR) )
-# define BOOST_CORE_SNPRINTF(buffer, format, arg) std::sprintf(buffer, format, arg)
+# define BOOST_CORE_DETAIL_SNPRINTF(buffer, format, arg) std::sprintf(buffer, format, arg)
 #else
-# define BOOST_CORE_SNPRINTF(buffer, format, arg) std::snprintf(buffer, sizeof(buffer)/sizeof(buffer[0]), format, arg)
+# define BOOST_CORE_DETAIL_SNPRINTF(buffer, format, arg) std::snprintf(buffer, sizeof(buffer)/sizeof(buffer[0]), format, arg)
 #endif
 
 inline std::string tn_to_string( std::size_t n )
 {
     char buffer[ 32 ];
-    BOOST_CORE_SNPRINTF( buffer, "%lu", static_cast< unsigned long >( n ) );
+    BOOST_CORE_DETAIL_SNPRINTF( buffer, "%lu", static_cast< unsigned long >( n ) );
 
     return buffer;
 }
 
-#undef BOOST_CORE_SNPRINTF
+#undef BOOST_CORE_DETAIL_SNPRINTF
 
 #if defined(BOOST_MSVC)
 # pragma warning( pop )

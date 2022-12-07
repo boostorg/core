@@ -204,9 +204,9 @@ inline unsigned long test_output_impl( char32_t const& v ) { return v; }
 
 // Use snprintf if available as some compilers (clang 14.0) issue deprecation warnings for sprintf
 #if ( defined(_MSC_VER) && _MSC_VER < 1900 ) || ( defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR) )
-# define BOOST_CORE_SNPRINTF(buffer, format, arg) std::sprintf(buffer, format, arg)
+# define BOOST_CORE_DETAIL_SNPRINTF(buffer, format, arg) std::sprintf(buffer, format, arg)
 #else
-# define BOOST_CORE_SNPRINTF(buffer, format, arg) std::snprintf(buffer, sizeof(buffer)/sizeof(buffer[0]), format, arg)
+# define BOOST_CORE_DETAIL_SNPRINTF(buffer, format, arg) std::snprintf(buffer, sizeof(buffer)/sizeof(buffer[0]), format, arg)
 #endif
 
 inline std::string test_output_impl( char const& v )
@@ -218,13 +218,13 @@ inline std::string test_output_impl( char const& v )
     else
     {
         char buffer[ 8 ];
-        BOOST_CORE_SNPRINTF( buffer, "\\x%02X", static_cast<unsigned char>( v ) );
+        BOOST_CORE_DETAIL_SNPRINTF( buffer, "\\x%02X", static_cast<unsigned char>( v ) );
 
         return buffer;
     }
 }
 
-#undef BOOST_CORE_SNPRINTF
+#undef BOOST_CORE_DETAIL_SNPRINTF
 
 #if defined(_MSC_VER)
 #pragma warning(pop)
