@@ -32,7 +32,6 @@
 #include <cstring>
 #include <cstddef>
 #include <cctype>
-#include <cstdio>
 
 #if defined(_MSC_VER) && defined(_CPPLIB_VER) && defined(_DEBUG)
 # include <crtdbg.h>
@@ -197,18 +196,6 @@ inline unsigned long test_output_impl( char16_t const& v ) { return v; }
 inline unsigned long test_output_impl( char32_t const& v ) { return v; }
 #endif
 
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable: 4996)
-#endif
-
-// Use snprintf if available as some compilers (clang 14.0) issue deprecation warnings for sprintf
-#if ( defined(_MSC_VER) && _MSC_VER < 1900 ) || ( defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR) )
-# define BOOST_CORE_DETAIL_SNPRINTF(buffer, format, arg) std::sprintf(buffer, format, arg)
-#else
-# define BOOST_CORE_DETAIL_SNPRINTF(buffer, format, arg) std::snprintf(buffer, sizeof(buffer)/sizeof(buffer[0]), format, arg)
-#endif
-
 inline std::string test_output_impl( char const& v )
 {
     if( std::isprint( static_cast<unsigned char>( v ) ) )
@@ -217,18 +204,16 @@ inline std::string test_output_impl( char const& v )
     }
     else
     {
-        char buffer[ 8 ];
-        BOOST_CORE_DETAIL_SNPRINTF( buffer, "\\x%02X", static_cast<unsigned char>( v ) );
+        static const char char_table[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+        char buffer[ 4 ];
+        buffer[ 0 ] = '\\';
+        buffer[ 1 ] = 'x';
+        buffer[ 2 ] = char_table[ (static_cast<unsigned char>( v ) >> 4u) & 0x0f ];
+        buffer[ 3 ] = char_table[ static_cast<unsigned char>( v ) & 0x0f ];
 
-        return buffer;
+        return std::string( buffer, 4u );
     }
 }
-
-#undef BOOST_CORE_DETAIL_SNPRINTF
-
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 
 // predicates
 
