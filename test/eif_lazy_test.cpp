@@ -12,7 +12,7 @@
 
 // Testing all variations of lazy_enable_if.
 
-#include <boost/utility/enable_if.hpp>
+#include <boost/core/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/core/lightweight_test.hpp>
 
@@ -26,7 +26,7 @@ using boost::lazy_disable_if_c;
 template <class T>
 struct is_int_or_double {
   BOOST_STATIC_CONSTANT(bool, 
-    value = (boost::is_same<T, int>::value || 
+    value = (boost::is_same<T, int>::value ||
              boost::is_same<T, double>::value));
 };
 
@@ -84,14 +84,14 @@ int main()
   BOOST_TEST(foo(1));
   BOOST_TEST(foo(1.0));
 
-  BOOST_TEST(!foo("1"));  
-  BOOST_TEST(!foo(static_cast<void*>(0)));  
+  BOOST_TEST(!foo("1"));
+  BOOST_TEST(!foo(static_cast<void*>(0)));
 
   BOOST_TEST(foo2(1));
   BOOST_TEST(foo2(1.0));
 
-  BOOST_TEST(!foo2("1"));  
-  BOOST_TEST(!foo2(static_cast<void*>(0)));  
+  BOOST_TEST(!foo2("1"));
+  BOOST_TEST(!foo2(static_cast<void*>(0)));
 
   return boost::report_errors();
 }

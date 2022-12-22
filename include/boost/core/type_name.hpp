@@ -14,7 +14,6 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/core/demangle.hpp>
-#include <boost/core/is_same.hpp>
 #include <boost/config.hpp>
 #include <string>
 #include <functional>

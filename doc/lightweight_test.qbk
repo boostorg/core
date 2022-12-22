@@ -326,14 +326,14 @@ parentheses.)
 
 ``
 #include <boost/core/lightweight_test_trait.hpp>
-#include <boost/core/is_same.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 template<class T, class U> struct X
 {
     typedef T type;
 };
 
-using boost::core::is_same;
+using boost::is_same;
 
 int main()
 {

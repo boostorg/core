@@ -18,8 +18,8 @@
 #if BOOST_CXX_VERSION < 201703
 
 #include <boost/iterator.hpp>
-#include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 /*
 
@@ -60,7 +60,7 @@ struct R
 
 int main()
 {
-    using boost::core::is_same;
+    using boost::is_same;
 
     BOOST_TEST_TRAIT_TRUE((is_same<boost::iterator<C,T,D,P,R>::iterator_category,C>));
     BOOST_TEST_TRAIT_TRUE((is_same<boost::iterator<C,T,D,P,R>::value_type,T>));

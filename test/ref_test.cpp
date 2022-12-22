@@ -6,7 +6,7 @@
 // run-time test for "boost/ref.hpp" header content
 // see 'ref_ct_test.cpp' for compile-time part
 
-#include <boost/ref.hpp>
+#include <boost/core/ref.hpp>
 #include <boost/core/lightweight_test.hpp>
 
 namespace {

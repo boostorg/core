@@ -5,7 +5,6 @@
 #include <boost/core/detail/string_view.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
-#include <boost/core/is_same.hpp>
 #include <iterator>
 
 struct Ch

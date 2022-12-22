@@ -10,8 +10,8 @@
 
 #define BOOST_ALLOW_DEPRECATED_HEADERS
 #include <boost/detail/iterator.hpp>
-#include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <cstddef>
 #include <list>
 
@@ -62,7 +62,7 @@ struct iterator
 
 int main()
 {
-    using boost::core::is_same;
+    using boost::is_same;
 
 /*
     template<class Iterator> struct iterator_traits {

@@ -11,6 +11,9 @@
 
 * Added [link core.snprintf `boost/core/snprintf.hpp`] header with portable definitions of `snprintf`, `vsnprintf` and
   their `wchar_t` counterparts.
+* Deprecated `boost/core/is_same.hpp` and `boost::core::is_same`. The header will be removed in a future release.
+  Users are advised to use [@http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/index.html Boost.TypeTraits]
+  or C++ standard library type traits instead.
 
 [endsect]
 
