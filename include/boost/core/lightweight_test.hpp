@@ -22,6 +22,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt
 //
 
+#include <boost/core/detail/lwt_unattended.hpp>
 #include <boost/current_function.hpp>
 #include <boost/config.hpp>
 #include <exception>
@@ -32,10 +33,6 @@
 #include <cstring>
 #include <cstddef>
 #include <cctype>
-
-#if defined(_MSC_VER) && defined(_CPPLIB_VER) && defined(_DEBUG)
-# include <crtdbg.h>
-#endif
 
 //  IDE's like Visual Studio perform better if output goes to std::cout or
 //  some other stream, so allow user to configure output stream:
@@ -49,38 +46,36 @@ namespace boost
 namespace detail
 {
 
-class test_result {
+class test_result
+{
 public:
-    test_result()
-        : report_(false)
-        , errors_(0) {
-#if defined(_MSC_VER) && (_MSC_VER > 1310)
-        // disable message boxes on assert(), abort()
-        ::_set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
-#endif
-#if defined(_MSC_VER) && defined(_CPPLIB_VER) && defined(_DEBUG)
-        // disable message boxes on iterator debugging violations
-        _CrtSetReportMode( _CRT_ASSERT, _CRTDBG_MODE_FILE );
-        _CrtSetReportFile( _CRT_ASSERT, _CRTDBG_FILE_STDERR );
-#endif
+
+    test_result(): report_( false ), errors_( 0 )
+    {
+        core::detail::lwt_unattended();
     }
 
-    ~test_result() {
-        if (!report_) {
+    ~test_result()
+    {
+        if( !report_ )
+        {
             BOOST_LIGHTWEIGHT_TEST_OSTREAM << "main() should return report_errors()" << std::endl;
             std::abort();
         }
     }
 
-    int& errors() {
+    int& errors()
+    {
         return errors_;
     }
 
-    void done() {
+    void done()
+    {
         report_ = true;
     }
 
 private:
+
     bool report_;
     int errors_;
 };
