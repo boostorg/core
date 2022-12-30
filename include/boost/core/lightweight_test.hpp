@@ -42,7 +42,6 @@
 
 namespace boost
 {
-
 namespace detail
 {
 
@@ -519,6 +518,15 @@ inline int report_errors()
     return errors < 256? errors: 255;
 }
 
+namespace core
+{
+
+inline void lwt_init()
+{
+    boost::detail::test_results();
+}
+
+} // namespace core
 } // namespace boost
 
 #define BOOST_TEST(expr) ( ::boost::detail::test_impl(#expr, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, (expr)? true: false) )
