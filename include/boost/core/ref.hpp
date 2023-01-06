@@ -118,14 +118,14 @@ public:
      @remark Does not throw.
     */
 #if !defined(BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS)
-    template<class Y, class = typename enable_if_c<boost::detail::ref_convertible<Y, T>::value>::type>
-    reference_wrapper( reference_wrapper<Y> r ) BOOST_NOEXCEPT : t_( r.t_ )
+     template<class Y> reference_wrapper( reference_wrapper<Y> r,
+        typename enable_if_c<boost::detail::ref_convertible<Y, T>::value,
+            boost::detail::ref_empty>::type = boost::detail::ref_empty() ) BOOST_NOEXCEPT : t_( r.t_ )
     {
     }
 #else
-    template<class Y> reference_wrapper( reference_wrapper<Y> r,
-        typename enable_if_c<boost::detail::ref_convertible<Y, T>::value,
-            boost::detail::ref_empty>::type = boost::detail::ref_empty() ) BOOST_NOEXCEPT : t_( r.t_ )
+    template<class Y, class = typename enable_if_c<boost::detail::ref_convertible<Y, T>::value>::type>
+    reference_wrapper( reference_wrapper<Y> r ) BOOST_NOEXCEPT : t_( r.t_ )
     {
     }
 #endif
