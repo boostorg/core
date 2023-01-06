@@ -59,7 +59,7 @@ public:
   {
     m_data = arg;
   }
-  
+
   static unsigned int swap_count(){ return swapCount(); }
   static unsigned int copy_count(){ return copyCount(); }
   static unsigned int construct_count(){ return constructCount(); }
@@ -68,7 +68,7 @@ public:
   static void reset()
   {
     swapCount() = 0;
-    copyCount() = 0;    
+    copyCount() = 0;
     constructCount() = 0;
     destructCount() = 0;
   }
@@ -80,19 +80,19 @@ private:
     return value;
   }
 
-  static unsigned int& copyCount()    
+  static unsigned int& copyCount()
   {
     static unsigned int value = 0;
     return value;
   }
 
-  static unsigned int& constructCount()    
+  static unsigned int& constructCount()
   {
     static unsigned int value = 0;
     return value;
   }
 
-  static unsigned int& destructCount()    
+  static unsigned int& destructCount()
   {
     static unsigned int value = 0;
     return value;

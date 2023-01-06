@@ -19,7 +19,7 @@ int main()
 {
   const std::type_info * const initial_value1 = 0;
   const std::type_info * const initial_value2 = &typeid(double);
-  
+
   const std::type_info * ptr1 = initial_value1;
   const std::type_info * ptr2 = initial_value2;
 

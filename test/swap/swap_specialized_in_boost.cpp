@@ -31,7 +31,7 @@ int main()
 
   boost::swap_test_class object1 = initial_value1;
   boost::swap_test_class object2 = initial_value2;
-  
+
   boost::swap_test_class::reset();
   boost::swap(object1,object2);
 

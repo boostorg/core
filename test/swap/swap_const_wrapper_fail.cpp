@@ -6,7 +6,7 @@
 
 namespace boost
 {
-  
+
 template<class T> struct Wrapper
 {
     T value;
@@ -16,9 +16,9 @@ template<class T> inline void swap( Wrapper<T> & w, Wrapper<T> & v )
 {
     boost::swap( w, v );
 }
-  
+
 } // namespace boost
- 
+
 int main()
 {
     boost::Wrapper<int> const w = { 2 };
