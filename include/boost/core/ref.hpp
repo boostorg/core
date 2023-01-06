@@ -92,11 +92,11 @@ public:
 
      @remark Does not throw.
     */
-    BOOST_FORCEINLINE explicit reference_wrapper(T& t): t_(boost::addressof(t)) {}
+    BOOST_FORCEINLINE explicit reference_wrapper(T& t) BOOST_NOEXCEPT : t_(boost::addressof(t)) {}
 
 #if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, == 1600 )
 
-    BOOST_FORCEINLINE explicit reference_wrapper( T & t, ref_workaround_tag ): t_( boost::addressof( t ) ) {}
+    BOOST_FORCEINLINE explicit reference_wrapper( T & t, ref_workaround_tag ) BOOST_NOEXCEPT : t_( boost::addressof( t ) ) {}
 
 #endif
 
@@ -119,7 +119,7 @@ public:
     */
     template<class Y> reference_wrapper( reference_wrapper<Y> r,
         typename enable_if_c<boost::detail::ref_convertible<Y, T>::value,
-            boost::detail::ref_empty>::type = boost::detail::ref_empty() ): t_( r.t_ )
+            boost::detail::ref_empty>::type = boost::detail::ref_empty() ) BOOST_NOEXCEPT : t_( r.t_ )
     {
     }
 
@@ -127,20 +127,20 @@ public:
      @return The stored reference.
      @remark Does not throw.
     */
-    BOOST_FORCEINLINE operator T& () const { return *t_; }
+    BOOST_FORCEINLINE operator T& () const BOOST_NOEXCEPT { return *t_; }
 
     /**
      @return The stored reference.
      @remark Does not throw.
     */
-    BOOST_FORCEINLINE T& get() const { return *t_; }
+    BOOST_FORCEINLINE T& get() const BOOST_NOEXCEPT { return *t_; }
 
     /**
      @return A pointer to the object referenced by the stored
        reference.
      @remark Does not throw.
     */
-    BOOST_FORCEINLINE T* get_pointer() const { return t_; }
+    BOOST_FORCEINLINE T* get_pointer() const BOOST_NOEXCEPT { return t_; }
 
 private:
 
@@ -165,7 +165,7 @@ private:
  @return `reference_wrapper<T>(t)`
  @remark Does not throw.
 */
-template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T & t )
+template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T & t ) BOOST_NOEXCEPT
 {
 #if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, == 1600 )
 
@@ -184,7 +184,7 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T 
  @return `reference_wrapper<T const>(t)`
  @remark Does not throw.
 */
-template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( T const & t )
+template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( T const & t ) BOOST_NOEXCEPT
 {
     return reference_wrapper<T const>(t);
 }
@@ -315,7 +315,7 @@ template<typename T> struct unwrap_reference< reference_wrapper<T> const volatil
  @return `unwrap_reference<T>::type&(t)`
  @remark Does not throw.
 */
-template<class T> BOOST_FORCEINLINE typename unwrap_reference<T>::type& unwrap_ref( T & t )
+template<class T> BOOST_FORCEINLINE typename unwrap_reference<T>::type& unwrap_ref( T & t ) BOOST_NOEXCEPT
 {
     return t;
 }
@@ -325,7 +325,7 @@ template<class T> BOOST_FORCEINLINE typename unwrap_reference<T>::type& unwrap_r
 /**
  @cond
 */
-template<class T> BOOST_FORCEINLINE T* get_pointer( reference_wrapper<T> const & r )
+template<class T> BOOST_FORCEINLINE T* get_pointer( reference_wrapper<T> const & r ) BOOST_NOEXCEPT
 {
     return r.get_pointer();
 }
