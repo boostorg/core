@@ -1,16 +1,14 @@
 #ifndef BOOST_CORE_REF_HPP
 #define BOOST_CORE_REF_HPP
 
-// MS compatible compilers support #pragma once
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
-# pragma once
-#endif
-
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
 #include <boost/core/addressof.hpp>
 #include <boost/core/enable_if.hpp>
+
+#if defined(BOOST_HAS_PRAGMA_ONCE)
+# pragma once
+#endif
 
 //
 //  ref.hpp - ref/cref, useful helper functions
@@ -61,9 +59,11 @@ template< class Y, class T > struct ref_convertible
     enum _vt { value = sizeof( (f)( static_cast<Y*>(0) ) ) == sizeof(yes) };
 };
 
+#if !defined(BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS)
 struct ref_empty
 {
 };
+#endif
 
 } // namespace detail
 
@@ -117,11 +117,18 @@ public:
      @remark Only enabled when `Y*` is convertible to `T*`.
      @remark Does not throw.
     */
+#if !defined(BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS)
+    template<class Y, class = typename enable_if_c<boost::detail::ref_convertible<Y, T>::value>::type>
+    reference_wrapper( reference_wrapper<Y> r ) BOOST_NOEXCEPT : t_( r.t_ )
+    {
+    }
+#else
     template<class Y> reference_wrapper( reference_wrapper<Y> r,
         typename enable_if_c<boost::detail::ref_convertible<Y, T>::value,
             boost::detail::ref_empty>::type = boost::detail::ref_empty() ) BOOST_NOEXCEPT : t_( r.t_ )
     {
     }
+#endif
 
     /**
      @return The stored reference.
