@@ -15,6 +15,7 @@
   Users are advised to use [@http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/index.html Boost.TypeTraits]
   or C++ standard library type traits instead.
 * Marked `boost::ref` member functions and associated methods with `noexcept`.
+* Marked `boost::swap` function with `noexcept`, depending on whether the type supports a non-throwing swap operation.
 
 [endsect]
 
