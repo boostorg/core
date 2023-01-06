@@ -59,7 +59,7 @@ template< class Y, class T > struct ref_convertible
     enum _vt { value = sizeof( (f)( static_cast<Y*>(0) ) ) == sizeof(yes) };
 };
 
-#if !defined(BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS)
+#if defined(BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS)
 struct ref_empty
 {
 };
