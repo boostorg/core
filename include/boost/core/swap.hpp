@@ -30,6 +30,10 @@
 #endif
 #include <cstddef> // for std::size_t
 
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
+
 #if defined(BOOST_GCC) && (BOOST_GCC < 40700)
 // gcc 4.6 ICEs on noexcept specifications below
 #define BOOST_CORE_SWAP_NOEXCEPT_IF(x)
@@ -82,4 +86,4 @@ namespace boost
 
 #undef BOOST_CORE_SWAP_NOEXCEPT_IF
 
-#endif
+#endif // BOOST_CORE_SWAP_HPP
