@@ -17,6 +17,10 @@
 #include <algorithm> //for std::copy and std::equal
 #include <cstddef> //for std::size_t
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wunused-function"
+#endif
+
 //Provide swap function in both the namespace of swap_test_class
 //(which is the global namespace), and the std namespace.
 //It's common to provide a swap function for a class in both
@@ -42,13 +46,13 @@ int main()
   const std::size_t array_size = 2;
   const swap_test_class initial_array1[array_size] = { swap_test_class(1), swap_test_class(2) };
   const swap_test_class initial_array2[array_size] = { swap_test_class(3), swap_test_class(4) };
-  
+
   swap_test_class array1[array_size];
   swap_test_class array2[array_size];
 
   std::copy(initial_array1, initial_array1 + array_size, array1);
   std::copy(initial_array2, initial_array2 + array_size, array2);
-  
+
   swap_test_class::reset();
   boost::swap(array1, array2);
 

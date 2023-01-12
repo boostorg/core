@@ -103,7 +103,7 @@ int main()
         test_single_bit( static_cast<unsigned short>( x ) );
         test_single_bit( static_cast<unsigned int>( x ) );
         test_single_bit( static_cast<unsigned long>( x ) );
-        test_single_bit( static_cast<unsigned long long>( x ) );
+        test_single_bit( static_cast<boost::ulong_long_type>( x ) );
     }
 
     return boost::report_errors();

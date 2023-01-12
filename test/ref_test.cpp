@@ -3,10 +3,10 @@
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-// run-time test for "boost/ref.hpp" header content
+// run-time test for "boost/core/ref.hpp" header content
 // see 'ref_ct_test.cpp' for compile-time part
 
-#include <boost/ref.hpp>
+#include <boost/core/ref.hpp>
 #include <boost/core/lightweight_test.hpp>
 
 namespace {

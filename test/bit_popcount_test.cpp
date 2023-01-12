@@ -26,7 +26,7 @@ int main()
         test_popcount( static_cast<unsigned short>( 0 ) );
         test_popcount( static_cast<unsigned int>( 0 ) );
         test_popcount( static_cast<unsigned long>( 0 ) );
-        test_popcount( static_cast<unsigned long long>( 0 ) );
+        test_popcount( static_cast<boost::ulong_long_type>( 0 ) );
     }
 
     boost::detail::splitmix64 rng;
@@ -39,7 +39,7 @@ int main()
         test_popcount( static_cast<unsigned short>( x ) );
         test_popcount( static_cast<unsigned int>( x ) );
         test_popcount( static_cast<unsigned long>( x ) );
-        test_popcount( static_cast<unsigned long long>( x ) );
+        test_popcount( static_cast<boost::ulong_long_type>( x ) );
     }
 
     return boost::report_errors();

@@ -87,7 +87,7 @@ int main()
         test_width( static_cast<unsigned short>( x ) );
         test_width( static_cast<unsigned int>( x ) );
         test_width( static_cast<unsigned long>( x ) );
-        test_width( static_cast<unsigned long long>( x ) );
+        test_width( static_cast<boost::ulong_long_type>( x ) );
     }
 
     return boost::report_errors();

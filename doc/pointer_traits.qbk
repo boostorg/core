@@ -1,5 +1,5 @@
 [/
-Copyright 2017-2018 Glen Joseph Fernandes
+Copyright 2017-2021 Glen Joseph Fernandes
 (glenjofe@gmail.com)
 
 Distributed under the Boost Software License, Version 1.0.
@@ -47,35 +47,56 @@ void function(Allocator& a)
 
 ```
 namespace boost {
-  template<class T> struct pointer_traits {
+
+template<class T>
+struct pointer_traits {
     typedef T pointer;
     typedef ``['see below]`` element_type;
     typedef ``['see below]`` difference_type;
 
-    template<class U> struct rebind_to { typedef ``['see below]`` type; };
-    template<class U> using rebind = typename rebind_to<U>::type;
+    template<class U>
+    struct rebind_to {
+        typedef ``['see below]`` type;
+    };
 
-    static pointer pointer_to(``['see below]`` v);
-  };
+    template<class U>
+    using rebind = typename rebind_to<U>::type;
 
-  template<class T> struct pointer_traits<T*> {
+    static pointer pointer_to(element_type& v);
+};
+
+template<class T>
+struct pointer_traits<T*> {
     typedef T* pointer;
     typedef T element_type;
     typedef std::ptrdiff_t difference_type;
 
-    template<class U> struct rebind_to { typedef U* type; };
-    template<class U> using rebind = typename rebind_to<U>::type;
+    template<class U>
+    struct rebind_to {
+        typedef U* type;
+    };
+
+    template<class U>
+    using rebind = typename rebind_to<U>::type;
 
     static pointer pointer_to(``['see below]`` v) noexcept;
-  };
+};
 
-  template<class T>
-  constexpr T* to_address(T* v) noexcept;
+template<class T>
+constexpr T* to_address(T* v) noexcept;
 
-  template<class T>
-  auto to_address(const T& v) noexcept;
-}
+template<class T>
+auto to_address(const T& v) noexcept;
+
+} // boost
 ```
+
+[section Overview]
+
+If the member type `element_type` is not defined, then all other members are
+also not defined (`pointer_traits` is SFINAE-friendly).
+
+[endsect]
 
 [section Member types]
 
@@ -83,32 +104,34 @@ namespace boost {
 [[`typedef` ['see below] `element_type;`]
 [`T::element_type` if such a type exists; otherwise `U` if `T` is a class
   template instantiation of the form `Pointer<U, Args>`, where `Args` is zero
-  or more type arguments; otherwise the specialization is ill-formed.]]
+  or more type arguments; otherwise the member is not defined.]]
 [[`typedef` ['see below] `difference_type;`]
 [`T::difference_type` if such a type exists; otherwise `std::ptrdiff_t`.]]
 [[`template<class U> struct rebind_to { typedef` ['see below] `type; };`]
 [`type` is `T::rebind<U>` if such a type exists; otherwise, `Pointer<V, Args>`
   if `T` is a class template instantiation of the form `Pointer<T, Args>`,
-  where `Args` is zero or more type arguments; otherwise, the instantiation of
-  `rebind_to` is ill-formed.]]]
+  where `Args` is zero or more type arguments; otherwise, the member is not
+  defined.]]]
+
+[note When C++11 template aliases are not supported, the `type` for `rebind` is
+`T::rebind<U>::other` if such a type exists.]
 
 [endsect]
 
 [section Member functions]
 
 [variablelist
-[[`static pointer pointer_traits::pointer_to(`['see below] `v);`]
+[[`static pointer pointer_traits::pointer_to(element_type& v);`]
 [[variablelist
 [[Remark]
-[If `element_type` is a void type, the type of `v` is unspecified; otherwise,
-  it is `element_type&`.]]
+[If `element_type` is a void type, or if `T::pointer_to(v)` is not well-formed,
+  this member is not defined.]]
 [[Returns]
 [A pointer to `v` obtained by calling `T::pointer_to(v)`.]]]]]
-[[`static pointer pointer_traits<T*>::pointer_to(`['see below] `v) noexcept;`]
+[[`static pointer pointer_traits<T*>::pointer_to(element_type& v) noexcept;`]
 [[variablelist
 [[Remark]
-[If `element_type` is a void type, the type of `v` is unspecified; otherwise,
-  it is `element_type&`.]]
+[If `element_type` is a void type, this member is not defined.]]
 [[Returns][`addressof(v)`.]]]]]]
 
 [endsect]
@@ -142,7 +165,7 @@ namespace boost {
 
 [endsect]
 
-[section Acknowledgments]
+[section Acknowledgements]
 
 Glen Fernandes implemented `pointer_traits` and `to_address` with reviews and
 guidance from Peter Dimov.

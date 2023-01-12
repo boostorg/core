@@ -10,6 +10,10 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/core/alloc_construct.hpp>
 #include <boost/core/lightweight_test.hpp>
 
+#if defined(_MSC_VER)
+# pragma warning(disable: 4100) // unreferenced parameter 'ptr'
+#endif
+
 class type {
 public:
     explicit type(int x)

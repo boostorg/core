@@ -8,9 +8,18 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
+#define BOOST_ALLOW_DEPRECATED_HEADERS
+#define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
+
+#include <boost/config.hpp>
+
+// std::iterator template is deprecated in C++17. Some standard libraries emit warnings
+// that cannot be easily suppressed, so disable the tests in C++17 onwards.
+#if BOOST_CXX_VERSION < 201703
+
 #include <boost/iterator.hpp>
-#include <boost/core/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 /*
 
@@ -51,7 +60,7 @@ struct R
 
 int main()
 {
-    using boost::core::is_same;
+    using boost::is_same;
 
     BOOST_TEST_TRAIT_TRUE((is_same<boost::iterator<C,T,D,P,R>::iterator_category,C>));
     BOOST_TEST_TRAIT_TRUE((is_same<boost::iterator<C,T,D,P,R>::value_type,T>));
@@ -67,3 +76,11 @@ int main()
 
     return boost::report_errors();
 }
+
+#else // BOOST_CXX_VERSION < 201703
+
+int main()
+{
+}
+
+#endif // BOOST_CXX_VERSION < 201703

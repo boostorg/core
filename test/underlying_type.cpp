@@ -15,8 +15,12 @@
 #include <boost/core/underlying_type.hpp>
 #include <boost/core/scoped_enum.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
-#include <boost/core/is_same.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/config.hpp>
+
+#if defined(_MSC_VER)
+# pragma warning(disable: 4244) // conversion from enum_type to underlying_type
+#endif
 
 BOOST_SCOPED_ENUM_UT_DECLARE_BEGIN(emulated_enum, unsigned char)
 {
@@ -59,9 +63,9 @@ struct underlying_type< native_enum >
 
 int main(int, char*[])
 {
-    BOOST_TEST_TRAIT_TRUE((boost::core::is_same< boost::underlying_type< emulated_enum >::type, unsigned char >));
+    BOOST_TEST_TRAIT_TRUE((boost::is_same< boost::underlying_type< emulated_enum >::type, unsigned char >));
 #if !defined(BOOST_NO_CXX11_SCOPED_ENUMS)
-    BOOST_TEST_TRAIT_TRUE((boost::core::is_same< boost::underlying_type< native_enum >::type, unsigned short >));
+    BOOST_TEST_TRAIT_TRUE((boost::is_same< boost::underlying_type< native_enum >::type, unsigned short >));
 #endif
 
     return boost::report_errors();

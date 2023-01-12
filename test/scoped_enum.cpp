@@ -15,6 +15,10 @@
 #include <boost/core/scoped_enum.hpp>
 #include <boost/core/lightweight_test.hpp>
 
+#if defined(_MSC_VER)
+# pragma warning(disable: 4244) // conversion from enum_type to underlying_type
+#endif
+
 BOOST_SCOPED_ENUM_DECLARE_BEGIN(namespace_enum1)
 {
     value0,
@@ -142,6 +146,7 @@ void check_underlying_type()
     // The real check for the type is in the underlying_type trait test.
     namespace_enum2 enum1 = namespace_enum2::value1;
     BOOST_TEST(sizeof(enum1) == sizeof(unsigned char));
+    (void)enum1;
 }
 
 int main(int, char*[])

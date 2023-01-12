@@ -27,6 +27,10 @@
 # include <array>
 #endif
 
+#if !defined(BOOST_NO_CXX11_HDR_TUPLE)
+# include <tuple>
+#endif
+
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 # include <string_view>
 #endif
@@ -67,7 +71,47 @@ struct Ch
 
 int main()
 {
+    TEST(signed char);
+    TEST(unsigned char);
+    TEST(short);
+    TEST(unsigned short);
     TEST(int);
+    TEST(unsigned);
+    TEST(long);
+    TEST(unsigned long);
+    TEST(long long);
+    TEST(unsigned long long);
+
+#if defined(BOOST_HAS_INT128)
+    TEST(__int128);
+    TEST(unsigned __int128);
+#endif
+
+    TEST(char);
+    TEST(wchar_t);
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+    TEST(char16_t);
+#endif
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+    TEST(char32_t);
+#endif
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+    TEST(char8_t);
+#endif
+#if defined(__cpp_lib_byte) && __cpp_lib_byte >= 201603L
+    TEST(std::byte);
+#endif
+
+    TEST(bool);
+
+    TEST(float);
+    TEST(double);
+    TEST(long double);
+
+    TEST(void);
+    TEST(void const);
+    TEST(void volatile);
+    TEST(void const volatile);
 
     TEST(A);
     TEST(B);
@@ -94,32 +138,132 @@ int main()
 
 #endif
 
-    TEST(void);
-    TEST(void const);
-    TEST(void volatile);
-    TEST(void const volatile);
-
     TEST(A*);
     TEST(B const* volatile*);
 
     TEST(void*);
     TEST(void const* volatile*);
 
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+    TEST(void());
+    TEST(int(float, A, B*));
+
+    TEST(void(*)());
+    TEST(void(**)());
+    TEST(void(***)());
+
+    TEST(void(* const* const*)());
+    TEST(void(* const* const&)());
+
+    TEST(void(&)());
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+
+    TEST(void(&&)());
+
+#endif
+
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1900
+
+    TEST(void() const);
+    TEST(void() volatile);
+    TEST(void() const volatile);
+
+#endif
+
+#if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
+
+    TEST(void() &);
+    TEST(void() const &);
+    TEST(void() volatile &);
+    TEST(void() const volatile &);
+
+    TEST(void() &&);
+    TEST(void() const &&);
+    TEST(void() volatile &&);
+    TEST(void() const volatile &&);
+
+#endif
+
+#if defined( __cpp_noexcept_function_type ) || defined( _NOEXCEPT_TYPES_SUPPORTED )
+
+    TEST(void() noexcept);
+    TEST(void() const noexcept);
+    TEST(void() volatile noexcept);
+    TEST(void() const volatile noexcept);
+
+    TEST(void() & noexcept);
+    TEST(void() const & noexcept);
+    TEST(void() volatile & noexcept);
+    TEST(void() const volatile & noexcept);
+
+    TEST(void() && noexcept);
+    TEST(void() const && noexcept);
+    TEST(void() volatile && noexcept);
+    TEST(void() const volatile && noexcept);
+
+#endif
+
+#endif // #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
     TEST(A[]);
     TEST(A const[]);
     TEST(A volatile[]);
     TEST(A const volatile[]);
+
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1700
+    TEST(A(&)[]);
+#endif
+    TEST(A const(***)[]);
 
     TEST(B[1]);
     TEST(B const[1]);
     TEST(B volatile[1]);
     TEST(B const volatile[1]);
 
+    TEST(B(&)[1]);
+    TEST(B const(***)[1]);
+
     TEST(A[][2][3]);
     TEST(A const[][2][3]);
 
+#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1700
+    TEST(A(&)[][2][3]);
+#endif
+    TEST(A const(***)[][2][3]);
+
     TEST(B[1][2][3]);
     TEST(B const volatile[1][2][3]);
+
+    TEST(B(&)[1][2][3]);
+    TEST(B const volatile(***)[1][2][3]);
+
+    TEST(int A::*);
+    TEST(int const B::*);
+
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+    TEST(void(A::*)());
+    TEST(void(A::*)() const);
+    TEST(void(A::*)() volatile);
+    TEST(void(A::*)() const volatile);
+
+#endif
+
+#if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
+
+    TEST(void(A::*)() &);
+    TEST(void(A::*)() const &&);
+
+#endif
+
+#if defined( __cpp_noexcept_function_type ) || defined( _NOEXCEPT_TYPES_SUPPORTED )
+
+    TEST(void(A::*)() volatile & noexcept);
+    TEST(void(A::*)() const volatile && noexcept);
+
+#endif
 
 #if !defined(BOOST_NO_CXX11_NULLPTR)
 
@@ -129,6 +273,9 @@ int main()
 
     TEST(std::pair<A, B>);
     TEST(std::pair<A const*, B*> volatile&);
+
+    TEST(std::pair<void, void>);
+    TEST(std::pair<std::pair<void, void>, void>);
 
     TEST(std::basic_string<Ch>);
 
@@ -150,6 +297,8 @@ int main()
 
     TEST(X<A, B>);
     TEST(X<A const&, B&> volatile&);
+
+    TEST(X<std::pair<void, void>, void>);
 
     TEST(std::vector<int>);
     TEST(std::vector<A>);
@@ -190,6 +339,23 @@ int main()
 
     TEST(std::array<std::string, 7>);
     TEST(std::array<std::wstring const*, 0> const&);
+
+#endif
+
+#if !defined(BOOST_NO_CXX11_HDR_TUPLE) && ( !defined(BOOST_MSVC) || BOOST_MSVC >= 1700 )
+
+    TEST(std::tuple<>);
+    TEST(std::tuple<int>);
+    TEST(std::tuple<int, float>);
+    TEST(std::tuple<int, float, std::string>);
+
+    TEST(std::tuple<void>);
+    TEST(std::tuple<void, void>);
+    TEST(std::tuple<void, void, void>);
+
+    TEST(std::tuple<std::tuple<void, void>, void>);
+
+    TEST(X<std::tuple<void>, void>);
 
 #endif
 

@@ -17,6 +17,11 @@
 
 [section Header <boost/core/is_same.hpp>]
 
+[warning This component is deprecated and will be removed in a future release.
+Users are recommended to use `boost::is_same` from
+[@http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/index.html Boost.TypeTraits]
+or `std::is_same` from C++ standard library `<type_traits>` instead.]
+
 The header `<boost/core/is_same.hpp>` defines the class template
 `boost::core::is_same<T1,T2>`. It defines a nested integral constant
 `value` which is `true` when `T1` and `T2` are the same type, and

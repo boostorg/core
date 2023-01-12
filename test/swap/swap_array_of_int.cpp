@@ -20,13 +20,13 @@ int main()
   const std::size_t array_size = 3;
   const int initial_array1[array_size] = { 1, 2, 3 };
   const int initial_array2[array_size] = { 4, 5, 6 };
-  
+
   int array1[array_size];
   int array2[array_size];
 
   std::copy(initial_array1, initial_array1 + array_size, array1);
   std::copy(initial_array2, initial_array2 + array_size, array2);
-  
+
   boost::swap(array1, array2);
 
   BOOST_CHECK(std::equal(array1, array1 + array_size, initial_array2));

@@ -26,13 +26,13 @@ template<class T> struct not_
 namespace A {
   template<class T>
   typename enable_if<is_arithmetic<T>, bool>::type
-  arithmetic_object(T t) { return true; }
+  arithmetic_object(T /*t*/) { return true; }
 }
 
 namespace B {
   template<class T>
   typename enable_if<not_<is_arithmetic<T> >, bool>::type
-  arithmetic_object(T t) { return false; }
+  arithmetic_object(T /*t*/) { return false; }
 }
 
 int main()
@@ -47,4 +47,3 @@ int main()
 
   return boost::report_errors();
 }
-

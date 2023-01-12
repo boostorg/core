@@ -5,7 +5,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 // Tests swapping std::vector objects by means of boost::swap,
-// having ::swap_test_class as vector element type. 
+// having ::swap_test_class as vector element type.
 
 #include <boost/utility/swap.hpp>
 #include <boost/core/lightweight_test.hpp>
@@ -17,7 +17,7 @@
 //Put test class in the global namespace
 #include "./swap_test_class.hpp"
 
-//Provide swap function in the global namespace 
+//Provide swap function in the global namespace
 void swap(swap_test_class& left, swap_test_class& right)
 {
   left.swap(right);
@@ -32,12 +32,12 @@ int main()
 
   const vector_type initial_value1(initial_size1, swap_test_class(1));
   const vector_type initial_value2(initial_size2, swap_test_class(2));
-  
+
   vector_type object1 = initial_value1;
   vector_type object2 = initial_value2;
 
   swap_test_class::reset();
-  
+
   boost::swap(object1,object2);
 
   BOOST_CHECK_EQUAL(object1.size(),initial_size2);

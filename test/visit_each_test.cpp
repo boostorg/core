@@ -34,7 +34,7 @@ struct V
     {
     }
 
-    template< class T > void operator()( T const & t )
+    template< class T > void operator()( T const & /*t*/ )
     {
     }
 
@@ -45,7 +45,7 @@ struct V
 
     void operator()( std::string const & w )
     {
-        s_ = s_ * 10 + w.size();
+        s_ = s_ * 10 + static_cast<int>( w.size() );
     }
 };
 

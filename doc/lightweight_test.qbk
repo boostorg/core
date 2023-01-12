@@ -51,8 +51,16 @@ When using `lightweight_test.hpp`, *do not forget* to
 
 namespace boost
 {
-    int report_errors();
-}
+
+int report_errors();
+
+namespace core
+{
+
+void lwt_init();
+
+} // namespace core
+} // namespace boost
 ``
 
 [endsect]
@@ -246,6 +254,25 @@ Return the error count from `main`.
 
 [endsect]
 
+[section lwt_init]
+
+``
+void boost::core::lwt_init()
+``
+
+Performs one-time initialization. Disables the interactive message
+boxes displayed by the Microsoft Windows debug runtime library on
+`abort`, failing `assert`, and other abnormal program terminations
+(to facilitate unattended testing), and ensures that in case
+`boost::report_errors` is not called (a common mistake), the program
+ends with a nonzero exit code.
+
+`lwt_init` is automatically called by the test macros. There is
+no need to call it explicitly, except in cases where a test fails due
+to e.g. an assertion failure before the first test macro is invoked.
+
+[endsect]
+
 [section Example]
 
 ``
@@ -326,14 +353,14 @@ parentheses.)
 
 ``
 #include <boost/core/lightweight_test_trait.hpp>
-#include <boost/core/is_same.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 template<class T, class U> struct X
 {
     typedef T type;
 };
 
-using boost::core::is_same;
+using boost::is_same;
 
 int main()
 {

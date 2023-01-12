@@ -11,7 +11,7 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <boost/ref.hpp>
+#include <boost/core/ref.hpp>
 #include <boost/core/lightweight_test.hpp>
 
 template<class T> void test( T const & t )

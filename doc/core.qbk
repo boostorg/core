@@ -34,13 +34,15 @@ criteria for inclusion is that the utility component be:
 * simple,
 * used by other Boost libraries, and
 * not dependent on any other Boost modules except Core
-  itself, Config, Assert, Static Assert, or Predef.
+  itself, Config, Assert, StaticAssert, or ThrowException.
 
 [endsect]
 
+[include changes.qbk]
+
 [include addressof.qbk]
 [include allocator_access.qbk]
-[include alloc_construct.qbk]
+[include allocator_traits.qbk]
 [include bit.qbk]
 [include checked_delete.qbk]
 [include cmath.qbk]
@@ -58,13 +60,17 @@ criteria for inclusion is that the utility component be:
 [include noinit_adaptor.qbk]
 [include noncopyable.qbk]
 [include null_deleter.qbk]
+[include fclose_deleter.qbk]
 [include nvp.qbk]
 [include pointer_traits.qbk]
 [include quick_exit.qbk]
 [include ref.qbk]
 [include scoped_enum.qbk]
+[include span.qbk]
 [include swap.qbk]
 [include typeinfo.qbk]
 [include type_name.qbk]
+[include snprintf.qbk]
 [include uncaught_exceptions.qbk]
 [include use_default.qbk]
+[include verbose_terminate_handler.qbk]
