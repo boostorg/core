@@ -20,12 +20,14 @@ target_link_libraries(boost_core
     Boost::throw_exception
 )
 
-file(GLOB_RECURSE boost_core_IDEFILES CONFIGURE_DEPENDS include/*.hpp)
-source_group(TREE ${PROJECT_SOURCE_DIR}/include FILES ${boost_core_IDEFILES})
-if (CMAKE_GENERATOR MATCHES "Visual Studio")
-    list(APPEND boost_core_IDEFILES extra/boost_core.natvis)
+if(CMAKE_VERSION VERSION_GREATER 3.18 AND CMAKE_GENERATOR MATCHES "Visual Studio")
+
+  file(GLOB_RECURSE boost_core_IDEFILES CONFIGURE_DEPENDS include/*.hpp)
+  source_group(TREE ${PROJECT_SOURCE_DIR}/include FILES ${boost_core_IDEFILES} PREFIX "Header Files")
+  list(APPEND boost_core_IDEFILES extra/boost_core.natvis)
+  target_sources(boost_core PRIVATE ${boost_core_IDEFILES})
+
 endif()
-target_sources(boost_core PRIVATE ${boost_core_IDEFILES})
 
 if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
 
