@@ -59,6 +59,13 @@ environment:
       TOOLSET: gcc
       CXXSTD: 03,11,14,1z
 
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      CMAKE: 1
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      CMAKE_SUBDIR: 1
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      CMAKE_INSTALL: 1
+
 install:
   - set GIT_FETCH_JOBS=8
   - set BOOST_BRANCH=develop
@@ -78,4 +85,27 @@ test_script:
   - PATH=%ADDPATH%%PATH%
   - if not "%CXXSTD%" == "" set CXXSTD=cxxstd=%CXXSTD%
   - if not "%ADDRMD%" == "" set ADDRMD=address-model=%ADDRMD%
-  - b2 -j %NUMBER_OF_PROCESSORS% libs/core/test toolset=%TOOLSET% %CXXSTD% %ADDRMD% variant=debug,release embed-manifest-via=linker
+  - if "%CMAKE%%CMAKE_SUBDIR%%CMAKE_INSTALL%" == ""  b2 -j %NUMBER_OF_PROCESSORS% libs/core/test toolset=%TOOLSET% %CXXSTD% %ADDRMD% variant=debug,release embed-manifest-via=linker
+
+  - if not "%CMAKE%" == ""  mkdir __build__ && cd __build__
+  - if not "%CMAKE%" == ""  cmake -DBUILD_TESTING=ON -DBOOST_INCLUDE_LIBRARIES=core -DBoost_VERBOSE=ON ..
+  - if not "%CMAKE%" == ""  cmake --build . --target tests --config Debug & ctest --output-on-failure --no-tests=error -C Debug
+  - if not "%CMAKE%" == ""  cmake --build . --target tests --config Release & ctest --output-on-failure --no-tests=error -C Release
+  - if not "%CMAKE%" == ""  cmake --build . --target tests --config MinSizeRel & ctest --output-on-failure --no-tests=error -C MinSizeRel
+  - if not "%CMAKE%" == ""  cmake --build . --target tests --config RelWithDebInfo & ctest --output-on-failure --no-tests=error -C RelWithDebInfo
+
+  - if not "%CMAKE_SUBDIR%" == ""  cd libs/core/test/cmake_subdir_test && mkdir __build__ && cd __build__
+  - if not "%CMAKE_SUBDIR%" == ""  cmake ..
+  - if not "%CMAKE_SUBDIR%" == ""  cmake --build . --config Debug && cmake --build . --target check --config Debug
+  - if not "%CMAKE_SUBDIR%" == ""  cmake --build . --config Release && cmake --build . --target check --config Release
+  - if not "%CMAKE_SUBDIR%" == ""  cmake --build . --config MinSizeRel && cmake --build . --target check --config MinSizeRel
+  - if not "%CMAKE_SUBDIR%" == ""  cmake --build . --config RelWithDebInfo && cmake --build . --target check --config RelWithDebInfo
+
+  - if not "%CMAKE_INSTALL%" == ""  mkdir __build__ && cd __build__
+  - if not "%CMAKE_INSTALL%" == ""  cmake -DBOOST_INCLUDE_LIBRARIES=core -DCMAKE_INSTALL_PREFIX=C:/cmake-prefix ..
+  - if not "%CMAKE_INSTALL%" == ""  cmake --build . --target install --config Debug
+  - if not "%CMAKE_INSTALL%" == ""  cmake --build . --target install --config Release
+  - if not "%CMAKE_INSTALL%" == ""  cd ../libs/core/test/cmake_install_test && mkdir __build__ && cd __build__
+  - if not "%CMAKE_INSTALL%" == ""  cmake -DCMAKE_INSTALL_PREFIX=C:/cmake-prefix ..
+  - if not "%CMAKE_INSTALL%" == ""  cmake --build . --config Debug && cmake --build . --target check --config Debug
+  - if not "%CMAKE_INSTALL%" == ""  cmake --build . --config Release && cmake --build . --target check --config Release
