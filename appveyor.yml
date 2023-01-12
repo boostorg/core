@@ -77,7 +77,7 @@ install:
   - xcopy /s /e /q %APPVEYOR_BUILD_FOLDER% libs\core\
   - python tools/boostdep/depinst/depinst.py --git_args "--jobs %GIT_FETCH_JOBS%" core
   - cmd /c bootstrap
-  - b2 headers
+  - b2 -d0 headers
 
 build: off
 
@@ -88,7 +88,7 @@ test_script:
   - if "%CMAKE%%CMAKE_SUBDIR%%CMAKE_INSTALL%" == ""  b2 -j %NUMBER_OF_PROCESSORS% libs/core/test toolset=%TOOLSET% %CXXSTD% %ADDRMD% variant=debug,release embed-manifest-via=linker
 
   - if not "%CMAKE%" == ""  mkdir __build__ && cd __build__
-  - if not "%CMAKE%" == ""  cmake -DBUILD_TESTING=ON -DBOOST_INCLUDE_LIBRARIES=core -DBoost_VERBOSE=ON ..
+  - if not "%CMAKE%" == ""  cmake -DBUILD_TESTING=ON -DBOOST_INCLUDE_LIBRARIES=core ..
   - if not "%CMAKE%" == ""  cmake --build . --target tests --config Debug & ctest --output-on-failure --no-tests=error -C Debug
   - if not "%CMAKE%" == ""  cmake --build . --target tests --config Release & ctest --output-on-failure --no-tests=error -C Release
   - if not "%CMAKE%" == ""  cmake --build . --target tests --config MinSizeRel & ctest --output-on-failure --no-tests=error -C MinSizeRel
