@@ -89,10 +89,10 @@ test_script:
 
   - if not "%CMAKE%" == ""  mkdir __build__ && cd __build__
   - if not "%CMAKE%" == ""  cmake -DBUILD_TESTING=ON -DBOOST_INCLUDE_LIBRARIES=core ..
-  - if not "%CMAKE%" == ""  cmake --build . --target tests --config Debug & ctest --output-on-failure --no-tests=error -C Debug
-  - if not "%CMAKE%" == ""  cmake --build . --target tests --config Release & ctest --output-on-failure --no-tests=error -C Release
-  - if not "%CMAKE%" == ""  cmake --build . --target tests --config MinSizeRel & ctest --output-on-failure --no-tests=error -C MinSizeRel
-  - if not "%CMAKE%" == ""  cmake --build . --target tests --config RelWithDebInfo & ctest --output-on-failure --no-tests=error -C RelWithDebInfo
+  - if not "%CMAKE%" == ""  cmake --build . --target tests -j 3 --config Debug & ctest --output-on-failure --no-tests=error -j 3 -C Debug
+  - if not "%CMAKE%" == ""  cmake --build . --target tests -j 3 --config Release & ctest --output-on-failure --no-tests=error -j 3 -C Release
+  - if not "%CMAKE%" == ""  cmake --build . --target tests -j 3 --config MinSizeRel & ctest --output-on-failure --no-tests=error -j 3 -C MinSizeRel
+  - if not "%CMAKE%" == ""  cmake --build . --target tests -j 3 --config RelWithDebInfo & ctest --output-on-failure --no-tests=error -j 3 -C RelWithDebInfo
 
   - if not "%CMAKE_SUBDIR%" == ""  cd libs/core/test/cmake_subdir_test && mkdir __build__ && cd __build__
   - if not "%CMAKE_SUBDIR%" == ""  cmake ..
