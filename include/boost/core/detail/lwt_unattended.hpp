@@ -27,6 +27,14 @@ inline void lwt_unattended()
     // disable message boxes on assert(), abort()
     ::_set_abort_behavior( 0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT );
 
+# pragma warning(push)
+# pragma warning(disable: 4996)
+
+    // disable message box on crash
+    ::_seterrormode( /*SEM_NOGPFAULTERRORBOX*/ 0x0002 );
+
+# pragma warning(pop)
+
 #endif
 
 #if defined(_MSC_VER) && defined(_CPPLIB_VER) && defined(_DEBUG)
