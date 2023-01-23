@@ -30,8 +30,17 @@ inline void lwt_unattended()
 # pragma warning(push)
 # pragma warning(disable: 4996)
 
+# if defined(__clang__)
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wdeprecated-declarations"
+# endif
+
     // disable message box on crash
     ::_seterrormode( /*SEM_NOGPFAULTERRORBOX*/ 0x0002 );
+
+# if defined(__clang__)
+#  pragma clang diagnostic pop
+# endif
 
 # pragma warning(pop)
 
