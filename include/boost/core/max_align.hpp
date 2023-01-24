@@ -26,12 +26,16 @@ union max_align_t
     int i;
     long l;
 
-#ifndef BOOST_NO_LONG_LONG
+#if !defined(BOOST_NO_LONG_LONG)
+
     boost::long_long_type ll;
+
 #endif
 
-#ifdef BOOST_HAS_INT128
+#if defined(BOOST_HAS_INT128)
+
     boost::int128_type i128;
+
 #endif
 
     float f;
@@ -39,7 +43,9 @@ union max_align_t
     long double ld;
 
 #if defined(BOOST_HAS_FLOAT128) || defined(__SIZEOF_FLOAT128__)
+
     __float128 f128;
+
 #endif
 
     void* p;

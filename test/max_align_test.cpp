@@ -8,6 +8,10 @@
 #include <boost/config.hpp>
 #include <cstddef>
 
+#if defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 40900
+# define BOOST_NO_STD_MAX_ALIGN_T
+#endif
+
 struct X
 {
 };
@@ -21,20 +25,26 @@ int main()
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<int>::value );
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<long>::value );
 
-#ifndef BOOST_NO_LONG_LONG
+#if !defined(BOOST_NO_LONG_LONG)
+
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<boost::long_long_type>::value );
+
 #endif
 
-#ifdef BOOST_HAS_INT128
+#if defined(BOOST_HAS_INT128)
+
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<boost::int128_type>::value );
+
 #endif
 
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<float>::value );
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<double>::value );
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<long double>::value );
 
-#ifdef BOOST_HAS_FLOAT128
+#if defined(BOOST_HAS_FLOAT128) || defined(__SIZEOF_FLOAT128__)
+
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<__float128>::value );
+
 #endif
 
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<void*>::value );
@@ -43,7 +53,7 @@ int main()
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<int X::*>::value );
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<void (X::*)()>::value );
 
-#if !defined(BOOST_NO_CXX11_ALIGNOF)
+#if !defined(BOOST_NO_CXX11_ALIGNOF) && !defined(BOOST_NO_STD_MAX_ALIGN_T)
 
     BOOST_TEST_EQ( boost::core::max_align, alignof( std::max_align_t ) );
 
