@@ -352,5 +352,7 @@ run-fail verbose_terminate_handler_fail.cpp : : : <exception-handling>off : verb
 run-fail verbose_terminate_handler_fail.cpp : : : <rtti>off : verbose_terminate_handler_fail_nr ;
 run-fail verbose_terminate_handler_fail.cpp : : : <exception-handling>off <rtti>off : verbose_terminate_handler_fail_nxr ;
 
+run launder_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
