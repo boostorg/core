@@ -354,5 +354,7 @@ run-fail verbose_terminate_handler_fail.cpp : : : <exception-handling>off <rtti>
 
 run launder_test.cpp ;
 
+run max_align_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
