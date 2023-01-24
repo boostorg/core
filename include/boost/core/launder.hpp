@@ -17,7 +17,7 @@
 # endif
 #endif
 
-#if !defined(BOOST_CORE_HAS_BUILTIN_LAUNDER)
+#if (__cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)) && !defined(BOOST_CORE_HAS_BUILTIN_LAUNDER)
 # include <new>
 #endif
 
@@ -33,7 +33,7 @@ template<class T> T* launder( T* p )
     return __builtin_launder( p );
 }
 
-#elif defined(__cpp_lib_launder)
+#elif (__cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L)) && defined(__cpp_lib_launder)
 
 template<class T> T* launder( T* p )
 {
