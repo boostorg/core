@@ -55,6 +55,7 @@ criteria for inclusion is that the utility component be:
 [include first_scalar.qbk]
 [include ignore_unused.qbk]
 [include is_same.qbk]
+[include launder.qbk]
 [include lightweight_test.qbk]
 [include no_exceptions_support.qbk]
 [include noinit_adaptor.qbk]
