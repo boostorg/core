@@ -38,7 +38,7 @@ union max_align_t
     double d;
     long double ld;
 
-#ifdef BOOST_HAS_FLOAT128
+#if defined(BOOST_HAS_FLOAT128) || defined(__SIZEOF_FLOAT128__)
     __float128 f128;
 #endif
 
