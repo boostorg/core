@@ -14,6 +14,24 @@
 #include <boost/config.hpp>
 #include <cstddef>
 
+// BOOST_CORE_HAS_FLOAT128
+
+#if defined(BOOST_HAS_FLOAT128)
+
+# define BOOST_CORE_HAS_FLOAT128
+
+#elif defined(__SIZEOF_FLOAT128__)
+
+# define BOOST_CORE_HAS_FLOAT128
+
+#elif defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ >= 404) && defined(__i386__)
+
+# define BOOST_CORE_HAS_FLOAT128
+
+#endif
+
+// max_align_t, max_align
+
 namespace boost
 {
 namespace core
@@ -42,7 +60,7 @@ union max_align_t
     double d;
     long double ld;
 
-#if defined(BOOST_HAS_FLOAT128) || defined(__SIZEOF_FLOAT128__)
+#if defined(BOOST_CORE_HAS_FLOAT128)
 
     __float128 f128;
 

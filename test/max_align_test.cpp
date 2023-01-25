@@ -41,7 +41,7 @@ int main()
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<double>::value );
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<long double>::value );
 
-#if defined(BOOST_HAS_FLOAT128) || defined(__SIZEOF_FLOAT128__)
+#if defined(BOOST_CORE_HAS_FLOAT128)
 
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<__float128>::value );
 
