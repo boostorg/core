@@ -57,6 +57,7 @@ criteria for inclusion is that the utility component be:
 [include is_same.qbk]
 [include launder.qbk]
 [include lightweight_test.qbk]
+[include max_align.qbk]
 [include no_exceptions_support.qbk]
 [include noinit_adaptor.qbk]
 [include noncopyable.qbk]
