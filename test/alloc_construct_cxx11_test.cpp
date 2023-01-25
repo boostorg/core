@@ -72,6 +72,7 @@ int main()
     BOOST_TEST_EQ(p->value(), 2);
     boost::alloc_destroy(a, p);
     BOOST_TEST_EQ(type::count, 0);
+    a.deallocate(p, 1);
     return boost::report_errors();
 }
 #else
