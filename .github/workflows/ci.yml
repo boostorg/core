@@ -32,82 +32,95 @@ jobs:
           # Linux, gcc
           - toolset: gcc-4.4
             cxxstd: "98,0x"
+            address-model: 32,64
             os: ubuntu-latest
             container: ubuntu:16.04
             install:
-              - g++-4.4
+              - g++-4.4-multilib
             sources:
               - "ppa:ubuntu-toolchain-r/test"
           - toolset: gcc-4.6
             cxxstd: "03,0x"
+            address-model: 32,64
             os: ubuntu-latest
             container: ubuntu:16.04
             install:
-              - g++-4.6
+              - g++-4.6-multilib
             sources:
               - "ppa:ubuntu-toolchain-r/test"
           - toolset: gcc-4.7
             cxxstd: "03,11"
+            address-model: 32,64
             os: ubuntu-latest
             container: ubuntu:16.04
             install:
-              - g++-4.7
+              - g++-4.7-multilib
           - toolset: gcc-4.8
             cxxstd: "03,11"
+            address-model: 32,64
             os: ubuntu-latest
             container: ubuntu:18.04
             install:
-              - g++-4.8
+              - g++-4.8-multilib
           - toolset: gcc-4.9
             cxxstd: "03,11"
+            address-model: 32,64
             os: ubuntu-latest
             container: ubuntu:16.04
             install:
-              - g++-4.9
+              - g++-4.9-multilib
           - toolset: gcc-5
             cxxstd: "03,11,14,1z"
+            address-model: 32,64
             os: ubuntu-latest
             container: ubuntu:16.04
             install:
-              - g++-5
+              - g++-5-multilib
           - toolset: gcc-6
             cxxstd: "03,11,14,1z"
+            address-model: 32,64
             os: ubuntu-latest
             container: ubuntu:18.04
             install:
-              - g++-6
+              - g++-6-multilib
           - toolset: gcc-7
             cxxstd: "03,11,14,17"
+            address-model: 32,64
             os: ubuntu-latest
             container: ubuntu:18.04
             install:
-              - g++-7
+              - g++-7-multilib
           - toolset: gcc-8
             cxxstd: "03,11,14,17,2a"
+            address-model: 32,64
             os: ubuntu-latest
             container: ubuntu:18.04
             install:
-              - g++-8
+              - g++-8-multilib
           - toolset: gcc-9
             cxxstd: "03,11,14,17,2a"
+            address-model: 32,64
             os: ubuntu-20.04
             install:
-              - g++-9
+              - g++-9-multilib
           - toolset: gcc-10
             cxxstd: "03,11,14,17,20"
+            address-model: 32,64
             os: ubuntu-20.04
             install:
-              - g++-10
+              - g++-10-multilib
           - toolset: gcc-11
             cxxstd: "03,11,14,17,20,23"
+            address-model: 32,64
             os: ubuntu-22.04
             install:
-              - g++-11
+              - g++-11-multilib
           - toolset: gcc-12
             cxxstd: "03,11,14,17,20,23"
+            address-model: 32,64
             os: ubuntu-22.04
             install:
-              - g++-12
+              - g++-12-multilib
           - name: UBSAN
             toolset: gcc-12
             cxxstd: "03,11,14,17,20,23"
@@ -266,6 +279,9 @@ jobs:
           - toolset: clang
             cxxstd: "03,11,14,17,2a"
             os: macos-11
+          - toolset: clang
+            cxxstd: "03,11,14,17,2a"
+            os: macos-12
 
     timeout-minutes: 120
     runs-on: ${{matrix.os}}
@@ -456,6 +472,10 @@ jobs:
             then
                 B2_ARGS+=("cxxflags=${{matrix.cxxflags}}")
             fi
+            if [ -n "${{matrix.address-model}}" ]
+            then
+                B2_ARGS+=("address-model=${{matrix.address-model}}")
+            fi
             if [ -n "${{matrix.linkflags}}" ]
             then
                 B2_ARGS+=("linkflags=${{matrix.linkflags}}")
@@ -530,6 +550,7 @@ jobs:
           - os: ubuntu-20.04
           - os: ubuntu-22.04
           - os: macos-11
+          - os: macos-12
 
     runs-on: ${{matrix.os}}
 
@@ -576,6 +597,7 @@ jobs:
           - os: ubuntu-20.04
           - os: ubuntu-22.04
           - os: macos-11
+          - os: macos-12
 
     runs-on: ${{matrix.os}}
 
@@ -632,6 +654,7 @@ jobs:
           - os: ubuntu-20.04
           - os: ubuntu-22.04
           - os: macos-11
+          - os: macos-12
 
     runs-on: ${{matrix.os}}
 
