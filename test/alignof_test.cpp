@@ -49,9 +49,12 @@ int main()
     test<long>();
 
 #if !defined(BOOST_NO_LONG_LONG)
+# if !( defined(__GNUC__) && defined(__i386__) )
 
+    // g++ -m32 has alignof(long long) = 8, but boost::alignment_of<long long>::value = 4
     test<boost::long_long_type>();
 
+# endif
 #endif
 
 #if defined(BOOST_HAS_INT128)
@@ -61,7 +64,14 @@ int main()
 #endif
 
     test<float>();
+
+#if !( defined(__GNUC__) && defined(__i386__) )
+
+    // g++ -m32 has alignof(double) = 8, but boost::alignment_of<double>::value = 4
     test<double>();
+
+#endif
+
     test<long double>();
 
 #if defined(BOOST_HAS_FLOAT128)
