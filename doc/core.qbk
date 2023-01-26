@@ -41,6 +41,7 @@ criteria for inclusion is that the utility component be:
 [include changes.qbk]
 
 [include addressof.qbk]
+[include alignof.qbk]
 [include allocator_access.qbk]
 [include allocator_traits.qbk]
 [include bit.qbk]
