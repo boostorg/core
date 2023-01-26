@@ -15,7 +15,37 @@
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
 #include <cstddef>
-#include <new>
+
+// Define our own placement new to avoid the inclusion of <new>
+// (~9K extra lines) at Ion Gaztanhaga's request.
+//
+// We can use our own because [intro.object] p13 says:
+//
+// Any implicit or explicit invocation of a function named `operator new`
+// or `operator new[]` implicitly creates objects in the returned region of
+// storage and returns a pointer to a suitable created object.
+
+namespace boost
+{
+namespace core
+{
+namespace detail
+{
+
+struct placement_new_tag {};
+
+} // namespace detail
+} // namespace core
+} // namespace boost
+
+inline void* operator new( std::size_t, void* p, boost::core::detail::placement_new_tag )
+{
+    return p;
+}
+
+inline void operator delete( void*, void*, boost::core::detail::placement_new_tag )
+{
+}
 
 namespace boost
 {
@@ -40,7 +70,8 @@ public:
     {
         // https://github.com/boostorg/container/issues/199
         // https://cplusplus.github.io/LWG/issue3471
-        return ::operator new( bytes, do_allocate( bytes, alignment ) );
+
+        return ::operator new( bytes, do_allocate( bytes, alignment ), core::detail::placement_new_tag() );
     }
 
     void deallocate( void* p, std::size_t bytes, std::size_t alignment = max_align )
