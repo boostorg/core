@@ -17,6 +17,7 @@
 * Marked `boost::ref` member functions and associated methods with `noexcept`.
 * Marked `boost::swap` function with `noexcept`, depending on whether the type supports a non-throwing swap operation.
 * Added `boost::core::launder`, a portable implementation of `std::launder`.
+* Added `BOOST_CORE_ALIGNOF`, a portable implementation of `alignof`.
 * Added `boost::core::max_align_t`, a portable equivalent of `std::max_align_t`, and `boost::core::max_align`, the
   alignment of `max_align_t`.
 
