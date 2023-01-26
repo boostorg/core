@@ -11,6 +11,7 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  https://www.boost.org/LICENSE_1_0.txt
 
+#include <boost/core/alignof.hpp>
 #include <boost/config.hpp>
 #include <cstddef>
 
@@ -73,34 +74,7 @@ union max_align_t
     void (max_align_t::*pmf)();
 };
 
-#if !defined(BOOST_NO_CXX11_ALIGNOF)
-
-BOOST_CONSTEXPR_OR_CONST std::size_t max_align = alignof( max_align_t );
-
-#elif defined(__GNUC__)
-
-BOOST_CONSTEXPR_OR_CONST std::size_t max_align = __alignof__( max_align_t );
-
-#elif defined(_MSC_VER)
-
-BOOST_CONSTEXPR_OR_CONST std::size_t max_align = __alignof( max_align_t );
-
-#else
-
-namespace detail
-{
-
-struct alignment_of_helper
-{
-    char x;
-    max_align_t a;
-};
-
-} // namespace detail
-
-BOOST_CONSTEXPR_OR_CONST std::size_t max_align = offsetof( core::detail::alignment_of_helper, a );
-
-#endif
+BOOST_CONSTEXPR_OR_CONST std::size_t max_align = BOOST_CORE_ALIGNOF( max_align_t );
 
 } // namespace core
 } // namespace boost

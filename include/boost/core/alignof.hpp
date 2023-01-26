@@ -1,5 +1,5 @@
-#ifndef BOOST_CORE_MAX_ALIGN_HPP_INCLUDED
-#define BOOST_CORE_MAX_ALIGN_HPP_INCLUDED
+#ifndef BOOST_CORE_ALIGNOF_HPP_INCLUDED
+#define BOOST_CORE_ALIGNOF_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -54,4 +54,4 @@ template<class T> struct alignof_helper
 
 #endif
 
-#endif  // #ifndef BOOST_CORE_MAX_ALIGN_HPP_INCLUDED
+#endif  // #ifndef BOOST_CORE_ALIGNOF_HPP_INCLUDED
