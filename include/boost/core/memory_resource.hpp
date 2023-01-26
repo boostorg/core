@@ -13,6 +13,7 @@
 
 #include <boost/core/max_align.hpp>
 #include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
 #include <cstddef>
 #include <new>
 
@@ -25,7 +26,7 @@ class memory_resource
 {
 public:
 
-#if defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS)
+#if defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS) || BOOST_WORKAROUND(BOOST_GCC, < 40700)
 
     virtual ~memory_resource() {}
 
