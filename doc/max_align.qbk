@@ -29,7 +29,7 @@ namespace core
 
 union max_align_t;
 
-constexpr max_align = alignof(max_align_t);
+constexpr std::size_t max_align = alignof(max_align_t);
 
 } // namespace core
 } // namespace boost
