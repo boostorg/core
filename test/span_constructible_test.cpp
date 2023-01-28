@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Glen Joseph Fernandes
+Copyright 2019-2023 Glen Joseph Fernandes
 (glenjofe@gmail.com)
 
 Distributed under the Boost Software License, Version 1.0.
@@ -140,6 +140,14 @@ void test_range()
         range<derived>&>));
 }
 
+void test_initializer_list()
+{
+    BOOST_TEST_TRAIT_TRUE((std::is_constructible<boost::span<const int>,
+        std::initializer_list<int> >));
+    BOOST_TEST_TRAIT_FALSE((std::is_constructible<boost::span<int>,
+        std::initializer_list<int> >));
+}
+
 void test_span()
 {
     BOOST_TEST_TRAIT_TRUE((std::is_constructible<boost::span<const int>,
@@ -187,6 +195,7 @@ int main()
     test_std_array();
     test_const_std_array();
     test_range();
+    test_initializer_list();
     test_span();
     test_copy();
     test_assign();

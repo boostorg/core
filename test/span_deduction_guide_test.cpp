@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Glen Joseph Fernandes
+Copyright 2019-2023 Glen Joseph Fernandes
 (glenjofe@gmail.com)
 
 Distributed under the Boost Software License, Version 1.0.
@@ -78,6 +78,15 @@ void test_range()
     BOOST_TEST_EQ(s.size(), c.size());
 }
 
+void test_initializer_list()
+{
+    std::initializer_list<int> l{1, 2};
+    boost::span s(l);
+    BOOST_TEST_EQ(s.extent, boost::dynamic_extent);
+    BOOST_TEST_EQ(s.data(), l.begin());
+    BOOST_TEST_EQ(s.size(), l.size());
+}
+
 void test_span_dynamic()
 {
     int a[4];
@@ -104,6 +113,7 @@ int main()
     test_std_array();
     test_const_std_array();
     test_range();
+    test_initializer_list();
     test_span_dynamic();
     test_span_static();
     return boost::report_errors();

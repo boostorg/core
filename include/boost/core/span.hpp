@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Glen Joseph Fernandes
+Copyright 2019-2023 Glen Joseph Fernandes
 (glenjofe@gmail.com)
 
 Distributed under the Boost Software License, Version 1.0.
@@ -9,6 +9,7 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_SPAN_HPP
 
 #include <array>
+#include <initializer_list>
 #include <iterator>
 #include <type_traits>
 #include <cstddef>
@@ -39,10 +40,8 @@ struct span_compatible {
 };
 
 template<class T>
-struct span_uncvref {
-    typedef typename std::remove_cv<typename
-        std::remove_reference<T>::type>::type type;
-};
+using span_uncvref = typename std::remove_cv<typename
+    std::remove_reference<T>::type>::type;
 
 template<class>
 struct span_is_span {
@@ -64,15 +63,37 @@ struct span_is_array<std::array<T, N> > {
     static constexpr bool value = true;
 };
 
+template<class C>
+inline constexpr auto
+span_begin(C& c) noexcept(noexcept(c.data())) -> decltype(c.data())
+{
+    return c.data();
+}
+
+template<class C>
+inline constexpr auto
+span_begin(const C& c) noexcept(noexcept(c.data())) -> decltype(c.data())
+{
+    return c.data();
+}
+
+template<class T>
+inline constexpr const T*
+span_begin(std::initializer_list<T> l) noexcept
+{
+    return l.begin();
+}
+
+template<class T>
+using span_ptr = decltype(boost::detail::span_begin(std::declval<T&>()));
+
 template<class, class = void>
 struct span_data { };
 
 template<class T>
 struct span_data<T,
-    typename std::enable_if<std::is_pointer<decltype(std::declval<T
-        &>().data())>::value>::type> {
-    typedef typename std::remove_pointer<decltype(std::declval<T
-        &>().data())>::type type;
+    typename std::enable_if<std::is_pointer<span_ptr<T> >::value>::type> {
+    typedef typename std::remove_pointer<span_ptr<T> >::type type;
 };
 
 template<class, class, class = void>
@@ -102,9 +123,9 @@ template<class R, class T>
 struct span_is_range {
     static constexpr bool value = (std::is_const<T>::value ||
         std::is_lvalue_reference<R>::value) &&
-        !span_is_span<typename span_uncvref<R>::type>::value &&
-        !span_is_array<typename span_uncvref<R>::type>::value &&
-        !std::is_array<typename span_uncvref<R>::type>::value &&
+        !span_is_span<span_uncvref<R> >::value &&
+        !span_is_array<span_uncvref<R> >::value &&
+        !std::is_array<span_uncvref<R> >::value &&
         span_has_data<R, T>::value &&
         span_has_size<R>::value;
 };
@@ -224,15 +245,16 @@ public:
     template<class R,
         typename std::enable_if<E == dynamic_extent &&
             detail::span_is_range<R, T>::value, int>::type = 0>
-    constexpr span(R&& r) noexcept(noexcept(r.data()) && noexcept(r.size()))
-        : s_(r.data(), r.size()) { }
+    constexpr span(R&& r) noexcept(noexcept(detail::span_begin(r)) &&
+        noexcept(r.size()))
+        : s_(detail::span_begin(r), r.size()) { }
 
     template<class R,
         typename std::enable_if<E != dynamic_extent &&
             detail::span_is_range<R, T>::value, int>::type = 0>
-    explicit constexpr span(R&& r) noexcept(noexcept(r.data()) &&
+    explicit constexpr span(R&& r) noexcept(noexcept(detail::span_begin(r)) &&
         noexcept(r.size()))
-        : s_(r.data(), r.size()) { }
+        : s_(detail::span_begin(r), r.size()) { }
 
     template<class U, std::size_t N,
         typename std::enable_if<detail::span_implicit<E, N>::value &&
