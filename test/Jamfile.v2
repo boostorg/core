@@ -360,5 +360,8 @@ run max_align_test.cpp ;
 
 run memory_resource_test.cpp ;
 
+run data_test.cpp ;
+run size_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
