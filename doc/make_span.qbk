@@ -48,7 +48,7 @@ constexpr span<const T, N>
 make_span(const std::array<T, N>& a) noexcept;
 
 template<class R>
-span<std::remove_pointer_t<decltype(std::declval<R&>().data())> >
+span<remove_pointer_t<iterator_t<R> > >
 make_span(R&& r);
 
 } /* boost */
@@ -70,9 +70,9 @@ make_span(std::array<T, N>& a);`]
 make_span(const std::array<T, N>& a);`]
 [Returns `span<const T, N>(a)`.]]
 [[`template<class R>
-span<std::remove_pointer_t<decltype(std::declval<R&>().data())> >
+span<remove_pointer_t<iterator_t<R> > >
 make_span(R&& r);`]
-[Returns `span<>(std::forward<R>(r))`.]]]
+[Returns `span<remove_pointer_t<iterator_t<R> > >(std::forward<R>(r))`.]]]
 
 [endsect]
 
