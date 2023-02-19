@@ -368,5 +368,8 @@ run serialization_split_free_test.cpp : : : <library>/boost//serialization/<warn
 run serialization_split_member_test.cpp : : : <library>/boost//serialization/<warnings>off ;
 run serialization_construct_data_test.cpp : : : <library>/boost//serialization/<warnings>off ;
 
+run identity_test.cpp ;
+run identity_rvalue_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
