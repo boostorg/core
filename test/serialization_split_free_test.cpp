@@ -2,6 +2,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#if defined(__clang__) && defined(__has_warning)
+# if __has_warning( "-Wdeprecated-copy" )
+#  pragma clang diagnostic ignored "-Wdeprecated-copy"
+# endif
+#endif
+
 #include <boost/core/serialization.hpp>
 
 struct X
