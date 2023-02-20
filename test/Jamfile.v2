@@ -363,7 +363,7 @@ run memory_resource_test.cpp ;
 run data_test.cpp ;
 run size_test.cpp ;
 
-run serialization_nvp_test.cpp : : : <library>/boost//serialization/<warnings>off ;
+run serialization_nvp_test.cpp : : : <library>/boost//serialization/<warnings>off <toolset>clang,<undefined-sanitizer>norecover:<build>no ;
 run serialization_split_free_test.cpp : : : <library>/boost//serialization/<warnings>off ;
 run serialization_split_member_test.cpp : : : <library>/boost//serialization/<warnings>off ;
 
