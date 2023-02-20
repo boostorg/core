@@ -16,7 +16,7 @@ struct X
 
 private:
 
-    friend boost::serialization::access;
+    friend class boost::serialization::access;
 
     template<class Ar> void load( Ar& ar, unsigned /*v*/ )
     {
