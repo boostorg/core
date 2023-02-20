@@ -363,5 +363,8 @@ run memory_resource_test.cpp ;
 run data_test.cpp ;
 run size_test.cpp ;
 
+run serialization_nvp_test.cpp : : : <library>/boost//serialization/<warnings>off ;
+run serialization_split_free_test.cpp : : : <library>/boost//serialization/<warnings>off ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
