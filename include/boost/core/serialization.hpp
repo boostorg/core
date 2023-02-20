@@ -27,6 +27,8 @@ namespace serialization
 
 template<class T> struct version;
 
+class access;
+
 // Our own version_type replacement. This has to be in
 // the `serialization` namespace, because its only purpose
 // is to add `serialization` as an associated namespace.
@@ -54,17 +56,17 @@ using serialization::make_nvp;
 namespace detail
 {
 
-template<bool IsSaving> struct load_or_save;
+template<bool IsSaving> struct load_or_save_f;
 
-template<> struct load_or_save<true>
+template<> struct load_or_save_f<true>
 {
     template<class A, class T> void operator()( A& a, T& t, unsigned int v ) const
     {
-		save( a, t, serialization::core_version_type( v ) );
+        save( a, t, serialization::core_version_type( v ) );
     }
 };
 
-template<> struct load_or_save<false>
+template<> struct load_or_save_f<false>
 {
     template<class A, class T> void operator()( A& a, T& t, unsigned int v ) const
     {
@@ -76,7 +78,37 @@ template<> struct load_or_save<false>
 
 template<class A, class T> inline void split_free( A& a, T& t, unsigned int v )
 {
-    detail::load_or_save< A::is_saving::value >()( a, t, v );
+    detail::load_or_save_f< A::is_saving::value >()( a, t, v );
+}
+
+// split_member
+
+namespace detail
+{
+
+template<bool IsSaving, class Access = serialization::access> struct load_or_save_m;
+
+template<class Access> struct load_or_save_m<true, Access>
+{
+    template<class A, class T> void operator()( A& a, T const& t, unsigned int v ) const
+    {
+        Access::member_save( a, t, v );
+    }
+};
+
+template<class Access> struct load_or_save_m<false, Access>
+{
+    template<class A, class T> void operator()( A& a, T& t, unsigned int v ) const
+    {
+        Access::member_load( a, t, v );
+    }
+};
+
+} // namespace detail
+
+template<class A, class T> inline void split_member( A& a, T& t, unsigned int v )
+{
+    detail::load_or_save_m< A::is_saving::value >()( a, t, v );
 }
 
 } // namespace core
