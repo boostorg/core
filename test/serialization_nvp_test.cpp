@@ -34,7 +34,7 @@ int main()
 
     std::string s = os.str();
 
-    X x2 = {};
+    X x2 = { 0, 0 };
 
     {
         std::istringstream is( s );
