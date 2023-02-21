@@ -466,7 +466,7 @@ jobs:
             if [ -n "${{matrix.ubsan}}" ]
             then
                 export UBSAN_OPTIONS="print_stacktrace=1"
-                B2_ARGS+=("cxxflags=-fsanitize=undefined -fno-sanitize-recover=undefined" "linkflags=-fsanitize=undefined -fuse-ld=gold" "define=UBSAN=1" "debug-symbols=on" "visibility=global")
+                B2_ARGS+=("undefined-sanitizer=norecover" "linkflags=-fuse-ld=gold" "define=UBSAN=1" "debug-symbols=on" "visibility=global")
             fi
             if [ -n "${{matrix.cxxflags}}" ]
             then
