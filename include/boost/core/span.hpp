@@ -8,11 +8,10 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_SPAN_HPP
 #define BOOST_CORE_SPAN_HPP
 
+#include <boost/core/data.hpp>
 #include <array>
-#include <initializer_list>
 #include <iterator>
 #include <type_traits>
-#include <cstddef>
 
 namespace boost {
 
@@ -63,29 +62,8 @@ struct span_is_array<std::array<T, N> > {
     static constexpr bool value = true;
 };
 
-template<class C>
-inline constexpr auto
-span_begin(C& c) noexcept(noexcept(c.data())) -> decltype(c.data())
-{
-    return c.data();
-}
-
-template<class C>
-inline constexpr auto
-span_begin(const C& c) noexcept(noexcept(c.data())) -> decltype(c.data())
-{
-    return c.data();
-}
-
 template<class T>
-inline constexpr const T*
-span_begin(std::initializer_list<T> l) noexcept
-{
-    return l.begin();
-}
-
-template<class T>
-using span_ptr = decltype(boost::detail::span_begin(std::declval<T&>()));
+using span_ptr = decltype(boost::data(std::declval<T&>()));
 
 template<class, class = void>
 struct span_data { };
@@ -245,16 +223,16 @@ public:
     template<class R,
         typename std::enable_if<E == dynamic_extent &&
             detail::span_is_range<R, T>::value, int>::type = 0>
-    constexpr span(R&& r) noexcept(noexcept(detail::span_begin(r)) &&
+    constexpr span(R&& r) noexcept(noexcept(boost::data(r)) &&
         noexcept(r.size()))
-        : s_(detail::span_begin(r), r.size()) { }
+        : s_(boost::data(r), r.size()) { }
 
     template<class R,
         typename std::enable_if<E != dynamic_extent &&
             detail::span_is_range<R, T>::value, int>::type = 0>
-    explicit constexpr span(R&& r) noexcept(noexcept(detail::span_begin(r)) &&
+    explicit constexpr span(R&& r) noexcept(noexcept(boost::data(r)) &&
         noexcept(r.size()))
-        : s_(detail::span_begin(r), r.size()) { }
+        : s_(boost::data(r), r.size()) { }
 
     template<class U, std::size_t N,
         typename std::enable_if<detail::span_implicit<E, N>::value &&
