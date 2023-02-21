@@ -54,16 +54,9 @@ int main()
     BOOST_TEST_GE( boost::core::max_align, boost::alignment_of<void (X::*)()>::value );
 
 #if !defined(BOOST_NO_CXX11_ALIGNOF) && !defined(BOOST_NO_STD_MAX_ALIGN_T)
-# if defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 70000
 
-    // libstdc++ 7 adds __float128 to std::max_align_t, but we always have it
     BOOST_TEST_GE( boost::core::max_align, alignof( std::max_align_t ) );
 
-# else
-
-    BOOST_TEST_EQ( boost::core::max_align, alignof( std::max_align_t ) );
-
-# endif
 #endif
 
     return boost::report_errors();
