@@ -36,7 +36,9 @@ template<class Ar> void load_construct_data( Ar& ar, X* t, unsigned /*v*/ )
 
 struct Y
 {
-    X data_[ 2 ];
+    X x1, x2;
+
+    explicit Y( int v1, int v2 ): x1( v1 ), x2( v2 ) {}
 
 private:
 
@@ -44,20 +46,20 @@ private:
 
     template<class Ar> void load( Ar& ar, unsigned v )
     {
-        boost::core::load_construct_data_adl( ar, &data_[0], v );
-        ar >> data_[0];
+        boost::core::load_construct_data_adl( ar, &x1, v );
+        ar >> x1;
 
-        boost::core::load_construct_data_adl( ar, &data_[1], v );
-        ar >> data_[1];
+        boost::core::load_construct_data_adl( ar, &x2, v );
+        ar >> x2;
     }
 
     template<class Ar> void save( Ar& ar, unsigned v ) const
     {
-        boost::core::save_construct_data_adl( ar, &data_[0], v );
-        ar << data_[0];
+        boost::core::save_construct_data_adl( ar, &x1, v );
+        ar << x1;
 
-        boost::core::save_construct_data_adl( ar, &data_[1], v );
-        ar << data_[1];
+        boost::core::save_construct_data_adl( ar, &x2, v );
+        ar << x2;
     }
 
     template<class Ar> void serialize( Ar& ar, unsigned v )
@@ -76,7 +78,7 @@ int main()
 {
     std::ostringstream os;
 
-    Y y1 = {{ X(7), X(11) }};
+    Y y1( 7, 11 );
 
     {
         boost::archive::text_oarchive ar( os );
@@ -85,7 +87,7 @@ int main()
 
     std::string s = os.str();
 
-    Y y2 = {{ X(0), X(0) }};
+    Y y2( 0, 0 );
 
     {
         std::istringstream is( s );
@@ -93,8 +95,8 @@ int main()
         ar >> y2;
     }
 
-    BOOST_TEST_EQ( y1.data_[0].v_, y2.data_[0].v_ );
-    BOOST_TEST_EQ( y1.data_[1].v_, y2.data_[1].v_ );
+    BOOST_TEST_EQ( y1.x1.v_, y2.x1.v_ );
+    BOOST_TEST_EQ( y1.x2.v_, y2.x2.v_ );
 
     return boost::report_errors();
 }
