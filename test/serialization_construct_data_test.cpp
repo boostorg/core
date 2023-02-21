@@ -76,7 +76,7 @@ int main()
 {
     std::ostringstream os;
 
-    Y y1 = { X(7), X(11) };
+    Y y1 = {{ X(7), X(11) }};
 
     {
         boost::archive::text_oarchive ar( os );
@@ -85,7 +85,7 @@ int main()
 
     std::string s = os.str();
 
-    Y y2 = { X(0), X(0) };
+    Y y2 = {{ X(0), X(0) }};
 
     {
         std::istringstream is( s );
