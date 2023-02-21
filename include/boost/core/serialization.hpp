@@ -111,6 +111,20 @@ template<class A, class T> inline void split_member( A& a, T& t, unsigned int v 
     detail::load_or_save_m< A::is_saving::value >()( a, t, v );
 }
 
+// load_construct_data_adl
+
+template<class Ar, class T> void load_construct_data_adl( Ar& ar, T* t, unsigned int v )
+{
+    load_construct_data( ar, t, serialization::core_version_type( v ) );
+}
+
+// save_construct_data_adl
+
+template<class Ar, class T> void save_construct_data_adl( Ar& ar, T const* t, unsigned int v )
+{
+    save_construct_data( ar, t, serialization::core_version_type( v ) );
+}
+
 } // namespace core
 } // namespace boost
 
