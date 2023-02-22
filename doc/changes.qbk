@@ -22,6 +22,9 @@
   `boost::core::max_align`, the alignment of `max_align_t`.
 * Added [link core.memory_resource `boost::core::memory_resource`], a portable equivalent of `std::pmr::memory_resource`
   from C++17.
+* Added [link core.serialization `boost/core/serialization.hpp`], a collection of primitives allowing libraries to
+  implement Boost.Serialization support for their types without including a Serialization header and thereby making
+  their libraries depend on Serialization.
 
 [endsect]
 

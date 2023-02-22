@@ -73,6 +73,7 @@ criteria for inclusion is that the utility component be:
 [include quick_exit.qbk]
 [include ref.qbk]
 [include scoped_enum.qbk]
+[include serialization.qbk]
 [include size.qbk]
 [include span.qbk]
 [include swap.qbk]
