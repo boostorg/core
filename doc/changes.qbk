@@ -30,7 +30,7 @@
 * Updated `boost::span` to use `boost::data` which adds support for range
   construction from an `std::initializer_list`.
 * Added [link core.identity `boost::identity`], an implementation of
-  `std::identity`.
+  `std::identity`. This facility has been moved from Boost.Functional.
 
 [endsect]
 
