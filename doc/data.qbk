@@ -50,10 +50,10 @@ data(std::initializer_list<T> l) noexcept;
 [variablelist
 [[`template<class C> constexpr auto data(C& c) noexcept(noexcept(c.data())) ->
 decltype(c.data());`]
-[Returns `c.begin()`.]]
+[Returns `c.data()`.]]
 [[`template<class C> constexpr auto data(const C& c)
 noexcept(noexcept(c.data())) -> decltype(c.data());`]
-[Returns `c.begin()`.]]
+[Returns `c.data()`.]]
 [[`template<class T, std::size_t N> constexpr T* data(T(&a)[N]) noexcept;`]
 [Returns `a`.]]
 [[`template<class T> constexpr const T* data(std::initializer_list<T> l)

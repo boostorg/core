@@ -25,6 +25,12 @@
 * Added [link core.serialization `boost/core/serialization.hpp`], a collection of primitives allowing libraries to
   implement Boost.Serialization support for their types without including a Serialization header and thereby making
   their libraries depend on Serialization.
+* Added [link core.data `boost::data`], an implementation of `std::data`.
+* Added [link core.size `boost::size`], an implementation of `std::size`.
+* Updated `boost::span` to use `boost::data` which adds support for range
+  construction from an `std::initializer_list`.
+* Added [link core.identity `boost::identity`], an implementation of
+  `std::identity`.
 
 [endsect]
 

@@ -227,13 +227,13 @@ constexpr span(R&& r);`]
 [`remove_cvref_t<R>` is not a specialization of `span`,]
 [`remove_cvref_t<R>` is not a specialization of `array`,]
 [`is_array_v<remove_cvref_t<R>>` is `false`,]
-[`r.data()` is well-formed and
+[`data(r)` is well-formed and
 `is_convertible_v<remove_pointer_t<iterator_t<R> >(*)[],
 T(*)[]>` is `true`, and]
 [`r.size()` is well-formed and
 `is_convertible_v<decltype(declval<R&>().size()), size_t>` is `true`.]]]]
-[[Effects][Constructs a `span` with data `r.data()` and size `r.size()`.]]
-[[Throws][What and when r.data() and r.size() throw.]]]]]
+[[Effects][Constructs a `span` with data `data(r)` and size `r.size()`.]]
+[[Throws][What and when data(r) and r.size() throw.]]]]]
 [[`explicit(E != dynamic_extent && N == dynamic_extent)
 template<class U, std::size_t N>
 constexpr span(const span<U, N>& s) noexcept;`]
