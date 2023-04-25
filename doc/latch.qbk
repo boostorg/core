@@ -1,0 +1,164 @@
+[/
+  Copyright 2023 Christian Mazakas
+  Distributed under the Boost Software License, Version 1.0.
+  https://boost.org/LICENSE_1_0.txt
+]
+
+[section:latch latch]
+
+[simplesect Authors]
+
+* Christian Mazakas
+
+[endsimplesect]
+
+[section Header <boost/core/latch.hpp>]
+
+The header `<boost/core/latch.hpp>` implements, in a portable way,
+the C++20 `<latch>` header.
+
+`latch` is a single-use barrier which counts downwards, enabling synchronization
+between a set of threads. The counter can be manually decremented by any value,
+but decrementing below zero produces UB. The maximum number of waiters is
+specified to be `boost::core::latch::max()`.
+
+[endsect]
+
+[section Example]
+
+```
+std::ptrdiff_t const num_threads = 16;
+boost::core::latch l(num_threads);
+
+std::vector<std::thread> threads;
+for (int i = 0; i < num_threads; ++i) {
+  threads.emplace_back([&l] {
+    // block until all threads have reached this statement
+    l.arrive_and_wait();
+  });
+}
+
+for (auto& t: threads) { t.join(); }
+```
+
+[endsect]
+
+[section Reference]
+
+```
+namespace boost
+{
+namespace core
+{
+
+class latch
+{
+    explicit latch(std::ptrdiff_t expected);
+
+    latch(latch const &) = delete;
+    latch &operator=(latch const &) = delete;
+
+    ~latch() = default;
+
+    void count_down(std::ptrdiff_t n = 1);
+
+    bool try_wait() const noexcept;
+
+    void wait() const;
+
+    void arrive_and_wait(std::ptrdiff_t n = 1);
+
+    static constexpr std::ptrdiff_t max() noexcept;
+};
+
+} // namespace core
+} // namespace boost
+```
+
+[section Constructors]
+
+[variablelist
+  [
+    [`explicit latch(std::ptrdiff_t expected);`]
+    [
+      [variablelist
+        [[Constraints][`expected >= 0 && expected <= boost::core::latch::max()`.]]
+        [
+          [Effects]
+          [Constructs a latch with an internal counter value of `expected`.]
+        ]
+      ]
+    ]
+  ]
+  [
+    [`latch(latch const &) = delete;`]
+    [
+      [variablelist
+        [[Constraints][`latch` is not copyable or movable.]]
+      ]
+    ]
+  ]
+]
+
+[endsect]
+
+[section Member Functions]
+
+[variablelist
+  [
+    [`void count_down(std::ptrdiff_t n = 1);`]
+    [
+      [variablelist
+        [[Constraints][`n` must not be larger than the current internal count.]]
+        [[Effects][Decrements the internal counter by `n`.]]
+      ]
+    ]
+  ]
+  [
+    [`bool try_wait() const noexcept;`]
+    [
+      [variablelist
+        [[Effects][Returns a boolean indicating whether or not the latch's internal count has reached 0 (`true`) or not (`false`).]]
+      ]
+    ]
+  ]
+  [
+    [`void wait() const;`]
+    [
+      [variablelist
+        [[Effects][Blocks the current thread until the internal counter has reached 0.]]
+      ]
+    ]
+  ]
+    [
+    [`void wait() const;`]
+    [
+      [variablelist
+        [[Effects][Blocks the current thread until the internal counter has reached 0.]]
+      ]
+    ]
+  ]
+  [
+    [`void arrive_and_wait(std::ptrdiff_t n = 1);`]
+    [
+      [variablelist
+        [[Constraints][`n` must not be larger than the current internal count.]]
+        [[Effects][Decrements the internal counter by `n` and if the counter non-zero, blocks the current thread.]]
+      ]
+    ]
+  ]
+  [
+    [`static constexpr std::ptrdiff_t max() noexcept;`]
+    [
+      [variablelist
+        [[Effects][Returns an implementation-defined number representing the maximum amount of waiters. Currently INT_MAX.]]
+      ]
+    ]
+  ]
+]
+
+[endsect]
+
+[endsect]
+
+[endsect]

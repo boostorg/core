@@ -371,5 +371,7 @@ run serialization_construct_data_test.cpp : : : <library>/boost//serialization/<
 run identity_test.cpp ;
 run identity_rvalue_test.cpp ;
 
+run latch_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
