@@ -249,6 +249,13 @@ int main()
     TEST(void(A::*)() volatile);
     TEST(void(A::*)() const volatile);
 
+#else
+
+    boost::core::type_name<void(A::*)()>();
+    boost::core::type_name<void(A::*)() const>();
+    boost::core::type_name<void(A::*)() volatile>();
+    boost::core::type_name<void(A::*)() const volatile>();
+
 #endif
 
 #if !defined(BOOST_NO_CXX11_REF_QUALIFIERS)
