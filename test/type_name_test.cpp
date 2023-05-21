@@ -239,8 +239,17 @@ int main()
     TEST(B(&)[1][2][3]);
     TEST(B const volatile(***)[1][2][3]);
 
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) || !defined(BOOST_MSVC)
+
     TEST(int A::*);
     TEST(int const B::*);
+
+#else
+
+    boost::core::type_name<int A::*>();
+    boost::core::type_name<int const B::*>();
+
+#endif
 
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
