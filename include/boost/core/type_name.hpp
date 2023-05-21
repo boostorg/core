@@ -102,9 +102,21 @@ inline std::string fix_typeid_name( char const* n )
     return r;
 }
 
-template<class T> std::string typeid_name()
+// class types can be incomplete
+template<class T> std::string typeid_name_impl( int T::* )
+{
+    std::string r = fix_typeid_name( typeid(T[1]).name() );
+    return r.substr( 0, r.size() - 4 ); // remove ' [1]' suffix
+}
+
+template<class T> std::string typeid_name_impl( ... )
 {
     return fix_typeid_name( typeid(T).name() );
+}
+
+template<class T> std::string typeid_name()
+{
+    return typeid_name_impl<T>( 0 );
 }
 
 // template names
