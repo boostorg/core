@@ -38,6 +38,10 @@
 
 #endif // defined(_MSC_VER)
 
+#if defined(BOOST_MSVC) && BOOST_MSVC >= 1925
+# define BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL
+#endif
+
 namespace boost
 {
 namespace core
@@ -102,10 +106,51 @@ BOOST_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
 namespace detail
 {
 
+#if defined(_MSC_VER) && defined(BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL)
+
+BOOST_CXX14_CONSTEXPR inline int countl_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    if( __builtin_is_constant_evaluated() )
+    {
+        constexpr unsigned char mod37[ 37 ] = { 32, 31, 6, 30, 9, 5, 0, 29, 16, 8, 2, 4, 21, 0, 19, 28, 25, 15, 0, 7, 10, 1, 17, 3, 22, 20, 26, 0, 11, 18, 23, 27, 12, 24, 13, 14, 0 };
+
+        x |= x >> 1;
+        x |= x >> 2;
+        x |= x >> 4;
+        x |= x >> 8;
+        x |= x >> 16;
+
+        return mod37[ x % 37 ];
+    }
+    else
+    {
+        unsigned long r;
+
+        if( _BitScanReverse( &r, x ) )
+        {
+            return 31 - static_cast<int>( r );
+        }
+        else
+        {
+            return 32;
+        }
+    }
+}
+
+BOOST_CXX14_CONSTEXPR inline int countl_impl( boost::uint8_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) - 24;
+}
+
+BOOST_CXX14_CONSTEXPR inline int countl_impl( boost::uint16_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) - 16;
+}
+
+#elif defined(_MSC_VER)
+
 inline int countl_impl( boost::uint32_t x ) BOOST_NOEXCEPT
 {
-#if defined(_MSC_VER)
-
     unsigned long r;
 
     if( _BitScanReverse( &r, x ) )
@@ -116,44 +161,6 @@ inline int countl_impl( boost::uint32_t x ) BOOST_NOEXCEPT
     {
         return 32;
     }
-
-#else
-
-    static unsigned char const mod37[ 37 ] = { 32, 31, 6, 30, 9, 5, 0, 29, 16, 8, 2, 4, 21, 0, 19, 28, 25, 15, 0, 7, 10, 1, 17, 3, 22, 20, 26, 0, 11, 18, 23, 27, 12, 24, 13, 14, 0 };
-
-    x |= x >> 1;
-    x |= x >> 2;
-    x |= x >> 4;
-    x |= x >> 8;
-    x |= x >> 16;
-
-    return mod37[ x % 37 ];
-
-#endif
-}
-
-inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
-{
-#if defined(_MSC_VER) && defined(_M_X64)
-
-    unsigned long r;
-
-    if( _BitScanReverse64( &r, x ) )
-    {
-        return 63 - static_cast<int>( r );
-    }
-    else
-    {
-        return 64;
-    }
-
-#else
-
-    return static_cast<boost::uint32_t>( x >> 32 ) != 0?
-        boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x >> 32 ) ):
-        boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) + 32;
-
-#endif
 }
 
 inline int countl_impl( boost::uint8_t x ) BOOST_NOEXCEPT
@@ -166,10 +173,89 @@ inline int countl_impl( boost::uint16_t x ) BOOST_NOEXCEPT
     return boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) - 16;
 }
 
+#else
+
+inline int countl_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    static unsigned char const mod37[ 37 ] = { 32, 31, 6, 30, 9, 5, 0, 29, 16, 8, 2, 4, 21, 0, 19, 28, 25, 15, 0, 7, 10, 1, 17, 3, 22, 20, 26, 0, 11, 18, 23, 27, 12, 24, 13, 14, 0 };
+
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+
+    return mod37[ x % 37 ];
+}
+
+inline int countl_impl( boost::uint8_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) - 24;
+}
+
+inline int countl_impl( boost::uint16_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) - 16;
+}
+
+#endif
+
+#if defined(_MSC_VER) && defined(_M_X64) && defined(BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL)
+
+BOOST_CXX14_CONSTEXPR inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    if( __builtin_is_constant_evaluated() )
+    {
+        return static_cast<boost::uint32_t>( x >> 32 ) != 0?
+            boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x >> 32 ) ):
+            boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) + 32;
+    }
+    else
+    {
+        unsigned long r;
+
+        if( _BitScanReverse64( &r, x ) )
+        {
+            return 63 - static_cast<int>( r );
+        }
+        else
+        {
+            return 64;
+        }
+    }
+}
+
+#elif defined(_MSC_VER) && defined(_M_X64)
+
+inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    unsigned long r;
+
+    if( _BitScanReverse64( &r, x ) )
+    {
+        return 63 - static_cast<int>( r );
+    }
+    else
+    {
+        return 64;
+    }
+}
+
+#else
+
+inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    return static_cast<boost::uint32_t>( x >> 32 ) != 0?
+        boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x >> 32 ) ):
+        boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) + 32;
+}
+
+#endif
+
 } // namespace detail
 
 template<class T>
-int countl_zero( T x ) BOOST_NOEXCEPT
+BOOST_CXX14_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
 {
     BOOST_STATIC_ASSERT( std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_signed );
 
@@ -250,10 +336,44 @@ BOOST_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
 namespace detail
 {
 
+#if defined(_MSC_VER) && defined(BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL)
+
+BOOST_CXX14_CONSTEXPR inline int countr_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    if( __builtin_is_constant_evaluated() )
+    {
+        constexpr unsigned char mod37[ 37 ] = { 32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13, 4, 7, 17, 0, 25, 22, 31, 15, 29, 10, 12, 6, 0, 21, 14, 9, 5, 20, 8, 19, 18 };
+        return mod37[ ( -(boost::int32_t)x & x ) % 37 ];
+    }
+    else
+    {
+        unsigned long r;
+
+        if( _BitScanForward( &r, x ) )
+        {
+            return static_cast<int>( r );
+        }
+        else
+        {
+            return 32;
+        }
+    }
+}
+
+BOOST_CXX14_CONSTEXPR inline int countr_impl( boost::uint8_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) | 0x100 );
+}
+
+BOOST_CXX14_CONSTEXPR inline int countr_impl( boost::uint16_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) | 0x10000 );
+}
+
+#elif defined(_MSC_VER)
+
 inline int countr_impl( boost::uint32_t x ) BOOST_NOEXCEPT
 {
-#if defined(_MSC_VER)
-
     unsigned long r;
 
     if( _BitScanForward( &r, x ) )
@@ -264,37 +384,6 @@ inline int countr_impl( boost::uint32_t x ) BOOST_NOEXCEPT
     {
         return 32;
     }
-
-#else
-
-    static unsigned char const mod37[ 37 ] = { 32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13, 4, 7, 17, 0, 25, 22, 31, 15, 29, 10, 12, 6, 0, 21, 14, 9, 5, 20, 8, 19, 18 };
-    return mod37[ ( -(boost::int32_t)x & x ) % 37 ];
-
-#endif
-}
-
-inline int countr_impl( boost::uint64_t x ) BOOST_NOEXCEPT
-{
-#if defined(_MSC_VER) && defined(_M_X64)
-
-    unsigned long r;
-
-    if( _BitScanForward64( &r, x ) )
-    {
-        return static_cast<int>( r );
-    }
-    else
-    {
-        return 64;
-    }
-
-#else
-
-    return static_cast<boost::uint32_t>( x ) != 0?
-        boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) ):
-        boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x >> 32 ) ) + 32;
-
-#endif
 }
 
 inline int countr_impl( boost::uint8_t x ) BOOST_NOEXCEPT
@@ -307,10 +396,82 @@ inline int countr_impl( boost::uint16_t x ) BOOST_NOEXCEPT
     return boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) | 0x10000 );
 }
 
+#else
+
+inline int countr_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    static unsigned char const mod37[ 37 ] = { 32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13, 4, 7, 17, 0, 25, 22, 31, 15, 29, 10, 12, 6, 0, 21, 14, 9, 5, 20, 8, 19, 18 };
+    return mod37[ ( -(boost::int32_t)x & x ) % 37 ];
+}
+
+inline int countr_impl( boost::uint8_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) | 0x100 );
+}
+
+inline int countr_impl( boost::uint16_t x ) BOOST_NOEXCEPT
+{
+    return boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) | 0x10000 );
+}
+
+#endif
+
+#if defined(_MSC_VER) && defined(_M_X64) && defined(BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL)
+
+BOOST_CXX14_CONSTEXPR inline int countr_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    if( __builtin_is_constant_evaluated() )
+    {
+        return static_cast<boost::uint32_t>( x ) != 0?
+            boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) ):
+            boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x >> 32 ) ) + 32;
+    }
+    else
+    {
+        unsigned long r;
+
+        if( _BitScanForward64( &r, x ) )
+        {
+            return static_cast<int>( r );
+        }
+        else
+        {
+            return 64;
+        }
+    }
+}
+
+#elif defined(_MSC_VER) && defined(_M_X64)
+
+inline int countr_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    unsigned long r;
+
+    if( _BitScanForward64( &r, x ) )
+    {
+        return static_cast<int>( r );
+    }
+    else
+    {
+        return 64;
+    }
+}
+
+#else
+
+inline int countr_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    return static_cast<boost::uint32_t>( x ) != 0?
+        boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) ):
+        boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x >> 32 ) ) + 32;
+}
+
+#endif
+
 } // namespace detail
 
 template<class T>
-int countr_zero( T x ) BOOST_NOEXCEPT
+BOOST_CXX14_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
 {
     BOOST_STATIC_ASSERT( std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_signed );
 

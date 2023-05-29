@@ -11,6 +11,10 @@
 
 BOOST_PRAGMA_MESSAGE( "Test skipped because BOOST_NO_CXX14_CONSTEXPR is defined" )
 
+#elif defined(BOOST_MSVC) && BOOST_MSVC / 10 == 191
+
+BOOST_PRAGMA_MESSAGE( "Test skipped because BOOST_MSVC is " BOOST_STRINGIZE(BOOST_MSVC) )
+
 #else
 
 #include <boost/core/bit.hpp>
