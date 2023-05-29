@@ -1,4 +1,4 @@
-// Test for boost/core/bit.hpp (bit_ceil)
+// Test for boost/core/bit.hpp (popcount)
 //
 // Copyright 2020 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0.
