@@ -9,9 +9,11 @@
 
 [section Changes in 1.83.0]
 
-* Add support for incomplete types to [link core.type_name `boost::core::type_name`].
+* Added support for incomplete types to [link core.type_name `boost::core::type_name`].
 * Bit manipulation functions in [link core.bit `boost/core/bit.hpp`] are now
   `constexpr` on recent MSVC versions (VS2019 update 5 and later.)
+* Added `boost::core::byteswap` (an implementation of `std::byteswap` from
+  C++23) to [link core.bit `boost/core/bit.hpp`].
 
 [endsect]
 

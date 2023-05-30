@@ -33,6 +33,11 @@ namespace core
 template<class To, class From>
 To bit_cast(From const& from) noexcept;
 
+// byteswap
+
+template<class T>
+constexpr T byteswap(T x) noexcept;
+
 // Integral powers of 2
 
 template<class T>
@@ -99,6 +104,17 @@ constant expression context.
 
 * *Requires:* `To` and `From` must be trivially copyable and `sizeof(To)` must be the same as `sizeof(From)`.
 * *Returns:* A value of type `To` with the storage bytes copied from `from`.
+
+[endsect]
+
+[section byteswap]
+
+`template<class T> constexpr T byteswap(T x) noexcept;`
+
+* *Requires:* `T` must be an integer type (i.e. one of `char`, `signed char`,
+  `unsigned char`, `short`, `unsigned short`, `int`, `unsigned int`, `long`,
+  `unsigned long`, `long long`, `unsigned long long`) without padding bits.
+* *Returns:* `x` with the storage bytes reversed.
 
 [endsect]
 
