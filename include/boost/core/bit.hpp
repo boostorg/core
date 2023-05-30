@@ -241,6 +241,15 @@ inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
     }
 }
 
+#elif defined(_MSC_VER) && defined(BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL)
+
+BOOST_CXX14_CONSTEXPR inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    return static_cast<boost::uint32_t>( x >> 32 ) != 0?
+        boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x >> 32 ) ):
+        boost::core::detail::countl_impl( static_cast<boost::uint32_t>( x ) ) + 32;
+}
+
 #else
 
 inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
@@ -455,6 +464,15 @@ inline int countr_impl( boost::uint64_t x ) BOOST_NOEXCEPT
     {
         return 64;
     }
+}
+
+#elif defined(_MSC_VER) && defined(BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL)
+
+BOOST_CXX14_CONSTEXPR inline int countr_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    return static_cast<boost::uint32_t>( x ) != 0?
+        boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x ) ):
+        boost::core::detail::countr_impl( static_cast<boost::uint32_t>( x >> 32 ) ) + 32;
 }
 
 #else
