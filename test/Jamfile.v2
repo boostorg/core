@@ -296,6 +296,8 @@ run bit_popcount_test.cpp
   : : : $(pedantic-errors) ;
 run bit_endian_test.cpp
   : : : $(pedantic-errors) ;
+run bit_byteswap_test.cpp
+  : : : $(pedantic-errors) ;
 
 compile-fail bit_width_fail.cpp
   : <warnings>off ;
@@ -308,6 +310,7 @@ compile has_single_bit_test_cx.cpp ;
 compile bit_floor_test_cx.cpp ;
 compile bit_ceil_test_cx.cpp ;
 compile bit_popcount_test_cx.cpp ;
+compile bit_byteswap_test_cx.cpp ;
 
 run type_name_test.cpp ;
 

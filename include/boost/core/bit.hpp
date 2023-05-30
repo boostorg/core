@@ -792,6 +792,60 @@ typedef endian::type endian_type;
 
 #undef BOOST_CORE_BIT_NATIVE_INITIALIZER
 
+// byteswap
+
+namespace detail
+{
+
+BOOST_CONSTEXPR inline boost::uint8_t byteswap_impl( boost::uint8_t x ) BOOST_NOEXCEPT
+{
+    return x;
+}
+
+BOOST_CONSTEXPR inline boost::uint16_t byteswap_impl( boost::uint16_t x ) BOOST_NOEXCEPT
+{
+    return (x << 8) | (x >> 8);
+}
+
+BOOST_CXX14_CONSTEXPR inline boost::uint32_t byteswap_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    boost::uint32_t step16 = x << 16 | x >> 16;
+    return ((step16 << 8) & 0xff00ff00) | ((step16 >> 8) & 0x00ff00ff);
+}
+
+BOOST_CXX14_CONSTEXPR inline boost::uint64_t byteswap_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    boost::uint64_t step32 = x << 32 | x >> 32;
+    boost::uint64_t step16 = (step32 & 0x0000FFFF0000FFFFULL) << 16 | (step32 & 0xFFFF0000FFFF0000ULL) >> 16;
+    return (step16 & 0x00FF00FF00FF00FFULL) << 8 | (step16 & 0xFF00FF00FF00FF00ULL) >> 8;
+}
+
+} // namespace detail
+
+template<class T> BOOST_CXX14_CONSTEXPR T byteswap( T x ) BOOST_NOEXCEPT
+{
+    BOOST_STATIC_ASSERT( std::numeric_limits<T>::is_integer );
+
+    BOOST_STATIC_ASSERT( sizeof(T) == sizeof(boost::uint8_t) || sizeof(T) == sizeof(boost::uint16_t) || sizeof(T) == sizeof(boost::uint32_t) || sizeof(T) == sizeof(boost::uint64_t) );
+
+    BOOST_IF_CONSTEXPR ( sizeof(T) == sizeof(boost::uint8_t) )
+    {
+        return static_cast<T>( boost::core::detail::byteswap_impl( static_cast<boost::uint8_t>( x ) ) );
+    }
+    else BOOST_IF_CONSTEXPR ( sizeof(T) == sizeof(boost::uint16_t) )
+    {
+        return static_cast<T>( boost::core::detail::byteswap_impl( static_cast<boost::uint16_t>( x ) ) );
+    }
+    else BOOST_IF_CONSTEXPR ( sizeof(T) == sizeof(boost::uint32_t) )
+    {
+        return static_cast<T>( boost::core::detail::byteswap_impl( static_cast<boost::uint32_t>( x ) ) );
+    }
+    else
+    {
+        return static_cast<T>( boost::core::detail::byteswap_impl( static_cast<boost::uint64_t>( x ) ) );
+    }
+}
+
 } // namespace core
 } // namespace boost
 
