@@ -20,6 +20,7 @@
 #include <boost/cstdint.hpp>
 #include <limits>
 #include <cstring>
+#include <cstdlib>
 
 #if defined(_MSC_VER)
 
@@ -817,6 +818,47 @@ BOOST_CXX14_CONSTEXPR inline boost::uint32_t byteswap_impl( boost::uint32_t x ) 
 BOOST_CXX14_CONSTEXPR inline boost::uint64_t byteswap_impl( boost::uint64_t x ) BOOST_NOEXCEPT
 {
     return __builtin_bswap64( x );
+}
+
+#elif defined(_MSC_VER) && defined(BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL)
+
+BOOST_CXX14_CONSTEXPR inline boost::uint32_t byteswap_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    if( __builtin_is_constant_evaluated() )
+    {
+        boost::uint32_t step16 = x << 16 | x >> 16;
+        return ((step16 << 8) & 0xff00ff00) | ((step16 >> 8) & 0x00ff00ff);
+    }
+    else
+    {
+        return _byteswap_ulong( x );
+    }
+}
+
+BOOST_CXX14_CONSTEXPR inline boost::uint64_t byteswap_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    if( __builtin_is_constant_evaluated() )
+    {
+        boost::uint64_t step32 = x << 32 | x >> 32;
+        boost::uint64_t step16 = (step32 & 0x0000FFFF0000FFFFULL) << 16 | (step32 & 0xFFFF0000FFFF0000ULL) >> 16;
+        return (step16 & 0x00FF00FF00FF00FFULL) << 8 | (step16 & 0xFF00FF00FF00FF00ULL) >> 8;
+    }
+    else
+    {
+        return _byteswap_uint64( x );
+    }
+}
+
+#elif defined(_MSC_VER)
+
+inline boost::uint32_t byteswap_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    return _byteswap_ulong( x );
+}
+
+inline boost::uint64_t byteswap_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    return _byteswap_uint64( x );
 }
 
 #else
