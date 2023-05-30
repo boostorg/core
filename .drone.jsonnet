@@ -359,24 +359,24 @@ local windows_pipeline(name, image, environment, arch = "amd64") =
     windows_pipeline(
         "Windows VS2015 msvc-14.0",
         "cppalliance/dronevs2015",
-        { TOOLSET: 'msvc-14.0', CXXSTD: '14,latest' },
+        { TOOLSET: 'msvc-14.0', CXXSTD: '14,latest', ADDRMD: '32,64' },
     ),
 
     windows_pipeline(
         "Windows VS2017 msvc-14.1",
         "cppalliance/dronevs2017",
-        { TOOLSET: 'msvc-14.1', CXXSTD: '14,17,latest' },
+        { TOOLSET: 'msvc-14.1', CXXSTD: '14,17,latest', ADDRMD: '32,64' },
     ),
 
     windows_pipeline(
         "Windows VS2019 msvc-14.2",
         "cppalliance/dronevs2019",
-        { TOOLSET: 'msvc-14.2', CXXSTD: '14,17,20,latest' },
+        { TOOLSET: 'msvc-14.2', CXXSTD: '14,17,20,latest', ADDRMD: '32,64' },
     ),
 
     windows_pipeline(
         "Windows VS2022 msvc-14.3",
         "cppalliance/dronevs2022:1",
-        { TOOLSET: 'msvc-14.3', CXXSTD: '14,17,20,latest' },
+        { TOOLSET: 'msvc-14.3', CXXSTD: '14,17,20,latest', ADDRMD: '32,64' },
     ),
 ]
