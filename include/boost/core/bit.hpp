@@ -807,6 +807,20 @@ BOOST_CONSTEXPR inline boost::uint16_t byteswap_impl( boost::uint16_t x ) BOOST_
     return (x << 8) | (x >> 8);
 }
 
+#if defined(__GNUC__) || defined(__clang__)
+
+BOOST_CXX14_CONSTEXPR inline boost::uint32_t byteswap_impl( boost::uint32_t x ) BOOST_NOEXCEPT
+{
+    return __builtin_bswap32( x );
+}
+
+BOOST_CXX14_CONSTEXPR inline boost::uint64_t byteswap_impl( boost::uint64_t x ) BOOST_NOEXCEPT
+{
+    return __builtin_bswap64( x );
+}
+
+#else
+
 BOOST_CXX14_CONSTEXPR inline boost::uint32_t byteswap_impl( boost::uint32_t x ) BOOST_NOEXCEPT
 {
     boost::uint32_t step16 = x << 16 | x >> 16;
@@ -819,6 +833,8 @@ BOOST_CXX14_CONSTEXPR inline boost::uint64_t byteswap_impl( boost::uint64_t x ) 
     boost::uint64_t step16 = (step32 & 0x0000FFFF0000FFFFULL) << 16 | (step32 & 0xFFFF0000FFFF0000ULL) >> 16;
     return (step16 & 0x00FF00FF00FF00FFULL) << 8 | (step16 & 0xFF00FF00FF00FF00ULL) >> 8;
 }
+
+#endif
 
 } // namespace detail
 
