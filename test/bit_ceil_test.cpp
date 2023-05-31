@@ -14,7 +14,7 @@ template<class T> void test_bit_ceil( T x )
 {
     if( !boost::core::has_single_bit( x ) )
     {
-        x >>= 1;
+        x = static_cast<T>( x >> 1 );
     }
 
     T y = boost::core::bit_ceil( x );

@@ -14,7 +14,7 @@ template<class T> void test_countl( T x )
 {
     x |= static_cast<T>( 1 ) << ( std::numeric_limits<T>::digits - 1 );
 
-    for( int i = 0; i <= std::numeric_limits<T>::digits; ++i, x >>= 1 )
+    for( int i = 0; i <= std::numeric_limits<T>::digits; ++i, x = static_cast<T>( x >> 1 ) )
     {
         BOOST_TEST_EQ( boost::core::countl_zero( x ), i );
         BOOST_TEST_EQ( boost::core::countl_one( static_cast<T>( ~x ) ), i );

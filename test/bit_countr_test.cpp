@@ -14,7 +14,7 @@ template<class T> void test_countr( T x )
 {
     x |= 1;
 
-    for( int i = 0; i <= std::numeric_limits<T>::digits; ++i, x <<= 1 )
+    for( int i = 0; i <= std::numeric_limits<T>::digits; ++i, x = static_cast<T>( x << 1 ) )
     {
         BOOST_TEST_EQ( boost::core::countr_zero( x ), i );
         BOOST_TEST_EQ( boost::core::countr_one( static_cast<T>( ~x ) ), i );

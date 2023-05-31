@@ -14,7 +14,7 @@
 template<class T> void test_popcount( T x )
 {
     int k = 0;
-    for( T y = x; y; y &= y - 1, ++k );
+    for( T y = x; y; y = static_cast<T>( y & (y - 1) ), ++k );
 
     BOOST_TEST_EQ( boost::core::popcount( x ), k ) || ( std::cerr << "x: " << +x << std::endl );
 }
