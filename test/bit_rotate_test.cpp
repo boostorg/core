@@ -20,7 +20,7 @@ template<class T> void test_rotate( T x )
         BOOST_TEST_EQ( +boost::core::rotl( x, -i ), +boost::core::rotr( x, i ) );
 
         unsigned const width = std::numeric_limits<T>::digits;
-        unsigned r = i & ( width - 1 );
+        unsigned r = static_cast<unsigned>( i ) & ( width - 1 );
 
         if( r == 0 )
         {

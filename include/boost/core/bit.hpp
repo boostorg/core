@@ -626,7 +626,7 @@ BOOST_CXX14_CONSTEXPR T rotl( T x, int s ) BOOST_NOEXCEPT
     BOOST_STATIC_ASSERT( std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_signed );
 
     unsigned const mask = std::numeric_limits<T>::digits - 1;
-    return x << (s & mask) | x >> ((-s) & mask);
+    return static_cast<T>( x << (static_cast<unsigned>( s ) & mask) | x >> (static_cast<unsigned>( -s ) & mask) );
 }
 
 template<class T>
@@ -635,7 +635,7 @@ BOOST_CXX14_CONSTEXPR T rotr( T x, int s ) BOOST_NOEXCEPT
     BOOST_STATIC_ASSERT( std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_signed );
 
     unsigned const mask = std::numeric_limits<T>::digits - 1;
-    return x >> (s & mask) | x << ((-s) & mask);
+    return static_cast<T>( x >> (static_cast<unsigned>( s ) & mask) | x << (static_cast<unsigned>( -s ) & mask) );
 }
 
 // integral powers of 2
@@ -664,7 +664,7 @@ BOOST_CONSTEXPR T bit_floor( T x ) BOOST_NOEXCEPT
 {
     BOOST_STATIC_ASSERT( std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_signed );
 
-    return x == 0? 0: T(1) << ( boost::core::bit_width( x ) - 1 );
+    return x == 0? 0: static_cast<T>( T(1) << ( boost::core::bit_width( x ) - 1 ) );
 }
 
 namespace detail
@@ -805,7 +805,7 @@ BOOST_CONSTEXPR inline boost::uint8_t byteswap_impl( boost::uint8_t x ) BOOST_NO
 
 BOOST_CONSTEXPR inline boost::uint16_t byteswap_impl( boost::uint16_t x ) BOOST_NOEXCEPT
 {
-    return (x << 8) | (x >> 8);
+    return static_cast<boost::uint16_t>( x << 8 | x >> 8 );
 }
 
 #if defined(__GNUC__) || defined(__clang__)
