@@ -304,6 +304,7 @@ run bit_byteswap_test.cpp
 compile-fail bit_width_fail.cpp
   : <warnings>off ;
 
+compile bit_cast_test_cx.cpp ;
 compile bit_rotate_test_cx.cpp ;
 compile bit_countr_test_cx.cpp ;
 compile bit_countl_test_cx.cpp ;

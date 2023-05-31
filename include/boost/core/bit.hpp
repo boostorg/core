@@ -43,12 +43,32 @@
 # define BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL
 #endif
 
+#if defined(__has_builtin)
+# if __has_builtin(__builtin_bit_cast)
+#  define BOOST_CORE_HAS_BUILTIN_BIT_CAST
+# endif
+#endif
+
+#if defined(BOOST_MSVC) && BOOST_MSVC >= 1926
+#  define BOOST_CORE_HAS_BUILTIN_BIT_CAST
+#endif
+
 namespace boost
 {
 namespace core
 {
 
 // bit_cast
+
+#if defined(BOOST_CORE_HAS_BUILTIN_BIT_CAST)
+
+template<class To, class From>
+BOOST_CONSTEXPR To bit_cast( From const & from ) BOOST_NOEXCEPT
+{
+    return __builtin_bit_cast( To, from );
+}
+
+#else
 
 template<class To, class From>
 To bit_cast( From const & from ) BOOST_NOEXCEPT
@@ -59,6 +79,8 @@ To bit_cast( From const & from ) BOOST_NOEXCEPT
     std::memcpy( &to, &from, sizeof(To) );
     return to;
 }
+
+#endif
 
 // countl
 
