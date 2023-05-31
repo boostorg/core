@@ -98,6 +98,8 @@ run visit_each_test.cpp ;
 run get_pointer_test.cpp ;
 
 local pedantic-errors = <warnings>pedantic
+    <toolset>gcc:<cxxflags>"-Wconversion"
+    <toolset>clang:<cxxflags>"-Wconversion"
     <toolset>msvc:<warnings-as-errors>on
     <toolset>gcc:<warnings-as-errors>on
     <toolset>clang:<warnings-as-errors>on ;
