@@ -664,7 +664,7 @@ BOOST_CONSTEXPR T bit_floor( T x ) BOOST_NOEXCEPT
 {
     BOOST_STATIC_ASSERT( std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_signed );
 
-    return x == 0? 0: static_cast<T>( T(1) << ( boost::core::bit_width( x ) - 1 ) );
+    return x == 0? T(0): static_cast<T>( T(1) << ( boost::core::bit_width( x ) - 1 ) );
 }
 
 namespace detail
