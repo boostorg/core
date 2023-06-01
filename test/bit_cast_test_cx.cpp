@@ -4,6 +4,9 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#include <boost/core/bit.hpp>
+#include <boost/cstdint.hpp>
+
 #include <boost/config.hpp>
 #include <boost/config/pragma_message.hpp>
 
@@ -11,10 +14,11 @@
 
 BOOST_PRAGMA_MESSAGE( "Test skipped because BOOST_NO_CXX11_CONSTEXPR is defined" )
 
-#else
+#elif !defined(BOOST_CORE_HAS_BUILTIN_BIT_CAST)
 
-#include <boost/core/bit.hpp>
-#include <boost/cstdint.hpp>
+BOOST_PRAGMA_MESSAGE( "Test skipped because BOOST_CORE_HAS_BUILTIN_BIT_CAST is not defined" )
+
+#else
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 
