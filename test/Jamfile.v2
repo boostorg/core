@@ -386,5 +386,10 @@ run serialization_construct_data_test.cpp : : : <library>/boost//serialization/<
 run identity_test.cpp ;
 run identity_rvalue_test.cpp ;
 
+run sp_thread_pause_test.cpp ;
+run sp_thread_yield_test.cpp ;
+run sp_thread_sleep_test.cpp ;
+run yield_prim_windows_h_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
