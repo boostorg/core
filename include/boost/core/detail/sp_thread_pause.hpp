@@ -13,23 +13,41 @@
 //
 //   Emits a "pause" instruction.
 //
-// Copyright 2008, 2020 Peter Dimov
+// Copyright 2008, 2020, 2023 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0
 // https://www.boost.org/LICENSE_1_0.txt
 
-#if defined(_MSC_VER) && _MSC_VER >= 1310 && ( defined(_M_IX86) || defined(_M_X64) ) && !defined(__c2__)
+#if defined(__has_builtin)
+# if __has_builtin(__builtin_ia32_pause) && !defined(_INTEL_COMPILER)
+#  define BOOST_CORE_HAS_BUILTIN_IA32_PAUSE
+# endif
+#endif
 
-extern "C" void _mm_pause();
+#if defined(BOOST_CORE_HAS_BUILTIN_IA32_PAUSE)
 
-#define BOOST_CORE_SP_PAUSE _mm_pause();
+# define BOOST_CORE_SP_PAUSE() __builtin_ia32_pause()
+
+#elif defined(_MSC_VER) && ( defined(_M_IX86) || defined(_M_X64) )
+
+# include <intrin.h>
+# define BOOST_CORE_SP_PAUSE() _mm_pause()
+
+#elif defined(_MSC_VER) && ( defined(_M_ARM) || defined(_M_ARM64) )
+
+# include <intrin.h>
+# define BOOST_CORE_SP_PAUSE() __yield()
 
 #elif defined(__GNUC__) && ( defined(__i386__) || defined(__x86_64__) )
 
-#define BOOST_CORE_SP_PAUSE __asm__ __volatile__( "rep; nop" : : : "memory" );
+# define BOOST_CORE_SP_PAUSE() __asm__ __volatile__( "rep; nop" : : : "memory" )
+
+#elif defined(__GNUC__) && ( (defined(__ARM_ARCH) && __ARM_ARCH >= 8) || defined(__ARM_ARCH_8A__) || defined(__aarch64__) )
+
+# define BOOST_CORE_SP_PAUSE() __asm__ __volatile__( "yield" : : : "memory" )
 
 #else
 
-#define BOOST_CORE_SP_PAUSE
+# define BOOST_CORE_SP_PAUSE() ((void)0)
 
 #endif
 
@@ -40,12 +58,12 @@ namespace core
 
 inline void sp_thread_pause()
 {
-    BOOST_CORE_SP_PAUSE
+    BOOST_CORE_SP_PAUSE();
 }
 
 } // namespace core
 } // namespace boost
 
-#undef BOOST_SP_PAUSE
+#undef BOOST_CORE_SP_PAUSE
 
 #endif // #ifndef BOOST_CORE_DETAIL_SP_THREAD_PAUSE_HPP_INCLUDED
