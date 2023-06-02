@@ -14,7 +14,7 @@
 //   Cease execution for a while to yield to other threads,
 //   as if by calling nanosleep() with an appropriate interval.
 //
-// Copyright 2008, 2020 Peter Dimov
+// Copyright 2008, 2020, 2023 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0
 // https://www.boost.org/LICENSE_1_0.txt
 
@@ -56,6 +56,10 @@ using boost::core::detail::sp_thread_sleep;
 
 #include <time.h>
 
+#if defined(BOOST_HAS_PTHREADS)
+# include <pthread.h>
+#endif
+
 namespace boost
 {
 namespace core
@@ -63,6 +67,13 @@ namespace core
 
 inline void sp_thread_sleep()
 {
+#if defined(BOOST_HAS_PTHREADS)
+
+    int oldst;
+    pthread_setcancelstate( PTHREAD_CANCEL_DISABLE, &oldst );
+
+#endif
+
     // g++ -Wextra warns on {} or {0}
     struct timespec rqtp = { 0, 0 };
 
@@ -73,6 +84,13 @@ inline void sp_thread_sleep()
     rqtp.tv_nsec = 1000;
 
     nanosleep( &rqtp, 0 );
+
+#if defined(BOOST_HAS_PTHREADS)
+
+    pthread_setcancelstate( oldst, &oldst );
+
+#endif
+
 }
 
 } // namespace core
