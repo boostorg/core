@@ -263,6 +263,20 @@ jobs:
               - "https://apt.llvm.org/llvm-snapshot.gpg.key"
             cxxflags: -stdlib=libc++
             linkflags: -stdlib=libc++
+          - toolset: clang
+            compiler: clang++-16
+            cxxstd: "03,11,14,17,20,2b"
+            os: ubuntu-22.04
+            install:
+              - clang-16
+              - libc++-16-dev
+              - libc++abi-16-dev
+            sources:
+              - "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
+            source_keys:
+              - "https://apt.llvm.org/llvm-snapshot.gpg.key"
+            cxxflags: -stdlib=libc++
+            linkflags: -stdlib=libc++
           - name: UBSAN
             toolset: clang
             compiler: clang++-14
