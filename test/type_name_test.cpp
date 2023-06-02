@@ -310,7 +310,11 @@ int main()
     TEST(std::pair<void, void>);
     TEST(std::pair<std::pair<void, void>, void>);
 
+#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 160000
+// std::char_traits<Ch> is deprecated for non-char types
+#else
     TEST(std::basic_string<Ch>);
+#endif
 
     TEST(std::string);
     TEST(std::wstring);
@@ -402,7 +406,11 @@ int main()
 
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
 
+#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 160000
+// std::char_traits<Ch> is deprecated for non-char types
+#else
     TEST(std::basic_string_view<Ch>);
+#endif
 
     TEST(std::string_view);
     TEST(std::wstring_view);

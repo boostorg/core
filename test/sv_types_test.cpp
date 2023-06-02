@@ -7,9 +7,18 @@
 #include <boost/core/lightweight_test_trait.hpp>
 #include <iterator>
 
+#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 160000
+
+// std::char_traits<Ch> is deprecated for non-char types
+typedef wchar_t Ch;
+
+#else
+
 struct Ch
 {
 };
+
+#endif
 
 int main()
 {
