@@ -38,6 +38,13 @@ boost_test(TYPE run SOURCES serialization_split_free_test.cpp)
 boost_test(TYPE run SOURCES serialization_split_member_test.cpp)
 boost_test(TYPE run SOURCES serialization_construct_data_test.cpp)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
+set(BOOST_TEST_LINK_LIBRARIES Boost::core Threads::Threads)
+
+boost_test(TYPE run SOURCES yield_prim_pthread_cancel_test.cpp)
+
 endif()
 
 add_subdirectory(swap)
