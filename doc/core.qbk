@@ -83,3 +83,4 @@ criteria for inclusion is that the utility component be:
 [include uncaught_exceptions.qbk]
 [include use_default.qbk]
 [include verbose_terminate_handler.qbk]
+[include yield_primitives.qbk]
