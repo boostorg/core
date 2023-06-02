@@ -17,6 +17,8 @@
 // Distributed under the Boost Software License, Version 1.0
 // https://www.boost.org/LICENSE_1_0.txt
 
+#include <boost/config.hpp>
+
 #if defined(__has_builtin)
 # if __has_builtin(__builtin_ia32_pause) && !defined(_INTEL_COMPILER)
 #  define BOOST_CORE_HAS_BUILTIN_IA32_PAUSE
@@ -56,7 +58,7 @@ namespace boost
 namespace core
 {
 
-inline void sp_thread_pause()
+BOOST_FORCEINLINE void sp_thread_pause() BOOST_NOEXCEPT
 {
     BOOST_CORE_SP_PAUSE();
 }

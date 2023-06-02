@@ -36,7 +36,7 @@ namespace core
 namespace detail
 {
 
-inline void sp_thread_yield()
+inline void sp_thread_yield() BOOST_NOEXCEPT
 {
     Sleep( 0 );
 }
@@ -66,7 +66,7 @@ namespace boost
 namespace core
 {
 
-inline void sp_thread_yield()
+inline void sp_thread_yield() BOOST_NOEXCEPT
 {
     sched_yield();
 }
@@ -87,7 +87,7 @@ namespace boost
 namespace core
 {
 
-inline void sp_thread_yield()
+inline void sp_thread_yield() BOOST_NOEXCEPT
 {
     sp_thread_pause();
 }

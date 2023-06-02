@@ -36,7 +36,7 @@ namespace core
 namespace detail
 {
 
-inline void sp_thread_sleep()
+inline void sp_thread_sleep() BOOST_NOEXCEPT
 {
     Sleep( 1 );
 }
@@ -65,7 +65,7 @@ namespace boost
 namespace core
 {
 
-inline void sp_thread_sleep()
+inline void sp_thread_sleep() BOOST_NOEXCEPT
 {
 #if defined(BOOST_HAS_PTHREADS)
 
@@ -109,7 +109,7 @@ namespace boost
 namespace core
 {
 
-inline void sp_thread_sleep()
+inline void sp_thread_sleep() BOOST_NOEXCEPT
 {
     sp_thread_yield();
 }
