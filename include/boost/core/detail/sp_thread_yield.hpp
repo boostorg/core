@@ -24,7 +24,7 @@
 #if defined( _WIN32 ) || defined( __WIN32__ ) || defined( __CYGWIN__ )
 
 #if defined(BOOST_SP_REPORT_IMPLEMENTATION)
-  BOOST_PRAGMA_MESSAGE("Using Sleep(0) in sp_thread_yield")
+  BOOST_PRAGMA_MESSAGE("Using SwitchToThread() in sp_thread_yield")
 #endif
 
 #include <boost/core/detail/sp_win32_sleep.hpp>
@@ -38,7 +38,7 @@ namespace detail
 
 inline void sp_thread_yield() BOOST_NOEXCEPT
 {
-    Sleep( 0 );
+    SwitchToThread();
 }
 
 } // namespace detail

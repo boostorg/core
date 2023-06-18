@@ -41,6 +41,8 @@ namespace detail
   extern "C" __declspec(dllimport) void BOOST_CORE_SP_STDCALL Sleep( unsigned long ms );
 #endif
 
+extern "C" __declspec(dllimport) int BOOST_CORE_SP_STDCALL SwitchToThread();
+
 #undef BOOST_CORE_SP_STDCALL
 
 #endif // !defined( BOOST_USE_WINDOWS_H )
