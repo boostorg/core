@@ -4,9 +4,9 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-// Tests that boost::swap propagates noexcept specification correctly
+// Tests that boost::core::invoke_swap propagates noexcept specification correctly
 
-#include <boost/core/swap.hpp>
+#include <boost/core/invoke_swap.hpp>
 #include <boost/config.hpp>
 
 #if !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_CXX11_STATIC_ASSERT) && \
@@ -34,9 +34,9 @@ struct class_with_except_swap
 
 } // namespace test_ns
 
-static_assert(noexcept(boost::swap(test_ns::class_with_noexcept_swap::instance(), test_ns::class_with_noexcept_swap::instance())),
-    "boost::swap for class_with_noexcept_swap should have noexcept specification");
-static_assert(!noexcept(boost::swap(test_ns::class_with_except_swap::instance(), test_ns::class_with_except_swap::instance())),
-    "boost::swap for class_with_except_swap should not have noexcept specification");
+static_assert(noexcept(boost::core::invoke_swap(test_ns::class_with_noexcept_swap::instance(), test_ns::class_with_noexcept_swap::instance())),
+    "boost::core::invoke_swap for class_with_noexcept_swap should have noexcept specification");
+static_assert(!noexcept(boost::core::invoke_swap(test_ns::class_with_except_swap::instance(), test_ns::class_with_except_swap::instance())),
+    "boost::core::invoke_swap for class_with_except_swap should not have noexcept specification");
 
 #endif // !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_CXX11_STATIC_ASSERT) ...

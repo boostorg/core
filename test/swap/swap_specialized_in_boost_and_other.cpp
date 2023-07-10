@@ -8,13 +8,13 @@
 // properly swapped, when both boost and the other namespace have a custom
 // swap function for that class. Note that it shouldn't be necessary for a class
 // in an other namespace to have a custom swap function in boost, because the
-// boost::swap utility should find the swap function in the other namespace, by
-// argument dependent lookup (ADL). Unfortunately ADL isn't fully implemented
-// by some specific compiler versions, including Intel C++ 8.1, MSVC 7.1, and
-// Borland 5.9.3. Users of those compilers might consider adding a swap overload
+// boost::core::invoke_swap utility should find the swap function in the other
+// namespace, by argument dependent lookup (ADL). Unfortunately ADL isn't fully
+// implemented by some specific compiler versions, including Intel C++ 8.1, MSVC 7.1,
+// and Borland 5.9.3. Users of those compilers might consider adding a swap overload
 // to the boost namespace.
 
-#include <boost/utility/swap.hpp>
+#include <boost/core/invoke_swap.hpp>
 #include <boost/core/lightweight_test.hpp>
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
@@ -52,7 +52,7 @@ int main()
   other::swap_test_class object2 = initial_value2;
 
   other::swap_test_class::reset();
-  boost::swap(object1,object2);
+  boost::core::invoke_swap(object1,object2);
 
   BOOST_CHECK(object1 == initial_value2);
   BOOST_CHECK(object2 == initial_value1);

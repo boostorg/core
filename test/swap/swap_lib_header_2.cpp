@@ -6,6 +6,6 @@
 
 // Tests that the swap header include guards work correctly
 
-#include <boost/utility/swap.hpp>
-#include <boost/utility/swap.hpp>
+#include <boost/core/invoke_swap.hpp>
+#include <boost/core/invoke_swap.hpp>
 

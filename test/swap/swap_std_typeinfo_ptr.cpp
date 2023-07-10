@@ -4,11 +4,11 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-// Tests swapping std::type_info pointers by means of boost::swap.
+// Tests swapping std::type_info pointers by means of boost::core::invoke_swap.
 // There is no std::swap overload or template specialization
 // for std::type_info pointers.
 
-#include <boost/utility/swap.hpp>
+#include <boost/core/invoke_swap.hpp>
 #include <boost/core/lightweight_test.hpp>
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
@@ -23,7 +23,7 @@ int main()
   const std::type_info * ptr1 = initial_value1;
   const std::type_info * ptr2 = initial_value2;
 
-  boost::swap(ptr1,ptr2);
+  boost::core::invoke_swap(ptr1,ptr2);
 
   BOOST_CHECK_EQUAL(ptr1,initial_value2);
   BOOST_CHECK_EQUAL(ptr2,initial_value1);

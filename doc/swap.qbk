@@ -20,17 +20,17 @@
 
 [endsimplesect]
 
-[section Header <boost/core/swap.hpp>]
+[section Header <boost/core/invoke_swap.hpp>]
 
-[^template<class T> void swap(T& left, T& right) noexcept(['see below]);]
+[^template<class T> void invoke_swap(T& left, T& right) noexcept(['see below]);]
 
 [endsect]
 
 [section Introduction]
 
-The template function `boost::swap` allows the values of two
-variables to be swapped, using argument dependent lookup to
-select a specialized swap function if available. If no
+The template function `boost::core::invoke_swap` allows the
+values of two variables to be swapped, using argument dependent
+lookup to select a specialized swap function if available. If no
 specialized swap function is available, `std::swap` is used.
 
 [endsect]
@@ -56,9 +56,9 @@ Although this is legal C++, no Boost libraries use this method,
 whereas many Boost libraries provide specialized swap functions
 in their own namespaces.
 
-`boost::swap` also supports swapping built-in arrays. Note that
-`std::swap` originally did not do so, but a request to add an
-overload of `std::swap` for built-in arrays has been accepted
+`boost::core::invoke_swap` also supports swapping built-in arrays.
+Note that `std::swap` originally did not do so, but a request to
+add an overload of `std::swap` for built-in arrays has been accepted
 by the C++ Standards Committee[footnote
   [@http://open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#809
   LWG Defect Report 809: std::swap should be overloaded for array
@@ -68,14 +68,15 @@ by the C++ Standards Committee[footnote
 
 [section Exception Safety]
 
-`boost::swap` provides the same exception guarantee as the
-underlying swap function used, with one exception; for an array
+`boost::core::invoke_swap` provides the same exception guarantee as
+the underlying swap function used, with one exception; for an array
 of type `T[n]`, where `n > 1` and the underlying swap function
-for `T` provides the strong exception guarantee, `boost::swap`
-provides only the basic exception guarantee.
+for `T` provides the strong exception guarantee,
+`boost::core::invoke_swap` provides only the basic exception guarantee.
 
-In C++11 and later, `boost::swap` propagates the same `noexcept`
-specification as the one specified in the underlying swap function.
+In C++11 and later, `boost::core::invoke_swap` propagates the same
+`noexcept` specification as the one specified in the underlying swap
+function.
 
 [endsect]
 
@@ -104,7 +105,7 @@ Or:
 [section Portability]
 
 Several older compilers do not support argument dependent
-lookup. On these compilers `boost::swap` will call
+lookup. On these compilers `boost::core::invoke_swap` will call
 `std::swap`, ignoring any specialized swap functions that
 could be found as a result of argument dependent lookup.
 
@@ -118,7 +119,9 @@ could be found as a result of argument dependent lookup.
   tests, and documentation
 * *Steven Watanabe* - for the idea to make `boost::swap` less
   specialized than `std::swap`, thereby allowing the function
-  to have the name 'swap' without introducing ambiguity
+  to have the name 'swap' without introducing ambiguity. However,
+  later the function was renamed to `boost::core::invoke_swap`
+  to avoid potential infinite recursion.
 
 [endsect]
 

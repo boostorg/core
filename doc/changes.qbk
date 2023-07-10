@@ -1,11 +1,28 @@
 [/
   Copyright 2021 Peter Dimov
-  Copyright 2022 Andrey Semashev
+  Copyright 2022-2023 Andrey Semashev
   Distributed under the Boost Software License, Version 1.0.
   https://boost.org/LICENSE_1_0.txt)
 ]
 
 [section Revision History]
+
+[section Changes in 1.84.0]
+
+* `boost::swap` utility function has been renamed to `boost::core::invoke_swap` to
+  avoid forming a potential infinite recursion when the arguments are not swappable.
+  The new function is defined in `boost/core/invoke_swap.hpp` and is functionally equivalent
+  to `boost::swap`. The old `boost::swap` name is preserved for backward compatibility
+  but deprecated and will be removed in a future release. Its `noexcept` specification
+  has been removed to avoid compile errors caused by compile-time recursion.
+  `BOOST_ALLOW_DEPRECATED_SYMBOLS` or `BOOST_ALLOW_DEPRECATED` can be defined to suppress
+  deprecation warnings for the transition period. ([@https://github.com/boostorg/core/issues/148 #148])
+* Headers `boost/swap.hpp`, `boost/utility/swap.hpp` and `boost/core/swap.hpp` are
+  deprecated and will be removed. Please, switch to `boost/core/invoke_swap.hpp`.
+  `BOOST_ALLOW_DEPRECATED_HEADERS` or `BOOST_ALLOW_DEPRECATED` can be defined to suppress
+  deprecation warnings.
+
+[endsect]
 
 [section Changes in 1.83.0]
 
