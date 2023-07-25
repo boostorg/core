@@ -56,7 +56,7 @@ using boost::core::detail::sp_thread_sleep;
 
 #include <time.h>
 
-#if defined(BOOST_HAS_PTHREADS)
+#if defined(BOOST_HAS_PTHREADS) && !defined(__ANDROID__)
 # include <pthread.h>
 #endif
 
@@ -67,7 +67,7 @@ namespace core
 
 inline void sp_thread_sleep() BOOST_NOEXCEPT
 {
-#if defined(BOOST_HAS_PTHREADS)
+#if defined(BOOST_HAS_PTHREADS) && !defined(__ANDROID__)
 
     int oldst;
     pthread_setcancelstate( PTHREAD_CANCEL_DISABLE, &oldst );
@@ -85,7 +85,7 @@ inline void sp_thread_sleep() BOOST_NOEXCEPT
 
     nanosleep( &rqtp, 0 );
 
-#if defined(BOOST_HAS_PTHREADS)
+#if defined(BOOST_HAS_PTHREADS) && !defined(__ANDROID__)
 
     pthread_setcancelstate( oldst, &oldst );
 
