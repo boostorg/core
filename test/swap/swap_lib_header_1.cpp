@@ -6,5 +6,5 @@
 
 // Tests that the swap header compiles as a standalone translation unit
 
-#include <boost/utility/swap.hpp>
+#include <boost/core/invoke_swap.hpp>
 

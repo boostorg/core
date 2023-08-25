@@ -7,12 +7,8 @@
 # bring in rules for testing
 import testing ;
 
-compile swap_root_header_1.cpp ;
-compile swap_root_header_2.cpp ;
 compile swap_lib_header_1.cpp ;
 compile swap_lib_header_2.cpp ;
-compile swap_mixed_headers_1.cpp ;
-compile swap_mixed_headers_2.cpp ;
 compile swap_noexcept.cpp ;
 
 compile-fail swap_const_wrapper_fail.cpp ;

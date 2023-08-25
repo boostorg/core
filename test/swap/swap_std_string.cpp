@@ -4,10 +4,10 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-// Tests swapping std::string objects by means of boost::swap.
+// Tests swapping std::string objects by means of boost::core::invoke_swap.
 // std::string has its own std::swap overload.
 
-#include <boost/utility/swap.hpp>
+#include <boost/core/invoke_swap.hpp>
 #include <boost/core/lightweight_test.hpp>
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
@@ -22,7 +22,7 @@ int main()
   std::string object1 = initial_value1;
   std::string object2 = initial_value2;
 
-  boost::swap(object1,object2);
+  boost::core::invoke_swap(object1,object2);
 
   BOOST_CHECK_EQUAL(object1,initial_value2);
   BOOST_CHECK_EQUAL(object2,initial_value1);
