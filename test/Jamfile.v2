@@ -17,7 +17,7 @@ project : requirements
   <toolset>gcc:<warnings-as-errors>on
   <toolset>gcc-4.4:<cxxflags>-Wno-sign-compare ;
 
-local warning-as-errors-off =
+local warnings-as-errors-off =
     "-<toolset>msvc:<warnings-as-errors>on"
     "-<toolset>gcc:<warnings-as-errors>on"
     "-<toolset>clang:<warnings-as-errors>on" ;
@@ -32,36 +32,36 @@ run addressof_np_test.cpp ;
 run addressof_fn_test.cpp ;
 compile addressof_constexpr_test.cpp ;
 compile-fail addressof_fail_rvalue.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 
 run checked_delete_test.cpp ;
 compile-fail checked_delete_fail.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail checked_delete_fail2.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 
 compile ref_ct_test.cpp ;
 run ref_test.cpp ;
 run ref_ref_test.cpp ;
 run ref_fn_test.cpp ;
 compile-fail ref_rv_fail1.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail ref_rv_fail2.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail ref_rv_fail3.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail ref_rv_fail4.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail ref_rv_fail5.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail ref_implicit_fail.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail ref_implicit_fail2.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail ref_implicit_fail3.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail ref_implicit_fail4.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 run ref_cv_test.cpp ;
 run ref_conversion_test.cpp ;
 
@@ -75,18 +75,18 @@ run eif_no_disambiguation.cpp : ;
 run eif_partial_specializations.cpp : ;
 
 compile-fail noncopyable_compile_fail.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 
 run explicit_operator_bool.cpp ;
 run explicit_operator_bool_noexcept.cpp ;
 compile-fail explicit_operator_bool_compile_fail_conv_int.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail explicit_operator_bool_compile_fail_conv_pvoid.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail explicit_operator_bool_compile_fail_delete.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail explicit_operator_bool_compile_fail_shift.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 
 compile ignore_unused_test.cpp ;
 
@@ -181,9 +181,9 @@ run demangled_name_test.cpp : : : <rtti>off <test-info>always_show_run_output : 
 
 run scoped_enum.cpp ;
 compile-fail scoped_enum_compile_fail_conv_from_int.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 compile-fail scoped_enum_compile_fail_conv_to_int.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 
 run underlying_type.cpp ;
 
@@ -349,7 +349,7 @@ run sv_common_reference_test.cpp ;
 compile sv_common_reference_test2.cpp ;
 compile sv_windows_h_test.cpp ;
 compile-fail sv_nullptr_fail.cpp
-  : $(warning-as-errors-off) ;
+  : $(warnings-as-errors-off) ;
 
 run span_test.cpp ;
 run span_types_test.cpp ;
@@ -378,10 +378,12 @@ run memory_resource_test.cpp ;
 run data_test.cpp ;
 run size_test.cpp ;
 
-run serialization_nvp_test.cpp : : : <library>/boost//serialization/<warnings>off <undefined-sanitizer>norecover:<build>no ;
-run serialization_split_free_test.cpp : : : <library>/boost//serialization/<warnings>off <undefined-sanitizer>norecover:<link>static ;
-run serialization_split_member_test.cpp : : : <library>/boost//serialization/<warnings>off <undefined-sanitizer>norecover:<link>static ;
-run serialization_construct_data_test.cpp : : : <library>/boost//serialization/<warnings>off <undefined-sanitizer>norecover:<link>static ;
+local with-serialization = <library>/boost//serialization/<warnings>off $(warnings-as-errors-off) <undefined-sanitizer>norecover:<link>static ;
+
+run serialization_nvp_test.cpp : : : $(with-serialization) <undefined-sanitizer>norecover:<build>no ;
+run serialization_split_free_test.cpp : : : $(with-serialization) ;
+run serialization_split_member_test.cpp : : : $(with-serialization) ;
+run serialization_construct_data_test.cpp : : : $(with-serialization) ;
 
 run identity_test.cpp ;
 run identity_rvalue_test.cpp ;
