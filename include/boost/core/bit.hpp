@@ -52,7 +52,7 @@
 # endif
 #endif
 
-#if defined(BOOST_MSVC) && BOOST_MSVC >= 1926
+#if !defined(BOOST_CORE_HAS_BUILTIN_BIT_CAST) && (defined(BOOST_MSVC) && BOOST_MSVC >= 1926)
 #  define BOOST_CORE_HAS_BUILTIN_BIT_CAST
 #endif
 
