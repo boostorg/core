@@ -592,7 +592,7 @@ jobs:
           - os: macos-13
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v3
@@ -641,7 +641,7 @@ jobs:
           - os: macos-13
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v3
@@ -700,7 +700,7 @@ jobs:
           - os: macos-13
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v3
@@ -754,7 +754,7 @@ jobs:
           - os: windows-2022
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v3
@@ -804,7 +804,7 @@ jobs:
           - os: windows-2022
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v3
@@ -872,7 +872,7 @@ jobs:
           - os: windows-2022
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v3
