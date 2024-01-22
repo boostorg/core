@@ -1,11 +1,18 @@
 [/
   Copyright 2021 Peter Dimov
-  Copyright 2022-2023 Andrey Semashev
+  Copyright 2022-2024 Andrey Semashev
   Distributed under the Boost Software License, Version 1.0.
   https://boost.org/LICENSE_1_0.txt)
 ]
 
 [section Revision History]
+
+[section Changes in 1.85.0]
+
+* Added a new [link core.functor `boost/core/functor.hpp`] header with a `functor` class template
+  for wrapping a raw function into a function object class.
+
+[endsect]
 
 [section Changes in 1.84.0]
 
