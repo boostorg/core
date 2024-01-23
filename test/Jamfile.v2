@@ -378,7 +378,11 @@ run memory_resource_test.cpp ;
 run data_test.cpp ;
 run size_test.cpp ;
 
-local with-serialization = <library>/boost//serialization/<warnings>off $(warnings-as-errors-off) <undefined-sanitizer>norecover:<link>static ;
+import ../../config/checks/config : requires ;
+
+local CPP11 = [ requires cxx11_variadic_templates cxx11_template_aliases cxx11_decltype cxx11_constexpr cxx11_noexcept ] ;
+
+local with-serialization = <library>/boost//serialization/<warnings>off $(warnings-as-errors-off) <undefined-sanitizer>norecover:<link>static $(CPP11) ;
 
 run serialization_nvp_test.cpp : : : $(with-serialization) <undefined-sanitizer>norecover:<build>no ;
 run serialization_split_free_test.cpp : : : $(with-serialization) ;
