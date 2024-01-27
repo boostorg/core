@@ -189,6 +189,8 @@ run underlying_type.cpp ;
 
 run fclose_deleter_test.cpp : : : <target-os>windows:<define>_CRT_SECURE_NO_WARNINGS <target-os>windows:<define>_CRT_SECURE_NO_DEPRECATE ;
 
+run functor_test.cpp ;
+
 run pointer_traits_pointer_test.cpp ;
 run pointer_traits_element_type_test.cpp ;
 run pointer_traits_difference_type_test.cpp ;
