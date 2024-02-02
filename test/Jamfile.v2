@@ -187,7 +187,12 @@ compile-fail scoped_enum_compile_fail_conv_to_int.cpp
 
 run underlying_type.cpp ;
 
+compile-fail null_deleter_compile_fail_adl.cpp
+  : $(warnings-as-errors-off) ;
+
 run fclose_deleter_test.cpp : : : <target-os>windows:<define>_CRT_SECURE_NO_WARNINGS <target-os>windows:<define>_CRT_SECURE_NO_DEPRECATE ;
+compile-fail fclose_deleter_compile_fail_adl.cpp
+  : <target-os>windows:<define>_CRT_SECURE_NO_WARNINGS <target-os>windows:<define>_CRT_SECURE_NO_DEPRECATE $(warnings-as-errors-off) ;
 
 run functor_test.cpp ;
 

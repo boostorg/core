@@ -11,6 +11,15 @@
 
 * Added a new [link core.functor `boost/core/functor.hpp`] header with a `functor` class template
   for wrapping a raw function into a function object class.
+* Changed [link core.null_deleter `null_deleter`] and [link core.fclose_deleter `fclose_deleter`]
+  definitions so that they don't bring namespace `boost` into argument-dependent lookup in cases
+  like this:
+  ```
+  std::unique_ptr< std::FILE, boost::fclose_deleter > p1, p2;
+  swap(p1, p2); // no longer looks for boost::swap as part of ADL
+  ```
+  Users may need to either explicitly qualify the namespace of the called function or add a
+  `using`-declaration.
 
 [endsect]
 
