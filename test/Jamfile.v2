@@ -195,6 +195,9 @@ compile-fail fclose_deleter_compile_fail_adl.cpp
   : <target-os>windows:<define>_CRT_SECURE_NO_WARNINGS <target-os>windows:<define>_CRT_SECURE_NO_DEPRECATE $(warnings-as-errors-off) ;
 
 run functor_test.cpp ;
+compile-fail functor_compile_fail_adl.cpp
+  : $(warnings-as-errors-off) ;
+
 
 run pointer_traits_pointer_test.cpp ;
 run pointer_traits_element_type_test.cpp ;

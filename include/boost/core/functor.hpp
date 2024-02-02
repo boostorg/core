@@ -18,6 +18,9 @@
 
 namespace boost::core {
 
+// Block unintended ADL
+namespace functor_ns {
+
 //! A function object that invokes a function specified as its template parameter
 template< auto Function >
 struct functor
@@ -28,6 +31,10 @@ struct functor
         return Function(static_cast< Args&& >(args)...);
     }
 };
+
+} // namespace functor_ns
+
+using functor_ns::functor;
 
 } // namespace boost::core
 
