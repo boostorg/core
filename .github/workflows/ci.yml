@@ -320,7 +320,7 @@ jobs:
             cxxstd: "03,11,14,17,20,2b"
             os: macos-13
 
-    timeout-minutes: 120
+    timeout-minutes: 45
     runs-on: ${{matrix.os}}
     container: ${{matrix.container}}
 
@@ -559,7 +559,7 @@ jobs:
             os: windows-2019
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 120
+    timeout-minutes: 45
 
     steps:
       - name: Setup Boost
