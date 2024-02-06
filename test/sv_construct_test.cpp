@@ -18,6 +18,11 @@ template<class It> std::reverse_iterator<It> make_reverse_iterator( It it )
     return std::reverse_iterator<It>( it );
 }
 
+// Verify that the constructor from std::string_view can be called in a constexpr context
+#if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
+static_assert(!boost::core::string_view(std::string_view("abc", 3)).empty());
+#endif
+
 int main()
 {
     {
