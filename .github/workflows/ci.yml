@@ -621,7 +621,9 @@ jobs:
     steps:
       - name: Install packages
         if: matrix.install
-        run: sudo apt install ${{matrix.install}}
+        run: |
+          sudo apt-get -o Acquire::Retries=$NET_RETRY_COUNT update
+          sudo apt-get -o Acquire::Retries=$NET_RETRY_COUNT -y ${{join(matrix.install, ' ')}}
 
       - name: Setup Boost
         run: |
@@ -686,7 +688,9 @@ jobs:
     steps:
       - name: Install packages
         if: matrix.install
-        run: sudo apt install ${{matrix.install}}
+        run: |
+          sudo apt-get -o Acquire::Retries=$NET_RETRY_COUNT update
+          sudo apt-get -o Acquire::Retries=$NET_RETRY_COUNT -y ${{join(matrix.install, ' ')}}
 
       - name: Setup Boost
         run: |
@@ -760,8 +764,14 @@ jobs:
 
     steps:
       - name: Install packages
-        if: matrix.install
-        run: sudo apt install ${{matrix.install}}
+        run: |
+          if [ -f "/etc/debian_version" ]
+          then
+              sudo apt-get -o Acquire::Retries=$NET_RETRY_COUNT update
+              sudo apt-get -o Acquire::Retries=$NET_RETRY_COUNT install -y ninja-build ${{join(matrix.install, ' ')}}
+          else
+              brew install ninja ${{join(matrix.install, ' ')}}
+          fi
 
       - name: Setup Boost
         run: |
@@ -776,8 +786,7 @@ jobs:
           echo REF: $REF
           BOOST_BRANCH=develop && [ "$REF" = "master" ] && BOOST_BRANCH=master || true
           echo BOOST_BRANCH: $BOOST_BRANCH
-          # Building tests on Mac OS occasionally fail with a timeout if there are too many parallel build jobs
-          BUILD_JOBS=$((nproc || echo 1) 2> /dev/null)
+          BUILD_JOBS=$((nproc || sysctl -n hw.ncpu) 2> /dev/null)
           echo BUILD_JOBS: $BUILD_JOBS
           echo "BUILD_JOBS=$BUILD_JOBS" >> $GITHUB_ENV
           echo "CMAKE_BUILD_PARALLEL_LEVEL=$BUILD_JOBS" >> $GITHUB_ENV
@@ -807,7 +816,8 @@ jobs:
         run: |
           cd boost-root
           mkdir __build__ && cd __build__
-          cmake -DBOOST_INCLUDE_LIBRARIES=$LIBRARY -DBUILD_TESTING=ON ..
+          # Building tests on Mac OS using makefiles sometimes blocks until timeout, if multiple parallel build jobs are used. Use Ninja instead.
+          cmake -G Ninja -DBOOST_INCLUDE_LIBRARIES=$LIBRARY -DBUILD_TESTING=ON ..
 
       - name: Build tests
         run: |
