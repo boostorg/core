@@ -616,7 +616,7 @@ jobs:
           - os: macos-13
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 45
+    timeout-minutes: 10
 
     steps:
       - name: Install packages
@@ -681,7 +681,7 @@ jobs:
           - os: macos-13
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 45
+    timeout-minutes: 10
 
     steps:
       - name: Install packages
@@ -756,7 +756,7 @@ jobs:
           - os: macos-13
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 45
+    timeout-minutes: 20
 
     steps:
       - name: Install packages
@@ -828,7 +828,7 @@ jobs:
           - os: windows-2022
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 45
+    timeout-minutes: 10
 
     steps:
       - name: Setup Boost
@@ -890,7 +890,7 @@ jobs:
           - os: windows-2022
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 45
+    timeout-minutes: 10
 
     steps:
       - name: Setup Boost
@@ -970,7 +970,7 @@ jobs:
           - os: windows-2022
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 45
+    timeout-minutes: 20
 
     steps:
       - name: Setup Boost
