@@ -39,6 +39,10 @@ compile-fail checked_delete_fail.cpp
   : $(warnings-as-errors-off) ;
 compile-fail checked_delete_fail2.cpp
   : $(warnings-as-errors-off) ;
+compile-fail checked_deleter_compile_fail_adl.cpp
+  : $(warnings-as-errors-off) ;
+compile-fail checked_array_deleter_compile_fail_adl.cpp
+  : $(warnings-as-errors-off) ;
 
 compile ref_ct_test.cpp ;
 run ref_test.cpp ;
