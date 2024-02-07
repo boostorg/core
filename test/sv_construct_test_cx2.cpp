@@ -18,6 +18,13 @@ int main() {}
 BOOST_PRAGMA_MESSAGE( "Test skipped because BOOST_CXX_VERSION < 201703L" )
 int main() {}
 
+#elif defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 70300
+
+// std::char_traits is not constexpr in libstdc++ 7.2
+
+BOOST_PRAGMA_MESSAGE( "Test skipped because BOOST_LIBSTDCXX_VERSION < 70300" )
+int main() {}
+
 #else
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
