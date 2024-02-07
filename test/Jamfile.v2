@@ -361,6 +361,9 @@ compile sv_windows_h_test.cpp ;
 compile-fail sv_nullptr_fail.cpp
   : $(warnings-as-errors-off) ;
 
+compile sv_construct_test_cx.cpp ;
+compile sv_construct_test_cx2.cpp ;
+
 run span_test.cpp ;
 run span_types_test.cpp ;
 run span_constructible_test.cpp ;
