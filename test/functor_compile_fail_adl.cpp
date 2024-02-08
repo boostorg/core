@@ -10,7 +10,7 @@
  * \date   02.02.2024
  *
  * This file tests that \c boost::core::functor doesn't bring namespace
- * boost::core into ADL.
+ * \c boost::core into ADL.
  */
 
 #include <boost/core/functor.hpp>

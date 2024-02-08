@@ -10,7 +10,7 @@
  * \date   02.02.2024
  *
  * This file tests that \c boost::fclose_deleter doesn't bring namespace
- * boost into ADL.
+ * \c boost into ADL.
  */
 
 #include <boost/core/fclose_deleter.hpp>

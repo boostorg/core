@@ -10,7 +10,7 @@
  * \date   02.02.2024
  *
  * This file tests that \c boost::null_deleter doesn't bring namespace
- * boost into ADL.
+ * \c boost into ADL.
  */
 
 #include <boost/core/null_deleter.hpp>
