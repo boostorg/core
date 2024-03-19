@@ -265,6 +265,7 @@ run allocator_destroy_test.cpp ;
 run allocator_construct_n_test.cpp ;
 run allocator_destroy_n_test.cpp ;
 run allocator_traits_test.cpp ;
+compile allocator_pmr_test.cpp ;
 
 lib lib_typeid : lib_typeid.cpp : <link>shared:<define>LIB_TYPEID_DYN_LINK=1 ;
 
