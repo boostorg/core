@@ -416,5 +416,8 @@ run sp_thread_sleep_test.cpp ;
 run yield_prim_windows_h_test.cpp ;
 run yield_prim_pthread_cancel_test.cpp : ;
 
+run pointer_in_range_test.cpp ;
+compile pointer_in_range_constexpr_test.cpp ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
