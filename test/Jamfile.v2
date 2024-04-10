@@ -22,6 +22,15 @@ local warnings-as-errors-off =
     "-<toolset>gcc:<warnings-as-errors>on"
     "-<toolset>clang:<warnings-as-errors>on" ;
 
+local pedantic-errors = <warnings>pedantic
+    <toolset>gcc:<cxxflags>"-Wconversion"
+    <toolset>gcc:<cxxflags>"-Wsign-conversion"
+    <toolset>clang:<cxxflags>"-Wconversion"
+    <toolset>clang:<cxxflags>"-Wsign-conversion"
+    <toolset>msvc:<warnings-as-errors>on
+    <toolset>gcc:<warnings-as-errors>on
+    <toolset>clang:<warnings-as-errors>on ;
+
 # quick test (for CI)
 run quick.cpp ;
 
@@ -34,7 +43,8 @@ compile addressof_constexpr_test.cpp ;
 compile-fail addressof_fail_rvalue.cpp
   : $(warnings-as-errors-off) ;
 
-run checked_delete_test.cpp ;
+run checked_delete_test.cpp
+  : : : $(pedantic-errors) ;
 compile-fail checked_delete_fail.cpp
   : $(warnings-as-errors-off) ;
 compile-fail checked_delete_fail2.cpp
@@ -100,13 +110,6 @@ run sp_typeinfo_test.cpp : : : <rtti>off : sp_typeinfo_test_no_rtti ;
 run visit_each_test.cpp ;
 
 run get_pointer_test.cpp ;
-
-local pedantic-errors = <warnings>pedantic
-    <toolset>gcc:<cxxflags>"-Wconversion"
-    <toolset>clang:<cxxflags>"-Wconversion"
-    <toolset>msvc:<warnings-as-errors>on
-    <toolset>gcc:<warnings-as-errors>on
-    <toolset>clang:<warnings-as-errors>on ;
 
 run lightweight_test_test.cpp
   : : : $(pedantic-errors) ;
