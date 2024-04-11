@@ -507,7 +507,7 @@ int main()
         {
             std::string str3( str2 );
 
-            str3[ i ] = ~str3[ i ];
+            str3[ i ] = static_cast<char>( ~str3[ i ] );
 
             BOOST_TEST_EQ( sv.find_last_not_of( str3 ), i );
         }
@@ -518,7 +518,7 @@ int main()
         {
             std::string str3( str2 );
 
-            str3[ i ] = ~str3[ i ];
+            str3[ i ] = static_cast<char>( ~str3[ i ] );
 
             BOOST_TEST_EQ( sv.find_last_not_of( str3 ), 255 - i );
         }
