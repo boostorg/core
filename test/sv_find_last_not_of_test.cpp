@@ -542,7 +542,7 @@ int main()
         {
             std::wstring str3( str2 );
 
-            str3[ i ] = ~str3[ i ];
+            str3[ i ] = static_cast<wchar_t>( ~str3[ i ] );
 
             BOOST_TEST_EQ( sv.find_first_not_of( str3 ), i );
         }
@@ -553,7 +553,7 @@ int main()
         {
             std::wstring str3( str2 );
 
-            str3[ i ] = ~str3[ i ];
+            str3[ i ] = static_cast<wchar_t>( ~str3[ i ] );
 
             BOOST_TEST_EQ( sv.find_first_not_of( str3 ), 255 - i );
         }
