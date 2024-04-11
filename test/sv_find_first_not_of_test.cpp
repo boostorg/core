@@ -494,7 +494,7 @@ int main()
 
         for( int i = 0; i < 256; ++i )
         {
-            str[ i ] = static_cast< unsigned char >( i );
+            str[ i ] = static_cast<char>( static_cast< unsigned char >( i ) );
         }
 
         boost::core::string_view sv( str, 256 );
@@ -503,7 +503,7 @@ int main()
 
         std::string str2( sv.data(), sv.size() );
 
-        for( int i = 0; i < 256; ++i )
+        for( std::size_t i = 0; i < 256; ++i )
         {
             std::string str3( str2 );
 
@@ -514,7 +514,7 @@ int main()
 
         std::reverse( str, str + 256 );
 
-        for( int i = 0; i < 256; ++i )
+        for( std::size_t i = 0; i < 256; ++i )
         {
             std::string str3( str2 );
 
@@ -538,7 +538,7 @@ int main()
 
         std::wstring str2( sv.data(), sv.size() );
 
-        for( int i = 0; i < 256; ++i )
+        for( std::size_t i = 0; i < 256; ++i )
         {
             std::wstring str3( str2 );
 
@@ -549,7 +549,7 @@ int main()
 
         std::reverse( str, str + 256 );
 
-        for( int i = 0; i < 256; ++i )
+        for( std::size_t i = 0; i < 256; ++i )
         {
             std::wstring str3( str2 );
 
