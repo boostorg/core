@@ -33,7 +33,7 @@ template<class T, class N>
 void
 Allocator<T, N>::deallocate(pointer ptr, size_type)
 {
-    if (!boost::pointer_in_range(ptr, &buffer_[0], &buffer_[N])) {
+    if (!boost::pointer_in_range(ptr, buffer_, buffer_ + N)) {
         ::operator delete(ptr);
     }
 }
@@ -58,6 +58,7 @@ constexpr bool pointer_in_range(const T* ptr, const T* begin, const T* end);
 [[`template<class T> constexpr bool pointer_in_range(const T* ptr,
 const T* begin, T* end);`]
 [[variablelist
+[[Requires][`[begin,end)` is a valid range.]]
 [[Returns][`true` if `ptr` is in range `[begin,end)`, otherwise `false`.]]]]]]
 
 [endsect]
