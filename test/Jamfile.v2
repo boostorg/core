@@ -440,5 +440,8 @@ run yield_prim_pthread_cancel_test.cpp : ;
 run pointer_in_range_test.cpp ;
 compile pointer_in_range_constexpr_test.cpp ;
 
+run minstd_rand_test.cpp
+  : : : $(pedantic-errors) ;
+
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
