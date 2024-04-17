@@ -29,7 +29,7 @@ namespace boost {
 
 template<class T>
 inline BOOST_CONSTEXPR bool
-pointer_in_range(const T* p, const T* b, const T* e)
+pointer_in_range(const T* b, const T* p, const T* e)
 {
 #if defined(BOOST_CORE_DETAIL_HAS_IS_CONSTEVAL)
     if ( __builtin_is_constant_evaluated()) {
