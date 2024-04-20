@@ -56,7 +56,7 @@ constexpr bool pointer_in_range(const T* ptr, const T* begin, const T* end);
 
 [variablelist
 [[`template<class T> constexpr bool pointer_in_range(const T* ptr,
-const T* begin, T* end);`]
+const T* begin, const T* end);`]
 [[variablelist
 [[Requires][`[begin,end)` is a valid range.]]
 [[Returns][`true` if `ptr` is in range `[begin,end)`, otherwise `false`.]]]]]]
