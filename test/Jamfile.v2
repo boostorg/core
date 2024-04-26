@@ -382,7 +382,7 @@ run sv_stream_insert_test.cpp
   : : : $(pedantic-errors) ;
 run sv_conversion_test.cpp
   : : : $(pedantic-errors) ;
-run sv_conversion_test2.cpp : ;
+run sv_conversion_test2.cpp /boost/utility//boost_utility : ;
 run sv_common_reference_test.cpp
   : : : $(pedantic-errors) ;
 compile sv_common_reference_test2.cpp ;
