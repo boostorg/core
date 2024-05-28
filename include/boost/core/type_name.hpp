@@ -346,6 +346,8 @@ template<> struct tn_holder<boost::uint128_type>
 
 #endif
 
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+
 template<> struct tn_holder<wchar_t>
 {
     static std::string type_name( std::string const& suffix )
@@ -353,6 +355,8 @@ template<> struct tn_holder<wchar_t>
         return "wchar_t" + suffix;
     }
 };
+
+#endif
 
 #if !defined(BOOST_NO_CXX11_CHAR16_T)
 
