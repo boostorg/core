@@ -63,6 +63,37 @@ void test_type()
     BOOST_TEST(v2.get().value() == 6);
 }
 
+template <class T>
+struct derived : boost::empty_value<T> {
+    typedef typename boost::empty_value<T>::type type;
+    derived(boost::empty_init_t e) : boost::empty_value<T>(e) {}
+};
+
+struct outer {
+    struct inner_empty {};
+    struct inner_non_empty {
+        inner_non_empty() : value() {}
+        int value;
+    };
+};
+
+void test_derived_compile()
+{
+    const boost::empty_value<outer> x1(boost::empty_init);
+    const boost::empty_value<outer::inner_empty> x2(boost::empty_init);
+    const boost::empty_value<outer::inner_non_empty> x3(boost::empty_init);
+    const derived<outer> x4(boost::empty_init);
+    const derived<outer::inner_empty> x5(boost::empty_init);
+    const derived<outer::inner_non_empty> x6(boost::empty_init);
+
+    (void)x1;
+    (void)x2;
+    (void)x3;
+    (void)x4;
+    (void)x5;
+    (void)x6;
+}
+
 int main()
 {
     test_int();
