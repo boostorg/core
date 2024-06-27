@@ -96,6 +96,8 @@ private:
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #if defined(BOOST_MSVC)
+// This is a workaround to an MSVC bug when T is a nested class.
+// See https://developercommunity.visualstudio.com/t/Compiler-bug:-Incorrect-C2247-and-C2248/10690025
 namespace detail {
 
 template<class T>
