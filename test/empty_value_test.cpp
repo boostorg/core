@@ -79,6 +79,9 @@ struct outer {
 
 void test_derived_compile()
 {
+    // This is testing the workaround to an MSVC bug when T is a nested class.
+    // See https://developercommunity.visualstudio.com/t/Compiler-bug:-Incorrect-C2247-and-C2248/10690025
+
     const boost::empty_value<outer> x1(boost::empty_init);
     const boost::empty_value<outer::inner_empty> x2(boost::empty_init);
     const boost::empty_value<outer::inner_non_empty> x3(boost::empty_init);
