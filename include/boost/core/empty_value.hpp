@@ -95,9 +95,55 @@ private:
 };
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if defined(BOOST_MSVC)
+// This is a workaround to an MSVC bug when T is a nested class.
+// See https://developercommunity.visualstudio.com/t/Compiler-bug:-Incorrect-C2247-and-C2248/10690025
+namespace detail {
+
+template<class T>
+class empty_value_base
+    : public T {
+public:
+#if !defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS)
+    empty_value_base() = default;
+#else
+    BOOST_CONSTEXPR empty_value_base() { }
+#endif
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+    template<class U, class... Args>
+    BOOST_CONSTEXPR empty_value_base(U&& value, Args&&... args)
+        : T(std::forward<U>(value), std::forward<Args>(args)...) { }
+#else
+    template<class U>
+    BOOST_CONSTEXPR empty_value_base(U&& value)
+        : T(std::forward<U>(value)) { }
+#endif
+#else
+    template<class U>
+    BOOST_CONSTEXPR empty_value_base(const U& value)
+        : T(value) { }
+
+    template<class U>
+    BOOST_CONSTEXPR empty_value_base(U& value)
+        : T(value) { }
+#endif
+};
+
+} /* detail */
+#endif
+
 template<class T, unsigned N>
 class empty_value<T, N, true>
+#if defined(BOOST_MSVC)
+    : detail::empty_value_base<T> {
+    typedef detail::empty_value_base<T> base;
+#else
     : T {
+    typedef T base;
+#endif
+
 public:
     typedef T type;
 
@@ -108,26 +154,26 @@ public:
 #endif
 
     BOOST_CONSTEXPR empty_value(boost::empty_init_t)
-        : T() { }
+        : base() { }
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template<class U, class... Args>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, U&& value, Args&&... args)
-        : T(std::forward<U>(value), std::forward<Args>(args)...) { }
+        : base(std::forward<U>(value), std::forward<Args>(args)...) { }
 #else
     template<class U>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, U&& value)
-        : T(std::forward<U>(value)) { }
+        : base(std::forward<U>(value)) { }
 #endif
 #else
     template<class U>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, const U& value)
-        : T(value) { }
+        : base(value) { }
 
     template<class U>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, U& value)
-        : T(value) { }
+        : base(value) { }
 #endif
 
     BOOST_CONSTEXPR const T& get() const BOOST_NOEXCEPT {
