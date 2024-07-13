@@ -138,10 +138,10 @@ template<class T, unsigned N>
 class empty_value<T, N, true>
 #if defined(BOOST_MSVC)
     : detail::empty_value_base<T> {
-    typedef detail::empty_value_base<T> base;
+    typedef detail::empty_value_base<T> core_ev_base;
 #else
     : T {
-    typedef T base;
+    typedef T core_ev_base;
 #endif
 
 public:
@@ -154,26 +154,26 @@ public:
 #endif
 
     BOOST_CONSTEXPR empty_value(boost::empty_init_t)
-        : base() { }
+        : core_ev_base() { }
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template<class U, class... Args>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, U&& value, Args&&... args)
-        : base(std::forward<U>(value), std::forward<Args>(args)...) { }
+        : core_ev_base(std::forward<U>(value), std::forward<Args>(args)...) { }
 #else
     template<class U>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, U&& value)
-        : base(std::forward<U>(value)) { }
+        : core_ev_base(std::forward<U>(value)) { }
 #endif
 #else
     template<class U>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, const U& value)
-        : base(value) { }
+        : core_ev_base(value) { }
 
     template<class U>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, U& value)
-        : base(value) { }
+        : core_ev_base(value) { }
 #endif
 
     BOOST_CONSTEXPR const T& get() const BOOST_NOEXCEPT {
