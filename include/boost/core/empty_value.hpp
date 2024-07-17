@@ -96,8 +96,10 @@ private:
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #if defined(BOOST_MSVC)
-// This is a workaround to an MSVC bug when T is a nested class.
-// See https://developercommunity.visualstudio.com/t/Compiler-bug:-Incorrect-C2247-and-C2248/10690025
+/*
+This is a workaround to an MSVC bug when T is a nested class:
+https://developercommunity.visualstudio.com/t/Compiler-bug:-Incorrect-C2247-and-C2248/10690025
+*/
 namespace detail {
 
 template<class T>
@@ -138,10 +140,10 @@ template<class T, unsigned N>
 class empty_value<T, N, true>
 #if defined(BOOST_MSVC)
     : detail::empty_value_base<T> {
-    typedef detail::empty_value_base<T> base_type;
+    typedef detail::empty_value_base<T> empty_base_;
 #else
     : T {
-    typedef T base_type;
+    typedef T empty_base_;
 #endif
 
 public:
@@ -154,26 +156,26 @@ public:
 #endif
 
     BOOST_CONSTEXPR empty_value(boost::empty_init_t)
-        : base_type() { }
+        : empty_base_() { }
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template<class U, class... Args>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, U&& value, Args&&... args)
-        : base_type(std::forward<U>(value), std::forward<Args>(args)...) { }
+        : empty_base_(std::forward<U>(value), std::forward<Args>(args)...) { }
 #else
     template<class U>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, U&& value)
-        : base_type(std::forward<U>(value)) { }
+        : empty_base_(std::forward<U>(value)) { }
 #endif
 #else
     template<class U>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, const U& value)
-        : base_type(value) { }
+        : empty_base_(value) { }
 
     template<class U>
     BOOST_CONSTEXPR empty_value(boost::empty_init_t, U& value)
-        : base_type(value) { }
+        : empty_base_(value) { }
 #endif
 
     BOOST_CONSTEXPR const T& get() const BOOST_NOEXCEPT {
