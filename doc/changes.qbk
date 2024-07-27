@@ -14,6 +14,8 @@
 * Fixed `type_name` for abstract classes. ([github_issue 172])
 * Fixed `boost/core/type_name.hpp` compilation error with MSVC with disabled native `wchar_t` type.
   ([github_issue 173])
+* Added a workaround for an MSVC [@https://developercommunity.visualstudio.com/t/Compiler-bug:-Incorrect-C2247-and-C2248/10690025 bug]
+  causing `empty_value` compilation errors when it is used with a nested class. ([github_pr 175])
 
 [endsect]
 
