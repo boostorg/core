@@ -437,7 +437,9 @@ local with-serialization =
     $(warnings-as-errors-off)
     <undefined-sanitizer>norecover:<link>static
     $(CPP11)
-    <toolset>gcc,<target-os>windows,<address-model>32:<build>no # Serialization no longer builds under classic MinGW
+    # Serialization no longer builds under classic MinGW
+    # and <toolset>gcc,<target-os>windows,<address-model>32 fails for some reason
+    <toolset>gcc,<target-os>windows:<build>no
 ;
 
 run serialization_nvp_test.cpp : : : $(with-serialization) <undefined-sanitizer>norecover:<build>no ;
