@@ -432,7 +432,15 @@ run memory_resource_test.cpp ;
 run data_test.cpp ;
 run size_test.cpp ;
 
-local with-serialization = <library>/boost/serialization//boost_serialization/<warnings>off $(warnings-as-errors-off) <undefined-sanitizer>norecover:<link>static $(CPP11) ;
+local with-serialization =
+    <library>/boost/serialization//boost_serialization/<warnings>off
+    $(warnings-as-errors-off)
+    <undefined-sanitizer>norecover:<link>static
+    $(CPP11)
+    # Serialization no longer builds under classic MinGW
+    # and <toolset>gcc,<target-os>windows,<address-model>32 fails for some reason
+    <toolset>gcc,<target-os>windows:<build>no
+;
 
 run serialization_nvp_test.cpp : : : $(with-serialization) <undefined-sanitizer>norecover:<build>no ;
 run serialization_split_free_test.cpp : : : $(with-serialization) ;
