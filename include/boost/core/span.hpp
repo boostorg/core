@@ -153,6 +153,39 @@ struct span_bytes<T, boost::dynamic_extent> {
     static constexpr std::size_t value = boost::dynamic_extent;
 };
 
+// This is what span_default_constructed_size returns if we can not determine size at compile time,
+// or if it is of no value for check(e.g. constexpr std::vector will return 0).
+// This value can not be changed since logic only works if it is 0.
+static constexpr std::size_t span_unknown_or_useless_size = 0;
+
+// Uses better match betwen short and float argument to do second step in dispatch:
+// 1) does type has size method
+// 2) is size constexpr and does it return a usable value
+template<typename R>
+constexpr std::size_t span_default_constructed_size_dispatch(float) {
+    return span_unknown_or_useless_size;
+}
+
+template<typename R, typename std::enable_if<R().size() != span_unknown_or_useless_size, int>::type = 0>
+constexpr std::size_t span_default_constructed_size_dispatch(short) {
+    return R().size();
+}
+
+template<typename R, typename std::enable_if<span_has_size<R>::value, int>::type = 0>
+constexpr std::size_t span_default_constructed_size() {
+    return span_default_constructed_size_dispatch<typename std::remove_reference<R>::type>(short{0});
+}
+
+template<typename R, typename std::enable_if<!span_has_size<R>::value, int>::type = 0>
+constexpr std::size_t span_default_constructed_size() {
+    return span_unknown_or_useless_size;
+}
+
+template<std::size_t E, std::size_t InputE>
+constexpr bool static_extents_incompatible() {
+    return (InputE != span_unknown_or_useless_size) &&  (E != InputE);
+}
+
 } /* detail */
 
 template<class T, std::size_t E>
@@ -232,7 +265,9 @@ public:
             detail::span_is_range<R, T>::value, int>::type = 0>
     explicit constexpr span(R&& r) noexcept(noexcept(boost::data(r)) &&
         noexcept(r.size()))
-        : s_(boost::data(r), r.size()) { }
+        : s_(boost::data(r), r.size()) {
+            static_assert(!detail::static_extents_incompatible<E, detail::span_default_constructed_size<R>()>(), "Incompatible Extents");
+         }
 
     template<class U, std::size_t N,
         typename std::enable_if<detail::span_implicit<E, N>::value &&
