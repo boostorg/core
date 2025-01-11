@@ -8,6 +8,8 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_SPAN_HPP
 #define BOOST_CORE_SPAN_HPP
 
+#include <boost/config.hpp>
+#include <boost/assert.hpp>
 #include <boost/core/data.hpp>
 #include <array>
 #include <iterator>
@@ -273,16 +275,20 @@ public:
         return span<T, C>(s_.p + O, C);
     }
 
-    constexpr span<T, dynamic_extent> first(size_type c) const {
+    BOOST_CXX14_CONSTEXPR span<T, dynamic_extent> first(size_type c) const {
+        BOOST_ASSERT(c <= size());
         return span<T, dynamic_extent>(s_.p, c);
     }
 
-    constexpr span<T, dynamic_extent> last(size_type c) const {
+    BOOST_CXX14_CONSTEXPR span<T, dynamic_extent> last(size_type c) const {
+        BOOST_ASSERT(c <= size());
         return span<T, dynamic_extent>(s_.p + (s_.n - c), c);
     }
 
-    constexpr span<T, dynamic_extent> subspan(size_type o,
+    BOOST_CXX14_CONSTEXPR span<T, dynamic_extent> subspan(size_type o,
         size_type c = dynamic_extent) const {
+        BOOST_ASSERT(o <= size());
+        BOOST_ASSERT((c == dynamic_extent) || ((c + o) <= size()));
         return span<T, dynamic_extent>(s_.p + o,
             c == dynamic_extent ? s_.n - o : c);
     }
@@ -299,15 +305,18 @@ public:
         return s_.n == 0;
     }
 
-    constexpr reference operator[](size_type i) const {
+    BOOST_CXX14_CONSTEXPR reference operator[](size_type i) const {
+        BOOST_ASSERT(i < size());
         return s_.p[i];
     }
 
-    constexpr reference front() const {
+    BOOST_CXX14_CONSTEXPR reference front() const {
+        BOOST_ASSERT(!empty());
         return *s_.p;
     }
 
-    constexpr reference back() const {
+    BOOST_CXX14_CONSTEXPR reference back() const {
+        BOOST_ASSERT(!empty());
         return s_.p[s_.n - 1];
     }
 
