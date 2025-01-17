@@ -409,6 +409,7 @@ run span_test.cpp ;
 run span_types_test.cpp ;
 run span_constructible_test.cpp ;
 run span_deduction_guide_test.cpp ;
+run span_constexpr_test.cpp ;
 run as_bytes_test.cpp ;
 run as_writable_bytes_test.cpp ;
 compile span_boost_begin_test.cpp ;
