@@ -5,8 +5,7 @@ Copyright 2025 Glen Joseph Fernandes
 Distributed under the Boost Software License, Version 1.0.
 (http://www.boost.org/LICENSE_1_0.txt)
 */
-#ifndef BOOST_CORE_DETAIL_ASSERT_HPP
-#define BOOST_CORE_DETAIL_ASSERT_HPP
+#undef BOOST_CORE_ASSERT
 
 #include <cassert>
 
@@ -19,6 +18,4 @@ Distributed under the Boost Software License, Version 1.0.
    ((expr) ? void(0) : __assert_fail(#expr, __FILE__, __LINE__, 0))
 #else
 #define BOOST_CORE_ASSERT(expr) assert(expr)
-#endif
-
 #endif
