@@ -7,15 +7,12 @@ Distributed under the Boost Software License, Version 1.0.
 */
 #undef BOOST_CORE_DETAIL_ASSERT
 
-#include <cassert>
-
-#if !defined(NDEBUG) && \
-    !defined(__clang__) && \
+#if !defined(__clang__) && \
     !defined(__INTEL_COMPILER) && \
     defined(__GNUC__) && \
     (__GNUC__ < 5)
-#define BOOST_CORE_DETAIL_ASSERT(expr) \
-   ((expr) ? void(0) : __assert_fail(#expr, __FILE__, __LINE__, 0))
+#define BOOST_CORE_DETAIL_ASSERT(expr) void(0)
 #else
-#define BOOST_CORE_DETAIL_ASSERT(expr) assert(expr)
+#include <boost/assert.hpp>
+#define BOOST_CORE_DETAIL_ASSERT(expr) BOOST_ASSERT(expr)
 #endif
