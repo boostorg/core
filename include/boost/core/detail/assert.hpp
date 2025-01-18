@@ -5,7 +5,7 @@ Copyright 2025 Glen Joseph Fernandes
 Distributed under the Boost Software License, Version 1.0.
 (http://www.boost.org/LICENSE_1_0.txt)
 */
-#undef BOOST_CORE_ASSERT
+#undef BOOST_CORE_DETAIL_ASSERT
 
 #include <cassert>
 
@@ -14,8 +14,8 @@ Distributed under the Boost Software License, Version 1.0.
     !defined(__INTEL_COMPILER) && \
     defined(__GNUC__) && \
     (__GNUC__ < 5)
-#define BOOST_CORE_ASSERT(expr) \
+#define BOOST_CORE_DETAIL_ASSERT(expr) \
    ((expr) ? void(0) : __assert_fail(#expr, __FILE__, __LINE__, 0))
 #else
-#define BOOST_CORE_ASSERT(expr) assert(expr)
+#define BOOST_CORE_DETAIL_ASSERT(expr) assert(expr)
 #endif

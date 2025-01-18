@@ -275,18 +275,18 @@ public:
     }
 
     constexpr span<T, dynamic_extent> first(size_type c) const {
-        return BOOST_CORE_ASSERT(c <= size()),
+        return BOOST_CORE_DETAIL_ASSERT(c <= size()),
             span<T, dynamic_extent>(s_.p, c);
     }
 
     constexpr span<T, dynamic_extent> last(size_type c) const {
-        return BOOST_CORE_ASSERT(c <= size()),
+        return BOOST_CORE_DETAIL_ASSERT(c <= size()),
             span<T, dynamic_extent>(s_.p + (s_.n - c), c);
     }
 
     constexpr span<T, dynamic_extent> subspan(size_type o,
         size_type c = dynamic_extent) const {
-        return BOOST_CORE_ASSERT(o <= size() &&
+        return BOOST_CORE_DETAIL_ASSERT(o <= size() &&
                 (c == dynamic_extent || c + o <= size())),
             span<T, dynamic_extent>(s_.p + o,
                 c == dynamic_extent ? s_.n - o : c);
@@ -305,15 +305,15 @@ public:
     }
 
     constexpr reference operator[](size_type i) const {
-        return BOOST_CORE_ASSERT(i < size()), s_.p[i];
+        return BOOST_CORE_DETAIL_ASSERT(i < size()), s_.p[i];
     }
 
     constexpr reference front() const {
-        return BOOST_CORE_ASSERT(!empty()), *s_.p;
+        return BOOST_CORE_DETAIL_ASSERT(!empty()), *s_.p;
     }
 
     constexpr reference back() const {
-        return BOOST_CORE_ASSERT(!empty()), s_.p[s_.n - 1];
+        return BOOST_CORE_DETAIL_ASSERT(!empty()), s_.p[s_.n - 1];
     }
 
     constexpr pointer data() const noexcept {
