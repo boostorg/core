@@ -124,7 +124,7 @@ local windows_pipeline(name, image, environment, arch = "amd64") =
     linux_pipeline(
         "Linux 16.04 GCC 4.8 32/64",
         "cppalliance/droneubuntu1604:1",
-        { TOOLSET: 'gcc', COMPILER: 'g++', CXXSTD: '03,11', ADDRMD: '32,64' },
+        { TOOLSET: 'gcc', COMPILER: 'g++-4.8', CXXSTD: '03,11', ADDRMD: '32,64' },
         "g++-4.8-multilib",
     ),
 
