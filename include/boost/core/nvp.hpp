@@ -11,6 +11,10 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/core/addressof.hpp>
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 namespace boost {
 namespace serialization {
 
@@ -51,6 +55,8 @@ using serialization::nvp;
 using serialization::make_nvp;
 
 } /* boost */
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #define BOOST_NVP(v) boost::make_nvp(BOOST_STRINGIZE(v), v)
 

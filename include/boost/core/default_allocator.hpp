@@ -9,9 +9,14 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_DEFAULT_ALLOCATOR_HPP
 
 #include <boost/config.hpp>
+
+#include <boost/core/detail/module_macro.hpp>
+
 #include <new>
 
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 #if defined(BOOST_NO_EXCEPTIONS)
 BOOST_NORETURN void throw_exception(const std::exception&);
@@ -152,6 +157,8 @@ operator!=(const default_allocator<T>&,
 } /* default_ */
 
 using default_::default_allocator;
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

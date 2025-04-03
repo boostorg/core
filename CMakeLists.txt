@@ -29,6 +29,10 @@ if(CMAKE_VERSION VERSION_GREATER 3.18 AND CMAKE_GENERATOR MATCHES "Visual Studio
 
 endif()
 
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.28.0" AND BUILD_MODULE)
+    add_subdirectory(module)
+endif()
+
 if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
 
   add_subdirectory(test)

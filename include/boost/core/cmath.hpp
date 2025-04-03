@@ -18,12 +18,16 @@
 
 #include <cmath>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if defined(BOOST_CORE_USE_GENERIC_CMATH) || (!defined(_MSC_VER) && !defined(FP_SUBNORMAL))
 
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
 #include <limits>
 #include <cstring>
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 namespace boost
 {
@@ -112,6 +116,8 @@ template<class T> T copysign( T x, T y )
 } // namespace core
 } // namespace boost
 
+BOOST_CORE_END_MODULE_EXPORT
+
 #else // defined(BOOST_CORE_USE_GENERIC_CMATH)
 
 #if defined(_MSC_VER) && _MSC_VER < 1800
@@ -123,6 +129,8 @@ namespace boost
 namespace core
 {
 #if defined(_MSC_VER) && _MSC_VER < 1800
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T> T copysign( T x, T y )
 {
@@ -233,7 +241,11 @@ inline int fpclassify( long double x )
     return boost::core::fpclassify( static_cast<double>( x ) );
 }
 
+BOOST_CORE_END_MODULE_EXPORT
+
 #else
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 using std::isfinite;
 using std::isnan;
@@ -249,14 +261,20 @@ int const fp_nan = FP_NAN;
 
 using std::signbit;
 
+BOOST_CORE_END_MODULE_EXPORT
+
 // std::copysign doesn't exist in libstdc++ under -std=c++03
 
 #if !defined(__GNUC__)
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T> T copysign( T x, T y )
 {
     return std::copysign( x, y );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #else
 
@@ -282,10 +300,14 @@ inline long double copysign_impl( long double x, long double y )
 
 } // namespace detail
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T> T copysign( T x, T y )
 {
     return boost::core::detail::copysign_impl( x, y );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #endif // !defined(__GNUC__)
 #endif // #if defined(_MSC_VER) && _MSC_VER < 1800

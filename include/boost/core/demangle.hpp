@@ -11,6 +11,9 @@
 // http://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/config.hpp>
+
+#include <boost/core/detail/module_macro.hpp>
+
 #include <string>
 
 #if defined(BOOST_HAS_PRAGMA_ONCE)
@@ -46,6 +49,8 @@ namespace boost
 
 namespace core
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 inline char const * demangle_alloc( char const * name ) BOOST_NOEXCEPT;
 inline void demangle_free( char const * name ) BOOST_NOEXCEPT;
@@ -116,6 +121,8 @@ inline std::string demangle( char const * name )
 }
 
 #endif
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 

@@ -12,6 +12,8 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/core/addressof.hpp>
 #include <cstddef>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost {
 namespace detail {
 
@@ -209,6 +211,8 @@ struct ptr_traits<T, ptr_none> { };
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 struct pointer_traits
     : detail::ptr_traits<T, typename detail::ptr_element<T>::type> { };
@@ -238,6 +242,8 @@ to_address(T* v) BOOST_NOEXCEPT
     return v;
 }
 
+BOOST_CORE_END_MODULE_EXPORT
+
 #if !defined(BOOST_NO_CXX14_RETURN_TYPE_DEDUCTION)
 namespace detail {
 
@@ -265,19 +271,30 @@ ptr_address(const T& v, long) BOOST_NOEXCEPT
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 inline auto
 to_address(const T& v) BOOST_NOEXCEPT
 {
     return boost::detail::ptr_address(v, 0);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
+
 #else
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 inline typename pointer_traits<T>::element_type*
 to_address(const T& v) BOOST_NOEXCEPT
 {
     return boost::to_address(v.operator->());
 }
+
+BOOST_CORE_END_MODULE_EXPORT
+
 #endif
 
 } /* boost */

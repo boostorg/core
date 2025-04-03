@@ -15,6 +15,7 @@
 
 #include <boost/core/demangle.hpp>
 #include <boost/config.hpp>
+#include <boost/core/detail/module_macro.hpp>
 #include <string>
 #include <functional>
 #include <memory>
@@ -1175,10 +1176,14 @@ template<template<class T, std::size_t N> class L, class T, std::size_t N> struc
 
 } // namespace detail
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T> std::string type_name()
 {
     return core::detail::tn_holder<T>::type_name( "" );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 } // namespace boost

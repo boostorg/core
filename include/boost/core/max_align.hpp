@@ -15,6 +15,8 @@
 #include <boost/config.hpp>
 #include <cstddef>
 
+#include <boost/core/detail/module_macro.hpp>
+
 // BOOST_CORE_HAS_FLOAT128
 
 #if defined(BOOST_HAS_FLOAT128)
@@ -37,6 +39,8 @@ namespace boost
 {
 namespace core
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 union max_align_t
 {
@@ -75,6 +79,8 @@ union max_align_t
 };
 
 BOOST_CONSTEXPR_OR_CONST std::size_t max_align = BOOST_CORE_ALIGNOF( max_align_t );
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 } // namespace boost

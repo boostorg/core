@@ -9,6 +9,9 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_EMPTY_VALUE_HPP
 
 #include <boost/config.hpp>
+
+#include <boost/core/detail/module_macro.hpp>
+
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #include <utility>
 #endif
@@ -32,6 +35,8 @@ Distributed under the Boost Software License, Version 1.0.
 
 namespace boost {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 struct use_empty_value_base {
     enum {
@@ -45,7 +50,11 @@ struct use_empty_value_base {
 
 struct empty_init_t { };
 
+BOOST_CORE_END_MODULE_EXPORT
+
 namespace empty_ {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T, unsigned N = 0,
     bool E = boost::use_empty_value_base<T>::value>
@@ -94,6 +103,8 @@ private:
     T value_;
 };
 
+BOOST_CORE_END_MODULE_EXPORT
+
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #if defined(BOOST_MSVC)
 /*
@@ -135,6 +146,8 @@ public:
 
 } /* detail */
 #endif
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T, unsigned N>
 class empty_value<T, N, true>
@@ -188,11 +201,17 @@ public:
 };
 #endif
 
+BOOST_CORE_END_MODULE_EXPORT
+
 } /* empty_ */
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 using empty_::empty_value;
 
 BOOST_INLINE_CONSTEXPR empty_init_t empty_init = empty_init_t();
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

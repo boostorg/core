@@ -17,8 +17,12 @@
 #include <boost/core/nvp.hpp>
 #include <cstddef>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 namespace serialization
 {
@@ -43,13 +47,19 @@ struct core_version_type
 
 } // namespace serialization
 
+BOOST_CORE_END_MODULE_EXPORT
+
 namespace core
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 // nvp
 
 using serialization::nvp;
 using serialization::make_nvp;
+
+BOOST_CORE_END_MODULE_EXPORT
 
 // split_free
 
@@ -76,10 +86,14 @@ template<> struct load_or_save_f<false>
 
 } // namespace detail
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A, class T> inline void split_free( A& a, T& t, unsigned int v )
 {
     detail::load_or_save_f< A::is_saving::value >()( a, t, v );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 // split_member
 
@@ -106,6 +120,8 @@ template<class Access> struct load_or_save_m<false, Access>
 
 } // namespace detail
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A, class T> inline void split_member( A& a, T& t, unsigned int v )
 {
     detail::load_or_save_m< A::is_saving::value >()( a, t, v );
@@ -124,6 +140,8 @@ template<class Ar, class T> void save_construct_data_adl( Ar& ar, T const* t, un
 {
     save_construct_data( ar, t, serialization::core_version_type( v ) );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 } // namespace boost

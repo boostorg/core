@@ -12,6 +12,8 @@
 #include <boost/config.hpp>
 #include <boost/core/detail/is_same.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if defined(BOOST_HAS_PRAGMA_ONCE)
 # pragma once
 #endif
@@ -26,7 +28,11 @@ namespace boost
 namespace core
 {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 using boost::core::detail::is_same;
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 

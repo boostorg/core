@@ -10,7 +10,11 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include <cstddef>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class C>
 inline constexpr auto
@@ -25,6 +29,8 @@ size(T(&)[N]) noexcept
 {
     return N;
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

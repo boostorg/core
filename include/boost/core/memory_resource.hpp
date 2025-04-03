@@ -16,6 +16,8 @@
 #include <boost/config/workaround.hpp>
 #include <cstddef>
 
+#include <boost/core/detail/module_macro.hpp>
+
 // Define our own placement new to avoid the inclusion of <new>
 // (~9K extra lines) at Ion Gaztanhaga's request.
 //
@@ -51,6 +53,8 @@ namespace boost
 {
 namespace core
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 class memory_resource
 {
@@ -101,6 +105,8 @@ inline bool operator!=( memory_resource const& a, memory_resource const& b ) BOO
 {
     return !( a == b );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 } // namespace boost

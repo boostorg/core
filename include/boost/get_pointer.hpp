@@ -7,11 +7,15 @@
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 // In order to avoid circular dependencies with Boost.TR1
 // we make sure that our include of <memory> doesn't try to
 // pull in the TR1 headers: that's why we use this header 
 // rather than including <memory> directly:
 #include <boost/config/no_tr1/memory.hpp>  // std::auto_ptr
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 namespace boost { 
 
@@ -72,5 +76,7 @@ template<class T> T * get_pointer( std::shared_ptr<T> const& p )
 #endif
 
 } // namespace boost
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #endif // GET_POINTER_DWA20021219_HPP

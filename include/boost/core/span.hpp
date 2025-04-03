@@ -14,12 +14,18 @@ Distributed under the Boost Software License, Version 1.0.
 #include <iterator>
 #include <type_traits>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 constexpr std::size_t dynamic_extent = static_cast<std::size_t>(-1);
 
 template<class T, std::size_t E = dynamic_extent>
 class span;
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -155,6 +161,8 @@ struct span_bytes<T, boost::dynamic_extent> {
 };
 
 } /* detail */
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T, std::size_t E>
 class span {
@@ -400,6 +408,8 @@ as_writable_bytes(span<T, E> s) noexcept
         E>::value>(reinterpret_cast<std::byte*>(s.data()), s.size_bytes());
 }
 #endif
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

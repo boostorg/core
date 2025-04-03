@@ -16,6 +16,8 @@
 
 #include "boost/config.hpp"
 
+#include <boost/core/detail/module_macro.hpp>
+
 // Even the definition of enable_if causes problems on some compilers,
 // so it's macroed out for all compilers that do not support SFINAE
 
@@ -23,6 +25,9 @@
 
 namespace boost
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
   template<typename T, typename R=void>
   struct enable_if_has_type
   {
@@ -74,6 +79,8 @@ namespace boost
   template <class Cond, class T> 
   struct lazy_disable_if : public lazy_disable_if_c<Cond::value, T> {};
 
+BOOST_CORE_END_MODULE_EXPORT
+
 } // namespace boost
 
 #else
@@ -81,6 +88,8 @@ namespace boost
 namespace boost {
 
   namespace detail { typedef void enable_if_default_T; }
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
   template <typename T>
   struct enable_if_does_not_work_on_this_compiler;
@@ -120,6 +129,8 @@ namespace boost {
   template <class Cond, class T = detail::enable_if_default_T> 
   struct lazy_disable_if : enable_if_does_not_work_on_this_compiler<T>
   { };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace boost
 

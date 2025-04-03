@@ -13,6 +13,10 @@ This functionality is now in <boost/core/allocator_access.hpp>.
 */
 #include <boost/core/noinit_adaptor.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 namespace boost {
 
 template<class A, class T>
@@ -91,5 +95,7 @@ alloc_construct_n(A& a, T* p, std::size_t n, I b)
 }
 
 } /* boost */
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #endif

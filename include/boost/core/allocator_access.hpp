@@ -9,6 +9,9 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_ALLOCATOR_ACCESS_HPP
 
 #include <boost/config.hpp>
+
+#include <boost/core/detail/module_macro.hpp>
+
 #include <boost/core/pointer_traits.hpp>
 #include <limits>
 #include <new>
@@ -58,10 +61,14 @@ _STL_DISABLE_DEPRECATED_WARNING
 
 namespace boost {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_value_type {
     typedef typename A::value_type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -83,10 +90,14 @@ struct alloc_ptr<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_pointer {
     typedef typename detail::alloc_ptr<A>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -105,10 +116,14 @@ struct alloc_const_ptr<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_const_pointer {
     typedef typename detail::alloc_const_ptr<A>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -151,10 +166,14 @@ struct alloc_rebind<A, T,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A, class T>
 struct allocator_rebind {
     typedef typename detail::alloc_rebind<A, T>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -173,10 +192,14 @@ struct alloc_void_ptr<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_void_pointer {
     typedef typename detail::alloc_void_ptr<A>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -195,10 +218,14 @@ struct alloc_const_void_ptr<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_const_void_pointer {
     typedef typename detail::alloc_const_void_ptr<A>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -216,10 +243,14 @@ struct alloc_diff_type<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_difference_type {
     typedef typename detail::alloc_diff_type<A>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -244,10 +275,14 @@ struct alloc_size_type<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_size_type {
     typedef typename detail::alloc_size_type<A>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -290,10 +325,14 @@ struct alloc_pocca<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A, class = void>
 struct allocator_propagate_on_container_copy_assignment {
     typedef typename detail::alloc_pocca<A>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -311,10 +350,14 @@ struct alloc_pocma<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_propagate_on_container_move_assignment {
     typedef typename detail::alloc_pocma<A>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -331,10 +374,14 @@ struct alloc_pocs<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_propagate_on_container_swap {
     typedef typename detail::alloc_pocs<A>::type type;
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -363,6 +410,8 @@ struct alloc_equal<A,
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 struct allocator_is_always_equal {
     typedef typename detail::alloc_equal<A>::type type;
@@ -383,7 +432,12 @@ allocator_deallocate(A& a, typename allocator_pointer<A>::type p,
     a.deallocate(p, n);
 }
 
+BOOST_CORE_END_MODULE_EXPORT
+
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 inline typename allocator_pointer<A>::type
 allocator_allocate(A& a, typename allocator_size_type<A>::type n,
@@ -391,6 +445,9 @@ allocator_allocate(A& a, typename allocator_size_type<A>::type n,
 {
     return a.allocate(n, h);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
+
 #else
 namespace detail {
 
@@ -416,6 +473,8 @@ public:
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 inline typename std::enable_if<detail::alloc_has_allocate<A>::value,
     typename allocator_pointer<A>::type>::type
@@ -433,6 +492,9 @@ allocator_allocate(A& a, typename allocator_size_type<A>::type n,
 {
     return a.allocate(n);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
+
 #endif
 
 namespace detail {
@@ -473,6 +535,8 @@ struct alloc_if<true, T> {
 };
 
 } /* detail */
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
 template<class A, class T>
@@ -538,6 +602,8 @@ allocator_construct(A&, T* p, Args&&... args)
 }
 #endif
 
+BOOST_CORE_END_MODULE_EXPORT
+
 namespace detail {
 
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
@@ -568,6 +634,8 @@ public:
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A, class T>
 inline typename detail::alloc_if<detail::alloc_has_destroy<A, T>::value>::type
 allocator_destroy(A& a, T* p)
@@ -582,6 +650,8 @@ allocator_destroy(A&, T* p)
     p->~T();
     (void)p;
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -628,6 +698,8 @@ public:
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 inline typename detail::alloc_if<detail::alloc_has_max_size<A>::value,
     typename allocator_size_type<A>::type>::type
@@ -645,6 +717,8 @@ allocator_max_size(const A&) BOOST_NOEXCEPT
         allocator_size_type<A>::type>::max)() /
             sizeof(typename allocator_value_type<A>::type);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -686,6 +760,8 @@ public:
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class A>
 inline typename detail::alloc_if<detail::alloc_has_soccc<A>::value, A>::type
 allocator_select_on_container_copy_construction(const A& a)
@@ -708,6 +784,8 @@ allocator_destroy_n(A& a, T* p, std::size_t n)
         boost::allocator_destroy(a, p + --n);
     }
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 namespace detail {
 
@@ -735,6 +813,8 @@ private:
 };
 
 } /* detail */
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class A, class T>
 inline void
@@ -812,6 +892,8 @@ using allocator_is_always_equal_t =
 template<class A, class T>
 using allocator_rebind_t = typename allocator_rebind<A, T>::type;
 #endif
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

@@ -11,6 +11,8 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/config.hpp>
 #include <functional>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if !defined(BOOST_NO_CXX14_CONSTEXPR)
 #if defined(BOOST_MSVC) && BOOST_MSVC >= 1925
 #define BOOST_CORE_DETAIL_HAS_IS_CONSTEVAL
@@ -26,6 +28,8 @@ Distributed under the Boost Software License, Version 1.0.
 #endif
 
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T>
 inline BOOST_CONSTEXPR bool
@@ -43,6 +47,8 @@ pointer_in_range(const T* p, const T* b, const T* e)
 #endif
     return std::less_equal<const T*>()(b, p) && std::less<const T*>()(p, e);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

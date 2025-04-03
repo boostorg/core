@@ -6,6 +6,8 @@
 #include <boost/core/addressof.hpp>
 #include <boost/core/enable_if.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if defined(BOOST_HAS_PRAGMA_ONCE)
 # pragma once
 #endif
@@ -66,6 +68,8 @@ struct ref_empty
 #endif
 
 } // namespace detail
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 // reference_wrapper
 
@@ -339,6 +343,8 @@ template<class T> BOOST_FORCEINLINE T* get_pointer( reference_wrapper<T> const &
 /**
  @endcond
 */
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace boost
 

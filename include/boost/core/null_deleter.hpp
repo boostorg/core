@@ -21,11 +21,15 @@
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 // Block unintended ADL
 namespace null_deleter_ns {
@@ -45,6 +49,8 @@ struct null_deleter
 } // namespace null_deleter_ns
 
 using null_deleter_ns::null_deleter;
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace boost
 

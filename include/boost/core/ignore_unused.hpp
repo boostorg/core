@@ -9,7 +9,11 @@
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
@@ -94,6 +98,8 @@ BOOST_FORCEINLINE BOOST_CXX14_CONSTEXPR void ignore_unused()
 {}
 
 #endif
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace boost
 
