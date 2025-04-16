@@ -100,13 +100,13 @@ jobs:
           - toolset: gcc-9
             cxxstd: "03,11,14,17,2a"
             address-model: 32,64
-            os: ubuntu-20.04
+            os: ubuntu-24.04
             install:
               - g++-9-multilib
           - toolset: gcc-10
             cxxstd: "03,11,14,17,20"
             address-model: 32,64
-            os: ubuntu-20.04
+            os: ubuntu-24.04
             install:
               - g++-10-multilib
           - toolset: gcc-11
@@ -220,13 +220,15 @@ jobs:
           - toolset: clang
             compiler: clang++-9
             cxxstd: "03,11,14,17,2a"
-            os: ubuntu-20.04
+            os: ubuntu-latest
+            container: ubuntu:20.04
             install:
               - clang-9
           - toolset: clang
             compiler: clang++-10
             cxxstd: "03,11,14,17,20"
-            os: ubuntu-20.04
+            os: ubuntu-latest
+            container: ubuntu:20.04
             install:
               - clang-10
           - toolset: clang
@@ -635,7 +637,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
           - os: ubuntu-22.04
           - os: ubuntu-24.04
           - os: macos-13
@@ -703,7 +704,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
           - os: ubuntu-22.04
           - os: ubuntu-24.04
           - os: macos-13
@@ -781,7 +781,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
           - os: ubuntu-22.04
           - os: ubuntu-24.04
           - os: macos-13
