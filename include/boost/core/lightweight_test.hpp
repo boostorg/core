@@ -45,17 +45,83 @@ namespace boost
 namespace detail
 {
 
+// specialize test output for char pointers to avoid printing as cstring
+template <class T> inline const T& test_output_impl(const T& v) { return v; }
+inline const void* test_output_impl(const char* v) { return v; }
+inline const void* test_output_impl(const unsigned char* v) { return v; }
+inline const void* test_output_impl(const signed char* v) { return v; }
+inline const void* test_output_impl(char* v) { return v; }
+inline const void* test_output_impl(unsigned char* v) { return v; }
+inline const void* test_output_impl(signed char* v) { return v; }
+template<class T> inline const void* test_output_impl(T volatile* v) { return const_cast<T*>(v); }
+
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+inline const void* test_output_impl(std::nullptr_t) { return nullptr; }
+#endif
+
+// print chars as numeric
+
+inline int test_output_impl( signed char const& v ) { return v; }
+inline unsigned test_output_impl( unsigned char const& v ) { return v; }
+
+// Whether wchar_t is signed is implementation-defined
+
+template<bool Signed> struct lwt_long_type {};
+template<> struct lwt_long_type<true> { typedef long type; };
+template<> struct lwt_long_type<false> { typedef unsigned long type; };
+
+inline lwt_long_type<(static_cast<wchar_t>(-1) < static_cast<wchar_t>(0))>::type test_output_impl( wchar_t const& v ) { return v; }
+
+#if !defined( BOOST_NO_CXX11_CHAR16_T )
+inline unsigned long test_output_impl( char16_t const& v ) { return v; }
+#endif
+
+#if !defined( BOOST_NO_CXX11_CHAR32_T )
+inline unsigned long test_output_impl( char32_t const& v ) { return v; }
+#endif
+
+inline std::string test_output_impl( char const& v )
+{
+    if( std::isprint( static_cast<unsigned char>( v ) ) )
+    {
+        return std::string( 1, v );
+    }
+    else
+    {
+        static const char char_table[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+        char buffer[ 4 ];
+        buffer[ 0 ] = '\\';
+        buffer[ 1 ] = 'x';
+        buffer[ 2 ] = char_table[ (static_cast<unsigned char>( v ) >> 4u) & 0x0f ];
+        buffer[ 3 ] = char_table[ static_cast<unsigned char>( v ) & 0x0f ];
+
+        return std::string( buffer, 4u );
+    }
+}
+
+// Allow associating arbitrary context values to tests that get printed on error
 struct lwt_context_frame
 {
     static const int max_values = 3;
 
+    template <class T>
+    static void do_print(const void* value)
+    { 
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM << boost::detail::test_output_impl(*static_cast<const T*>(value));
+    }
+
+    // A type-erased reference to a streamable value
     struct context_value {
         const void* obj;
-        void (*print) (const void*);
+        void (*print_fn) (const void*);
 
-        void do_print() const { print(obj); }
+        void print() const { print_fn(obj); }
+        void set_null() { obj = NULL; print_fn = NULL; }
+        template <class T> void set_value(const T* value) { obj = value; print_fn = &do_print<T>; }
     };
 
+    // Multiple context frames are allowed, creating a stack (forward linked list).
+    // It's rooted at test_result, with the last pushed frame first.
     lwt_context_frame* next;
     context_value values [max_values];
 };
@@ -121,17 +187,17 @@ private:
 
         // Go through the linked list
         lwt_context_frame* frame = context_;
-        for (int i = 0; frame && i < 10; ++i, frame = frame->next)
+        for (int i = 0; frame; ++i, frame = frame->next)
         {
             // Print the header and the first value, which should always be present
             BOOST_LIGHTWEIGHT_TEST_OSTREAM << "    #" << i << ": ";
-            frame->values[0].do_print();
+            frame->values[0].print();
 
             // Print any other values, if present
             for (int j = 1; j < lwt_context_frame::max_values && frame->values[j].obj; ++j)
             {
                 BOOST_LIGHTWEIGHT_TEST_OSTREAM << ", ";    
-                frame->values[j].do_print();
+                frame->values[j].print();
             }
 
             // Finish the frame
@@ -212,59 +278,6 @@ inline void no_throw_failed_impl(const char* expr, const char* what, const char*
 # pragma GCC diagnostic ignored "-Wsign-conversion"
 #endif
 
-// specialize test output for char pointers to avoid printing as cstring
-template <class T> inline const T& test_output_impl(const T& v) { return v; }
-inline const void* test_output_impl(const char* v) { return v; }
-inline const void* test_output_impl(const unsigned char* v) { return v; }
-inline const void* test_output_impl(const signed char* v) { return v; }
-inline const void* test_output_impl(char* v) { return v; }
-inline const void* test_output_impl(unsigned char* v) { return v; }
-inline const void* test_output_impl(signed char* v) { return v; }
-template<class T> inline const void* test_output_impl(T volatile* v) { return const_cast<T*>(v); }
-
-#if !defined( BOOST_NO_CXX11_NULLPTR )
-inline const void* test_output_impl(std::nullptr_t) { return nullptr; }
-#endif
-
-// print chars as numeric
-
-inline int test_output_impl( signed char const& v ) { return v; }
-inline unsigned test_output_impl( unsigned char const& v ) { return v; }
-
-// Whether wchar_t is signed is implementation-defined
-
-template<bool Signed> struct lwt_long_type {};
-template<> struct lwt_long_type<true> { typedef long type; };
-template<> struct lwt_long_type<false> { typedef unsigned long type; };
-
-inline lwt_long_type<(static_cast<wchar_t>(-1) < static_cast<wchar_t>(0))>::type test_output_impl( wchar_t const& v ) { return v; }
-
-#if !defined( BOOST_NO_CXX11_CHAR16_T )
-inline unsigned long test_output_impl( char16_t const& v ) { return v; }
-#endif
-
-#if !defined( BOOST_NO_CXX11_CHAR32_T )
-inline unsigned long test_output_impl( char32_t const& v ) { return v; }
-#endif
-
-inline std::string test_output_impl( char const& v )
-{
-    if( std::isprint( static_cast<unsigned char>( v ) ) )
-    {
-        return std::string( 1, v );
-    }
-    else
-    {
-        static const char char_table[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-        char buffer[ 4 ];
-        buffer[ 0 ] = '\\';
-        buffer[ 1 ] = 'x';
-        buffer[ 2 ] = char_table[ (static_cast<unsigned char>( v ) >> 4u) & 0x0f ];
-        buffer[ 3 ] = char_table[ static_cast<unsigned char>( v ) & 0x0f ];
-
-        return std::string( buffer, 4u );
-    }
-}
 
 // predicates
 
@@ -587,12 +600,7 @@ class lwt_context
 {
     boost::detail::lwt_context_frame frame_;
     
-    template <class T>
-    static void lwt_print_value(const void* value)
-    { 
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM << boost::detail::test_output_impl(*static_cast<const T*>(value));
-    }
-
+    // Disallow copy and movement
     lwt_context(const lwt_context&) {};
     lwt_context& operator=(const lwt_context&) { return *this; }
 
@@ -600,36 +608,27 @@ public:
     template <class T>
     explicit lwt_context(const T* value)
     {
-        frame_.values[0].obj = value;
-        frame_.values[0].print = &lwt_print_value<T>;
-        frame_.values[1].obj = NULL;
-        frame_.values[1].print = NULL;
-        frame_.values[2].obj = NULL;
-        frame_.values[2].print = NULL;
+        frame_.values[0].set_value(value);
+        frame_.values[1].set_null();
+        frame_.values[2].set_null();
         boost::detail::test_results().push_context(frame_);
     }
 
-    template <class T1, class T2>
-    explicit lwt_context(const T1* value1, const T2* value2)
+    template <class T0, class T1>
+    lwt_context(const T0* value0, const T1* value1)
     {
-        frame_.values[0].obj = value1;
-        frame_.values[0].print = &lwt_print_value<T1>;
-        frame_.values[1].obj = value2;
-        frame_.values[1].print = &lwt_print_value<T2>;
-        frame_.values[2].obj = NULL;
-        frame_.values[2].print = NULL;
+        frame_.values[0].set_value(value0);
+        frame_.values[1].set_value(value1);
+        frame_.values[2].set_null();
         boost::detail::test_results().push_context(frame_);
     }
 
-    template <class T1, class T2, class T3>
-    explicit lwt_context(const T1* value1, const T2* value2, const T3* value3)
+    template <class T0, class T1, class T2>
+    lwt_context(const T0* value0, const T1* value1, const T2* value2)
     {
-        frame_.values[0].obj = value1;
-        frame_.values[0].print = &lwt_print_value<T1>;
-        frame_.values[1].obj = value2;
-        frame_.values[1].print = &lwt_print_value<T2>;
-        frame_.values[2].obj = value3;
-        frame_.values[2].print = &lwt_print_value<T3>;
+        frame_.values[0].set_value(value0);
+        frame_.values[0].set_value(value1);
+        frame_.values[0].set_value(value2);
         boost::detail::test_results().push_context(frame_);
     }
 
