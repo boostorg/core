@@ -45,11 +45,26 @@ namespace boost
 namespace detail
 {
 
+struct lwt_context_frame
+{
+    static const int max_values = 3;
+
+    struct context_value {
+        const void* obj;
+        void (*print) (const void*);
+
+        void do_print() const { print(obj); }
+    };
+
+    lwt_context_frame* next;
+    context_value values [max_values];
+};
+
 class test_result
 {
 public:
 
-    test_result(): report_( false ), errors_( 0 )
+    test_result(): report_( false ), errors_( 0 ), context_ ( NULL )
     {
         core::detail::lwt_unattended();
     }
@@ -63,7 +78,7 @@ public:
         }
     }
 
-    int& errors()
+    int errors() const
     {
         return errors_;
     }
@@ -73,21 +88,62 @@ public:
         report_ = true;
     }
 
+    void push_context(lwt_context_frame& frame)
+    {
+        frame.next = context_;
+        context_ = &frame;
+    }
+
+    void pop_context()
+    {
+        context_ = context_->next;
+    }
+
+    void on_error()
+    {
+        ++errors_;
+        print_context();
+    }
+
 private:
 
     bool report_;
     int errors_;
+    lwt_context_frame* context_;
+
+    void print_context()
+    {
+        // If there is no context, do nothing
+        if (!context_)
+            return;
+
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM << "Failure happened in the following context:\n";
+
+        // Go through the linked list
+        lwt_context_frame* frame = context_;
+        for (int i = 0; frame && i < 10; ++i, frame = frame->next)
+        {
+            // Print the header and the first value, which should always be present
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM << "    #" << i << ": ";
+            frame->values[0].do_print();
+
+            // Print any other values, if present
+            for (int j = 1; j < lwt_context_frame::max_values && frame->values[j].obj; ++j)
+            {
+                BOOST_LIGHTWEIGHT_TEST_OSTREAM << ", ";    
+                frame->values[j].do_print();
+            }
+
+            // Finish the frame
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM << '\n';
+        }
+    }
 };
 
 inline test_result& test_results()
 {
     static test_result instance;
     return instance;
-}
-
-inline int& test_errors()
-{
-    return test_results().errors();
 }
 
 inline bool test_impl(char const * expr, char const * file, int line, char const * function, bool v)
@@ -102,7 +158,7 @@ inline bool test_impl(char const * expr, char const * file, int line, char const
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
           << file << "(" << line << "): test '" << expr << "' failed in function '"
           << function << "'" << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -112,7 +168,7 @@ inline void error_impl(char const * msg, char const * file, int line, char const
     BOOST_LIGHTWEIGHT_TEST_OSTREAM
       << file << "(" << line << "): " << msg << " in function '"
       << function << "'" << std::endl;
-    ++test_results().errors();
+    test_results().on_error();
 }
 
 inline void throw_failed_impl(const char* expr, char const * excep, char const * file, int line, char const * function)
@@ -120,7 +176,7 @@ inline void throw_failed_impl(const char* expr, char const * excep, char const *
    BOOST_LIGHTWEIGHT_TEST_OSTREAM
     << file << "(" << line << "): expression '" << expr << "' did not throw exception '" << excep << "' in function '"
     << function << "'" << std::endl;
-   ++test_results().errors();
+   test_results().on_error();
 }
 
 inline void no_throw_failed_impl(const char* expr, const char* file, int line, const char* function)
@@ -128,7 +184,7 @@ inline void no_throw_failed_impl(const char* expr, const char* file, int line, c
     BOOST_LIGHTWEIGHT_TEST_OSTREAM
         << file << "(" << line << "): expression '" << expr << "' threw an exception in function '"
         << function << "'" << std::endl;
-   ++test_results().errors();
+   test_results().on_error();
 }
 
 inline void no_throw_failed_impl(const char* expr, const char* what, const char* file, int line, const char* function)
@@ -136,7 +192,7 @@ inline void no_throw_failed_impl(const char* expr, const char* what, const char*
     BOOST_LIGHTWEIGHT_TEST_OSTREAM
         << file << "(" << line << "): expression '" << expr << "' threw an exception in function '"
         << function << "': " << what << std::endl;
-   ++test_results().errors();
+   test_results().on_error();
 }
 
 // In the comparisons below, it is possible that T and U are signed and unsigned integer types, which generates warnings in some compilers.
@@ -303,7 +359,7 @@ inline bool test_with_impl(BinaryPredicate pred, char const * expr1, char const 
             << file << "(" << line << "): test '" << expr1 << " " << lwt_predicate_name(pred) << " " << expr2
             << "' ('" << test_output_impl(t) << "' " << lwt_predicate_name(pred) << " '" << test_output_impl(u)
             << "') failed in function '" << function << "'" << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -321,7 +377,7 @@ inline bool test_cstr_eq_impl( char const * expr1, char const * expr2,
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " == " << expr2 << "' ('" << t
             << "' == '" << u << "') failed in function '" << function << "'" << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -339,7 +395,7 @@ inline bool test_cstr_ne_impl( char const * expr1, char const * expr2,
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " != " << expr2 << "' ('" << t
             << "' != '" << u << "') failed in function '" << function << "'" << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -409,7 +465,7 @@ bool test_all_eq_impl(FormattedOutputFunction& output,
     else
     {
         output << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -480,7 +536,7 @@ bool test_all_with_impl(FormattedOutputFunction& output,
     else
     {
         output << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -526,6 +582,62 @@ inline void lwt_init()
 {
     boost::detail::test_results();
 }
+
+class lwt_context
+{
+    boost::detail::lwt_context_frame frame_;
+    
+    template <class T>
+    static void lwt_print_value(const void* value)
+    { 
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM << boost::detail::test_output_impl(*static_cast<const T*>(value));
+    }
+
+    lwt_context(const lwt_context&) {};
+    lwt_context& operator=(const lwt_context&) { return *this; }
+
+public:
+    template <class T>
+    explicit lwt_context(const T* value)
+    {
+        frame_.values[0].obj = value;
+        frame_.values[0].print = &lwt_print_value<T>;
+        frame_.values[1].obj = NULL;
+        frame_.values[1].print = NULL;
+        frame_.values[2].obj = NULL;
+        frame_.values[2].print = NULL;
+        boost::detail::test_results().push_context(frame_);
+    }
+
+    template <class T1, class T2>
+    explicit lwt_context(const T1* value1, const T2* value2)
+    {
+        frame_.values[0].obj = value1;
+        frame_.values[0].print = &lwt_print_value<T1>;
+        frame_.values[1].obj = value2;
+        frame_.values[1].print = &lwt_print_value<T2>;
+        frame_.values[2].obj = NULL;
+        frame_.values[2].print = NULL;
+        boost::detail::test_results().push_context(frame_);
+    }
+
+    template <class T1, class T2, class T3>
+    explicit lwt_context(const T1* value1, const T2* value2, const T3* value3)
+    {
+        frame_.values[0].obj = value1;
+        frame_.values[0].print = &lwt_print_value<T1>;
+        frame_.values[1].obj = value2;
+        frame_.values[1].print = &lwt_print_value<T2>;
+        frame_.values[2].obj = value3;
+        frame_.values[2].print = &lwt_print_value<T3>;
+        boost::detail::test_results().push_context(frame_);
+    }
+
+    ~lwt_context()
+    {
+        boost::detail::test_results().pop_context();
+    }
+};
 
 } // namespace core
 } // namespace boost
