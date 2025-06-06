@@ -135,6 +135,13 @@ jobs:
             container: ubuntu:24.04
             install:
               - g++-14-multilib
+          - toolset: gcc-15
+            cxxstd: "03,11,14,17,20,23,2c"
+            address-model: 32,64
+            os: ubuntu-latest
+            container: ubuntu:25.04
+            install:
+              - g++-15-multilib
           - name: UBSAN
             toolset: gcc-12
             cxxstd: "03,11,14,17,20,23"
@@ -318,11 +325,22 @@ jobs:
             compiler: clang++-19
             cxxstd: "03,11,14,17,20,2b"
             os: ubuntu-latest
-            container: ubuntu:24.10
+            container: ubuntu:24.04
             install:
               - clang-19
               - libc++-19-dev
               - libc++abi-19-dev
+            cxxflags: -stdlib=libc++
+            linkflags: -stdlib=libc++
+          - toolset: clang
+            compiler: clang++-20
+            cxxstd: "03,11,14,17,20,2b,2c"
+            os: ubuntu-latest
+            container: ubuntu:25.04
+            install:
+              - clang-20
+              - libc++-20-dev
+              - libc++abi-20-dev
             cxxflags: -stdlib=libc++
             linkflags: -stdlib=libc++
           - name: UBSAN
@@ -584,7 +602,7 @@ jobs:
           - toolset: gcc
             cxxstd: "03,11,14,17,2a"
             addrmd: 64
-            os: windows-2019
+            os: windows-2022
 
     runs-on: ${{matrix.os}}
     timeout-minutes: 45
@@ -862,8 +880,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
           - os: windows-2022
+          - os: windows-2025
 
     runs-on: ${{matrix.os}}
     timeout-minutes: 10
@@ -924,8 +942,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
           - os: windows-2022
+          - os: windows-2025
 
     runs-on: ${{matrix.os}}
     timeout-minutes: 10
@@ -1004,8 +1022,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-2019
           - os: windows-2022
+          - os: windows-2025
 
     runs-on: ${{matrix.os}}
     timeout-minutes: 20
