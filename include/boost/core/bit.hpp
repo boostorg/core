@@ -703,7 +703,7 @@ BOOST_CXX14_CONSTEXPR inline boost::uint32_t bit_ceil_impl( boost::uint32_t x ) 
 {
     if( x == 0 )
     {
-        return 0;
+        return 1;
     }
 
     --x;
@@ -723,7 +723,7 @@ BOOST_CXX14_CONSTEXPR inline boost::uint64_t bit_ceil_impl( boost::uint64_t x ) 
 {
     if( x == 0 )
     {
-        return 0;
+        return 1;
     }
 
     --x;
