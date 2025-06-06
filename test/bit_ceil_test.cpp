@@ -21,7 +21,7 @@ template<class T> void test_bit_ceil( T x )
 
     if( x == 0 )
     {
-        BOOST_TEST_EQ( y, 0 );
+        BOOST_TEST_EQ( y, 1 );
     }
     else
     {
