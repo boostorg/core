@@ -601,8 +601,8 @@ class lwt_context
     boost::detail::lwt_context_frame frame_;
     
     // Disallow copy and movement
-    lwt_context(const lwt_context&) {};
-    lwt_context& operator=(const lwt_context&) { return *this; }
+    BOOST_DELETED_FUNCTION(lwt_context(const lwt_context&))
+    BOOST_DELETED_FUNCTION(lwt_context& operator=(const lwt_context&))
 
 public:
     template <class T>
@@ -627,8 +627,8 @@ public:
     lwt_context(const T0* value0, const T1* value1, const T2* value2)
     {
         frame_.values[0].set_value(value0);
-        frame_.values[0].set_value(value1);
-        frame_.values[0].set_value(value2);
+        frame_.values[1].set_value(value1);
+        frame_.values[2].set_value(value2);
         boost::detail::test_results().push_context(frame_);
     }
 
