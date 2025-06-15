@@ -107,7 +107,8 @@ struct lwt_context_frame
     template <class T>
     static void do_print(const void* value)
     { 
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM << boost::detail::test_output_impl(*static_cast<const T*>(value));
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM << '\''
+            << boost::detail::test_output_impl(*static_cast<const T*>(value)) << '\'';
     }
 
     // A type-erased reference to a streamable value
