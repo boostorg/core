@@ -425,7 +425,7 @@ public:
 
     template<class A> operator std::basic_string<Ch, std::char_traits<Ch>, A>() const
     {
-        return std::basic_string<Ch, std::char_traits<Ch>, A>( data(), size() );
+        return std::basic_string<Ch, std::char_traits<Ch>, A>( begin(), end() );
     }
 
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
