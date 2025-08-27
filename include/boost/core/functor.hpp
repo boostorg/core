@@ -16,7 +16,11 @@
 #ifndef BOOST_CORE_FUNCTOR_HPP
 #define BOOST_CORE_FUNCTOR_HPP
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost::core {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 // Block unintended ADL
 namespace functor_ns {
@@ -35,6 +39,8 @@ struct functor
 } // namespace functor_ns
 
 using functor_ns::functor;
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace boost::core
 

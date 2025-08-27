@@ -11,7 +11,11 @@
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 //  Private copy constructor and copy assignment ensure classes derived from
 //  class noncopyable cannot be copied.
@@ -57,6 +61,8 @@ namespace noncopyable_  // protection from unintended ADL
 }
 
 typedef noncopyable_::noncopyable noncopyable;
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace boost
 

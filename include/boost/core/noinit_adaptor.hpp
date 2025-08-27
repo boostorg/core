@@ -10,7 +10,11 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include <boost/core/allocator_access.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class A>
 struct noinit_adaptor
@@ -84,6 +88,8 @@ noinit_adapt(const A& a) BOOST_NOEXCEPT
 {
     return noinit_adaptor<A>(a);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

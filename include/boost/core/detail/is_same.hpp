@@ -11,6 +11,8 @@
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if defined(BOOST_HAS_PRAGMA_ONCE)
 # pragma once
 #endif
@@ -22,6 +24,8 @@ namespace core
 namespace detail
 {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template< class T1, class T2 > struct is_same
 {
     BOOST_STATIC_CONSTANT( bool, value = false );
@@ -31,6 +35,8 @@ template< class T > struct is_same< T, T >
 {
     BOOST_STATIC_CONSTANT( bool, value = true );
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace detail
 } // namespace core

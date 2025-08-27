@@ -20,11 +20,15 @@
 #include <cstdio>
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 // Block unintended ADL
 namespace fclose_deleter_ns {
@@ -47,6 +51,8 @@ struct fclose_deleter
 } // namespace fclose_deleter_ns
 
 using fclose_deleter_ns::fclose_deleter;
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace boost
 

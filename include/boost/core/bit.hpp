@@ -16,6 +16,9 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/config.hpp>
+
+#include <boost/core/detail/module_macro.hpp>
+
 #include <boost/static_assert.hpp>
 #include <boost/cstdint.hpp>
 #include <limits>
@@ -65,6 +68,8 @@ namespace boost
 namespace core
 {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 // bit_cast
 
 #if defined(BOOST_CORE_HAS_BUILTIN_BIT_CAST)
@@ -88,6 +93,8 @@ To bit_cast( From const & from ) BOOST_NOEXCEPT
 }
 
 #endif
+
+BOOST_CORE_END_MODULE_EXPORT
 
 // countl
 
@@ -123,6 +130,8 @@ BOOST_CONSTEXPR inline int countl_impl( boost::ulong_long_type x ) BOOST_NOEXCEP
 
 } // namespace detail
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
 {
@@ -130,6 +139,8 @@ BOOST_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
 
     return boost::core::detail::countl_impl( x );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #else // defined(__GNUC__) || defined(__clang__)
 
@@ -293,6 +304,8 @@ inline int countl_impl( boost::uint64_t x ) BOOST_NOEXCEPT
 
 } // namespace detail
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_CXX14_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
 {
@@ -318,7 +331,11 @@ BOOST_CXX14_CONSTEXPR int countl_zero( T x ) BOOST_NOEXCEPT
     }
 }
 
+BOOST_CORE_END_MODULE_EXPORT
+
 #endif // defined(__GNUC__) || defined(__clang__)
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T>
 BOOST_CONSTEXPR int countl_one( T x ) BOOST_NOEXCEPT
@@ -327,6 +344,8 @@ BOOST_CONSTEXPR int countl_one( T x ) BOOST_NOEXCEPT
 
     return boost::core::countl_zero( static_cast<T>( ~x ) );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 // countr
 
@@ -362,6 +381,8 @@ BOOST_CONSTEXPR inline int countr_impl( boost::ulong_long_type x ) BOOST_NOEXCEP
 
 } // namespace detail
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
 {
@@ -369,6 +390,8 @@ BOOST_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
 
     return boost::core::detail::countr_impl( x );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #else // defined(__GNUC__) || defined(__clang__)
 
@@ -518,6 +541,9 @@ inline int countr_impl( boost::uint64_t x ) BOOST_NOEXCEPT
 
 } // namespace detail
 
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_CXX14_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
 {
@@ -543,7 +569,11 @@ BOOST_CXX14_CONSTEXPR int countr_zero( T x ) BOOST_NOEXCEPT
     }
 }
 
+BOOST_CORE_END_MODULE_EXPORT
+
 #endif // defined(__GNUC__) || defined(__clang__)
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T>
 BOOST_CONSTEXPR int countr_one( T x ) BOOST_NOEXCEPT
@@ -552,6 +582,8 @@ BOOST_CONSTEXPR int countr_one( T x ) BOOST_NOEXCEPT
 
     return boost::core::countr_zero( static_cast<T>( ~x ) );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 // popcount
 
@@ -595,6 +627,8 @@ BOOST_CORE_POPCOUNT_CONSTEXPR inline int popcount_impl( boost::ulong_long_type x
 
 #undef BOOST_CORE_POPCOUNT_CONSTEXPR
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
 {
@@ -602,6 +636,8 @@ BOOST_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
 
     return boost::core::detail::popcount_impl( x );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #else // defined(__GNUC__) || defined(__clang__)
 
@@ -628,6 +664,8 @@ BOOST_CXX14_CONSTEXPR inline int popcount_impl( boost::uint64_t x ) BOOST_NOEXCE
 
 } // namespace detail
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_CXX14_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
 {
@@ -645,9 +683,13 @@ BOOST_CXX14_CONSTEXPR int popcount( T x ) BOOST_NOEXCEPT
     }
 }
 
+BOOST_CORE_END_MODULE_EXPORT
+
 #endif // defined(__GNUC__) || defined(__clang__)
 
 // rotating
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T>
 BOOST_CXX14_CONSTEXPR T rotl( T x, int s ) BOOST_NOEXCEPT
@@ -696,6 +738,8 @@ BOOST_CONSTEXPR T bit_floor( T x ) BOOST_NOEXCEPT
     return x == 0? T(0): static_cast<T>( T(1) << ( boost::core::bit_width( x ) - 1 ) );
 }
 
+BOOST_CORE_END_MODULE_EXPORT
+
 namespace detail
 {
 
@@ -741,6 +785,8 @@ BOOST_CXX14_CONSTEXPR inline boost::uint64_t bit_ceil_impl( boost::uint64_t x ) 
 }
 
 } // namespace detail
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class T>
 BOOST_CXX14_CONSTEXPR T bit_ceil( T x ) BOOST_NOEXCEPT
@@ -819,6 +865,8 @@ enum type
 typedef endian::type endian_type;
 
 #endif
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #undef BOOST_CORE_BIT_NATIVE_INITIALIZER
 
@@ -920,6 +968,8 @@ BOOST_CXX14_CONSTEXPR inline boost::uint64_t byteswap_impl( boost::uint64_t x ) 
 
 } // namespace detail
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T> BOOST_CXX14_CONSTEXPR T byteswap( T x ) BOOST_NOEXCEPT
 {
     BOOST_STATIC_ASSERT( std::numeric_limits<T>::is_integer );
@@ -943,6 +993,8 @@ template<class T> BOOST_CXX14_CONSTEXPR T byteswap( T x ) BOOST_NOEXCEPT
         return static_cast<T>( boost::core::detail::byteswap_impl( static_cast<boost::uint64_t>( x ) ) );
     }
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 } // namespace boost

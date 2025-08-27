@@ -12,6 +12,7 @@
 //  https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/core/demangle.hpp>
+#include <boost/core/detail/module_macro.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/config.hpp>
 #include <exception>
@@ -23,6 +24,8 @@ namespace boost
 {
 namespace core
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 BOOST_NORETURN inline void verbose_terminate_handler()
 {
@@ -81,6 +84,8 @@ BOOST_NORETURN inline void verbose_terminate_handler()
     std::fflush( stdout );
     std::abort();
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 } // namespace boost

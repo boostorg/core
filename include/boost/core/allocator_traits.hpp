@@ -10,7 +10,11 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include <boost/core/allocator_access.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class A>
 struct allocator_traits {
@@ -106,6 +110,8 @@ struct allocator_traits {
         return boost::allocator_select_on_container_copy_construction(a);
     }
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

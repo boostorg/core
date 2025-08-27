@@ -10,6 +10,10 @@
 #ifndef BOOST_VISIT_EACH_HPP
 #define BOOST_VISIT_EACH_HPP
 
+#include <boost/core/detail/module_macro.hpp>
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 namespace boost {
   template<typename Visitor, typename T>
   inline void visit_each(Visitor& visitor, const T& t, long)
@@ -23,5 +27,7 @@ namespace boost {
     visit_each(visitor, t, 0);
   }
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #endif // BOOST_VISIT_EACH_HPP

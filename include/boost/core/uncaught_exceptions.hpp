@@ -22,6 +22,8 @@
 #include <exception>
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if defined(BOOST_HAS_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -121,6 +123,8 @@ namespace boost {
 
 namespace core {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 //! Returns the number of currently pending exceptions
 inline unsigned int uncaught_exceptions() BOOST_NOEXCEPT
 {
@@ -142,6 +146,8 @@ inline unsigned int uncaught_exceptions() BOOST_NOEXCEPT
     return static_cast< unsigned int >(std::uncaught_exception());
 #endif
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 

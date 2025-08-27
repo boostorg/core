@@ -17,6 +17,8 @@
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if defined( BOOST_NO_TYPEID )
 
 #include <boost/current_function.hpp>
@@ -28,6 +30,8 @@ namespace boost
 
 namespace core
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 class typeinfo
 {
@@ -87,6 +91,8 @@ inline char const * demangled_name( core::typeinfo const & ti )
     return ti.name();
 }
 
+BOOST_CORE_END_MODULE_EXPORT
+
 } // namespace core
 
 namespace detail
@@ -141,6 +147,8 @@ namespace boost
 namespace core
 {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 #if defined( BOOST_NO_STD_TYPEINFO )
 
 typedef ::type_info typeinfo;
@@ -155,6 +163,8 @@ inline std::string demangled_name( core::typeinfo const & ti )
 {
     return core::demangle( ti.name() );
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 

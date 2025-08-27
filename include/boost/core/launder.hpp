@@ -13,6 +13,8 @@
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if defined(__has_builtin)
 # if __has_builtin(__builtin_launder)
 #  define BOOST_CORE_HAS_BUILTIN_LAUNDER
@@ -40,6 +42,8 @@ namespace boost
 namespace core
 {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 #if defined(BOOST_CORE_HAS_BUILTIN_LAUNDER)
 
 template<class T> T* launder( T* p )
@@ -62,6 +66,8 @@ template<class T> T* launder( T* p )
 }
 
 #endif
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 } // namespace boost

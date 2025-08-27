@@ -16,6 +16,8 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if defined(BOOST_MSVC_FULL_VER) && BOOST_MSVC_FULL_VER >= 190024215
 #define BOOST_CORE_HAS_BUILTIN_ADDRESSOF
 #elif defined(BOOST_GCC) && BOOST_GCC >= 70000
@@ -33,12 +35,16 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 namespace boost {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_CONSTEXPR inline T*
 addressof(T& o) BOOST_NOEXCEPT
 {
     return __builtin_addressof(o);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 #else
@@ -121,6 +127,8 @@ struct addrof<const volatile addrof_null_t> {
     defined(BOOST_NO_CXX11_DECLTYPE)
 #define BOOST_CORE_NO_CONSTEXPR_ADDRESSOF
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_FORCEINLINE T*
 addressof(T& o) BOOST_NOEXCEPT
@@ -133,6 +141,8 @@ addressof(T& o) BOOST_NOEXCEPT
 #endif
 }
 
+BOOST_CORE_END_MODULE_EXPORT
+
 #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
 namespace detail {
 
@@ -143,15 +153,24 @@ struct addrof_result {
 
 } /* detail */
 
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T, std::size_t N>
 BOOST_FORCEINLINE typename boost::detail::addrof_result<T[N]>::type
 addressof(T (&o)[N]) BOOST_NOEXCEPT
 {
     return &o;
 }
+
+BOOST_CORE_END_MODULE_EXPORT
+
 #endif
 
 #if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x564))
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T, std::size_t N>
 BOOST_FORCEINLINE
 T (*addressof(T (&o)[N]) BOOST_NOEXCEPT)[N]
@@ -165,6 +184,9 @@ const T (*addressof(const T (&o)[N]) BOOST_NOEXCEPT)[N]
 {
    return reinterpret_cast<const T(*)[N]>(&o);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
+
 #endif
 #else
 namespace detail {
@@ -250,12 +272,17 @@ addressof(T& o) BOOST_NOEXCEPT
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 constexpr BOOST_FORCEINLINE T*
 addressof(T& o) BOOST_NOEXCEPT
 {
     return boost::detail::addressof(o);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
+
 #endif
 
 } /* boost */
@@ -265,8 +292,12 @@ addressof(T& o) BOOST_NOEXCEPT
     !defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
 namespace boost {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 const T* addressof(const T&&) = delete;
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 #endif

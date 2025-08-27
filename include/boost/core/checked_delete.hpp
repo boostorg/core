@@ -9,6 +9,8 @@
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 //
 //  boost/checked_delete.hpp
 //
@@ -22,6 +24,8 @@
 //
 //  See http://www.boost.org/libs/core/doc/html/core/checked_delete.html for documentation.
 //
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 namespace boost
 {
@@ -93,5 +97,7 @@ using checked_deleters::checked_deleter;
 using checked_deleters::checked_array_deleter;
 
 } // namespace boost
+
+BOOST_CORE_END_MODULE_EXPORT
 
 #endif  // #ifndef BOOST_CORE_CHECKED_DELETE_HPP

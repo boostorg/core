@@ -20,6 +20,8 @@
 #include <wchar.h>
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
@@ -49,6 +51,8 @@
 namespace boost {
 
 namespace core {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 #if defined(BOOST_CORE_DETAIL_MINGW_SNPRINTF) || defined(BOOST_CORE_DETAIL_MSVC_LEGACY_SNPRINTF)
 
@@ -165,6 +169,8 @@ using ::swprintf;
 using ::vswprintf;
 
 #endif // defined(BOOST_CORE_DETAIL_MINGW_SNPRINTF) || defined(BOOST_CORE_DETAIL_MSVC_LEGACY_SNPRINTF)
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 

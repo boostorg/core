@@ -9,11 +9,16 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_IDENTITY_HPP
 
 #include <boost/config.hpp>
+
+#include <boost/core/detail/module_macro.hpp>
+
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #include <utility>
 #endif
 
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 struct identity {
     typedef void is_transparent;
@@ -55,6 +60,8 @@ struct identity {
     };
 #endif
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

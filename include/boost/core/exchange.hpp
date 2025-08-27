@@ -9,12 +9,17 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_EXCHANGE_HPP
 
 #include <boost/config.hpp>
+
+#include <boost/core/detail/module_macro.hpp>
+
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #include <boost/config/workaround.hpp>
 #include <utility>
 #endif
 
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 #if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 template<class T, class U>
@@ -43,6 +48,8 @@ BOOST_CXX14_CONSTEXPR inline T exchange(T& t, U&& u)
 }
 #endif
 #endif
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

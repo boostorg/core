@@ -11,7 +11,11 @@ Distributed under the Boost Software License, Version 1.0.
 #include <initializer_list>
 #include <cstddef>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 template<class C>
 inline constexpr auto
@@ -40,6 +44,8 @@ data(std::initializer_list<T> l) noexcept
 {
     return l.begin();
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

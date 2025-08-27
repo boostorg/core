@@ -18,6 +18,8 @@
 #include <boost/config.hpp>
 #include <stdlib.h>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
 
 extern "C" _CRTIMP __cdecl __MINGW_NOTHROW  void _exit (int) __MINGW_ATTRIB_NORETURN;
@@ -32,6 +34,8 @@ extern "C" _Noreturn void quick_exit(int);
 
 namespace boost
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 BOOST_NORETURN inline void quick_exit( int code ) BOOST_NOEXCEPT
 {
@@ -53,6 +57,8 @@ BOOST_NORETURN inline void quick_exit( int code ) BOOST_NOEXCEPT
 
 #endif
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace boost
 

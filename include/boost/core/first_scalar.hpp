@@ -11,6 +11,8 @@ Distributed under the Boost Software License, Version 1.0.
 #include <boost/config.hpp>
 #include <cstddef>
 
+#include <boost/core/detail/module_macro.hpp>
+
 namespace boost {
 namespace detail {
 
@@ -26,6 +28,8 @@ struct make_scalar<T[N]> {
 
 } /* detail */
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_CONSTEXPR inline T*
 first_scalar(T* p) BOOST_NOEXCEPT
@@ -39,6 +43,8 @@ first_scalar(T (*p)[N]) BOOST_NOEXCEPT
 {
     return boost::first_scalar(&(*p)[0]);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } /* boost */
 

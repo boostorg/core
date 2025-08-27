@@ -13,6 +13,8 @@
 
 #include <boost/config.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 // GCC 4.7 and later seem to provide std::underlying_type
 #if !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS) || (defined(BOOST_GCC) && BOOST_GCC >= 40700 && defined(__GXX_EXPERIMENTAL_CXX0X__))
 #include <type_traits>
@@ -60,6 +62,8 @@ struct underlying_type_impl
 #define BOOST_NO_UNDERLYING_TYPE
 #endif
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 /**
  * Meta-function to get the underlying type of a scoped enum.
  *
@@ -73,6 +77,8 @@ struct underlying_type :
     public detail::underlying_type_impl< EnumType >
 {
 };
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace boost
 

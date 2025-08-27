@@ -11,6 +11,9 @@
 #ifndef BOOST_NON_TYPE_HPP_GP_20030417
 #define BOOST_NON_TYPE_HPP_GP_20030417
 
+#include <boost/core/detail/module_macro.hpp>
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
 
 namespace boost {
 
@@ -23,5 +26,6 @@ namespace boost {
 
 }
 
+BOOST_CORE_END_MODULE_EXPORT
 
 #endif // include guard

@@ -19,6 +19,8 @@
 #include <boost/config/header_deprecated.hpp>
 #include <boost/core/invoke_swap.hpp>
 
+#include <boost/core/detail/module_macro.hpp>
+
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
@@ -27,6 +29,9 @@ BOOST_HEADER_DEPRECATED("boost/core/invoke_swap.hpp")
 
 namespace boost
 {
+
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
   template<class T1, class T2>
   BOOST_GPU_ENABLED
   BOOST_DEPRECATED("This function is deprecated, use boost::core::invoke_swap instead.")
@@ -35,6 +40,9 @@ namespace boost
   {
     boost::core::invoke_swap(left, right);
   }
+
+BOOST_CORE_END_MODULE_EXPORT
+
 }
 
 #endif // BOOST_CORE_SWAP_HPP

@@ -23,6 +23,9 @@
 
 #include <boost/core/enable_if.hpp>
 #include <boost/config.hpp>
+
+#include <boost/core/detail/module_macro.hpp>
+
 #if __cplusplus >= 201103L || defined(BOOST_DINKUMWARE_STDLIB)
 #include <utility> // for std::swap (C++11)
 #else
@@ -76,6 +79,8 @@ inline void invoke_swap_impl(T (& left)[N], T (& right)[N])
 namespace boost {
 namespace core {
 
+BOOST_CORE_BEGIN_MODULE_EXPORT
+
 template<class T>
 BOOST_GPU_ENABLED
 inline typename enable_if_c< !::boost_swap_impl::is_const<T>::value >::type
@@ -84,6 +89,8 @@ invoke_swap(T& left, T& right)
 {
     ::boost_swap_impl::invoke_swap_impl(left, right);
 }
+
+BOOST_CORE_END_MODULE_EXPORT
 
 } // namespace core
 } // namespace boost
