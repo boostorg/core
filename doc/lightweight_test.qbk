@@ -59,6 +59,19 @@ namespace core
 
 void lwt_init();
 
+class lwt_context
+{
+public:
+    template <class T> explicit             lwt_context(const T* value);
+    template <class T0, class T1>           lwt_context(const T0* value0, const T1* value1);
+    template <class T0, class T1, class T2> lwt_context(const T0* value0, const T1* value1, const T2* value2);
+
+    lwt_context(const lwt_context&) = delete;
+    lwt_context& operator=(const lwt_context&) = delete;
+
+    ~lwt_context();
+};
+
 } // namespace core
 } // namespace boost
 ``
@@ -273,6 +286,59 @@ to e.g. an assertion failure before the first test macro is invoked.
 
 [endsect]
 
+[section lwt_context]
+
+This class can be used to attach context to tests. When an assertion fails,
+the values passed to `lwt_context` will be printed. This is useful when
+the assertion's source location is not enough by itself to diagnose
+the cause of failures. Potential use cases include:
+
+* Parametric tests: when running the same test function over a range of inputs,
+  `lwt_context` can be used to print the parameter value that caused the assertion to fail.
+* When writing utility functions called from several tests, `lwt_context` can be used to
+  diagnose which test caused the function to fail.
+
+The context is arranged as a stack composed of frames. When constructing a `lwt_context`
+object, a new context frame is pushed to the stack. When it is destroyed,
+the frame is popped.
+
+
+``
+template <class T>
+explicit lwt_context(const T* value);
+
+template <class T0, class T1>
+lwt_context(const T0* value0, const T1* value1);
+
+template <class T0, class T1, class T2>
+lwt_context(const T0* value0, const T1* value1, const T2* value2);
+``
+
+Pushes a new frame to the top of the context stack. Depending on the chosen constructor,
+the frame will contain one, two, or three values.
+These values will be printed using `operator<<` to `std::cerr` when an assertion fails.
+
+The caller retains ownership of the passed values. They should be kept alive until
+the context stack frame is popped by `lwt_context::~lwt_context()`.
+
+``
+lwt_context(const lwt_context&) = delete;
+lwt_context& operator=(const lwt_context&) = delete;
+``
+
+This class is neither copyable not movable.
+
+``
+~lwt_context();
+``
+
+Removes the top frame from the context stack.
+
+
+[endsect]
+
+
+
 [section Example]
 
 ``
@@ -287,6 +353,42 @@ int main()
 {
     BOOST_TEST( sqr(2) == 4 );
     BOOST_TEST_EQ( sqr(-3), 9 );
+
+    return boost::report_errors();
+}
+``
+
+[endsect]
+
+[section Parametric test example]
+
+``
+#include <boost/core/lightweight_test.hpp>
+
+int sqr( int x )
+{
+    return x * x;
+}
+
+int main()
+{
+    struct
+    {
+        int input;
+        int expected;
+    } test_cases [] = {
+        {  2, 4 },
+        { -3, 9 },
+        {  0, 0 }
+    };
+
+    for (const auto& tc : test_cases)
+    {
+        // Print the offending parameter on error
+        boost::core::lwt_context frame (&input);
+
+        BOOST_TEST_EQ( sqr(tc.input), tc.expected );    
+    }
 
     return boost::report_errors();
 }

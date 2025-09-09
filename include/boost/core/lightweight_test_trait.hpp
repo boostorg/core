@@ -46,7 +46,7 @@ template< class T > inline void test_trait_impl( char const * trait, void (*)( T
             << "' (should have been " << ( expected? "true": "false" ) << ")"
             << std::endl;
 
-        ++test_results().errors();
+        test_results().on_error();
     }
 }
 
@@ -71,7 +71,7 @@ template<class T1, class T2> inline void test_trait_same_impl( char const * type
             << "' != '" << boost::core::type_name<T2>() << "')"
             << std::endl;
 
-        ++test_results().errors();
+        test_results().on_error();
     }
 }
 

@@ -45,117 +45,6 @@ namespace boost
 namespace detail
 {
 
-class test_result
-{
-public:
-
-    test_result(): report_( false ), errors_( 0 )
-    {
-        core::detail::lwt_unattended();
-    }
-
-    ~test_result()
-    {
-        if( !report_ )
-        {
-            BOOST_LIGHTWEIGHT_TEST_OSTREAM << "main() should return report_errors()" << std::endl;
-            std::abort();
-        }
-    }
-
-    int& errors()
-    {
-        return errors_;
-    }
-
-    void done()
-    {
-        report_ = true;
-    }
-
-private:
-
-    bool report_;
-    int errors_;
-};
-
-inline test_result& test_results()
-{
-    static test_result instance;
-    return instance;
-}
-
-inline int& test_errors()
-{
-    return test_results().errors();
-}
-
-inline bool test_impl(char const * expr, char const * file, int line, char const * function, bool v)
-{
-    if( v )
-    {
-        test_results();
-        return true;
-    }
-    else
-    {
-        BOOST_LIGHTWEIGHT_TEST_OSTREAM
-          << file << "(" << line << "): test '" << expr << "' failed in function '"
-          << function << "'" << std::endl;
-        ++test_results().errors();
-        return false;
-    }
-}
-
-inline void error_impl(char const * msg, char const * file, int line, char const * function)
-{
-    BOOST_LIGHTWEIGHT_TEST_OSTREAM
-      << file << "(" << line << "): " << msg << " in function '"
-      << function << "'" << std::endl;
-    ++test_results().errors();
-}
-
-inline void throw_failed_impl(const char* expr, char const * excep, char const * file, int line, char const * function)
-{
-   BOOST_LIGHTWEIGHT_TEST_OSTREAM
-    << file << "(" << line << "): expression '" << expr << "' did not throw exception '" << excep << "' in function '"
-    << function << "'" << std::endl;
-   ++test_results().errors();
-}
-
-inline void no_throw_failed_impl(const char* expr, const char* file, int line, const char* function)
-{
-    BOOST_LIGHTWEIGHT_TEST_OSTREAM
-        << file << "(" << line << "): expression '" << expr << "' threw an exception in function '"
-        << function << "'" << std::endl;
-   ++test_results().errors();
-}
-
-inline void no_throw_failed_impl(const char* expr, const char* what, const char* file, int line, const char* function)
-{
-    BOOST_LIGHTWEIGHT_TEST_OSTREAM
-        << file << "(" << line << "): expression '" << expr << "' threw an exception in function '"
-        << function << "': " << what << std::endl;
-   ++test_results().errors();
-}
-
-// In the comparisons below, it is possible that T and U are signed and unsigned integer types, which generates warnings in some compilers.
-// A cleaner fix would require common_type trait or some meta-programming, which would introduce a dependency on Boost.TypeTraits. To avoid
-// the dependency we just disable the warnings.
-#if defined(__clang__) && defined(__has_warning)
-# if __has_warning("-Wsign-compare")
-#  pragma clang diagnostic push
-#  pragma clang diagnostic ignored "-Wsign-compare"
-# endif
-#elif defined(_MSC_VER)
-# pragma warning(push)
-# pragma warning(disable: 4389)
-#elif defined(__GNUC__) && !(defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)) && (__GNUC__ * 100 + __GNUC_MINOR__) >= 406
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wsign-compare"
-# pragma GCC diagnostic ignored "-Wsign-conversion"
-#endif
-
 // specialize test output for char pointers to avoid printing as cstring
 template <class T> inline const T& test_output_impl(const T& v) { return v; }
 inline const void* test_output_impl(const char* v) { return v; }
@@ -209,6 +98,187 @@ inline std::string test_output_impl( char const& v )
         return std::string( buffer, 4u );
     }
 }
+
+// Allow associating arbitrary context values to tests that get printed on error
+struct lwt_context_frame
+{
+    static const int max_values = 3;
+
+    template <class T>
+    static void do_print(const void* value)
+    { 
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM << '\''
+            << boost::detail::test_output_impl(*static_cast<const T*>(value)) << '\'';
+    }
+
+    // A type-erased reference to a streamable value
+    struct context_value {
+        const void* obj;
+        void (*print_fn) (const void*);
+
+        void print() const { print_fn(obj); }
+        void set_null() { obj = NULL; print_fn = NULL; }
+        template <class T> void set_value(const T* value) { obj = value; print_fn = &do_print<T>; }
+    };
+
+    // Multiple context frames are allowed, creating a stack (forward linked list).
+    // It's rooted at test_result, with the last pushed frame first.
+    lwt_context_frame* next;
+    context_value values [max_values];
+};
+
+class test_result
+{
+public:
+
+    test_result(): report_( false ), errors_( 0 ), context_ ( NULL )
+    {
+        core::detail::lwt_unattended();
+    }
+
+    ~test_result()
+    {
+        if( !report_ )
+        {
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM << "main() should return report_errors()" << std::endl;
+            std::abort();
+        }
+    }
+
+    int errors() const
+    {
+        return errors_;
+    }
+
+    void done()
+    {
+        report_ = true;
+    }
+
+    void push_context(lwt_context_frame& frame)
+    {
+        frame.next = context_;
+        context_ = &frame;
+    }
+
+    void pop_context()
+    {
+        context_ = context_->next;
+    }
+
+    void on_error()
+    {
+        ++errors_;
+        print_context();
+    }
+
+private:
+
+    bool report_;
+    int errors_;
+    lwt_context_frame* context_;
+
+    void print_context()
+    {
+        // If there is no context, do nothing
+        if (!context_)
+            return;
+
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM << "Failure happened in the following context:\n";
+
+        // Go through the linked list
+        lwt_context_frame* frame = context_;
+        for (int i = 0; frame; ++i, frame = frame->next)
+        {
+            // Print the header and the first value, which should always be present
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM << "    #" << i << ": ";
+            frame->values[0].print();
+
+            // Print any other values, if present
+            for (int j = 1; j < lwt_context_frame::max_values && frame->values[j].obj; ++j)
+            {
+                BOOST_LIGHTWEIGHT_TEST_OSTREAM << ", ";    
+                frame->values[j].print();
+            }
+
+            // Finish the frame
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM << '\n';
+        }
+    }
+};
+
+inline test_result& test_results()
+{
+    static test_result instance;
+    return instance;
+}
+
+inline bool test_impl(char const * expr, char const * file, int line, char const * function, bool v)
+{
+    if( v )
+    {
+        test_results();
+        return true;
+    }
+    else
+    {
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+          << file << "(" << line << "): test '" << expr << "' failed in function '"
+          << function << "'" << std::endl;
+        test_results().on_error();
+        return false;
+    }
+}
+
+inline void error_impl(char const * msg, char const * file, int line, char const * function)
+{
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM
+      << file << "(" << line << "): " << msg << " in function '"
+      << function << "'" << std::endl;
+    test_results().on_error();
+}
+
+inline void throw_failed_impl(const char* expr, char const * excep, char const * file, int line, char const * function)
+{
+   BOOST_LIGHTWEIGHT_TEST_OSTREAM
+    << file << "(" << line << "): expression '" << expr << "' did not throw exception '" << excep << "' in function '"
+    << function << "'" << std::endl;
+   test_results().on_error();
+}
+
+inline void no_throw_failed_impl(const char* expr, const char* file, int line, const char* function)
+{
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM
+        << file << "(" << line << "): expression '" << expr << "' threw an exception in function '"
+        << function << "'" << std::endl;
+   test_results().on_error();
+}
+
+inline void no_throw_failed_impl(const char* expr, const char* what, const char* file, int line, const char* function)
+{
+    BOOST_LIGHTWEIGHT_TEST_OSTREAM
+        << file << "(" << line << "): expression '" << expr << "' threw an exception in function '"
+        << function << "': " << what << std::endl;
+   test_results().on_error();
+}
+
+// In the comparisons below, it is possible that T and U are signed and unsigned integer types, which generates warnings in some compilers.
+// A cleaner fix would require common_type trait or some meta-programming, which would introduce a dependency on Boost.TypeTraits. To avoid
+// the dependency we just disable the warnings.
+#if defined(__clang__) && defined(__has_warning)
+# if __has_warning("-Wsign-compare")
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wsign-compare"
+# endif
+#elif defined(_MSC_VER)
+# pragma warning(push)
+# pragma warning(disable: 4389)
+#elif defined(__GNUC__) && !(defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)) && (__GNUC__ * 100 + __GNUC_MINOR__) >= 406
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wsign-compare"
+# pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
+
 
 // predicates
 
@@ -303,7 +373,7 @@ inline bool test_with_impl(BinaryPredicate pred, char const * expr1, char const 
             << file << "(" << line << "): test '" << expr1 << " " << lwt_predicate_name(pred) << " " << expr2
             << "' ('" << test_output_impl(t) << "' " << lwt_predicate_name(pred) << " '" << test_output_impl(u)
             << "') failed in function '" << function << "'" << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -321,7 +391,7 @@ inline bool test_cstr_eq_impl( char const * expr1, char const * expr2,
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " == " << expr2 << "' ('" << t
             << "' == '" << u << "') failed in function '" << function << "'" << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -339,7 +409,7 @@ inline bool test_cstr_ne_impl( char const * expr1, char const * expr2,
         BOOST_LIGHTWEIGHT_TEST_OSTREAM
             << file << "(" << line << "): test '" << expr1 << " != " << expr2 << "' ('" << t
             << "' != '" << u << "') failed in function '" << function << "'" << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -409,7 +479,7 @@ bool test_all_eq_impl(FormattedOutputFunction& output,
     else
     {
         output << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -480,7 +550,7 @@ bool test_all_with_impl(FormattedOutputFunction& output,
     else
     {
         output << std::endl;
-        ++test_results().errors();
+        test_results().on_error();
         return false;
     }
 }
@@ -526,6 +596,48 @@ inline void lwt_init()
 {
     boost::detail::test_results();
 }
+
+class lwt_context
+{
+    boost::detail::lwt_context_frame frame_;
+    
+    // Disallow copy and movement
+    BOOST_DELETED_FUNCTION(lwt_context(const lwt_context&))
+    BOOST_DELETED_FUNCTION(lwt_context& operator=(const lwt_context&))
+
+public:
+    template <class T>
+    explicit lwt_context(const T* value)
+    {
+        frame_.values[0].set_value(value);
+        frame_.values[1].set_null();
+        frame_.values[2].set_null();
+        boost::detail::test_results().push_context(frame_);
+    }
+
+    template <class T0, class T1>
+    lwt_context(const T0* value0, const T1* value1)
+    {
+        frame_.values[0].set_value(value0);
+        frame_.values[1].set_value(value1);
+        frame_.values[2].set_null();
+        boost::detail::test_results().push_context(frame_);
+    }
+
+    template <class T0, class T1, class T2>
+    lwt_context(const T0* value0, const T1* value1, const T2* value2)
+    {
+        frame_.values[0].set_value(value0);
+        frame_.values[1].set_value(value1);
+        frame_.values[2].set_value(value2);
+        boost::detail::test_results().push_context(frame_);
+    }
+
+    ~lwt_context()
+    {
+        boost::detail::test_results().pop_context();
+    }
+};
 
 } // namespace core
 } // namespace boost
