@@ -552,38 +552,42 @@ inline void lwt_init()
 #define BOOST_TEST_ALL_WITH(begin1, end1, begin2, end2, predicate) ( ::boost::detail::test_all_with_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, begin1, end1, begin2, end2, predicate) )
 
 #ifndef BOOST_NO_EXCEPTIONS
-   #define BOOST_TEST_THROWS( EXPR, EXCEP )                           \
-      try {                                                           \
-         EXPR;                                                        \
-         ::boost::detail::throw_failed_impl                           \
-         (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
-      }                                                               \
-      catch(EXCEP const&) {                                           \
-         ::boost::detail::test_results();                             \
-      }                                                               \
-      catch(...) {                                                    \
-         ::boost::detail::throw_failed_impl                           \
-         (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
-      }                                                               \
+   #define BOOST_TEST_THROWS( EXPR, EXCEP )                              \
+      do {                                                               \
+         try {                                                           \
+            EXPR;                                                        \
+            ::boost::detail::throw_failed_impl                           \
+            (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
+         }                                                               \
+         catch(EXCEP const&) {                                           \
+            ::boost::detail::test_results();                             \
+         }                                                               \
+         catch(...) {                                                    \
+            ::boost::detail::throw_failed_impl                           \
+            (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
+         }                                                               \
+      } while (false)
    //
 #else
-   #define BOOST_TEST_THROWS( EXPR, EXCEP )
+   #define BOOST_TEST_THROWS( EXPR, EXCEP ) do {} while (false)
 #endif
 
 #ifndef BOOST_NO_EXCEPTIONS
-#  define BOOST_TEST_NO_THROW(EXPR)                                    \
-    try {                                                              \
-        EXPR;                                                          \
-    } catch (const std::exception& e) {                                \
-        ::boost::detail::no_throw_failed_impl                          \
-        (#EXPR, e.what(), __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
-    } catch (...) {                                                    \
-        ::boost::detail::no_throw_failed_impl                          \
-        (#EXPR, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);           \
-    }
+#  define BOOST_TEST_NO_THROW(EXPR)                                        \
+    do {                                                                   \
+        try {                                                              \
+            EXPR;                                                          \
+        } catch (const std::exception& e) {                                \
+            ::boost::detail::no_throw_failed_impl                          \
+            (#EXPR, e.what(), __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
+        } catch (...) {                                                    \
+            ::boost::detail::no_throw_failed_impl                          \
+            (#EXPR, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);           \
+        }                                                                  \
+    } while (false)
     //
 #else
-#  define BOOST_TEST_NO_THROW(EXPR) { EXPR; }
+#  define BOOST_TEST_NO_THROW(EXPR) do { EXPR; } while (false)
 #endif
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_HPP
