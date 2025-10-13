@@ -551,9 +551,22 @@ inline void lwt_init()
 #define BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2) ( ::boost::detail::test_all_eq_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, begin1, end1, begin2, end2) )
 #define BOOST_TEST_ALL_WITH(begin1, end1, begin2, end2, predicate) ( ::boost::detail::test_all_with_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, begin1, end1, begin2, end2, predicate) )
 
+#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1900)
+// The usual idiom for multiline macros. But disabled for MSVC versions
+// prior to 2015, which would emit a "conditional expression is constant"
+// warning that we could not silence with a _Pragma, despite this being
+// the same thing described here:
+//
+// <https://learn.microsoft.com/en-us/cpp/preprocessor/pragma-directives-and-the-pragma-keyword?view=msvc-140>.
+//
+   #define BOOST_LWT_DETAIL_DO_WHILE_FALSE( x ) do { x } while (false)
+#else
+   #define BOOST_LWT_DETAIL_DO_WHILE_FALSE( x ) x
+#endif
+
 #ifndef BOOST_NO_EXCEPTIONS
    #define BOOST_TEST_THROWS( EXPR, EXCEP )                              \
-      do {                                                               \
+      BOOST_LWT_DETAIL_DO_WHILE_FALSE(                                   \
          try {                                                           \
             EXPR;                                                        \
             ::boost::detail::throw_failed_impl                           \
@@ -566,15 +579,15 @@ inline void lwt_init()
             ::boost::detail::throw_failed_impl                           \
             (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
          }                                                               \
-      } while (false)
+      )
    //
 #else
-   #define BOOST_TEST_THROWS( EXPR, EXCEP ) do {} while (false)
+   #define BOOST_TEST_THROWS( EXPR, EXCEP ) BOOST_LWT_DETAIL_DO_WHILE_FALSE((void)0;)
 #endif
 
 #ifndef BOOST_NO_EXCEPTIONS
 #  define BOOST_TEST_NO_THROW(EXPR)                                        \
-    do {                                                                   \
+     BOOST_LWT_DETAIL_DO_WHILE_FALSE(                                      \
         try {                                                              \
             EXPR;                                                          \
         } catch (const std::exception& e) {                                \
@@ -584,10 +597,10 @@ inline void lwt_init()
             ::boost::detail::no_throw_failed_impl                          \
             (#EXPR, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);           \
         }                                                                  \
-    } while (false)
+    )
     //
 #else
-#  define BOOST_TEST_NO_THROW(EXPR) do { EXPR; } while (false)
+#  define BOOST_TEST_NO_THROW(EXPR) BOOST_LWT_DETAIL_DO_WHILE_FALSE(EXPR;)
 #endif
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_HPP
