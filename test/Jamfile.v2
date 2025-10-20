@@ -469,3 +469,12 @@ run minstd_rand_test.cpp
 
 use-project /boost/core/swap : ./swap ;
 build-project ./swap ;
+
+compile static_assert_test.cpp ;
+compile static_assert_test2.cpp ;
+compile static_assert_test3.cpp ;
+
+compile-fail static_assert_fail.cpp ;
+compile-fail static_assert_fail2.cpp ;
+compile-fail static_assert_fail3.cpp ;
+compile-fail static_assert_fail4.cpp ;
