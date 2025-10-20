@@ -551,6 +551,12 @@ inline void lwt_init()
 #define BOOST_TEST_ALL_EQ(begin1, end1, begin2, end2) ( ::boost::detail::test_all_eq_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, begin1, end1, begin2, end2) )
 #define BOOST_TEST_ALL_WITH(begin1, end1, begin2, end2, predicate) ( ::boost::detail::test_all_with_impl(BOOST_LIGHTWEIGHT_TEST_OSTREAM, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION, begin1, end1, begin2, end2, predicate) )
 
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1900
+# define BOOST_LWT_DETAIL_WHILE_FALSE __pragma(warning(push)) __pragma(warning(disable:4127)) while(false) __pragma(warning(pop))
+#else
+# define BOOST_LWT_DETAIL_WHILE_FALSE while(false)
+#endif
+
 #ifndef BOOST_NO_EXCEPTIONS
    #define BOOST_TEST_THROWS( EXPR, EXCEP )                              \
       do {                                                               \
@@ -566,10 +572,9 @@ inline void lwt_init()
             ::boost::detail::throw_failed_impl                           \
             (#EXPR, #EXCEP, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION); \
          }                                                               \
-      } while (false)
-   //
+      } BOOST_LWT_DETAIL_WHILE_FALSE
 #else
-   #define BOOST_TEST_THROWS( EXPR, EXCEP ) do {} while (false)
+   #define BOOST_TEST_THROWS( EXPR, EXCEP ) do {} BOOST_LWT_DETAIL_WHILE_FALSE
 #endif
 
 #ifndef BOOST_NO_EXCEPTIONS
@@ -584,10 +589,9 @@ inline void lwt_init()
             ::boost::detail::no_throw_failed_impl                          \
             (#EXPR, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);           \
         }                                                                  \
-    } while (false)
-    //
+    } BOOST_LWT_DETAIL_WHILE_FALSE
 #else
-#  define BOOST_TEST_NO_THROW(EXPR) do { EXPR; } while (false)
+#  define BOOST_TEST_NO_THROW(EXPR) do { EXPR; } BOOST_LWT_DETAIL_WHILE_FALSE
 #endif
 
 #endif // #ifndef BOOST_CORE_LIGHTWEIGHT_TEST_HPP
