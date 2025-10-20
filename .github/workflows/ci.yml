@@ -628,7 +628,7 @@ jobs:
             os: windows-11-arm
 
     runs-on: ${{matrix.os}}
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Setup Boost
