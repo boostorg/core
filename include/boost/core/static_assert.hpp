@@ -11,9 +11,31 @@
 
 #else
 
-#include <boost/static_assert.hpp>
+#include <boost/config.hpp>
+#include <cstddef>
 
-#define BOOST_CORE_STATIC_ASSERT(expr) BOOST_STATIC_ASSERT(expr)
+namespace boost
+{
+namespace core
+{
+
+template<bool> struct STATIC_ASSERTION_FAILURE;
+
+template<> struct STATIC_ASSERTION_FAILURE<true>
+{
+};
+
+template<std::size_t> struct static_assert_test
+{
+};
+
+} // namespace core
+} // namespace boost
+
+#define BOOST_CORE_STATIC_ASSERT(expr) \
+    typedef ::boost::core::static_assert_test< \
+        sizeof( ::boost::core::STATIC_ASSERTION_FAILURE<(expr)? true: false> ) \
+    > BOOST_JOIN(boost_static_assert_typedef_,__LINE__) BOOST_ATTRIBUTE_UNUSED
 
 #endif
 
