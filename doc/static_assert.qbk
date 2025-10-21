@@ -1,0 +1,57 @@
+[/
+  Copyright 2025 Peter Dimov
+  Distributed under the Boost Software License, Version 1.0.
+  https://boost.org/LICENSE_1_0.txt
+]
+
+[section:static_assert static_assert]
+
+[simplesect Authors]
+
+* Peter Dimov
+
+[endsimplesect]
+
+[section Header <boost/core/static_assert.hpp>]
+
+The header `<boost/core/static_assert.hpp>` defines
+the macro `BOOST_CORE_STATIC_ASSERT(expr)`, which
+expands to `static_assert(expr, #expr)` under C++11
+or later, or to a suitable emulation under C++03.
+
+The same functionality is provided by `BOOST_STATIC_ASSERT`
+defined in `<boost/static_assert.hpp>`, and the macro
+is duplicated here for libraries that already depend
+on Core and would like to remove the dependency on
+StaticAssert.
+
+[section Synopsis]
+
+``
+#define BOOST_CORE_STATIC_ASSERT(expr) static_assert(expr, #expr)
+``
+
+[endsect]
+
+[section Example]
+
+```
+#include <boost/core/static_assert.hpp>
+
+BOOST_CORE_STATIC_ASSERT( sizeof(char[1]) == 1 );
+
+struct X
+{
+    BOOST_CORE_STATIC_ASSERT( sizeof(char[2]) == 2 );
+};
+
+int main()
+{
+    BOOST_CORE_STATIC_ASSERT( sizeof(char[3]) == 3 );
+}
+```
+[endsect]
+
+[endsect]
+
+[endsect]

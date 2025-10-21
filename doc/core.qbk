@@ -81,6 +81,7 @@ criteria for inclusion is that the utility component be:
 [include serialization.qbk]
 [include size.qbk]
 [include span.qbk]
+[include static_assert.qbk]
 [include swap.qbk]
 [include typeinfo.qbk]
 [include type_name.qbk]
