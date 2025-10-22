@@ -6,7 +6,7 @@ The criteria for inclusion is that the utility component be:
 
 * simple,
 * used by other Boost libraries, and
-* not dependent on any other Boost modules except Core itself, Config, Assert, Static Assert, or Predef.
+* not dependent on any other Boost modules except Core itself, Config, Assert, or ThrowException.
 
 ### Build Status
 
