@@ -1,5 +1,5 @@
-#ifndef BOOST_CORE_STATIC_ASSERT_HPP_INCLUDED
-#define BOOST_CORE_STATIC_ASSERT_HPP_INCLUDED
+#ifndef BOOST_CORE_DETAIL_STATIC_ASSERT_HPP_INCLUDED
+#define BOOST_CORE_DETAIL_STATIC_ASSERT_HPP_INCLUDED
 
 // Copyright 2025 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0.
@@ -39,4 +39,4 @@ template<std::size_t> struct static_assert_test
 
 #endif
 
-#endif  // #ifndef BOOST_CORE_STATIC_ASSERT_HPP_INCLUDED
+#endif  // #ifndef BOOST_CORE_DETAIL_STATIC_ASSERT_HPP_INCLUDED

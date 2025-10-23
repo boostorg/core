@@ -20,7 +20,7 @@
 
 #if defined(BOOST_CORE_USE_GENERIC_CMATH) || (!defined(_MSC_VER) && !defined(FP_SUBNORMAL))
 
-#include <boost/core/static_assert.hpp>
+#include <boost/core/detail/static_assert.hpp>
 #include <boost/cstdint.hpp>
 #include <limits>
 #include <cstring>
