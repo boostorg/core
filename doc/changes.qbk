@@ -17,8 +17,6 @@
   and `std::size`, respectively, when the latter are provided by compiler. This resolves potential
   ambiguities when both `boost::` and `std::` alternatives are found by the compiler, e.g. as a result
   of ADL. ([github_issue 206])
-* Added [link core.static_assert `BOOST_CORE_STATIC_ASSERT`], a reimplementation of `BOOST_STATIC_ASSERT`
-  for libraries that already depend on Core and would like to remove the dependency on StaticAssert.
 
 [endsect]
 
