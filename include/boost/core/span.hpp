@@ -24,15 +24,13 @@ class span;
 namespace detail {
 
 template<class U, class T, class = void>
-struct span_convertible
-{
+struct span_convertible {
     static constexpr bool value = false;
 };
 
 template<class U, class T>
-struct span_convertible<U, T, typename std::enable_if<
-    std::is_convertible<U(*)[], T(*)[]>::value>::type>
-{
+struct span_convertible<U, T, typename
+    std::enable_if<std::is_convertible<U(*)[], T(*)[]>::value>::type> {
     static constexpr bool value = true;
 };
 
