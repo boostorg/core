@@ -177,6 +177,8 @@ run lightweight_test_with_test.cpp
   : : : $(pedantic-errors) ;
 run-fail lightweight_test_with_fail.cpp ;
 
+run lightweight_test_context1.cpp ;
+
 run is_same_test.cpp ;
 
 run typeinfo_test.cpp ;
