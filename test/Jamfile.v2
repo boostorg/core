@@ -419,6 +419,11 @@ run as_writable_bytes_test.cpp ;
 compile span_boost_begin_test.cpp ;
 compile span_nonmem_data_size_test.cpp ;
 run make_span_test.cpp ;
+compile-fail span_incompatible_range_size_smaller.cpp ;
+compile-fail span_incompatible_range_size_larger.cpp ;
+compile span_compatible_range_size.cpp ;
+compile span_undetectable_incompatible_range_size.cpp ;
+compile span_default_constructed_size.cpp ;
 
 run splitmix64_test.cpp
   : : : $(pedantic-errors) ;
