@@ -20,13 +20,39 @@ which can be used as a deleter with smart pointers such as `unique_ptr` or `shar
 deleter doesn't do anything with the pointer provided upon deallocation, which makes it useful
 when the pointed object doesn't need to be deallocated or is deallocated elsewhere.
 
-[section Example]
+[section Examples]
+
+[section Using null_deleter with external objects]
+
+The `null_deleter` is useful when wrapping a pointer to an external object (such as `std::cout`)
+that should not be deallocated when the smart pointer goes out of scope.
+
 ``
 std::shared_ptr< std::ostream > make_stream()
 {
     return std::shared_ptr< std::ostream >(&std::cout, boost::null_deleter());
 }
 ``
+
+[endsect]
+
+[section Using null_deleter with static objects]
+
+The `null_deleter` is also useful when you need to return a smart pointer to a static object.
+This allows you to return a `shared_ptr` to a static instance without attempting to delete it.
+
+``
+struct impl { /* ... */ };
+
+std::shared_ptr< impl > get_default_impl()
+{
+    static impl def;
+    return std::shared_ptr< impl >(&def, boost::null_deleter());
+}
+``
+
+[endsect]
+
 [endsect]
 
 [endsect]
