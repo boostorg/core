@@ -207,6 +207,16 @@ inline std::string test_output_impl( char const& v )
     }
 }
 
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+
+inline std::string test_output_impl( char8_t const& v )
+{
+    // assume that char is ASCII, compatible with char8_t
+    return test_output_impl( static_cast<char>( v ) );
+}
+
+#endif
+
 // predicates
 
 struct lw_test_eq
