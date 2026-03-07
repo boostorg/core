@@ -2,6 +2,10 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt
 
+if(BOOST_USE_MODULES)
+set(CMAKE_CXX_MODULE_STD ON)
+endif()
+
 include(BoostTestJamfile OPTIONAL RESULT_VARIABLE HAVE_BOOST_TEST)
 
 if(HAVE_BOOST_TEST)
@@ -24,12 +28,16 @@ set(BOOST_TEST_LINK_LIBRARIES Boost::core Boost::config Boost::move Boost::smart
 
 boost_test(TYPE run SOURCES fclose_deleter_test.cpp)
 
+# The serialization tests require building Boost libraries not modularized yet,
+# which causes errors
+if (NOT BOOST_USE_MODULES)
 set(BOOST_TEST_LINK_LIBRARIES Boost::core Boost::serialization)
 
 boost_test(TYPE run SOURCES serialization_nvp_test.cpp)
 boost_test(TYPE run SOURCES serialization_split_free_test.cpp)
 boost_test(TYPE run SOURCES serialization_split_member_test.cpp)
 boost_test(TYPE run SOURCES serialization_construct_data_test.cpp)
+endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)

@@ -3,17 +3,29 @@
 # Distributed under the Boost Software License, Version 1.0.
 # https://www.boost.org/LICENSE_1_0.txt
 
-cmake_minimum_required(VERSION 3.5...3.20)
+cmake_minimum_required(VERSION 3.5...3.31)
 
 project(boost_core VERSION "${BOOST_SUPERPROJECT_VERSION}" LANGUAGES CXX)
 
-add_library(boost_core INTERFACE)
+if (BOOST_USE_MODULES)
+  add_library(boost_core STATIC)
+  target_sources(boost_core PUBLIC FILE_SET CXX_MODULES BASE_DIRS modules FILES modules/boost_core.cppm)
+  set(__scope PUBLIC)
+
+  # Enable and propagate C++23, import std, and the modules macro
+  target_compile_features(boost_core PUBLIC cxx_std_23)
+  set_target_properties(boost_core PROPERTIES CXX_MODULE_STD 1)
+  target_compile_definitions(boost_core PUBLIC BOOST_USE_MODULES)
+
+else()
+  add_library(boost_core INTERFACE)
+  set(__scope INTERFACE)
+endif()
+
 add_library(Boost::core ALIAS boost_core)
-
-target_include_directories(boost_core INTERFACE include)
-
+target_include_directories(boost_core ${__scope} include)
 target_link_libraries(boost_core
-  INTERFACE
+  ${__scope}
     Boost::assert
     Boost::config
     Boost::throw_exception

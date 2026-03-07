@@ -8,46 +8,53 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_MAKE_SPAN_HPP
 #define BOOST_CORE_MAKE_SPAN_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/core/span.hpp>
 
 namespace boost {
 
-template<class I>
+BOOST_CORE_MODULE_EXPORT template<class I>
 inline constexpr span<I>
 make_span(I* f, std::size_t c) noexcept
 {
     return span<I>(f, c);
 }
 
-template<class I>
+BOOST_CORE_MODULE_EXPORT template<class I>
 inline constexpr span<I>
 make_span(I* f, I* l) noexcept
 {
     return span<I>(f, l);
 }
 
-template<class T, std::size_t N>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t N>
 inline constexpr span<T, N>
 make_span(T(&a)[N]) noexcept
 {
     return span<T, N>(a);
 }
 
-template<class T, std::size_t N>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t N>
 inline constexpr span<T, N>
 make_span(std::array<T, N>& a) noexcept
 {
     return span<T, N>(a);
 }
 
-template<class T, std::size_t N>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t N>
 inline constexpr span<const T, N>
 make_span(const std::array<T, N>& a) noexcept
 {
     return span<const T, N>(a);
 }
 
-template<class R>
+BOOST_CORE_MODULE_EXPORT template<class R>
 inline span<typename detail::span_data<R>::type>
 make_span(R&& r)
 {
@@ -55,5 +62,7 @@ make_span(R&& r)
 }
 
 } /* boost */
+
+#endif
 
 #endif

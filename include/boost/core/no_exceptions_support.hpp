@@ -1,3 +1,8 @@
+// Make the header safe to include from libraries supporting modules
+#if defined(BOOST_IN_MODULE_PURVIEW) && !defined(BOOST_CORE_NO_EXCEPTIONS_SUPPORT_HPP)
+#  error "Please #include <boost/core/no_exceptions_support.hpp> in your module global fragment"
+#endif
+
 #ifndef BOOST_CORE_NO_EXCEPTIONS_SUPPORT_HPP
 #define BOOST_CORE_NO_EXCEPTIONS_SUPPORT_HPP
 

@@ -7,8 +7,8 @@ Distributed under the Boost Software License, Version 1.0.
 */
 #include <boost/core/default_allocator.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
-#include <vector>
-#include <list>
+#include <boost/config/std/vector.hpp>
+#include <boost/config/std/list.hpp>
 
 class type {
 public:

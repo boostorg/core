@@ -10,7 +10,7 @@
 
 #include <boost/core/verbose_terminate_handler.hpp>
 #include <boost/throw_exception.hpp>
-#include <exception>
+#include <boost/config/std/exception.hpp>
 #include <stdlib.h>
 #if defined(_MSC_VER) && defined(_CPPLIB_VER) && defined(_DEBUG)
 # include <crtdbg.h>

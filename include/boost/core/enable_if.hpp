@@ -14,14 +14,23 @@
 #ifndef BOOST_CORE_ENABLE_IF_HPP
 #define BOOST_CORE_ENABLE_IF_HPP
 
-#include "boost/config.hpp"
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+
+#else
+
+#include <boost/core/detail/modules.hpp>
+#include <boost/config.hpp>
 
 // Even the definition of enable_if causes problems on some compilers,
 // so it's macroed out for all compilers that do not support SFINAE
 
 #ifndef BOOST_NO_SFINAE
 
-namespace boost
+BOOST_CORE_MODULE_EXPORT namespace boost
 {
   template<typename T, typename R=void>
   struct enable_if_has_type
@@ -124,5 +133,7 @@ namespace boost {
 } // namespace boost
 
 #endif // BOOST_NO_SFINAE
+
+#endif
 
 #endif

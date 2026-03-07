@@ -11,20 +11,28 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  https://www.boost.org/LICENSE_1_0.txt
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/config.hpp>
-#include <exception>
-#include <typeinfo>
-#include <cstdlib>
-#include <cstdio>
+#include <boost/config/std/exception.hpp>
+#include <boost/config/std/typeinfo.hpp>
+#include <boost/config/std/cstdlib.hpp>
+#include <boost/config/std/cstdio.hpp>
 
 namespace boost
 {
 namespace core
 {
 
-BOOST_NORETURN inline void verbose_terminate_handler()
+BOOST_CORE_MODULE_EXPORT BOOST_NORETURN inline void verbose_terminate_handler()
 {
     std::set_terminate( 0 );
 
@@ -84,5 +92,7 @@ BOOST_NORETURN inline void verbose_terminate_handler()
 
 } // namespace core
 } // namespace boost
+
+#endif
 
 #endif  // #ifndef BOOST_CORE_VERBOSE_TERMINATE_HANDLER_HPP_INCLUDED

@@ -7,7 +7,7 @@ Distributed under the Boost Software License, Version 1.0.
 */
 #include <boost/core/allocator_access.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <limits>
+#include <boost/config/std/limits.hpp>
 
 template<class T>
 struct A1 {

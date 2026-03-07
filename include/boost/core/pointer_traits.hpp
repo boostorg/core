@@ -8,9 +8,16 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_POINTER_TRAITS_HPP
 #define BOOST_CORE_POINTER_TRAITS_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 #include <boost/core/addressof.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
 
 namespace boost {
 namespace detail {
@@ -209,7 +216,7 @@ struct ptr_traits<T, ptr_none> { };
 
 } /* detail */
 
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 struct pointer_traits
     : detail::ptr_traits<T, typename detail::ptr_element<T>::type> { };
 
@@ -231,7 +238,7 @@ struct pointer_traits<T*>
 #endif
 };
 
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 BOOST_CONSTEXPR inline T*
 to_address(T* v) BOOST_NOEXCEPT
 {
@@ -265,14 +272,14 @@ ptr_address(const T& v, long) BOOST_NOEXCEPT
 
 } /* detail */
 
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 inline auto
 to_address(const T& v) BOOST_NOEXCEPT
 {
     return boost::detail::ptr_address(v, 0);
 }
 #else
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 inline typename pointer_traits<T>::element_type*
 to_address(const T& v) BOOST_NOEXCEPT
 {
@@ -281,5 +288,7 @@ to_address(const T& v) BOOST_NOEXCEPT
 #endif
 
 } /* boost */
+
+#endif
 
 #endif

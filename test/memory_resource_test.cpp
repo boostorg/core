@@ -4,8 +4,8 @@
 
 #include <boost/core/memory_resource.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <new>
-#include <cstddef>
+#include <boost/config/std/new.hpp>
+#include <boost/config/std/cstddef.hpp>
 
 static bool do_allocate_called;
 static std::size_t do_allocate_bytes;

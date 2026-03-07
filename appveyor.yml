@@ -79,6 +79,7 @@ install:
   - git submodule update --init tools/boostdep
   - xcopy /s /e /q %APPVEYOR_BUILD_FOLDER% libs\core\
   - python tools/boostdep/depinst/depinst.py --git_args "--jobs %GIT_FETCH_JOBS%" core
+  - python libs/core/tools/setup_boost_with_modules.py # Temporary
   - cmd /c bootstrap
   - b2 -d0 headers
 

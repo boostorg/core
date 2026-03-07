@@ -11,8 +11,8 @@
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
 
-#include <algorithm> //for std::copy and std::equal
-#include <cstddef> //for std::size_t
+#include <boost/config/std/algorithm.hpp> //for std::copy and std::equal
+#include <boost/config/std/cstddef.hpp> //for std::size_t
 
 
 int main()

@@ -14,7 +14,7 @@ int main() {}
 #else
 
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
-# include <string_view>
+# include <boost/config/std/string_view.hpp>
 #endif
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)

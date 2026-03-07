@@ -16,12 +16,12 @@
 # endif
 #endif
 
-#include <string>
+#include <boost/config/std/string.hpp>
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
-# include <string_view>
+# include <boost/config/std/string_view.hpp>
 #endif
 #if !defined(BOOST_NO_CXX17_HDR_MEMORY_RESOURCE)
-# include <memory_resource>
+# include <boost/config/std/memory_resource.hpp>
 #endif
 
 boost::core::string_view f( boost::core::string_view const& str )

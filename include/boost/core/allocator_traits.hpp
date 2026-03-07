@@ -8,11 +8,18 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_ALLOCATOR_TRAITS_HPP
 #define BOOST_CORE_ALLOCATOR_TRAITS_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/core/allocator_access.hpp>
 
 namespace boost {
 
-template<class A>
+BOOST_CORE_MODULE_EXPORT template<class A>
 struct allocator_traits {
     typedef A allocator_type;
 
@@ -108,5 +115,7 @@ struct allocator_traits {
 };
 
 } /* boost */
+
+#endif
 
 #endif

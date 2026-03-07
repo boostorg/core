@@ -8,16 +8,25 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_EXCHANGE_HPP
 #define BOOST_CORE_EXCHANGE_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #include <boost/config/workaround.hpp>
-#include <utility>
+#include <boost/config/std/utility.hpp>
 #endif
 
 namespace boost {
 
 #if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-template<class T, class U>
+BOOST_CORE_MODULE_EXPORT template<class T, class U>
 inline T exchange(T& t, const U& u)
 {
     T v = t;
@@ -26,7 +35,7 @@ inline T exchange(T& t, const U& u)
 }
 #else
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
-template<class T, class U>
+BOOST_CORE_MODULE_EXPORT template<class T, class U>
 inline T exchange(T& t, U&& u)
 {
     T v = std::move(t);
@@ -34,7 +43,7 @@ inline T exchange(T& t, U&& u)
     return v;
 }
 #else
-template<class T, class U = T>
+BOOST_CORE_MODULE_EXPORT template<class T, class U = T>
 BOOST_CXX14_CONSTEXPR inline T exchange(T& t, U&& u)
 {
     T v = std::move(t);
@@ -45,5 +54,7 @@ BOOST_CXX14_CONSTEXPR inline T exchange(T& t, U&& u)
 #endif
 
 } /* boost */
+
+#endif
 
 #endif

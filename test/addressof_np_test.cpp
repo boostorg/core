@@ -8,7 +8,7 @@
 
 #include <boost/utility/addressof.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
 
 #if defined( BOOST_NO_CXX11_NULLPTR )
 

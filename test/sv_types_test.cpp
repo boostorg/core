@@ -5,7 +5,7 @@
 #include <boost/core/detail/string_view.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
-#include <iterator>
+#include <boost/config/std/iterator.hpp>
 
 #if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 160000
 

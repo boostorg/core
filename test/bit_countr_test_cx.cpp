@@ -22,7 +22,7 @@ BOOST_PRAGMA_MESSAGE( "Test skipped because BOOST_MSVC is " BOOST_STRINGIZE(BOOS
 #else
 
 #include <boost/core/bit.hpp>
-#include <climits>
+#include <boost/config/std/climits.hpp>
 
 #define STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 

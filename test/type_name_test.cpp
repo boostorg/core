@@ -5,34 +5,34 @@
 #include <boost/core/type_name.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/config.hpp>
-#include <string>
-#include <vector>
-#include <list>
-#include <deque>
-#include <set>
-#include <map>
-#include <utility>
-#include <cstddef>
-#include <iosfwd>
+#include <boost/config/std/string.hpp>
+#include <boost/config/std/vector.hpp>
+#include <boost/config/std/list.hpp>
+#include <boost/config/std/deque.hpp>
+#include <boost/config/std/set.hpp>
+#include <boost/config/std/map.hpp>
+#include <boost/config/std/utility.hpp>
+#include <boost/config/std/cstddef.hpp>
+#include <boost/config/std/iosfwd.hpp>
 
 #if !defined(BOOST_NO_CXX11_HDR_UNORDERED_SET)
-# include <unordered_set>
+# include <boost/config/std/unordered_set.hpp>
 #endif
 
 #if !defined(BOOST_NO_CXX11_HDR_UNORDERED_MAP)
-# include <unordered_map>
+# include <boost/config/std/unordered_map.hpp>
 #endif
 
 #if !defined(BOOST_NO_CXX11_HDR_ARRAY)
-# include <array>
+# include <boost/config/std/array.hpp>
 #endif
 
 #if !defined(BOOST_NO_CXX11_HDR_TUPLE)
-# include <tuple>
+# include <boost/config/std/tuple.hpp>
 #endif
 
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
-# include <string_view>
+# include <boost/config/std/string_view.hpp>
 #endif
 
 //

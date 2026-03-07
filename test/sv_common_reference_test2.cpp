@@ -4,8 +4,9 @@
 
 #include <boost/core/detail/string_view.hpp>
 #include <boost/config/pragma_message.hpp>
-#include <string>
-#include <iterator>
+#include <boost/config.hpp>
+#include <boost/config/std/string.hpp>
+#include <boost/config/std/iterator.hpp>
 
 #if !defined(__cpp_lib_ranges)
 

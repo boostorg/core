@@ -9,7 +9,7 @@ Distributed under the Boost Software License, Version 1.0.
 #if !defined(BOOST_NO_CXX11_CONSTEXPR) && !defined(BOOST_NO_CXX11_DECLTYPE)
 #include <boost/core/size.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <iterator>
+#include <boost/config/std/iterator.hpp>
 
 struct range {
     std::size_t size() const {

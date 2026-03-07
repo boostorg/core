@@ -16,6 +16,11 @@
  * https://github.com/panaseleus/stack_unwinding/blob/master/boost/exception/uncaught_exception_count.hpp
  */
 
+// Make the header safe to include from libraries supporting modules
+#if defined(BOOST_IN_MODULE_PURVIEW) && !defined(BOOST_CORE_UNCAUGHT_EXCEPTIONS_HPP_INCLUDED_)
+#  error "Please #include <boost/core/uncaught_exceptions.hpp> in your module global fragment"
+#endif
+
 #ifndef BOOST_CORE_UNCAUGHT_EXCEPTIONS_HPP_INCLUDED_
 #define BOOST_CORE_UNCAUGHT_EXCEPTIONS_HPP_INCLUDED_
 

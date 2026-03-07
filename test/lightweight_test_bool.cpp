@@ -3,7 +3,7 @@
 // https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/core/lightweight_test.hpp>
-#include <vector>
+#include <boost/config/std/vector.hpp>
 
 int main()
 {

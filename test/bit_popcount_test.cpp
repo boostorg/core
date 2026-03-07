@@ -8,8 +8,8 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/detail/splitmix64.hpp>
 #include <boost/cstdint.hpp>
-#include <limits>
-#include <iostream>
+#include <boost/config/std/limits.hpp>
+#include <boost/config/std/iostream.hpp>
 
 template<class T> void test_popcount( T x )
 {

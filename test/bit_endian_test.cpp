@@ -7,7 +7,7 @@
 #include <boost/core/bit.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/cstdint.hpp>
-#include <cstring>
+#include <boost/config/std/cstring.hpp>
 
 #if defined(_MSC_VER)
 # pragma warning(disable: 4127) // conditional expression is constant

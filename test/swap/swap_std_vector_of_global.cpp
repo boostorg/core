@@ -12,7 +12,7 @@
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
 
-#include <vector>
+#include <boost/config/std/vector.hpp>
 
 //Put test class in the global namespace
 #include "./swap_test_class.hpp"

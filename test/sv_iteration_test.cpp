@@ -4,8 +4,8 @@
 
 #include <boost/core/detail/string_view.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <string>
-#include <algorithm>
+#include <boost/config/std/string.hpp>
+#include <boost/config/std/algorithm.hpp>
 
 int main()
 {

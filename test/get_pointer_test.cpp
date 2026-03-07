@@ -14,7 +14,7 @@
 
 #include <boost/get_pointer.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <memory>
+#include <boost/config/std/memory.hpp>
 
 struct X
 {

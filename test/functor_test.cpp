@@ -19,7 +19,7 @@
 #include <boost/core/functor.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
-#include <type_traits>
+#include <boost/config/std/type_traits.hpp>
 
 #if (defined(__cpp_lib_is_invocable) && (__cpp_lib_is_invocable >= 201703l)) || \
     (defined(BOOST_MSSTL_VERSION) && (BOOST_MSSTL_VERSION >= 140) && (BOOST_CXX_VERSION >= 201703l))

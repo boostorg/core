@@ -13,7 +13,7 @@
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
 
-#include <locale>
+#include <boost/config/std/locale.hpp>
 
 int main()
 {

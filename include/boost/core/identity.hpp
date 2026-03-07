@@ -8,14 +8,21 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_IDENTITY_HPP
 #define BOOST_CORE_IDENTITY_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-#include <utility>
+#include <boost/config/std/utility.hpp>
 #endif
 
 namespace boost {
 
-struct identity {
+BOOST_CORE_MODULE_EXPORT struct identity {
     typedef void is_transparent;
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
@@ -57,5 +64,7 @@ struct identity {
 };
 
 } /* boost */
+
+#endif
 
 #endif

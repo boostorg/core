@@ -1,3 +1,8 @@
+// Make the header safe to include from libraries supporting modules
+#if defined(BOOST_IN_MODULE_PURVIEW) && !defined(BOOST_CORE_YIELD_PRIMITIVES_HPP_INCLUDED)
+#  error "Please #include <boost/core/yield_primitives.hpp> in your module global fragment"
+#endif
+
 #ifndef BOOST_CORE_YIELD_PRIMITIVES_HPP_INCLUDED
 #define BOOST_CORE_YIELD_PRIMITIVES_HPP_INCLUDED
 

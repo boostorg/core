@@ -1,3 +1,8 @@
+// Make the header safe to include from libraries supporting modules
+#if defined(BOOST_IN_MODULE_PURVIEW) && !defined(BOOST_CORE_ALIGNOF_HPP_INCLUDED)
+#  error "Please #include <boost/core/alignof.hpp> in your module global fragment"
+#endif
+
 #ifndef BOOST_CORE_ALIGNOF_HPP_INCLUDED
 #define BOOST_CORE_ALIGNOF_HPP_INCLUDED
 
@@ -12,7 +17,7 @@
 //  https://www.boost.org/LICENSE_1_0.txt
 
 #include <boost/config.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
 
 #if !defined(BOOST_NO_CXX11_ALIGNOF)
 

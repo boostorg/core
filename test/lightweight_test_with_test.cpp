@@ -9,7 +9,7 @@
 //
 
 #include <boost/core/lightweight_test.hpp>
-#include <cmath>
+#include <boost/config/std/cmath.hpp>
 
 template <typename T>
 struct with_tolerance

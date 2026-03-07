@@ -10,7 +10,7 @@
 
 #include <boost/visit_each.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <string>
+#include <boost/config/std/string.hpp>
 
 struct X
 {

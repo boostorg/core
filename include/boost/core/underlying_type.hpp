@@ -11,11 +11,18 @@
 #ifndef BOOST_CORE_UNDERLYING_TYPE_HPP
 #define BOOST_CORE_UNDERLYING_TYPE_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 
 // GCC 4.7 and later seem to provide std::underlying_type
 #if !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS) || (defined(BOOST_GCC) && BOOST_GCC >= 40700 && defined(__GXX_EXPERIMENTAL_CXX0X__))
-#include <type_traits>
+#include <boost/config/std/type_traits.hpp>
 #define BOOST_DETAIL_HAS_STD_UNDERLYING_TYPE
 #endif
 
@@ -68,12 +75,14 @@ struct underlying_type_impl
  * to deduce the underlying type of enums. The user is expected to specialize
  * this trait in this case.
  */
-template< typename EnumType >
+BOOST_CORE_MODULE_EXPORT template< typename EnumType >
 struct underlying_type :
     public detail::underlying_type_impl< EnumType >
 {
 };
 
 } // namespace boost
+
+#endif
 
 #endif  // BOOST_CORE_UNDERLYING_TYPE_HPP

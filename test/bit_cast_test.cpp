@@ -7,7 +7,7 @@
 #include <boost/core/bit.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/cstdint.hpp>
-#include <cstring>
+#include <boost/config/std/cstring.hpp>
 
 int main()
 {

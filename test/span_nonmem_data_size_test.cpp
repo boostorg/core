@@ -19,7 +19,7 @@
 #if !defined(BOOST_NO_CXX11_CONSTEXPR) && !defined(BOOST_NO_CXX11_DECLTYPE)
 
 #include <boost/core/span.hpp>
-#include <iterator>
+#include <boost/config/std/iterator.hpp>
 
 // Note: This preprocessor check should be equivalent to those in boost/core/data.hpp and boost/core/size.hpp
 #if (defined(__cpp_lib_nonmember_container_access) && (__cpp_lib_nonmember_container_access >= 201411l)) || \

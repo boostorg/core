@@ -31,12 +31,12 @@
 
 #elif defined(_MSC_VER) && ( defined(_M_IX86) || defined(_M_X64) )
 
-# include <intrin.h>
+# include <boost/core/detail/intrin.hpp>
 # define BOOST_CORE_SP_PAUSE() _mm_pause()
 
 #elif defined(_MSC_VER) && ( defined(_M_ARM) || defined(_M_ARM64) )
 
-# include <intrin.h>
+# include <boost/core/detail/intrin.hpp>
 # define BOOST_CORE_SP_PAUSE() __yield()
 
 #elif defined(__GNUC__) && ( defined(__i386__) || defined(__x86_64__) )

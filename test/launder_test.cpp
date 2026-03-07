@@ -4,7 +4,7 @@
 
 #include <boost/core/launder.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <new>
+#include <boost/config/std/new.hpp>
 
 struct X
 {

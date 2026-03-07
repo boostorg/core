@@ -7,6 +7,11 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
 
+// Make the header safe to include from libraries supporting modules
+#if defined(BOOST_IN_MODULE_PURVIEW) && !defined(BOOST_CORE_SCOPED_ENUM_HPP)
+#  error "Please #include <boost/core/scoped_enum.hpp> in your module global fragment"
+#endif
+
 #ifndef BOOST_CORE_SCOPED_ENUM_HPP
 #define BOOST_CORE_SCOPED_ENUM_HPP
 

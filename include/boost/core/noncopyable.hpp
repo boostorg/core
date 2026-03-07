@@ -9,6 +9,15 @@
 #ifndef BOOST_CORE_NONCOPYABLE_HPP
 #define BOOST_CORE_NONCOPYABLE_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 
 namespace boost {
@@ -56,8 +65,10 @@ namespace noncopyable_  // protection from unintended ADL
   };
 }
 
-typedef noncopyable_::noncopyable noncopyable;
+BOOST_CORE_MODULE_EXPORT typedef noncopyable_::noncopyable noncopyable;
 
 } // namespace boost
+
+#endif
 
 #endif  // BOOST_CORE_NONCOPYABLE_HPP

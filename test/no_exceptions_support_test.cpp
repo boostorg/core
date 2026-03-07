@@ -17,7 +17,7 @@
 #include <boost/core/no_exceptions_support.hpp>
 #include <boost/core/quick_exit.hpp>
 #include <boost/throw_exception.hpp>
-#include <exception>
+#include <boost/config/std/exception.hpp>
 
 void f()
 {

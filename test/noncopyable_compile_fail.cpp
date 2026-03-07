@@ -11,7 +11,7 @@
 //   2 Jun 99  Initial Version
 
 #include <boost/noncopyable.hpp>
-#include <iostream>
+#include <boost/config/std/iostream.hpp>
 
 //  This program demonstrates compiler errors resulting from trying to copy
 //  construct or copy assign a class object derived from class noncopyable.

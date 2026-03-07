@@ -12,7 +12,7 @@
 #define BOOST_CHECK BOOST_TEST
 #define BOOST_CHECK_EQUAL BOOST_TEST_EQ
 
-#include <string>
+#include <boost/config/std/string.hpp>
 
 int main()
 {

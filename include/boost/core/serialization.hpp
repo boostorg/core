@@ -1,3 +1,8 @@
+// Make the header safe to include from libraries supporting modules
+#if defined(BOOST_IN_MODULE_PURVIEW) && !defined(BOOST_CORE_SERIALIZATION_HPP_INCLUDED)
+#  error "Please #include <boost/core/serialization.hpp> in your module global fragment"
+#endif
+
 #ifndef BOOST_CORE_SERIALIZATION_HPP_INCLUDED
 #define BOOST_CORE_SERIALIZATION_HPP_INCLUDED
 
@@ -15,7 +20,7 @@
 // without including a Boost.Serialization header
 
 #include <boost/core/nvp.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
 
 namespace boost
 {

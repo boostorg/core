@@ -6,7 +6,7 @@
 #include <boost/core/lightweight_test_trait.hpp>
 #include <boost/config/pragma_message.hpp>
 #include <boost/config.hpp>
-#include <string>
+#include <boost/config/std/string.hpp>
 
 #if defined(BOOST_NO_CXX20_HDR_CONCEPTS)
 
@@ -15,8 +15,8 @@ int main() {}
 
 #else
 
-#include <concepts>
-#include <type_traits>
+#include <boost/config/std/concepts.hpp>
+#include <boost/config/std/type_traits.hpp>
 
 using T = std::common_reference_t< boost::core::string_view&&, std::string& >;
 

@@ -10,7 +10,7 @@
 
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/noncopyable.hpp>
-#include <ostream>
+#include <boost/config/std/ostream.hpp>
 
 // EQ
 

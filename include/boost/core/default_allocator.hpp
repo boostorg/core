@@ -8,13 +8,23 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_DEFAULT_ALLOCATOR_HPP
 #define BOOST_CORE_DEFAULT_ALLOCATOR_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
-#include <new>
-#include <cstddef>
+#include <boost/config/std/new.hpp>
+#include <boost/config/std/cstddef.hpp>
 
 namespace boost {
 
-#if defined(BOOST_NO_EXCEPTIONS)
+// Avoid throw_exception from being attached to Boost.Core in module builds
+#if defined(BOOST_NO_EXCEPTIONS) && !defined(BOOST_USE_MODULES)
 BOOST_NORETURN void throw_exception(const std::exception&);
 #endif
 
@@ -54,7 +64,7 @@ struct add_reference<const void> {
     typedef const void type;
 };
 
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 struct default_allocator {
     typedef T value_type;
     typedef T* pointer;
@@ -134,7 +144,7 @@ struct default_allocator {
 #endif
 };
 
-template<class T, class U>
+BOOST_CORE_MODULE_EXPORT template<class T, class U>
 BOOST_CONSTEXPR inline bool
 operator==(const default_allocator<T>&,
     const default_allocator<U>&) BOOST_NOEXCEPT
@@ -142,7 +152,7 @@ operator==(const default_allocator<T>&,
     return true;
 }
 
-template<class T, class U>
+BOOST_CORE_MODULE_EXPORT template<class T, class U>
 BOOST_CONSTEXPR inline bool
 operator!=(const default_allocator<T>&,
     const default_allocator<U>&) BOOST_NOEXCEPT
@@ -152,8 +162,10 @@ operator!=(const default_allocator<T>&,
 
 } /* default_ */
 
-using default_::default_allocator;
+BOOST_CORE_MODULE_EXPORT using default_::default_allocator;
 
 } /* boost */
+
+#endif
 
 #endif

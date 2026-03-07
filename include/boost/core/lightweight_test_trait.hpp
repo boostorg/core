@@ -20,17 +20,29 @@
 // See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt
 
+// Make the header safe to include from libraries supporting modules
+#if defined(BOOST_IN_MODULE_PURVIEW) && !defined(BOOST_CORE_LIGHTWEIGHT_TEST_TRAIT_HPP) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#  error "Please #include <boost/core/lightweight_test_trait.hpp> in your module global fragment"
+#endif
+
+// Subset of includes required for exported macros
 #include <boost/core/lightweight_test.hpp>
+#include <boost/config.hpp>
+
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+// Note that we're guaranteed to not be in a purview here
+import boost.core;
+#else
+
 #include <boost/core/type_name.hpp>
 #include <boost/core/detail/is_same.hpp>
-#include <boost/config.hpp>
 
 namespace boost
 {
 namespace detail
 {
 
-template< class T > inline void test_trait_impl( char const * trait, void (*)( T ),
+BOOST_CORE_MODULE_EXPORT template< class T > inline void test_trait_impl( char const * trait, void (*)( T ),
   bool expected, char const * file, int line, char const * function )
 {
     if( T::value == expected )
@@ -50,12 +62,12 @@ template< class T > inline void test_trait_impl( char const * trait, void (*)( T
     }
 }
 
-template<class T> inline bool test_trait_same_impl_( T )
+BOOST_CORE_MODULE_EXPORT template<class T> inline bool test_trait_same_impl_( T )
 {
     return T::value;
 }
 
-template<class T1, class T2> inline void test_trait_same_impl( char const * types,
+BOOST_CORE_MODULE_EXPORT template<class T1, class T2> inline void test_trait_same_impl( char const * types,
   boost::core::detail::is_same<T1, T2> same, char const * file, int line, char const * function )
 {
     if( test_trait_same_impl_( same ) )
@@ -77,6 +89,11 @@ template<class T1, class T2> inline void test_trait_same_impl( char const * type
 
 } // namespace detail
 } // namespace boost
+
+#endif // defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+// Macros should be defined by this header regardless of whether
+// modules are being used or not
 
 #define BOOST_TEST_TRAIT_TRUE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, true, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )
 #define BOOST_TEST_TRAIT_FALSE(type) ( ::boost::detail::test_trait_impl(#type, (void(*)type)0, false, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION) )

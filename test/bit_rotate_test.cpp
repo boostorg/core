@@ -8,7 +8,7 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/core/detail/splitmix64.hpp>
 #include <boost/cstdint.hpp>
-#include <limits>
+#include <boost/config/std/limits.hpp>
 
 int const M = 256;
 

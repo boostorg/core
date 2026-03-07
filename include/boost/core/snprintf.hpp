@@ -13,6 +13,11 @@
  *         as well as \c wchar_t counterparts.
  */
 
+// Make the header safe to include from libraries supporting modules
+#if defined(BOOST_IN_MODULE_PURVIEW) && !defined(BOOST_CORE_SNPRINTF_HPP_INCLUDED_)
+#  error "Please #include <boost/core/snprintf.hpp> in your module global fragment"
+#endif
+
 #ifndef BOOST_CORE_SNPRINTF_HPP_INCLUDED_
 #define BOOST_CORE_SNPRINTF_HPP_INCLUDED_
 

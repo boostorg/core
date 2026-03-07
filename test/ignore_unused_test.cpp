@@ -5,6 +5,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/core/ignore_unused.hpp>
+#include <boost/config.hpp>
 
 BOOST_CXX14_CONSTEXPR int test_fun(int a)
 {

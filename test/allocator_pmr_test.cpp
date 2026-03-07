@@ -12,7 +12,7 @@
 #include <boost/config.hpp>
 
 #ifndef BOOST_NO_CXX17_HDR_MEMORY_RESOURCE
-#include <memory_resource>
+#include <boost/config/std/memory_resource.hpp>
 
 void pmr_allocator_destroy_compiles(std::pmr::polymorphic_allocator<int>& alloc, int* p)
 {

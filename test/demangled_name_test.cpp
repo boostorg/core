@@ -9,7 +9,7 @@
 //
 
 #include <boost/core/typeinfo.hpp>
-#include <iostream>
+#include <boost/config/std/iostream.hpp>
 
 template<class T1, class T2> struct Y1
 {

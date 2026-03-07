@@ -4,15 +4,25 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_TYPE_DWA20010120_HPP
-# define BOOST_TYPE_DWA20010120_HPP
+#define BOOST_TYPE_DWA20010120_HPP
+
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 
 namespace boost {
 
   // Just a simple "type envelope". Useful in various contexts, mostly to work
   // around some MSVC deficiencies.
-  template <class T>
+  BOOST_CORE_MODULE_EXPORT template <class T>
   struct type {};
 
 }
+
+#endif
 
 #endif // BOOST_TYPE_DWA20010120_HPP

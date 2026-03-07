@@ -12,7 +12,7 @@
 #else
 
 #include <boost/config.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
 
 namespace boost
 {

@@ -16,14 +16,21 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
-#include <cmath>
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
+#include <boost/config/std/cmath.hpp>
 
 #if defined(BOOST_CORE_USE_GENERIC_CMATH) || (!defined(_MSC_VER) && !defined(FP_SUBNORMAL))
 
 #include <boost/core/detail/static_assert.hpp>
 #include <boost/cstdint.hpp>
-#include <limits>
-#include <cstring>
+#include <boost/config/std/limits.hpp>
+#include <boost/config/std/cstring.hpp>
 
 namespace boost
 {
@@ -32,35 +39,35 @@ namespace core
 
 // fpclassify return values
 
-int const fp_zero = 0;
-int const fp_subnormal = 1;
-int const fp_normal = 2;
-int const fp_infinite = 3;
-int const fp_nan = 4;
+BOOST_CORE_MODULE_EXPORT int const fp_zero = 0;
+BOOST_CORE_MODULE_EXPORT int const fp_subnormal = 1;
+BOOST_CORE_MODULE_EXPORT int const fp_normal = 2;
+BOOST_CORE_MODULE_EXPORT int const fp_infinite = 3;
+BOOST_CORE_MODULE_EXPORT int const fp_nan = 4;
 
 // Classification functions
 
-template<class T> bool isfinite( T x )
+BOOST_CORE_MODULE_EXPORT template<class T> bool isfinite( T x )
 {
     return x <= (std::numeric_limits<T>::max)() && x >= -(std::numeric_limits<T>::max)();
 }
 
-template<class T> bool isinf( T x )
+BOOST_CORE_MODULE_EXPORT template<class T> bool isinf( T x )
 {
     return x > (std::numeric_limits<T>::max)() || x < -(std::numeric_limits<T>::max)();
 }
 
-template<class T> bool isnan( T x )
+BOOST_CORE_MODULE_EXPORT template<class T> bool isnan( T x )
 {
     return !isfinite( x ) && !isinf( x );
 }
 
-template<class T> bool isnormal( T x )
+BOOST_CORE_MODULE_EXPORT template<class T> bool isnormal( T x )
 {
     return isfinite( x ) && ( x >= (std::numeric_limits<T>::min)() || x <= -(std::numeric_limits<T>::min)() );
 }
 
-template<class T> int fpclassify( T x )
+BOOST_CORE_MODULE_EXPORT template<class T> int fpclassify( T x )
 {
     if( x == 0 ) return fp_zero;
 
@@ -77,7 +84,7 @@ template<class T> int fpclassify( T x )
 
 // Sign manipulation functions
 
-inline bool signbit( float x )
+BOOST_CORE_MODULE_EXPORT inline bool signbit( float x )
 {
     boost::int32_t y;
 
@@ -88,7 +95,7 @@ inline bool signbit( float x )
     return y < 0;
 }
 
-inline bool signbit( double x )
+BOOST_CORE_MODULE_EXPORT inline bool signbit( double x )
 {
     boost::int64_t y;
 
@@ -99,12 +106,12 @@ inline bool signbit( double x )
     return y < 0;
 }
 
-inline bool signbit( long double x )
+BOOST_CORE_MODULE_EXPORT inline bool signbit( long double x )
 {
     return signbit( static_cast<double>( x ) );
 }
 
-template<class T> T copysign( T x, T y )
+BOOST_CORE_MODULE_EXPORT template<class T> T copysign( T x, T y )
 {
     return signbit( x ) == signbit( y )? x: -x;
 }
@@ -115,6 +122,11 @@ template<class T> T copysign( T x, T y )
 #else // defined(BOOST_CORE_USE_GENERIC_CMATH)
 
 #if defined(_MSC_VER) && _MSC_VER < 1800
+// This MSVC version shouldn't support modules.
+// Guard the include, just in case.
+# ifdef BOOST_USE_MODULES
+#   error "Your compiler is not supported with BOOST_USE_MODULES"
+# endif
 # include <float.h>
 #endif
 
@@ -235,25 +247,25 @@ inline int fpclassify( long double x )
 
 #else
 
-using std::isfinite;
-using std::isnan;
-using std::isinf;
-using std::isnormal;
-using std::fpclassify;
+BOOST_CORE_MODULE_EXPORT using std::isfinite;
+BOOST_CORE_MODULE_EXPORT using std::isnan;
+BOOST_CORE_MODULE_EXPORT using std::isinf;
+BOOST_CORE_MODULE_EXPORT using std::isnormal;
+BOOST_CORE_MODULE_EXPORT using std::fpclassify;
 
-int const fp_zero = FP_ZERO;
-int const fp_subnormal = FP_SUBNORMAL;
-int const fp_normal = FP_NORMAL;
-int const fp_infinite = FP_INFINITE;
-int const fp_nan = FP_NAN;
+BOOST_CORE_MODULE_EXPORT int const fp_zero = FP_ZERO;
+BOOST_CORE_MODULE_EXPORT int const fp_subnormal = FP_SUBNORMAL;
+BOOST_CORE_MODULE_EXPORT int const fp_normal = FP_NORMAL;
+BOOST_CORE_MODULE_EXPORT int const fp_infinite = FP_INFINITE;
+BOOST_CORE_MODULE_EXPORT int const fp_nan = FP_NAN;
 
-using std::signbit;
+BOOST_CORE_MODULE_EXPORT using std::signbit;
 
 // std::copysign doesn't exist in libstdc++ under -std=c++03
 
 #if !defined(__GNUC__)
 
-template<class T> T copysign( T x, T y )
+BOOST_CORE_MODULE_EXPORT template<class T> T copysign( T x, T y )
 {
     return std::copysign( x, y );
 }
@@ -282,7 +294,7 @@ inline long double copysign_impl( long double x, long double y )
 
 } // namespace detail
 
-template<class T> T copysign( T x, T y )
+BOOST_CORE_MODULE_EXPORT template<class T> T copysign( T x, T y )
 {
     return boost::core::detail::copysign_impl( x, y );
 }
@@ -294,5 +306,7 @@ template<class T> T copysign( T x, T y )
 } // namespace boost
 
 #endif // defined(BOOST_CORE_USE_GENERIC_CMATH)
+
+#endif
 
 #endif  // #ifndef BOOST_CORE_CMATH_HPP_INCLUDED

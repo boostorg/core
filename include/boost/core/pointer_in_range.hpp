@@ -9,7 +9,6 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_POINTER_IN_RANGE_HPP
 
 #include <boost/config.hpp>
-#include <functional>
 
 #if !defined(BOOST_NO_CXX14_CONSTEXPR)
 #if defined(BOOST_MSVC) && BOOST_MSVC >= 1925
@@ -25,9 +24,18 @@ Distributed under the Boost Software License, Version 1.0.
 #define BOOST_CORE_NO_CONSTEXPR_POINTER_IN_RANGE
 #endif
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
+#include <boost/config/std/functional.hpp>
+
 namespace boost {
 
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 inline BOOST_CONSTEXPR bool
 pointer_in_range(const T* p, const T* b, const T* e)
 {
@@ -45,5 +53,7 @@ pointer_in_range(const T* p, const T* b, const T* e)
 }
 
 } /* boost */
+
+#endif // defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
 
 #endif

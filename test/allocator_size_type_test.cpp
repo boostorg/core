@@ -5,6 +5,18 @@ Copyright 2020 Glen Joseph Fernandes
 Distributed under the Boost Software License, Version 1.0.
 (http://www.boost.org/LICENSE_1_0.txt)
 */
+
+#ifdef BOOST_USE_MODULES
+
+import std.compat;
+
+int main()
+{
+    printf("This test depends on Boost.TypeTraits and can't be run with C++20 modules yet\n");
+}
+
+#else
+
 #include <boost/core/allocator_access.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -36,3 +48,5 @@ int main()
 #endif
     return boost::report_errors();
 }
+
+#endif

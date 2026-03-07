@@ -14,8 +14,8 @@
 //Put test class in the global namespace
 #include "./swap_test_class.hpp"
 
-#include <algorithm> //for std::copy and std::equal
-#include <cstddef> //for std::size_t
+#include <boost/config/std/algorithm.hpp>  //for std::copy and std::equal
+#include <boost/config/std/cstddef.hpp> //for std::size_t
 
 #if defined(__clang__)
 # pragma clang diagnostic ignored "-Wunused-function"

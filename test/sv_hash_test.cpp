@@ -2,11 +2,22 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#ifdef BOOST_USE_MODULES
+
+import std.compat;
+
+int main()
+{
+    printf("This test depends on Boost.ContainerHash and can't be run with C++20 modules yet\n");
+}
+
+#else
+
 #include <boost/core/detail/string_view.hpp>
 #include <boost/container_hash/hash.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/config.hpp>
-#include <string>
+#include <boost/config/std/string.hpp>
 
 template<class T> std::size_t hv( T const& t )
 {
@@ -46,3 +57,5 @@ int main()
 
     return boost::report_errors();
 }
+
+#endif

@@ -9,6 +9,15 @@
 // derived from Sebastiano Vigna's public domain implementation
 // http://xorshift.di.unimi.it/splitmix64.c
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/cstdint.hpp>
 
 namespace boost
@@ -16,6 +25,7 @@ namespace boost
 namespace detail
 {
 
+BOOST_CORE_MODULE_EXPORT
 class splitmix64
 {
 private:
@@ -24,15 +34,15 @@ private:
 
 public:
 
-    splitmix64(): x_( 0 )
+    inline splitmix64(): x_( 0 )
     {
     }
 
-    explicit splitmix64( boost::uint64_t seed ): x_( seed )
+    inline explicit splitmix64( boost::uint64_t seed ): x_( seed )
     {
     }
 
-    boost::uint64_t operator()()
+    inline boost::uint64_t operator()()
     {
         x_ += ( boost::uint64_t(0x9e3779b9u) << 32 ) + 0x7f4a7c15u;
 
@@ -50,5 +60,7 @@ public:
 
 } // namespace detail
 } // namespace boost
+
+#endif
 
 #endif // #ifndef BOOST_CORE_DETAIL_SPLITMIX64_HPP_INCLUDED

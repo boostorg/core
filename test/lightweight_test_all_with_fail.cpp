@@ -8,9 +8,9 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <cmath>
-#include <functional>
-#include <vector>
+#include <boost/config/std/cmath.hpp>
+#include <boost/config/std/functional.hpp>
+#include <boost/config/std/vector.hpp>
 #include <boost/core/lightweight_test.hpp>
 
 int fail_vector()

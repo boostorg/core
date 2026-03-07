@@ -4,12 +4,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#include <cfloat> // floating-point macros. Should appear before anything that might import std
 #include <boost/core/cmath.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
-#include <limits>
-#include <cfloat>
+#include <boost/config/std/limits.hpp>
 
 template<class T> void test_positive_normal( T x )
 {

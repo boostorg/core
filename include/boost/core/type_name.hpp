@@ -7,24 +7,33 @@
 # pragma once
 #endif
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+
+#else
+
 // std::string boost::core::type_name<T>()
 //
 // Copyright 2021 Peter Dimov
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#include <boost/core/detail/modules.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/config.hpp>
-#include <string>
-#include <functional>
-#include <memory>
-#include <utility>
-#include <cstdio>
-#include <cstddef>
-#include <cstring>
-#include <iosfwd>
+#include <boost/config/std/string.hpp>
+#include <boost/config/std/functional.hpp>
+#include <boost/config/std/memory.hpp>
+#include <boost/config/std/utility.hpp>
+#include <boost/config/std/cstdio.hpp>
+#include <boost/config/std/cstddef.hpp>
+#include <boost/config/std/cstring.hpp>
+#include <boost/config/std/iosfwd.hpp>
 #if !defined(BOOST_NO_CXX17_HDR_STRING_VIEW)
-# include <string_view>
+# include <boost/config/std/string_view.hpp>
 #endif
 
 namespace boost
@@ -232,7 +241,7 @@ template<class T> struct tn_holder
 
 template<> struct tn_holder<bool>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "bool" + suffix;
     }
@@ -240,7 +249,7 @@ template<> struct tn_holder<bool>
 
 template<> struct tn_holder<char>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "char" + suffix;
     }
@@ -248,7 +257,7 @@ template<> struct tn_holder<char>
 
 template<> struct tn_holder<signed char>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "signed char" + suffix;
     }
@@ -256,7 +265,7 @@ template<> struct tn_holder<signed char>
 
 template<> struct tn_holder<unsigned char>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "unsigned char" + suffix;
     }
@@ -264,7 +273,7 @@ template<> struct tn_holder<unsigned char>
 
 template<> struct tn_holder<short>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "short" + suffix;
     }
@@ -272,7 +281,7 @@ template<> struct tn_holder<short>
 
 template<> struct tn_holder<unsigned short>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "unsigned short" + suffix;
     }
@@ -280,7 +289,7 @@ template<> struct tn_holder<unsigned short>
 
 template<> struct tn_holder<int>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "int" + suffix;
     }
@@ -288,7 +297,7 @@ template<> struct tn_holder<int>
 
 template<> struct tn_holder<unsigned>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "unsigned" + suffix;
     }
@@ -296,7 +305,7 @@ template<> struct tn_holder<unsigned>
 
 template<> struct tn_holder<long>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "long" + suffix;
     }
@@ -304,7 +313,7 @@ template<> struct tn_holder<long>
 
 template<> struct tn_holder<unsigned long>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "unsigned long" + suffix;
     }
@@ -312,7 +321,7 @@ template<> struct tn_holder<unsigned long>
 
 template<> struct tn_holder<boost::long_long_type>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "long long" + suffix;
     }
@@ -320,7 +329,7 @@ template<> struct tn_holder<boost::long_long_type>
 
 template<> struct tn_holder<boost::ulong_long_type>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "unsigned long long" + suffix;
     }
@@ -330,7 +339,7 @@ template<> struct tn_holder<boost::ulong_long_type>
 
 template<> struct tn_holder<boost::int128_type>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "__int128" + suffix;
     }
@@ -338,7 +347,7 @@ template<> struct tn_holder<boost::int128_type>
 
 template<> struct tn_holder<boost::uint128_type>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "unsigned __int128" + suffix;
     }
@@ -350,7 +359,7 @@ template<> struct tn_holder<boost::uint128_type>
 
 template<> struct tn_holder<wchar_t>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "wchar_t" + suffix;
     }
@@ -362,7 +371,7 @@ template<> struct tn_holder<wchar_t>
 
 template<> struct tn_holder<char16_t>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "char16_t" + suffix;
     }
@@ -374,7 +383,7 @@ template<> struct tn_holder<char16_t>
 
 template<> struct tn_holder<char32_t>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "char32_t" + suffix;
     }
@@ -386,7 +395,7 @@ template<> struct tn_holder<char32_t>
 
 template<> struct tn_holder<char8_t>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "char8_t" + suffix;
     }
@@ -398,7 +407,7 @@ template<> struct tn_holder<char8_t>
 
 template<> struct tn_holder<std::byte>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::byte" + suffix;
     }
@@ -410,7 +419,7 @@ template<> struct tn_holder<std::byte>
 
 template<> struct tn_holder<float>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "float" + suffix;
     }
@@ -418,7 +427,7 @@ template<> struct tn_holder<float>
 
 template<> struct tn_holder<double>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "double" + suffix;
     }
@@ -426,7 +435,7 @@ template<> struct tn_holder<double>
 
 template<> struct tn_holder<long double>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "long double" + suffix;
     }
@@ -436,7 +445,7 @@ template<> struct tn_holder<long double>
 
 template<> struct tn_holder<void>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "void" + suffix;
     }
@@ -448,7 +457,7 @@ template<> struct tn_holder<void>
 
 template<> struct tn_holder<std::nullptr_t>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::nullptr_t" + suffix;
     }
@@ -460,7 +469,7 @@ template<> struct tn_holder<std::nullptr_t>
 
 template<class T> struct tn_holder<T const>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return tn_holder<T>::type_name( " const" + suffix );
     }
@@ -468,7 +477,7 @@ template<class T> struct tn_holder<T const>
 
 template<class T> struct tn_holder<T volatile>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return tn_holder<T>::type_name( " volatile" + suffix );
     }
@@ -476,7 +485,7 @@ template<class T> struct tn_holder<T volatile>
 
 template<class T> struct tn_holder<T const volatile>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return tn_holder<T>::type_name( " const volatile" + suffix );
     }
@@ -486,7 +495,7 @@ template<class T> struct tn_holder<T const volatile>
 
 template<class T> struct tn_holder<T&>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return tn_holder<T>::type_name( "&" + suffix );
     }
@@ -496,7 +505,7 @@ template<class T> struct tn_holder<T&>
 
 template<class T> struct tn_holder<T&&>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return tn_holder<T>::type_name( "&&" + suffix );
     }
@@ -940,7 +949,7 @@ template<template<class Ch, class Tr, class A> class L, class Ch> struct tn_hold
 
 template<> struct tn_holder<std::string>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::string" + suffix;
     }
@@ -948,7 +957,7 @@ template<> struct tn_holder<std::string>
 
 template<> struct tn_holder<std::wstring>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::wstring" + suffix;
     }
@@ -958,7 +967,7 @@ template<> struct tn_holder<std::wstring>
 
 template<> struct tn_holder<std::u16string>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::u16string" + suffix;
     }
@@ -970,7 +979,7 @@ template<> struct tn_holder<std::u16string>
 
 template<> struct tn_holder<std::u32string>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::u32string" + suffix;
     }
@@ -982,7 +991,7 @@ template<> struct tn_holder<std::u32string>
 
 template<> struct tn_holder< std::basic_string<char8_t> >
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::u8string" + suffix;
     }
@@ -1004,7 +1013,7 @@ template<template<class Ch, class Tr> class L, class Ch> struct tn_holder< L<Ch,
 // needed for libstdc++
 template<> struct tn_holder<std::ostream>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::ostream" + suffix;
     }
@@ -1014,7 +1023,7 @@ template<> struct tn_holder<std::ostream>
 
 template<> struct tn_holder<std::string_view>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::string_view" + suffix;
     }
@@ -1022,7 +1031,7 @@ template<> struct tn_holder<std::string_view>
 
 template<> struct tn_holder<std::wstring_view>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::wstring_view" + suffix;
     }
@@ -1032,7 +1041,7 @@ template<> struct tn_holder<std::wstring_view>
 
 template<> struct tn_holder<std::u16string_view>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::u16string_view" + suffix;
     }
@@ -1044,7 +1053,7 @@ template<> struct tn_holder<std::u16string_view>
 
 template<> struct tn_holder<std::u32string_view>
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::u32string_view" + suffix;
     }
@@ -1056,7 +1065,7 @@ template<> struct tn_holder<std::u32string_view>
 
 template<> struct tn_holder< std::basic_string_view<char8_t> >
 {
-    static std::string type_name( std::string const& suffix )
+    static inline std::string type_name( std::string const& suffix )
     {
         return "std::u8string_view" + suffix;
     }
@@ -1175,12 +1184,14 @@ template<template<class T, std::size_t N> class L, class T, std::size_t N> struc
 
 } // namespace detail
 
-template<class T> std::string type_name()
+BOOST_CORE_MODULE_EXPORT template<class T> std::string type_name()
 {
     return core::detail::tn_holder<T>::type_name( "" );
 }
 
 } // namespace core
 } // namespace boost
+
+#endif
 
 #endif  // #ifndef BOOST_CORE_TYPE_NAME_HPP_INCLUDED

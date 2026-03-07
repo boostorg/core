@@ -10,7 +10,7 @@
 
 #include <boost/core/typeinfo.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <iostream>
+#include <boost/config/std/iostream.hpp>
 
 int main()
 {

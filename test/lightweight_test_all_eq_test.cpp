@@ -8,8 +8,8 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
-#include <vector>
-#include <set>
+#include <boost/config/std/vector.hpp>
+#include <boost/config/std/set.hpp>
 #include <boost/core/lightweight_test.hpp>
 
 int main()

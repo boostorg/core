@@ -4,7 +4,7 @@
 
 #include <boost/core/detail/string_view.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <stdexcept>
+#include <boost/config/std/stdexcept.hpp>
 
 int main()
 {

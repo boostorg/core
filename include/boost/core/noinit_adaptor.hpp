@@ -8,11 +8,18 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_NOINIT_ADAPTOR_HPP
 #define BOOST_CORE_NOINIT_ADAPTOR_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/core/allocator_access.hpp>
 
 namespace boost {
 
-template<class A>
+BOOST_CORE_MODULE_EXPORT template<class A>
 struct noinit_adaptor
     : A {
     typedef void _default_construct_destroy;
@@ -62,7 +69,7 @@ struct noinit_adaptor
     }
 };
 
-template<class T, class U>
+BOOST_CORE_MODULE_EXPORT template<class T, class U>
 inline bool
 operator==(const noinit_adaptor<T>& lhs,
     const noinit_adaptor<U>& rhs) BOOST_NOEXCEPT
@@ -70,7 +77,7 @@ operator==(const noinit_adaptor<T>& lhs,
     return static_cast<const T&>(lhs) == static_cast<const U&>(rhs);
 }
 
-template<class T, class U>
+BOOST_CORE_MODULE_EXPORT template<class T, class U>
 inline bool
 operator!=(const noinit_adaptor<T>& lhs,
     const noinit_adaptor<U>& rhs) BOOST_NOEXCEPT
@@ -78,7 +85,7 @@ operator!=(const noinit_adaptor<T>& lhs,
     return !(lhs == rhs);
 }
 
-template<class A>
+BOOST_CORE_MODULE_EXPORT template<class A>
 inline noinit_adaptor<A>
 noinit_adapt(const A& a) BOOST_NOEXCEPT
 {
@@ -86,5 +93,7 @@ noinit_adapt(const A& a) BOOST_NOEXCEPT
 }
 
 } /* boost */
+
+#endif
 
 #endif

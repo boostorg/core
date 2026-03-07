@@ -8,9 +8,16 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_EMPTY_VALUE_HPP
 #define BOOST_CORE_EMPTY_VALUE_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-#include <utility>
+#include <boost/config/std/utility.hpp>
 #endif
 
 #if defined(BOOST_GCC_VERSION) && (BOOST_GCC_VERSION >= 40700)
@@ -43,11 +50,11 @@ struct use_empty_value_base {
     };
 };
 
-struct empty_init_t { };
+BOOST_CORE_MODULE_EXPORT struct empty_init_t { };
 
 namespace empty_ {
 
-template<class T, unsigned N = 0,
+BOOST_CORE_MODULE_EXPORT template<class T, unsigned N = 0,
     bool E = boost::use_empty_value_base<T>::value>
 class empty_value {
 public:
@@ -190,14 +197,16 @@ public:
 
 } /* empty_ */
 
-using empty_::empty_value;
+BOOST_CORE_MODULE_EXPORT using empty_::empty_value;
 
-BOOST_INLINE_CONSTEXPR empty_init_t empty_init = empty_init_t();
+BOOST_CORE_MODULE_EXPORT BOOST_INLINE_CONSTEXPR empty_init_t empty_init = empty_init_t();
 
 } /* boost */
 
 #if defined(_MSC_VER)
 #pragma warning(pop)
+#endif
+
 #endif
 
 #endif

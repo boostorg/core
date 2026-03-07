@@ -2,11 +2,22 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#ifdef BOOST_USE_MODULES
+
+import std.compat;
+
+int main()
+{
+    printf("This test depends on Boost.TypeTraits and can't be run with C++20 modules yet\n");
+}
+
+#else
+
 #include <boost/core/max_align.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/config.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
 
 #if defined(BOOST_LIBSTDCXX_VERSION) && BOOST_LIBSTDCXX_VERSION < 40900
 # define BOOST_NO_STD_MAX_ALIGN_T
@@ -61,3 +72,5 @@ int main()
 
     return boost::report_errors();
 }
+
+#endif

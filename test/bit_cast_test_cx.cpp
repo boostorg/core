@@ -14,7 +14,8 @@
 
 BOOST_PRAGMA_MESSAGE( "Test skipped because BOOST_NO_CXX11_CONSTEXPR is defined" )
 
-#elif !defined(BOOST_CORE_HAS_BUILTIN_BIT_CAST)
+// BOOST_CORE_HAS_BUILTIN_BIT_CAST is not public, but should be defined in every compiler that supports BOOST_USE_MODULES
+#elif !defined(BOOST_CORE_HAS_BUILTIN_BIT_CAST) && !defined(BOOST_USE_MODULES)
 
 BOOST_PRAGMA_MESSAGE( "Test skipped because BOOST_CORE_HAS_BUILTIN_BIT_CAST is not defined" )
 

@@ -14,6 +14,17 @@ http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_CORE_ADDRESSOF_HPP
 #define BOOST_CORE_ADDRESSOF_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+
+#else
+
+// RP TODO: BOOST_CORE_HAS_BUILTIN_ADDRESSOF
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 
 #if defined(BOOST_MSVC_FULL_VER) && BOOST_MSVC_FULL_VER >= 190024215
@@ -33,7 +44,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 namespace boost {
 
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 BOOST_CONSTEXPR inline T*
 addressof(T& o) BOOST_NOEXCEPT
 {
@@ -43,7 +54,7 @@ addressof(T& o) BOOST_NOEXCEPT
 } /* boost */
 #else
 #include <boost/config/workaround.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
 
 namespace boost {
 namespace detail {
@@ -143,7 +154,7 @@ struct addrof_result {
 
 } /* detail */
 
-template<class T, std::size_t N>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t N>
 BOOST_FORCEINLINE typename boost::detail::addrof_result<T[N]>::type
 addressof(T (&o)[N]) BOOST_NOEXCEPT
 {
@@ -152,14 +163,14 @@ addressof(T (&o)[N]) BOOST_NOEXCEPT
 #endif
 
 #if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x564))
-template<class T, std::size_t N>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t N>
 BOOST_FORCEINLINE
 T (*addressof(T (&o)[N]) BOOST_NOEXCEPT)[N]
 {
    return reinterpret_cast<T(*)[N]>(&o);
 }
 
-template<class T, std::size_t N>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t N>
 BOOST_FORCEINLINE
 const T (*addressof(const T (&o)[N]) BOOST_NOEXCEPT)[N]
 {
@@ -250,7 +261,7 @@ addressof(T& o) BOOST_NOEXCEPT
 
 } /* detail */
 
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 constexpr BOOST_FORCEINLINE T*
 addressof(T& o) BOOST_NOEXCEPT
 {
@@ -265,10 +276,12 @@ addressof(T& o) BOOST_NOEXCEPT
     !defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
 namespace boost {
 
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 const T* addressof(const T&&) = delete;
 
 } /* boost */
+#endif
+
 #endif
 
 #endif

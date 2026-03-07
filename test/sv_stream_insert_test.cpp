@@ -4,8 +4,8 @@
 
 #include <boost/core/detail/string_view.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <sstream>
-#include <iomanip>
+#include <boost/config/std/sstream.hpp>
+#include <boost/config/std/iomanip.hpp>
 
 int main()
 {

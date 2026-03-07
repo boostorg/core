@@ -19,6 +19,13 @@
 #ifndef BOOST_CORE_NULL_DELETER_HPP
 #define BOOST_CORE_NULL_DELETER_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
@@ -31,7 +38,7 @@ namespace boost {
 namespace null_deleter_ns {
 
 //! A function object that does nothing and can be used as an empty deleter for \c shared_ptr
-struct null_deleter
+BOOST_CORE_MODULE_EXPORT struct null_deleter
 {
     //! Function object result type
     typedef void result_type;
@@ -44,8 +51,10 @@ struct null_deleter
 
 } // namespace null_deleter_ns
 
-using null_deleter_ns::null_deleter;
+BOOST_CORE_MODULE_EXPORT using null_deleter_ns::null_deleter;
 
 } // namespace boost
+
+#endif
 
 #endif // BOOST_CORE_NULL_DELETER_HPP

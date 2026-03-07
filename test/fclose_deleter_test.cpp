@@ -12,6 +12,17 @@
  * This file contains tests for \c boost::fclose_deleter.
  */
 
+#ifdef BOOST_USE_MODULES
+
+import std.compat;
+
+int main()
+{
+    printf("This test depends on Boost.SmartPtr and can't be run with C++20 modules yet\n");
+}
+
+#else
+
 #include <boost/core/fclose_deleter.hpp>
 #include <cstdio>
 #include <cstddef>
@@ -71,3 +82,5 @@ int main()
 
     std::remove(filename);
 }
+
+#endif

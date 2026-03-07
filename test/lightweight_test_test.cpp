@@ -15,7 +15,7 @@
 #endif
 
 #include <boost/core/lightweight_test.hpp>
-#include <vector>
+#include <boost/config/std/vector.hpp>
 
 struct X
 {

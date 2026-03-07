@@ -14,8 +14,8 @@ int main() {}
 
 #else
 
-#include <format>
-#include <string_view>
+#include <boost/config/std/format.hpp>
+#include <boost/config/std/string_view.hpp>
 
 int main()
 {

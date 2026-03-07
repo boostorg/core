@@ -7,10 +7,10 @@ Distributed under the Boost Software License, Version 1.0.
 */
 #include <boost/core/identity.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <vector>
+#include <boost/config/std/algorithm.hpp>
+#include <boost/config/std/iterator.hpp>
+#include <boost/config/std/string.hpp>
+#include <boost/config/std/vector.hpp>
 
 bool test(std::string&)
 {

@@ -2,10 +2,18 @@
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef GET_POINTER_DWA20021219_HPP
 #define GET_POINTER_DWA20021219_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
 #include <boost/config.hpp>
+#include <boost/core/detail/modules.hpp>
 
 // In order to avoid circular dependencies with Boost.TR1
 // we make sure that our include of <memory> doesn't try to
@@ -17,7 +25,7 @@ namespace boost {
 
 // get_pointer(p) extracts a ->* capable pointer from p
 
-template<class T> T * get_pointer(T * p)
+BOOST_CORE_MODULE_EXPORT template<class T> T * get_pointer(T * p)
 {
     return p;
 }
@@ -45,7 +53,7 @@ template<class T> T * get_pointer(T * p)
 #define BOOST_CORE_DETAIL_DISABLED_DEPRECATED_WARNINGS
 #endif
 
-template<class T> T * get_pointer(std::auto_ptr<T> const& p)
+BOOST_CORE_MODULE_EXPORT template<class T> T * get_pointer(std::auto_ptr<T> const& p)
 {
     return p.get();
 }
@@ -59,12 +67,12 @@ template<class T> T * get_pointer(std::auto_ptr<T> const& p)
 
 #if !defined( BOOST_NO_CXX11_SMART_PTR )
 
-template<class T> T * get_pointer( std::unique_ptr<T> const& p )
+BOOST_CORE_MODULE_EXPORT template<class T> T * get_pointer( std::unique_ptr<T> const& p )
 {
     return p.get();
 }
 
-template<class T> T * get_pointer( std::shared_ptr<T> const& p )
+BOOST_CORE_MODULE_EXPORT template<class T> T * get_pointer( std::shared_ptr<T> const& p )
 {
     return p.get();
 }
@@ -72,5 +80,7 @@ template<class T> T * get_pointer( std::shared_ptr<T> const& p )
 #endif
 
 } // namespace boost
+
+#endif
 
 #endif // GET_POINTER_DWA20021219_HPP

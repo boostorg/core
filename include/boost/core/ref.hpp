@@ -1,6 +1,13 @@
 #ifndef BOOST_CORE_REF_HPP
 #define BOOST_CORE_REF_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
 #include <boost/core/addressof.hpp>
@@ -78,7 +85,7 @@ struct ref_empty
  usually allows the function templates to work on references
  unmodified.
 */
-template<class T> class reference_wrapper
+BOOST_CORE_MODULE_EXPORT template<class T> class reference_wrapper
 {
 public:
     /**
@@ -172,7 +179,7 @@ private:
  @return `reference_wrapper<T>(t)`
  @remark Does not throw.
 */
-template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T & t ) BOOST_NOEXCEPT
+BOOST_CORE_MODULE_EXPORT template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T & t ) BOOST_NOEXCEPT
 {
 #if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, == 1600 )
 
@@ -191,7 +198,7 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T> BOOST_REF_CONST ref( T 
  @return `reference_wrapper<T const>(t)`
  @remark Does not throw.
 */
-template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( T const & t ) BOOST_NOEXCEPT
+BOOST_CORE_MODULE_EXPORT template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST cref( T const & t ) BOOST_NOEXCEPT
 {
     return reference_wrapper<T const>(t);
 }
@@ -215,12 +222,12 @@ template<class T> BOOST_FORCEINLINE reference_wrapper<T const> BOOST_REF_CONST c
 /**
  @remark Construction from a temporary object is disabled.
 */
-template<class T> void ref(T const&&) BOOST_REF_DELETE;
+BOOST_CORE_MODULE_EXPORT template<class T> void ref(T const&&) BOOST_REF_DELETE;
 
 /**
  @remark Construction from a temporary object is disabled.
 */
-template<class T> void cref(T const&&) BOOST_REF_DELETE;
+BOOST_CORE_MODULE_EXPORT template<class T> void cref(T const&&) BOOST_REF_DELETE;
 
 #undef BOOST_REF_DELETE
 
@@ -235,7 +242,7 @@ template<class T> void cref(T const&&) BOOST_REF_DELETE;
  The value static constant will be true if the type `T` is a
  specialization of `reference_wrapper`.
 */
-template<typename T> struct is_reference_wrapper
+BOOST_CORE_MODULE_EXPORT template<typename T> struct is_reference_wrapper
 {
     BOOST_STATIC_CONSTANT( bool, value = false );
 };
@@ -280,7 +287,7 @@ template<typename T> struct is_reference_wrapper< reference_wrapper<T> const vol
  The `typedef` type is `T::type` if `T` is a
  `reference_wrapper`, `T` otherwise.
 */
-template<typename T> struct unwrap_reference
+BOOST_CORE_MODULE_EXPORT template<typename T> struct unwrap_reference
 {
     typedef T type;
 };
@@ -322,7 +329,7 @@ template<typename T> struct unwrap_reference< reference_wrapper<T> const volatil
  @return `unwrap_reference<T>::type&(t)`
  @remark Does not throw.
 */
-template<class T> BOOST_FORCEINLINE typename unwrap_reference<T>::type& unwrap_ref( T & t ) BOOST_NOEXCEPT
+BOOST_CORE_MODULE_EXPORT template<class T> BOOST_FORCEINLINE typename unwrap_reference<T>::type& unwrap_ref( T & t ) BOOST_NOEXCEPT
 {
     return t;
 }
@@ -332,7 +339,7 @@ template<class T> BOOST_FORCEINLINE typename unwrap_reference<T>::type& unwrap_r
 /**
  @cond
 */
-template<class T> BOOST_FORCEINLINE T* get_pointer( reference_wrapper<T> const & r ) BOOST_NOEXCEPT
+BOOST_CORE_MODULE_EXPORT template<class T> BOOST_FORCEINLINE T* get_pointer( reference_wrapper<T> const & r ) BOOST_NOEXCEPT
 {
     return r.get_pointer();
 }
@@ -341,5 +348,7 @@ template<class T> BOOST_FORCEINLINE T* get_pointer( reference_wrapper<T> const &
 */
 
 } // namespace boost
+
+#endif
 
 #endif // #ifndef BOOST_CORE_REF_HPP

@@ -9,6 +9,15 @@
 // See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/config.hpp>
 
 #if defined(BOOST_HAS_PRAGMA_ONCE)
@@ -22,7 +31,7 @@ namespace core
 namespace detail
 {
 
-template< class T1, class T2 > struct is_same
+BOOST_CORE_MODULE_EXPORT template< class T1, class T2 > struct is_same
 {
     BOOST_STATIC_CONSTANT( bool, value = false );
 };
@@ -35,5 +44,7 @@ template< class T > struct is_same< T, T >
 } // namespace detail
 } // namespace core
 } // namespace boost
+
+#endif
 
 #endif // #ifndef BOOST_CORE_DETAIL_IS_SAME_HPP_INCLUDED

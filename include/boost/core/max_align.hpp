@@ -11,9 +11,17 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  https://www.boost.org/LICENSE_1_0.txt
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+
 #include <boost/core/alignof.hpp>
 #include <boost/config.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
+#include <boost/core/detail/modules.hpp>
 
 // BOOST_CORE_HAS_FLOAT128
 
@@ -38,7 +46,7 @@ namespace boost
 namespace core
 {
 
-union max_align_t
+BOOST_CORE_MODULE_EXPORT union max_align_t
 {
     char c;
     short s;
@@ -74,9 +82,11 @@ union max_align_t
     void (max_align_t::*pmf)();
 };
 
-BOOST_CONSTEXPR_OR_CONST std::size_t max_align = BOOST_CORE_ALIGNOF( max_align_t );
+BOOST_CORE_MODULE_EXPORT BOOST_CONSTEXPR_OR_CONST std::size_t max_align = BOOST_CORE_ALIGNOF( max_align_t );
 
 } // namespace core
 } // namespace boost
+
+#endif
 
 #endif  // #ifndef BOOST_CORE_MAX_ALIGN_HPP_INCLUDED

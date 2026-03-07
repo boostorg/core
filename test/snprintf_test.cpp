@@ -13,8 +13,8 @@
  */
 
 #include <boost/core/snprintf.hpp>
-#include <cstddef>
-#include <cstring>
+#include <boost/config/std/cstddef.hpp>
+#include <boost/config/std/cstring.hpp>
 #include <boost/core/lightweight_test.hpp>
 
 void test_snprintf()

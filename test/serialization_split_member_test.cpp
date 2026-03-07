@@ -39,8 +39,8 @@ private:
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <sstream>
-#include <string>
+#include <boost/config/std/sstream.hpp>
+#include <boost/config/std/string.hpp>
 
 int main()
 {

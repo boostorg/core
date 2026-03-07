@@ -8,17 +8,26 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef BOOST_CORE_SPAN_HPP
 #define BOOST_CORE_SPAN_HPP
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/core/detail/assert.hpp>
 #include <boost/core/data.hpp>
-#include <array>
-#include <iterator>
-#include <type_traits>
+#include <boost/config/std/array.hpp>
+#include <boost/config/std/iterator.hpp>
+#include <boost/config/std/type_traits.hpp>
 
 namespace boost {
 
-constexpr std::size_t dynamic_extent = static_cast<std::size_t>(-1);
+BOOST_CORE_MODULE_EXPORT constexpr std::size_t dynamic_extent = static_cast<std::size_t>(-1);
 
-template<class T, std::size_t E = dynamic_extent>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t E = dynamic_extent>
 class span;
 
 namespace detail {
@@ -368,27 +377,27 @@ constexpr std::size_t span<T, E>::extent;
 #endif
 
 #ifdef __cpp_deduction_guides
-template<class I, class L>
+BOOST_CORE_MODULE_EXPORT template<class I, class L>
 span(I*, L) -> span<I>;
 
-template<class T, std::size_t N>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t N>
 span(T(&)[N]) -> span<T, N>;
 
-template<class T, std::size_t N>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t N>
 span(std::array<T, N>&) -> span<T, N>;
 
-template<class T, std::size_t N>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t N>
 span(const std::array<T, N>&) -> span<const T, N>;
 
-template<class R>
+BOOST_CORE_MODULE_EXPORT template<class R>
 span(R&&) -> span<typename detail::span_data<R>::type>;
 
-template<class T, std::size_t E>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t E>
 span(span<T, E>) -> span<T, E>;
 #endif
 
 #ifdef __cpp_lib_byte
-template<class T, std::size_t E>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t E>
 inline span<const std::byte, detail::span_bytes<T, E>::value>
 as_bytes(span<T, E> s) noexcept
 {
@@ -397,7 +406,7 @@ as_bytes(span<T, E> s) noexcept
             s.size_bytes());
 }
 
-template<class T, std::size_t E>
+BOOST_CORE_MODULE_EXPORT template<class T, std::size_t E>
 inline typename std::enable_if<!std::is_const<T>::value,
     span<std::byte, detail::span_bytes<T, E>::value> >::type
 as_writable_bytes(span<T, E> s) noexcept
@@ -408,5 +417,7 @@ as_writable_bytes(span<T, E> s) noexcept
 #endif
 
 } /* boost */
+
+#endif
 
 #endif

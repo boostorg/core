@@ -21,14 +21,21 @@
 // to avoid forming an infinite recursion when the arguments are not
 // swappable.
 
+#if defined(BOOST_USE_MODULES) && !defined(BOOST_CORE_INTERFACE_UNIT)
+#ifndef BOOST_IN_MODULE_PURVIEW
+import boost.core;
+#endif
+#else
+
+#include <boost/core/detail/modules.hpp>
 #include <boost/core/enable_if.hpp>
 #include <boost/config.hpp>
 #if __cplusplus >= 201103L || defined(BOOST_DINKUMWARE_STDLIB)
-#include <utility> // for std::swap (C++11)
+#include <boost/config/std/utility.hpp> // for std::swap (C++11)
 #else
-#include <algorithm> // for std::swap (C++98)
+#include <boost/config/std/algorithm.hpp> // for std::swap (C++98)
 #endif
-#include <cstddef> // for std::size_t
+#include <boost/config/std/cstddef.hpp> // for std::size_t
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
@@ -76,7 +83,7 @@ inline void invoke_swap_impl(T (& left)[N], T (& right)[N])
 namespace boost {
 namespace core {
 
-template<class T>
+BOOST_CORE_MODULE_EXPORT template<class T>
 BOOST_GPU_ENABLED
 inline typename enable_if_c< !::boost_swap_impl::is_const<T>::value >::type
 invoke_swap(T& left, T& right)
@@ -89,5 +96,7 @@ invoke_swap(T& left, T& right)
 } // namespace boost
 
 #undef BOOST_CORE_SWAP_NOEXCEPT_IF
+
+#endif
 
 #endif // BOOST_CORE_INVOKE_SWAP_HPP

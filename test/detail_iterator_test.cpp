@@ -8,6 +8,17 @@
 // http://www.boost.org/LICENSE_1_0.txt
 //
 
+#ifdef BOOST_USE_MODULES
+
+import std.compat;
+
+int main()
+{
+    printf("This test depends on Boost.TypeTraits and can't be run with C++20 modules yet\n");
+}
+
+#else
+
 #define BOOST_ALLOW_DEPRECATED_HEADERS
 #include <boost/detail/iterator.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
@@ -147,3 +158,5 @@ int main()
 
     return boost::report_errors();
 }
+
+#endif

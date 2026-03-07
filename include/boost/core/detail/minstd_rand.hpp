@@ -28,11 +28,11 @@ private:
 
 public:
 
-    minstd_rand(): x_( 1 )
+    inline minstd_rand(): x_( 1 )
     {
     }
 
-    explicit minstd_rand( boost::uint_least32_t x ): x_( x % m )
+    inline explicit minstd_rand( boost::uint_least32_t x ): x_( x % m )
     {
         if( x_ == 0 )
         {
@@ -40,7 +40,7 @@ public:
         }
     }
 
-    boost::uint_least32_t operator()()
+    inline boost::uint_least32_t operator()()
     {
         boost::uint_least64_t y = x_;
 

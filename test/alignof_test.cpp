@@ -2,11 +2,22 @@
 // Distributed under the Boost Software License, Version 1.0.
 // https://www.boost.org/LICENSE_1_0.txt
 
+#ifdef BOOST_USE_MODULES
+
+import std.compat;
+
+int main()
+{
+    printf("This test depends on Boost.TypeTraits and can't be run with C++20 modules yet\n");
+}
+
+#else
+
 #include <boost/core/alignof.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/config.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
 
 template<class T> struct struct_of
 {
@@ -96,3 +107,5 @@ int main()
 
     return boost::report_errors();
 }
+
+#endif

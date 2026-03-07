@@ -10,10 +10,21 @@
 //             Jeremiah Willcock (jewillco at osl.iu.edu)
 //             Andrew Lumsdaine (lums at osl.iu.edu)
 
+#ifdef BOOST_USE_MODULES
+
+import std.compat;
+
+int main()
+{
+    printf("This test depends on Boost.TypeTraits and can't be run with C++20 modules yet\n");
+}
+
+#else
+
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/core/lightweight_test.hpp>
-#include <cstddef>
+#include <boost/config/std/cstddef.hpp>
 
 using boost::enable_if;
 using boost::disable_if;
@@ -59,3 +70,5 @@ int main()
 
   return boost::report_errors();
 }
+
+#endif
