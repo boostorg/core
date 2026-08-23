@@ -29,6 +29,29 @@ boost::core::string_view f( boost::core::string_view const& str )
     return str;
 }
 
+template<typename Char>
+boost::core::basic_string_view<Char> f( boost::core::basic_string_view<Char> const& str )
+{
+    return str;
+}
+
+template<typename Char>
+void subtest()
+{
+    std::basic_string<Char> s1( 3, Char('1') );
+    s1[1] = Char('2');
+    s1[2] = Char('3');
+
+    std::basic_string<Char> s2 = f<Char>( s1 );
+    BOOST_TEST( s1 == s2 );
+
+#if ! (defined(BOOST_CLANG) && BOOST_CLANG_VERSION < 150000)
+    // leads to undefined symbols in Clang < 15: https://github.com/llvm/llvm-project/issues/55560
+    std::basic_string<Char> s3( (f<Char>( s1 )) );
+    BOOST_TEST( s1 == s3 );
+#endif
+}
+
 int main()
 {
     {
@@ -60,6 +83,16 @@ int main()
         BOOST_TEST_EQ( s1, s2 );
     }
 
+#endif
+
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+    subtest<char16_t>();
+#endif
+#if !defined(BOOST_NO_CXX11_CHAR32_T)
+    subtest<char32_t>();
+#endif
+#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+    subtest<char8_t>();
 #endif
 
     return boost::report_errors();
