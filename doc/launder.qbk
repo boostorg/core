@@ -14,8 +14,8 @@
 
 [section Header <boost/core/launder.hpp>]
 
-The header `<boost/core/launder.hpp>` defines the function
-`void boost::core::launder()`, a portable implementation of
+The header `<boost/core/launder.hpp>` defines the
+`boost::core::launder` function template, a portable implementation of
 `std::launder`.
 
 [section Synopsis]
