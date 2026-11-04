@@ -636,7 +636,7 @@ jobs:
 
           # Windows SDK 32-bit ARM libs not installed in this image
           - name: ARM
-            toolset: msvc-14.3
+            toolset: msvc-14.5
             cxxstd: "14,17,20,latest"
             addrmd: 64
             os: windows-11-arm
