@@ -39,7 +39,7 @@
 
 #endif // defined(_MSC_VER)
 
-#if defined(BOOST_MSVC) && BOOST_MSVC >= 1925
+#if defined(BOOST_MSVC) && BOOST_MSVC >= 1925 && !defined(__CUDACC__)
 # define BOOST_CORE_HAS_BUILTIN_ISCONSTEVAL
 #endif
 
