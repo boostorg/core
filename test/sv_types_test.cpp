@@ -12,6 +12,10 @@
 // std::char_traits<Ch> is deprecated for non-char types
 typedef wchar_t Ch;
 
+#elif defined(_MSVC_STL_UPDATE) && _MSVC_STL_UPDATE > 202609L
+
+typedef unsigned Ch;
+
 #else
 
 struct Ch
